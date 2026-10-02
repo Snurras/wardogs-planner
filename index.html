@@ -68,9 +68,9 @@ button{cursor:pointer}
 
 .pal{background:var(--panel);border:1px solid var(--line);border-radius:6px;overflow:hidden}
 .pal{padding:2px 0 4px;flex:none}
-.pal h4{margin:0;padding:5px 10px 0;font:600 11px var(--f-head);text-transform:uppercase;letter-spacing:.12em;color:var(--muted);display:flex;align-items:center;gap:8px}
+.pal h4{margin:0;padding:4px 10px 0;font:600 11px var(--f-head);text-transform:uppercase;letter-spacing:.12em;color:var(--muted);display:flex;align-items:center;gap:8px}
 .pal h4::after{content:'';flex:1 1 auto;height:1px;background:var(--line)}
-.pc{display:grid;grid-template-columns:14px 1fr auto auto;gap:8px;align-items:center;width:100%;border:0;background:none;padding:3px 10px;min-height:27px;box-sizing:border-box;text-align:left;font-size:14px;cursor:pointer}
+.pc{display:grid;grid-template-columns:14px 1fr auto auto;gap:8px;align-items:center;width:100%;border:0;background:none;padding:2px 10px;min-height:25px;box-sizing:border-box;text-align:left;font-size:14px;cursor:pointer}
 .pc:hover{background:var(--hi)}
 .pc.on{background:var(--hi);box-shadow:inset 3px 0 0 var(--accent)}
 .pc .sw{width:12px;height:12px;border-radius:2px;background:var(--c)}
@@ -154,6 +154,7 @@ ol.weak,ul.weak{margin:2px 0 0;padding:0;list-style:none;display:flex;flex-direc
 .picksel,.topbar input[type=text]{background:var(--panel);border:1px solid var(--line);border-radius:3px;padding:5px 8px;color:var(--ink);max-width:150px}
 .topbar input[type=text]{width:140px}
 #saveStatus:empty{display:none}
+#saveStatus{position:fixed;top:58px;right:16px;z-index:20;background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:5px 10px;box-shadow:0 2px 8px rgba(0,0,0,.15);color:var(--ink);max-width:min(420px,calc(100vw - 32px))}
 #dVis{width:104px}
 #acctBtn{max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 dialog#loginDlg{border:1px solid var(--line);border-radius:6px;background:var(--panel);color:var(--ink);padding:18px 20px;width:min(360px,calc(100vw - 32px));box-shadow:0 10px 30px rgba(0,0,0,.25)}
@@ -180,6 +181,37 @@ dialog#loginDlg::backdrop{background:rgba(20,25,15,.45)}
 .pc .trim.on{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
 .tdet-h.top{border-top:0;padding-top:0}
 #legendCard{padding:8px 12px}
+#legendCard{display:flex;flex-direction:column;flex:none}
+.leftcol.cmopen>.pal{display:none}   /* reading comments: they get the whole column */
+.leftcol.cmopen>#legendCard{flex:1 1 auto;min-height:0}
+.twohead{display:flex;gap:14px}
+.twohead .tdet-h{width:auto;flex:1 1 0;min-width:0;gap:6px}
+.twohead .tdet-h[hidden]{display:none}
+.twohead #cmBtn{border-left:1px solid var(--line);padding-left:12px}
+#cmBody{display:flex;flex-direction:column;gap:6px;min-height:0;flex:1 1 auto;margin-top:6px}
+#cmBody[hidden]{display:none}
+#cmFor{font-size:12px}
+.cmlist{list-style:none;margin:0;padding:0 4px 0 0;display:flex;flex-direction:column;gap:8px;overflow-y:auto;max-height:420px;min-height:40px}
+.grid3.fit .cmopen .cmlist{max-height:none;flex:1 1 auto;min-height:120px}
+.cmlist .empty{color:var(--muted);font-size:13px}
+.cm{border-left:3px solid var(--line);padding:2px 0 2px 8px}
+.cm.me{border-left-color:var(--accent)}
+.cmh{display:flex;align-items:baseline;gap:6px;font-size:13px}
+.cmh b{font:700 13px var(--f-head);letter-spacing:.03em}
+.cmt{color:var(--muted);font:500 11px var(--f-mono)}
+.cmx{margin-left:auto;border:0;background:none;color:var(--muted);font:600 12px var(--f-head);text-transform:uppercase;letter-spacing:.06em;padding:0 2px;cursor:pointer}
+.cmx:hover,.cmx.arm{color:var(--bad)}
+.cmb{font-size:14px;line-height:1.35;white-space:pre-wrap;overflow-wrap:anywhere;margin:1px 0 3px}
+.cmr{display:flex;gap:6px}
+.th{display:inline-flex;align-items:center;gap:4px;border:1px solid var(--line);background:var(--bg);border-radius:10px;padding:1px 8px 1px 6px;font:600 12px var(--f-mono);color:var(--muted);cursor:pointer}
+.th svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:1.4;stroke-linejoin:round}
+.th.on{border-color:var(--accent);color:var(--ink);background:var(--hi)}
+.th.on.dn{border-color:var(--bad)}
+.th:disabled{cursor:default;opacity:.8}
+.cmform{display:flex;flex-direction:column;gap:4px;flex:none}
+.cmform textarea{font:14px/1.35 var(--f-body);resize:vertical;min-height:44px;padding:6px 8px;border:1px solid var(--line);border-radius:3px;background:var(--bg);color:var(--ink)}
+.cmform[hidden]{display:none}
+.cmsend{display:flex;justify-content:space-between;align-items:center}
 .leftcol{gap:6px}
 .tabs button{border:0;background:none;padding:8px 14px;font:700 15px var(--f-head);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);border-bottom:3px solid transparent;margin-bottom:-2px;display:inline-flex;gap:8px;align-items:center}
 .tabs button.on{color:var(--ink);border-bottom-color:var(--accent)}
@@ -312,13 +344,22 @@ a{color:var(--accent)}
     <section class="col leftcol">
       <div class="pal" id="palette"></div>
       <div class="card" id="legendCard">
-        <button type="button" class="tdet-h top" id="legendBtn" aria-expanded="false" aria-controls="legendBody"><span>Legend</span><span class="tdet-c">SHOW ▼</span></button>
+        <div class="twohead"><button type="button" class="tdet-h top" id="legendBtn" aria-expanded="false" aria-controls="legendBody"><span>Legend</span><span class="tdet-c">▼</span></button><button type="button" class="tdet-h top" id="cmBtn" aria-expanded="false" aria-controls="cmBody" hidden><span id="cmTitle">Comments</span><span class="tdet-c">▼</span></button></div>
         <div id="legendBody" class="col" style="gap:10px" hidden>
           <div id="legend" class="col" style="gap:10px"></div>
           <div class="status">Click or drag to place · click on HESCO or building roofs to stack · R turns 90° · E or right-click erases the top piece · the dashed square is the FOB build area; move the FOB with Select · Ctrl + scroll zooms · middle-drag pans.</div>
           <div class="status">Sizes come from datamined footprints. <span style="color:var(--entry)">≈</span> means rounded to the grid; <span style="color:var(--entry)">?</span> means no footprint is published yet.</div>
         </div>
+        <div id="cmBody" hidden>
+          <div class="status" id="cmFor"></div>
+          <ol class="cmlist" id="cmList" aria-live="polite"></ol>
+          <form id="cmForm" class="cmform">
+            <textarea id="cmText" rows="2" maxlength="500" placeholder="Write a comment…" aria-label="Write a comment"></textarea>
+            <div class="cmsend"><span class="status" id="cmCount">0/500</span><button class="btn" type="submit">Send</button></div>
+          </form>
+        </div>
       </div>
+
     </section>
 
     <section class="col">
@@ -1646,7 +1687,11 @@ function selectRoute(id){threatSel=threatSel===id?null:id;renderSummary(threat);
 // Show / Hide headers on collapsible cards (closed by default)
 function collapsible(btnId,bodyId){const b=$(btnId),body=$(bodyId);b.onclick=()=>{const open=body.hidden;body.hidden=!open;b.setAttribute('aria-expanded',open?'true':'false');
   b.querySelector('.tdet-c').textContent=open?'HIDE ▲':'SHOW ▼';fitLayout()}}
-collapsible('legendBtn','legendBody');collapsible('bomBtn','bom');collapsible('orderBtn','steps');
+// Legend and Comments share one card: one open at a time; comments take the whole left column
+function pairToggle(which){const pairs=[['legendBtn','legendBody'],['cmBtn','cmBody']];
+  for(const[b,body]of pairs){const open=b===which&&$(body).hidden;$(body).hidden=!open;$(b).setAttribute('aria-expanded',open?'true':'false');$(b).querySelector('.tdet-c').textContent=open?'▲':'▼'}
+  const cm=!$('cmBody').hidden;document.querySelector('.leftcol').classList.toggle('cmopen',cm);if(cm&&$('cmBtn').onopen)$('cmBtn').onopen();fitLayout()}
+$('legendBtn').onclick=()=>pairToggle('legendBtn');$('cmBtn').onclick=()=>pairToggle('cmBtn');collapsible('bomBtn','bom');collapsible('orderBtn','steps');
 // wide screens: the design view fills the window; the map takes all the height that is left
 function fitLayout(){const g=$('designGrid');if(!g)return;
   if(innerWidth<1100||$('tab-design').hidden){g.classList.remove('fit');g.style.height='';return}
@@ -2463,6 +2508,7 @@ function renderSaved(){
   x.hidden=!(cur&&cur.canDelete);x.textContent=cur&&S.pendDel===cur.key?'Delete?':'Delete';
   x.title=cur&&cur.canDelete&&!cur.mine&&!cur.local?`Remove this design by ${cur.ownerName||'someone else'} (admin)`:'Delete this design';
   x.onclick=()=>{if(!cur)return;if(S.pendDel===cur.key)del(cur);else{S.pendDel=cur.key;renderSaved()}};
+  syncComments();
   const v=$('dVis'),t=v.querySelector('[value=template]');v.hidden=S.mode!=='firebase';t.hidden=t.disabled=!S.admin;if(!S.admin&&v.value==='template')v.value='personal';
   renderAcct()}
 function renderAcct(){const b=$('acctBtn');b.hidden=S.mode!=='firebase';
@@ -2525,13 +2571,59 @@ function listen(){S.unsub.forEach(f=>f());S.unsub=[];S.remote=[];const F=S.fb,co
   const watch=(k,q)=>S.unsub.push(F.onSnapshot(q,sn=>{parts[k]=sn.docs.map(d=>({id:d.id,...d.data()}));merge()},er=>{parts[k]=[];merge();if(k!=='tpl'||er.code!=='permission-denied')status('Could not load designs: '+errText(er))}));
   watch('tpl',F.query(col,F.where('visibility','==','template')));
   if(S.user){watch('mine',F.query(col,F.where('owner','==',S.user.uid)));watch('shared',F.query(col,F.where('visibility','==','shared')))}}
+/* ---------- comments on Shared designs and online Templates ---------- */
+const CM={did:null,unsub:null,list:[],pendDel:null,stick:true};
+const THUMB='<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 7h2.6v7.5H2zM4.6 7.2 7.6 2c1 0 1.9.8 1.6 2L8.7 6.6h4c1 0 1.7.9 1.4 1.9l-1.1 4.6c-.2.8-.9 1.4-1.7 1.4H4.6"/></svg>';
+const fmtWhen=d=>{if(!d)return'';const now=new Date(),o={day:'numeric',month:'short',hour:'2-digit',minute:'2-digit',hour12:false};if(d.getFullYear()!==now.getFullYear())o.year='numeric';return d.toLocaleString('en-GB',o)};
+function cmTarget(){if(S.mode!=='firebase'||!S.cur||S.cur[0]!=='f')return null;const r=S.remote.find(x=>'f'+x.id===S.cur);return r&&(r.visibility==='shared'||r.visibility==='template')?r:null}
+function syncComments(){const btn=$('cmBtn');btn.hidden=S.mode!=='firebase';if(btn.hidden)return;
+  const r=S.user?cmTarget():null,did=r?r.id:null;
+  if(did!==CM.did){if(CM.unsub)CM.unsub();CM.unsub=null;CM.did=did;CM.list=[];CM.pendDel=null;CM.stick=true;
+    if(did){const F=S.fb;CM.unsub=F.onSnapshot(F.query(F.collection(F.db,'designs',did,'comments'),F.orderBy('created')),sn=>{
+        const box=$('cmList');CM.stick=box.scrollHeight-box.scrollTop-box.clientHeight<30;
+        CM.list=sn.docs.map(d=>({id:d.id,...d.data({serverTimestamps:'estimate'})}));renderComments()},
+      er=>{CM.list=[];renderComments(errText(er))})}}
+  renderComments()}
+function renderComments(err){
+  const r=cmTarget(),n=CM.did?CM.list.length:0,box=$('cmList');
+  $('cmTitle').textContent=n?`Comments (${n})`:'Comments';
+  $('cmForm').hidden=!(S.user&&r);
+  $('cmFor').textContent=!S.user?'':r?`On "${r.name}"${r.ownerName?' by '+r.ownerName:''}`:'';
+  box.replaceChildren();
+  if(!S.user){box.append(el('li',{class:'empty'},'Log in to read and write comments. ',el('button',{type:'button',class:'cmx',style:'margin:0;color:var(--accent)',onclick:()=>openLogin('Log in to read and write comments.')},'Log in')));return}
+  if(!r){box.append(el('li',{class:'empty'},'Open a Shared design or an online Template to see its comments.'));return}
+  if(err){box.append(el('li',{class:'empty'},'Could not load comments: '+err));return}
+  if(!CM.list.length)box.append(el('li',{class:'empty'},'No comments yet. Be the first.'));
+  const me=S.user.uid;
+  for(const c of CM.list){const votes=c.votes||{},ups=[],downs=[];for(const[u,v]of Object.entries(votes))(v&&v.v===1?ups:v&&v.v===-1?downs:[]).push(v.n||'Someone');
+    const mine=votes[me]&&votes[me].v,canDel=c.uid===me||S.admin;
+    const thumb=(dir,names,cls)=>{const b=el('button',{type:'button',class:'th'+(cls||'')+(mine===dir?' on':''),'aria-pressed':mine===dir?'true':'false',
+        title:(names.length?names.join(', '):'Nobody yet')+(dir===1?' liked this':' disliked this'),'aria-label':(dir===1?'Thumbs up':'Thumbs down')+`, ${names.length}`});
+      b.innerHTML=dir===1?THUMB:THUMB.replace('<svg ','<svg style="transform:rotate(180deg)" ');b.append(String(names.length));b.onclick=()=>vote(c,dir);return b};
+    const x=canDel?el('button',{type:'button',class:'cmx'+(CM.pendDel===c.id?' arm':''),title:c.uid===me?'Remove your comment':'Remove this comment (admin)'},CM.pendDel===c.id?'Remove?':'×'):null;
+    if(x)x.onclick=()=>{if(CM.pendDel===c.id)delComment(c);else{CM.pendDel=c.id;renderComments();setTimeout(()=>{if(CM.pendDel===c.id){CM.pendDel=null;renderComments()}},3000)}};
+    const t=c.created&&c.created.toDate?c.created.toDate():null;
+    box.append(el('li',{class:'cm'+(c.uid===me?' me':'')},el('div',{class:'cmh'},el('b',{},c.name||'Someone'),el('span',{class:'cmt'},fmtWhen(t)),x),
+      el('div',{class:'cmb'},c.text),el('div',{class:'cmr'},thumb(1,ups),thumb(-1,downs,' dn'))))}
+  if(CM.stick)box.scrollTop=box.scrollHeight}
+$('cmBtn').onopen=()=>{CM.stick=true;renderComments()};
+async function vote(c,dir){const F=S.fb,me=S.user.uid,cur=c.votes&&c.votes[me]&&c.votes[me].v;
+  try{await F.updateDoc(F.doc(F.db,'designs',CM.did,'comments',c.id),{['votes.'+me]:cur===dir?F.deleteField():{v:dir,n:userName()}})}catch(e){status('Could not react: '+errText(e))}}
+async function delComment(c){CM.pendDel=null;const F=S.fb;try{await F.deleteDoc(F.doc(F.db,'designs',CM.did,'comments',c.id))}catch(e){status('Could not remove: '+errText(e))}renderComments()}
+$('cmText').addEventListener('input',()=>{$('cmCount').textContent=`${$('cmText').value.length}/500`});
+$('cmText').addEventListener('keydown',e=>{if(e.key==='Enter'&&(e.ctrlKey||e.metaKey)){e.preventDefault();$('cmForm').requestSubmit()}});
+$('cmForm').addEventListener('submit',async e=>{e.preventDefault();const t=$('cmText').value.trim();if(!t||!CM.did||!S.user)return;
+  const F=S.fb,btn=$('cmForm').querySelector('button');btn.disabled=true;
+  try{await F.addDoc(F.collection(F.db,'designs',CM.did,'comments'),{uid:S.user.uid,name:userName(),text:t.slice(0,500),created:F.serverTimestamp(),votes:{}});
+    $('cmText').value='';$('cmCount').textContent='0/500';CM.stick=true;renderComments()}
+  catch(x){status('Could not send: '+errText(x))}finally{btn.disabled=false}});
 async function startFirebase(){
   const base=`https://www.gstatic.com/firebasejs/${FB_VER}/`;let A,Au,Fs;
   try{[A,Au,Fs]=await Promise.all(['firebase-app.js','firebase-auth.js','firebase-firestore.js'].map(f=>import(base+f)))}
   catch(e){S.mode='local';renderSaved();status("Can't reach the online save. Designs are kept in this browser for now.");return}
   const app=A.initializeApp(FB_CONFIG),auth=Au.getAuth(app),fdb=Fs.getFirestore(app);
   S.fb={auth,db:fdb};for(const k of['signInWithEmailAndPassword','createUserWithEmailAndPassword','updateProfile','signOut','onAuthStateChanged'])S.fb[k]=Au[k];
-  for(const k of['collection','doc','query','where','onSnapshot','setDoc','deleteDoc','getDoc'])S.fb[k]=Fs[k];
+  for(const k of['collection','doc','query','where','orderBy','onSnapshot','setDoc','addDoc','updateDoc','deleteDoc','getDoc','deleteField','serverTimestamp'])S.fb[k]=Fs[k];
   const F=S.fb;
   // the shared Fact sheet: everyone reads it, only the admin writes it
   F.onSnapshot(F.doc(fdb,'facts','main'),sn=>{WD.load(sn.exists()?(sn.data().values||{}):{});factsApplied()},()=>{});
