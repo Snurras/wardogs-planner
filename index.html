@@ -147,16 +147,16 @@ ol.weak,ul.weak{margin:2px 0 0;padding:0;list-style:none;display:flex;flex-direc
 /* tabs */
 .tabs{display:flex;gap:2px;flex-wrap:wrap;align-self:stretch}
 /* one header row: title · tabs · template / designs / save */
-.topbar{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;border-bottom:2px solid var(--line);padding-bottom:0;min-height:50px}
-.topbar .tabs button{padding:14px 9px 11px;font-size:14px}
+.topbar{display:flex;flex-wrap:wrap;align-items:center;gap:6px 6px;border-bottom:2px solid var(--line);padding-bottom:0;min-height:50px}
+.topbar .tabs button{padding:14px 6px 11px;font-size:14px}
 .grow{flex:1 1 auto}
 .pick{display:inline-flex;align-items:center;gap:6px;font-size:14px;color:var(--muted)}
-.picksel,.topbar input[type=text]{background:var(--panel);border:1px solid var(--line);border-radius:3px;padding:5px 8px;color:var(--ink);max-width:150px}
-.topbar input[type=text]{width:140px}
+.picksel,.topbar input[type=text]{background:var(--panel);border:1px solid var(--line);border-radius:3px;padding:5px 8px;color:var(--ink);max-width:136px}
+.topbar input[type=text]{width:100px}
 #saveStatus:empty{display:none}
 #saveStatus{position:fixed;top:58px;right:16px;z-index:20;background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:5px 10px;box-shadow:0 2px 8px rgba(0,0,0,.15);color:var(--ink);max-width:min(420px,calc(100vw - 32px))}
-#dVis{width:104px}
-#acctBtn{max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#dVis{width:92px}
+#acctBtn{max-width:124px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 dialog#loginDlg{border:1px solid var(--line);border-radius:6px;background:var(--panel);color:var(--ink);padding:18px 20px;width:min(360px,calc(100vw - 32px));box-shadow:0 10px 30px rgba(0,0,0,.25)}
 dialog#loginDlg::backdrop{background:rgba(20,25,15,.45)}
 #loginForm{display:flex;flex-direction:column;gap:10px}
@@ -301,6 +301,7 @@ a{color:var(--accent)}
     </nav>
     <span class="grow"></span>
     <select id="openSel" class="picksel" aria-label="Open a template or saved design"></select>
+    <button class="btn ghost" type="button" id="promoBtn" hidden>Make template</button>
     <button class="btn ghost" type="button" id="delBtn" hidden>Delete</button>
     <form id="saveForm" style="display:flex;gap:6px;align-items:center">
       <input type="text" id="dName" placeholder="Design name" maxlength="60" autocomplete="off" aria-label="Design name">
@@ -633,7 +634,7 @@ const COLS=i=>{let o='';i++;while(i>0){const m=(i-1)%26;o=String.fromCharCode(65
    support: can be built on. clear: keep-out ring. low: may sit inside a keep-out ring. */
 const inner=(x,y,w,d)=>(lx,ly)=>lx>=x&&lx<x+w&&ly>=y&&ly<y+d;
 const P={
-  fob:{n:'FOB',w:2,d:2,h:1,c:'accent',cat:'FOB',ph:0,q:'?',ab:'FOB',fixed:1},   // fixed: can't be erased, only moved
+  fob:{n:'FOB',w:3,d:3,h:1,c:'accent',cat:'FOB',ph:0,ab:'FOB',fixed:1},   // fixed: can't be erased, only moved
   hesco_s:{n:'HESCO Block (Small)',w:1,d:1,h:1,c:'entry',cat:'Walls & entry',ph:1,ab:'H',support:1,low:1},
   hesco_l:{n:'HESCO Block (Large)',w:1,d:1,h:2,c:'entry',cat:'Walls & entry',ph:1,ab:'H',support:1},
   hesco_wall:{n:'HESCO Wall',w:4,d:1,h:2,c:'entry',cat:'Walls & entry',ph:1,ab:'HW',support:1},
@@ -1028,7 +1029,7 @@ function fit25(){setScale(vp.clientWidth/(25*C));centreOn(...fobCentre())}
 $('zoomIn').onclick=()=>setScale(scale*1.25);
 $('zoomOut').onclick=()=>setScale(scale/1.25);
 $('zoomFit').onclick=()=>{setScale(0);vp.scrollLeft=0;vp.scrollTop=0};
-const fobCentre=()=>{const f=fobOf()||FOB_AT;return[f.x+1,f.y+1]};
+const fobCentre=()=>{const f=fobOf()||FOB_AT;return[f.x+P.fob.w/2,f.y+P.fob.d/2]};
 $('zoomFob').onclick=()=>{if(visibleCells()>30)setScale(vp.clientWidth/(25*C));centreOn(...fobCentre())};
 vp.addEventListener('wheel',e=>{if(!(e.ctrlKey||e.metaKey))return;e.preventDefault();const b=vp.getBoundingClientRect();setScale(scale*(e.deltaY<0?1.12:1/1.12),{x:e.clientX-b.left,y:e.clientY-b.top})},{passive:false});
 let pan=null;
@@ -1344,8 +1345,8 @@ function block(x0,y0,w,d,t,l=0){const out=[];for(let x=x0;x<x0+w;x++)for(let y=y
 const SAVE_V=2;
 const isLegacy=d=>!d||!d.v||d.v<2;
 const TEMPLATES=[   // current (v2) coordinates; the FOB stays at its default spot
-  {name:'Recon AA post',v:2,pieces:[{t:'recon_tower',x:33,y:26},{t:'talon',x:34,y:27,l:1},{t:'bunker',x:38,y:26,r:3},
-    ...ring(31,23,43,33,'hesco_l').filter(p=>!(p.y===33&&p.x>=36&&p.x<=39)),{t:'gate',x:36,y:33}]},
+  {name:'Recon AA post',v:2,pieces:[{t:'recon_tower',x:34,y:26},{t:'talon',x:35,y:27,l:1},{t:'bunker',x:39,y:26,r:3},
+    ...ring(32,23,44,33,'hesco_l').filter(p=>!(p.y===33&&p.x>=37&&p.x<=40)),{t:'gate',x:37,y:33}]},
   {name:'Raised mortar',v:2,pieces:[...block(34,34,5,5,'hesco_s'),{t:'mortar',x:35,y:35,l:1},...ring(32,32,40,40,'hesco_l',[[36,40]]),{t:'door',x:36,y:40}]},
   {name:'Twin mortar pit',v:2,pieces:[...ring(32,18,42,24,'hesco_l',[[37,24]]),{t:'door',x:37,y:24},{t:'mortar',x:34,y:20},{t:'mortar',x:38,y:20}]},
   {name:'Trimmed recon + mortar',v:2,pieces:[{t:'recon_trim',x:22,y:22},{t:'mortar',x:22,y:22,l:1},{t:'ifs_trim',x:22,y:34},{t:'talon',x:23,y:35,l:1}]},
@@ -2492,7 +2493,7 @@ function entries(){
   const uid=S.user&&S.user.uid;
   if(S.mode==='firebase')for(const r of S.remote){const mine=r.owner===uid;
     out.push({key:'f'+r.id,id:r.id,group:r.visibility==='template'?'Templates':mine?'My designs':'Shared by others',name:r.name,vis:r.visibility,ownerName:r.ownerName,mine,
-      canDelete:!!uid&&(mine||S.admin),get doc(){return parseDoc(r)}})}
+      canDelete:!!uid&&((mine&&r.visibility!=='template')||S.admin),get doc(){return parseDoc(r)}})}
   if(S.mode==='claude')for(const d of S.remote)out.push({key:'c'+d.id,id:d.id,group:'Saved with the page',name:d.name,doc:d,mine:true,canDelete:true});
   for(const d of S.local)out.push({key:'l'+d.id,id:d.id,group:S.mode==='local'?'My designs':'In this browser',name:d.name,doc:d,local:true,mine:S.mode==='local',canDelete:true});
   return out}
@@ -2501,21 +2502,29 @@ function renderSaved(){
   for(const e of list)(groups[e.group]=groups[e.group]||[]).push(e);
   for(const g of['Templates','My designs','Shared by others','Saved with the page','In this browser']){const L=groups[g];if(!L)continue;const og=el('optgroup',{label:g});
     for(const e of L.sort((a,b)=>(b.builtin?1:0)-(a.builtin?1:0)||a.name.localeCompare(b.name))){
-      const label=e.name+(g==='Shared by others'&&e.ownerName?' · '+e.ownerName:'')+(g==='My designs'&&e.vis==='shared'?' · shared':'');
+      const label=e.name+((g==='Shared by others'||(g==='Templates'&&!e.builtin))&&e.ownerName?' · '+e.ownerName:'')+(g==='My designs'&&e.vis==='shared'?' · shared':'');
       const o=el('option',{value:e.key},label);if(S.cur===e.key)o.selected=true;og.append(o)}
     sel.append(og)}
   const cur=list.find(e=>e.key===S.cur),x=$('delBtn');
   x.hidden=!(cur&&cur.canDelete);x.textContent=cur&&S.pendDel===cur.key?'Delete?':'Delete';
   x.title=cur&&cur.canDelete&&!cur.mine&&!cur.local?`Remove this design by ${cur.ownerName||'someone else'} (admin)`:'Delete this design';
   x.onclick=()=>{if(!cur)return;if(S.pendDel===cur.key)del(cur);else{S.pendDel=cur.key;renderSaved()}};
+  // admin: move someone else's design between Shared and Template; the maker stays credited
+  const pb=$('promoBtn'),canPromo=S.admin&&cur&&cur.id&&!cur.local&&!cur.mine&&(cur.vis==='shared'||cur.vis==='template');
+  pb.hidden=!canPromo;if(canPromo){const to=cur.vis==='shared'?'template':'shared';pb.textContent=to==='template'?'Make template':'Make shared';
+    pb.title=`${to==='template'?'List it under Templates for everyone':'Move it back to Shared'}. ${cur.ownerName||'The maker'} stays credited as the maker.`;
+    pb.onclick=()=>setVis(cur,to)}
   syncComments();
   const v=$('dVis'),t=v.querySelector('[value=template]');v.hidden=S.mode!=='firebase';t.hidden=t.disabled=!S.admin;if(!S.admin&&v.value==='template')v.value='personal';
   renderAcct()}
 function renderAcct(){const b=$('acctBtn');b.hidden=S.mode!=='firebase';
   if(!S.user){b.textContent='Log in';b.title='Log in or create an account to save designs online'}
-  else{b.textContent=S.pendOut?'Log out?':userName()+(S.admin?' · admin':'');b.title=S.pendOut?'Click again to log out':'Logged in. Click to log out.'}}
+  else{b.textContent=S.pendOut?'Log out?':(S.admin?'★ ':'')+userName();b.title=S.pendOut?'Click again to log out':`Logged in${S.admin?' as admin':''}. Click to log out.`}}
 $('openSel').onchange=e=>{S.pendDel=null;S.pendSave=null;const en=entries().find(x=>x.key===e.target.value);if(!en){renderSaved();return}
   S.cur=en.key;if(S.mode==='firebase')$('dVis').value=en.mine&&en.vis?en.vis:'personal';load(en.doc)};
+async function setVis(en,to){const F=S.fb;
+  try{await F.updateDoc(F.doc(F.db,'designs',en.id),{visibility:to});status(to==='template'?`"${en.name}" is now a template (by ${en.ownerName||'its maker'}).`:`"${en.name}" is shared again.`)}
+  catch(e){status('Could not change it: '+errText(e))}}
 async function del(en){S.pendDel=null;
   try{if(en.local){S.local=S.local.filter(d=>d.id!==en.id);ls.set('wd_designs',S.local)}
     else if(S.mode==='firebase'){const F=S.fb;await F.deleteDoc(F.doc(F.db,'designs',en.id))}
@@ -2527,7 +2536,7 @@ $('saveForm').addEventListener('submit',async e=>{e.preventDefault();const name=
   if(!name){status('Name the design first.');return}if(pieces.length<=1){status('Nothing placed yet.');return}
   if(S.mode==='firebase'&&!S.user){openLogin('Log in to save designs online.');return}
   const vis=S.mode==='firebase'?$('dVis').value:null,ask=name.toLowerCase()+'|'+vis;
-  const same=entries().find(en=>en.mine&&!en.builtin&&en.name.toLowerCase()===name.toLowerCase());
+  const same=entries().find(en=>en.mine&&!en.builtin&&(en.vis!=='template'||S.admin)&&en.name.toLowerCase()===name.toLowerCase());
   if(same&&S.cur!==same.key&&S.pendSave!==ask){S.pendSave=ask;status(`You already have "${same.name}". Press Save again to replace it.`);return}
   S.pendSave=null;designName=name;const body={...designDoc(),name},now=new Date().toISOString();
   try{
