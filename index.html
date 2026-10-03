@@ -246,6 +246,11 @@ section.tab{display:flex;flex-direction:column;gap:16px}
 .levels label{display:flex;align-items:center;gap:6px;font:600 13px var(--f-head);text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
 .levels input,.prow input,.prow select{background:var(--bg);border:1px solid var(--line);border-radius:3px;padding:3px 6px;font:500 13px var(--f-mono);color:var(--ink)}
 .levels input{width:56px}
+#lvStatus{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.lvlim{font:600 12px var(--f-head);letter-spacing:.04em;text-transform:uppercase;color:var(--bad);border:1px solid var(--bad);border-radius:10px;padding:1px 8px}
+.lvreq{font-weight:500;text-transform:none;letter-spacing:0;color:var(--muted)}
+.lvok{color:var(--ok)}
+.lvsave{color:var(--muted)}
 .parts{display:grid;grid-template-columns:1fr auto auto;gap:3px 10px;font-size:14px}
 .parts .n,.cash .n{font-family:var(--f-mono);text-align:right;font-variant-numeric:tabular-nums}
 .parts .tot,.cash .tot{border-top:1px solid var(--line);padding-top:4px;font-weight:600}
@@ -2458,7 +2463,7 @@ function renderHaul(){
   if(r.cash)rows.push(['Stingray shots',r.cash]);
   for(const[k,v]of rows)cash.append(el('span',{},k),el('span',{class:'n'},money(v)));
   cash.append(el('span',{class:'tot'},'Total before vehicles'),el('span',{class:'n tot'},money(rows.reduce((a,x)=>a+x[1],0))));
-  $('lvStatus').textContent=['support','driver','pilot'].some(t=>levels[t]!=null&&levels[t]!=='')?'':'Enter your levels to hide what you can\'t use yet';
+  renderLevelNotes();
 }
 // inputs fire 'change' while losing focus; redraw on the next tick so the field isn't removed mid-blur
 const later=f=>setTimeout(f,0);
@@ -2466,8 +2471,31 @@ function planChanged(){ls.set('wd_design_draft',designDoc());later(()=>{renderHa
 $('optStock').onchange=e=>{plan.useFobStock=e.target.checked;planChanged()};
 $('optReserve').onchange=e=>{plan.reserve=+e.target.value;planChanged()};
 $('planReset').onclick=()=>{plan={...Haul.PLAN_DEFAULT};planChanged()};
-for(const t of['support','driver','pilot']){const i=$('lv_'+t);i.value=levels[t]??'';
-  i.addEventListener('change',()=>{levels[t]=i.value===''?null:Math.max(0,+i.value);ls.set('wd_levels',levels);later(()=>{renderHaul();renderTrips()})})}
+/* Levels: empty = assume everything can be used. Saved to the user's account when logged in, else in this browser. */
+const LEVEL_LIMITS=[['driver','c.large.lvl','Cannot buy large crates'],['driver','v.ural.lvl','Cannot buy Ural'],['driver','v.humvee.lvl','Cannot buy Humvee'],
+  ['pilot','v.lakota.lvl','Cannot buy Lakota'],['pilot','v.mh6.lvl','Cannot buy MH-6'],
+  ['support','ham.m.lvl','Cannot use the Medium Hammer'],['support','ham.l.lvl','Cannot use the Large Hammer']];
+const TRACK={support:'Support',driver:'Driver',pilot:'Pilot'};
+const filledLv=t=>levels[t]!=null&&levels[t]!=='';
+function renderLevelNotes(){const box=$('lvStatus');box.replaceChildren();
+  const where=S.mode==='firebase'?(S.user?'It saves to your user.':'Log in to save them to your user.'):'They are saved in this browser.';
+  if(!['support','driver','pilot'].some(filledLv)){box.append(`Enter your levels to hide what you can't use. ${where}`);return}
+  const lim=LEVEL_LIMITS.filter(([t,k])=>filledLv(t)&&+levels[t]<WD.F(k));
+  if(!lim.length)box.append(el('span',{class:'lvok'},'Everything can be used at these levels.'));
+  for(const[t,k,txt]of lim)box.append(el('span',{class:'lvlim',title:`Needs ${TRACK[t]} ${WD.F(k)}`},txt,el('span',{class:'lvreq'},` (${TRACK[t]} ${WD.F(k)})`)));
+  box.append(el('span',{class:'lvsave'},S.mode!=='firebase'?'Saved in this browser.':S.user?'Saved to your user.':'Log in to save them to your user.'))}
+function setLevelInputs(){for(const t of['support','driver','pilot'])$('lv_'+t).value=levels[t]??''}
+let lvTimer=0;
+function saveLevels(){ls.set('wd_levels',levels);
+  if(S.mode!=='firebase'||!S.user||!S.fb)return;clearTimeout(lvTimer);const F=S.fb,u=S.user;
+  lvTimer=setTimeout(()=>F.setDoc(F.doc(F.db,'users',u.uid),{levels:{support:levels.support??null,driver:levels.driver??null,pilot:levels.pilot??null},updated:new Date().toISOString()}).catch(e=>status('Could not save your levels: '+errText(e))),500)}
+// on login: take the levels saved to the user; a user with none saved yet keeps what this browser has, and saves it
+function loadLevels(u){const F=S.fb;F.getDoc(F.doc(F.db,'users',u.uid)).then(sn=>{if(S.user!==u)return;
+  if(sn.exists()&&sn.data().levels){const v=sn.data().levels;levels={support:v.support??null,driver:v.driver??null,pilot:v.pilot??null};ls.set('wd_levels',levels);setLevelInputs();renderHaul();renderTrips()}
+  else if(['support','driver','pilot'].some(filledLv))saveLevels();else renderLevelNotes()},()=>{})}
+setLevelInputs();
+for(const t of['support','driver','pilot']){const i=$('lv_'+t);
+  i.addEventListener('change',()=>{levels[t]=i.value===''?null:Math.max(0,+i.value);saveLevels();later(()=>{renderHaul();renderTrips()})})}
 
 /* ---------- Fact sheet ---------- */
 function renderFacts(){
@@ -2711,7 +2739,7 @@ async function startFirebase(){
   const F=S.fb;
   // the shared Fact sheet: everyone reads it, only the admin writes it
   F.onSnapshot(F.doc(fdb,'facts','main'),sn=>{WD.load(sn.exists()?(sn.data().values||{}):{});factsApplied()},()=>{});
-  F.onAuthStateChanged(auth,u=>{S.user=u;S.admin=false;S.pendOut=false;listen();renderSaved();renderFacts();
+  F.onAuthStateChanged(auth,u=>{S.user=u;S.admin=false;S.pendOut=false;listen();renderSaved();renderFacts();renderLevelNotes();if(u)loadLevels(u);
     if(u)F.getDoc(F.doc(fdb,'admins',u.uid)).then(()=>{if(S.user===u){S.admin=true;renderSaved();renderFacts()}},()=>{})})}
 
 /* ---------- start-up ---------- */
