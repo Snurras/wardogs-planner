@@ -76,6 +76,31 @@ button{cursor:pointer}
 .pc .sw{width:12px;height:12px;border-radius:2px;background:var(--c)}
 .pc .sz{font:500 11px var(--f-mono);color:var(--muted)}
 .stp.helper{color:var(--muted)}
+.stp.align{color:var(--entry)}
+.build-only{display:none!important}
+#tab-design.buildmode .build-only{display:revert!important}
+#tab-design.buildmode #layersCard{display:block!important}
+#tab-design.buildmode .edit-only{display:none!important}
+#tab-design.buildmode .rightcol>.card:last-child{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;gap:10px}
+#tab-design.buildmode #steps{overflow:auto;min-height:0}
+.bt-title{font:700 14px var(--f-head);letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+.lyr{font:600 11px var(--f-mono);background:var(--hi);border-radius:8px;padding:0 6px;margin-left:6px;color:var(--ink)}
+.stp.lhid{opacity:.35}
+.ordbar{display:flex!important;flex-direction:column;gap:6px}
+#tab-design:not(.buildmode) .ordbar{display:none!important}
+.ordbar>.btn{align-self:flex-start}
+.ordbar:has(>.btn){flex-direction:row;flex-wrap:wrap}
+.ordhead{font-size:14px}.ordrow{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.stp.edt{cursor:grab;border:1px solid transparent;border-radius:4px;padding:2px 4px;grid-template-columns:auto 34px 1fr}
+.stp.edt:hover{border-color:var(--line)}.stp.edt.over{border-color:var(--accent);background:var(--hi)}
+.stp .mv{display:inline-flex;gap:2px;margin-right:6px}.stp .mv .mini{padding:0 5px;min-height:22px;font-size:10px}
+.stp.oerr{background:color-mix(in srgb,var(--bad) 10%,transparent);border-color:var(--bad)}
+.stp.owarn{border-color:var(--entry)}
+.onote{grid-column:1/-1;font-size:12px;color:var(--bad)}.owarn .onote{color:var(--entry)}
+.sealed{font:700 12px var(--f-head);letter-spacing:.06em;text-transform:uppercase;color:var(--ok);border-top:2px solid var(--ok);padding-top:4px}
+.sealed.no{color:var(--muted);border-color:var(--line)}
+.lyrrow{display:flex;align-items:center;gap:8px;font-size:15px}
+.lyrrow .n{margin-left:auto;font:500 12px var(--f-mono);color:var(--muted)}
 .stp.helper>span:last-child{font-style:italic}
 .pc .pcost{font-weight:600;color:var(--ink);margin-left:3px}
 #threatHint:empty{display:none}
@@ -177,7 +202,7 @@ dialog#loginDlg::backdrop{background:rgba(20,25,15,.45)}
 .ftable input:disabled{opacity:.7;cursor:not-allowed}
 .fval{font:600 14px var(--f-mono);font-variant-numeric:tabular-nums;padding-right:6px}
 .vsep{width:1px;align-self:stretch;background:var(--line);margin:2px 2px}
-.toolbar{padding:7px 12px;gap:6px 8px}
+.toolbar{padding:7px 12px;gap:6px 7px}
 .btn.tool[aria-pressed=true]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
 #eraseBtn[aria-pressed=true]{background:var(--bad);border-color:var(--bad);color:#fff}
 /* fit the design view to the window (wide screens): each side column scrolls on its own if it ever needs to */
@@ -345,7 +370,8 @@ a{color:var(--accent)}
     <h1 title="Design a base on the HESCO grid, check where it can be climbed or blown open, then see exactly what to haul and how to pack it.">WARDOGS BASE PLANNER</h1>
     <nav class="tabs" id="tabs" aria-label="Sections">
       <button type="button" data-tab="design" class="on">Design</button>
-      <button type="button" data-tab="haul">Supplies &amp; haul <span class="badge" id="haulBadge" title="Supplies to haul"></span></button>
+      <button type="button" data-tab="haul">Haul <span class="badge" id="haulBadge" title="Supplies to haul"></span></button>
+      <button type="button" data-tab="build">Build</button>
       <button type="button" data-tab="facts">Fact sheet</button>
       <button type="button" data-tab="about">About</button>
     </nav>
@@ -377,17 +403,16 @@ a{color:var(--accent)}
 
   <section class="tab" id="tab-design">
   <div class="bar toolbar">
-    <span class="seg" id="modeSeg"><button type="button" data-m="edit" class="on">Edit</button><button type="button" data-m="blue">Blueprint</button></span>
-    <span class="vsep"></span>
-    <button class="btn ghost tool" type="button" id="selToolBtn" aria-pressed="false" title="Select, move and copy (V)">Select (V)</button>
-    <button class="btn ghost tool" type="button" id="sealToolBtn" aria-pressed="false" title="Click a building entrance to close it with HESCO or a Door, or open it again">Close an entrance</button>
-    <button class="btn ghost" type="button" id="rotBtn">Rotate (R)</button>
-    <button class="btn ghost tool" type="button" id="eraseBtn" aria-pressed="false" title="Erase the top piece where you click (E)">Erase (E)</button>
-    <span class="vsep"></span>
-    <button class="btn ghost" type="button" id="undoBtn" title="Undo the last change (Ctrl+Z)">Undo</button>
-    <button class="btn ghost" type="button" id="clearBtn" title="Start a new, empty design">Clear</button>
-    <label class="chk" title="Emplacements need one free block around them: when ticked, the planner won't let you build in that ring"><input type="checkbox" id="gapRule"> Keep 1 block free around emplacements</label>
-    <label class="chk" title="Pieces snapped side to side to a piece standing on a small HESCO are built one level up on a free foundation. It chains. Recon Towers and Shelters too."><input type="checkbox" id="fndMode"> +1 free foundation</label>
+    <span class="build-only bt-title">Build view · numbers show the build order</span>
+    <button class="edit-only btn ghost tool" type="button" id="selToolBtn" aria-pressed="false" title="Select, move and copy (V)">Select (V)</button>
+    <button class="edit-only btn ghost tool" type="button" id="sealToolBtn" aria-pressed="false" title="Click a building entrance to close it with HESCO or a Door, or open it again">Close an entrance</button>
+    <button class="edit-only btn ghost" type="button" id="rotBtn">Rotate (R)</button>
+    <button class="edit-only btn ghost tool" type="button" id="eraseBtn" aria-pressed="false" title="Erase the top piece where you click (E)">Erase (E)</button>
+    <span class="vsep edit-only"></span>
+    <button class="edit-only btn ghost" type="button" id="undoBtn" title="Undo the last change (Ctrl+Z)">Undo</button>
+    <button class="edit-only btn ghost" type="button" id="clearBtn" title="Start a new, empty design">Clear</button>
+    <label class="chk edit-only" title="Emplacements need one free block around them: when ticked, the planner won't let you build in that ring"><input type="checkbox" id="gapRule"> 1 block free around emplacements</label>
+    <label class="chk edit-only" title="+1h free trick: build a small HESCO with a large HESCO or Bremer on top. Anything you place touching it side to side is built one level up, on a free foundation, and the next piece touching that one too. Works for Recon Towers and Shelters; not for barbed wire, recon tents, hedgehogs or sandbags. The raised pieces stay if you remove the small HESCO afterwards: it then shows as a Helper block in the build order. Untick to build on the ground next to raised pieces."><input type="checkbox" id="fndMode" checked> +1h free trick</label>
     <span class="grow"></span>
     <button class="mini" type="button" id="zoomOut" aria-label="Zoom out">−</button><span class="mono status" id="zoomLbl">25×25</span><button class="mini" type="button" id="zoomIn" aria-label="Zoom in">+</button>
     <button class="mini" type="button" id="zoomFit" title="Zoom to show the whole design">Fit</button>
@@ -395,8 +420,13 @@ a{color:var(--accent)}
   </div>
   <div class="grid3" id="designGrid">
     <section class="col leftcol">
-      <div class="pal" id="palette"></div>
-      <div class="card" id="legendCard">
+      <div class="card build-only" id="layersCard">
+        <h3>Layers</h3>
+        <div class="col" id="layersList" style="gap:4px;margin-top:8px"></div>
+        <p class="status" style="margin:8px 0 0">A layer counts the pieces standing under a piece, not its height. Pieces raised with the +1h free trick count as Ground.</p>
+      </div>
+      <div class="pal edit-only" id="palette"></div>
+      <div class="card edit-only" id="legendCard">
         <div class="twohead"><button type="button" class="tdet-h top" id="legendBtn" aria-expanded="false" aria-controls="legendBody"><span>Legend</span><span class="tdet-c">▼</span></button><button type="button" class="tdet-h top" id="cmBtn" aria-expanded="false" aria-controls="cmBody" hidden><span id="cmTitle">Comments</span><span class="tdet-c">▼</span></button></div>
         <div id="legendBody" class="col" style="gap:10px" hidden>
           <div id="legend" class="col" style="gap:10px"></div>
@@ -428,7 +458,7 @@ a{color:var(--accent)}
     </section>
 
     <section class="col steps rightcol">
-      <div class="card">
+      <div class="card edit-only">
         <h3>Threat check</h3>
         <div id="threat" class="tsum" role="list"></div>
         <div id="threatHint" class="status"></div>
@@ -436,8 +466,8 @@ a{color:var(--accent)}
         <button type="button" id="detailsBtn" class="tdet-h" aria-expanded="false" aria-controls="threatDetails"><span>Details</span><span class="tdet-c">SHOW ▼</span></button>
         <div id="threatDetails" class="col" style="gap:8px" hidden></div>
       </div>
-      <div id="warns" class="col" style="gap:6px"></div>
-      <div class="card">
+      <div id="warns" class="col edit-only" style="gap:6px"></div>
+      <div class="card edit-only">
         <h3>Bill of materials</h3>
         <div class="trips" id="bomTrips"></div>
         <div class="packopts" title="With a vehicle: carried in your own backpack instead of the trunk. On foot both are always in your backpack.">
@@ -448,7 +478,9 @@ a{color:var(--accent)}
         <div class="bom" id="bom" hidden></div>
       </div>
       <div class="card">
-        <button type="button" class="tdet-h top" id="orderBtn" aria-expanded="false" aria-controls="steps"><span>Build order</span><span class="tdet-c">SHOW ▼</span></button>
+        <h3 class="build-only">Build order</h3>
+        <div class="build-only ordbar" id="ordBar"></div>
+        <button type="button" class="tdet-h top edit-only" id="orderBtn" aria-expanded="false" aria-controls="steps"><span>Build order</span><span class="tdet-c">SHOW ▼</span></button>
         <ol class="stepl" id="steps" hidden></ol>
       </div>
     </section>
@@ -516,8 +548,9 @@ a{color:var(--accent)}
         <dl class="feat">
           <dt>Design</dt><dd>Place every buildable, stack HESCO, turn pieces and seal entrances. The FOB build area is shown on the map.</dd>
           <dt>Threat check</dt><dd>Finds the easiest way in on foot, from a car or a Ural, with or without C4, and plays it as an animation.</dd>
-          <dt>Supplies &amp; haul</dt><dd>Build, ammo, fuel and mechanical supplies, cash cost and the fewest trips per vehicle.</dd>
+          <dt>Haul</dt><dd>Build, ammo, fuel and mechanical supplies, cash cost and the fewest trips per vehicle.</dd>
           <dt>Fact sheet</dt><dd>Every game number and most rules the planner uses, kept true and up to date after my best efforts.</dd>
+          <dt>Build</dt><dd>The build order step by step on the map, with layers you can hide to see what goes first.</dd>
           <dt>Save &amp; share</dt><dd>Personal, shared and template designs, with comments and thumbs.</dd>
         </dl>
       </section>
@@ -830,7 +863,7 @@ function withFnd(gp,list=pieces){if(!$('fndMode')||!$('fndMode').checked||NO_FND
   const r=rectOf(gp);for(let x=r.x;x<r.x+r.w;x++)for(let y=r.y;y<r.y+r.d;y++)if(topAt(x,y,list))return gp;
   const side=[];for(let x=r.x;x<r.x+r.w;x++){side.push([x,r.y-1],[x,r.y+r.d])}for(let y=r.y;y<r.y+r.d;y++){side.push([r.x-1,y],[r.x+r.w,y])}
   for(const[x,y]of side)if(raisedAt(x,y,list))return{...gp,fnd:{dx:x-gp.x,dy:y-gp.y}};
-  return{...gp,fndMiss:true}}
+  return gp}   // nothing raised to snap to: an ordinary piece on the ground
 function place(np,list=pieces){
   const r=rectOf(np),t=P[np.t];
   if(np.fndMiss)return{err:'Free foundation: touch a piece that stands one level up (on a small HESCO), side to side'};
@@ -1191,21 +1224,25 @@ function draw(){
   if(showLbl)for(let i=0;i<N;i++){
     svg.append(s('text',{x:M+i*C+C/2,y:M-8,'text-anchor':'middle','font-size':i%2?7:9,fill:'var(--muted)','font-family':'IBM Plex Mono, monospace'},COLS(i)));
     svg.append(s('text',{x:M-4,y:M+i*C+C/2+3,'text-anchor':'end','font-size':i%2?7:9,fill:'var(--muted)','font-family':'IBM Plex Mono, monospace'},i+1));}
-  const BS=buildSteps(),num=new Map(BS.steps.filter(st=>st.kind==='piece').map(st=>[st.p,st.no]));
+  const BS=buildSteps(),num=new Map(BS.steps.filter(st=>st.kind==='piece').map(st=>[st.p,st.no])),LY=computeLayers();
   for(const p of [...pieces].sort((a,b)=>a.z-b.z)){
-    const t=P[p.t];
+    const t=P[p.t];if(!layerShown(p,LY))continue;
     if(t.clear&&!p.z&&$('gapRule').checked&&mode==='edit'){const h=grow(rectOf(p),t.clear);
       g.append(s('rect',{x:h.x*C+1,y:h.y*C+1,width:h.w*C-2,height:h.d*C-2,fill:'none',stroke:`var(--${t.c})`,'stroke-dasharray':'3 3','stroke-width':1,opacity:.7}))}
     g.append(drawPiece(p,{num:mode==='blue'?num.get(p):null,covered:t.sym&&supports(p)}));
     if(p.bad){const r=rectOf(p);g.append(s('rect',{x:r.x*C+1,y:r.y*C+1,width:r.w*C-2,height:r.d*C-2,fill:'var(--bad)','fill-opacity':.12,stroke:'var(--bad)','stroke-width':2.2,'stroke-dasharray':'5 3'},null))}
   }
-  for(const p of pieces)if(p.fnd){const r=rectOf(p),c=fndCell(p);   // free foundation: sandbag edge, an F, and the helper spot if the anchor is gone
+  for(const p of pieces)if(p.fnd&&layerShown(p,LY)){const r=rectOf(p),c=fndCell(p);   // free foundation: sandbag edge, an F, and the helper spot if the anchor is gone
     g.append(s('rect',{x:r.x*C+.5,y:r.y*C+.5,width:r.w*C-1,height:r.d*C-1,fill:'none',stroke:'var(--fnd)','stroke-width':2,'stroke-dasharray':'4 2'}));
     if(r.w>1&&r.d>1){const f=s('g',{transform:`translate(${(r.x+r.w)*C-7},${r.y*C+7})`});f.append(s('circle',{r:5.5,fill:'var(--fnd)',stroke:'var(--ink)','stroke-width':.6}));
       const tx=s('text',{y:2.6,'text-anchor':'middle','font-size':7.5,'font-weight':700,fill:'var(--ink)','font-family':'var(--f-mono)'});tx.textContent='F';f.append(tx);
       const tt=s('title');tt.textContent=`${P[p.t].n}: ${fndText(p)}`;f.append(tt);g.append(f)}
   }
-  for(const h of BS.helpers){const{x,y}=h.c,hg=s('g',{});   // helper blocks: built for the snap, removed after
+  if(!(mode==='blue'&&hiddenLayers.has(0)))for(const c of alignHelpers()){const ag=s('g',{});   // alignment helpers: ground HESCO to snap the build into line
+    ag.append(s('rect',{x:c.x*C+3,y:c.y*C+3,width:C-6,height:C-6,rx:2,fill:'var(--entry)','fill-opacity':.22,stroke:'var(--entry)','stroke-width':1.6,'stroke-dasharray':'3 2'}));
+    const tx=s('text',{x:(c.x+.5)*C,y:(c.y+.5)*C+3,'text-anchor':'middle','font-size':mode==='blue'?8:7,'font-weight':700,fill:'var(--ink)','font-family':'var(--f-mono)'});tx.textContent=mode==='blue'&&c.no?String(c.no):'AH';ag.append(tx);
+    const tt=s('title');tt.textContent=`Alignment helper at ${COLS(c.x)}${c.y+1}: a small HESCO laid on the ground, not hammered (1 supply), so the build can snap into line from the FOB. Erase it afterwards if you like.`;ag.append(tt);g.append(ag)}
+  for(const h of BS.helpers){if(mode==='blue'&&hiddenLayers.has(0))break;const{x,y}=h.c,hg=s('g',{});   // helper blocks: built for the snap, removed after
     hg.append(s('rect',{x:x*C+2,y:y*C+2,width:C-4,height:C-4,rx:2,fill:'var(--fnd)','fill-opacity':.35,stroke:'var(--fnd)','stroke-width':1.6,'stroke-dasharray':'3 2'}));
     const tx=s('text',{x:(x+.5)*C,y:(y+.5)*C+(mode==='blue'?-1:3),'text-anchor':'middle','font-size':mode==='blue'?6.5:8,'font-weight':700,fill:'var(--ink)','font-family':'var(--f-mono)'});
     tx.textContent=mode==='blue'?`#${h.build}`:'HB';hg.append(tx);
@@ -1282,13 +1319,15 @@ function settle(rest,moved){
     const order=[...moved].sort((a,b)=>(a.t==='fob'?-1:b.t==='fob'?1:0)||a.z-b.z);
     for(const m of order){const np={t:m.t,x:m.x,y:m.y,r:m.r||0};if(m.fnd)np.fnd={...m.fnd};const res=place(np,out);
       if(res.err)return{err:`${P[m.t].n} at ${COLS(m.x)}${m.y+1}: ${res.err}`};
-      const q={...np,z:res.z};if(m.closed)q.closed=[...m.closed];if(m.doors)q.doors=[...m.doors];out.push(q);placed.push(q)}
+      const q={...np,z:res.z};if(m._o!=null)Object.defineProperty(q,'_o',{value:m._o,enumerable:false});if(m.closed)q.closed=[...m.closed];if(m.doors)q.doors=[...m.doors];out.push(q);placed.push(q)}
     const a=areaRect(fobOf(out)),outside=out.filter(p=>needsFob(p.t)&&!inside(rectOf(p),a));
     if(outside.length)return{err:`The FOB area would leave out ${outside.length} piece${outside.length>1?'s':''} (e.g. ${P[outside[0].t].n} at ${where(outside[0])})`};
     return{list:out,placed};
   }finally{stroke=saved}}
-function transformSel(fn){const moving=[...sel],rest=pieces.filter(p=>!sel.has(p));
-  const b=bbox(moving);return settle(rest,moving.map(p=>fn(copyPiece(p),b)))}
+function transformSel(fn){const moving=[...sel].sort((a,b)=>pieces.indexOf(a)-pieces.indexOf(b)),rest=pieces.filter(p=>!sel.has(p));
+  const b=bbox(moving),res=settle(rest,moving.map(p=>({...fn(copyPiece(p),b),_o:pieces.indexOf(p)})));
+  if(res.list){const o=q=>q._o!=null?q._o:pieces.indexOf(q);res.list.sort((a,c)=>(a.t==='fob'?-1:c.t==='fob'?1:0)||o(a)-o(c))}
+  return res}
 const shiftBy=(dx,dy)=>(p)=>({...p,x:p.x+dx,y:p.y+dy});
 // quarter turn clockwise about the selection's bounding box
 const turnCW=(p,b)=>{const r=rectOf(p),q={...p,x:b.x+(b.d-(r.y-b.y)-r.d),y:b.y+(r.x-b.x),r:((p.r||0)+1)%4};
@@ -1384,7 +1423,7 @@ function markAll(){for(const p of pieces)if(p.t!=='fob')p.bad='?';recheck()}
 try{$('gridLbl').checked=localStorage.getItem('wd_gridLbl')==='1'}catch(e){}
 $('gridLbl').onchange=()=>{try{localStorage.setItem('wd_gridLbl',$('gridLbl').checked?'1':'0')}catch(e){}draw()};
 $('showThreat').onchange=draw;
-for(const b of $('modeSeg').children)b.onclick=()=>{mode=b.dataset.m;[...$('modeSeg').children].forEach(x=>x.classList.toggle('on',x===b));draw()};
+
 
 let lastPiece='hesco_wall';
 function setTool(t){if(t!=='select'){pasting=false;drag=null;selBox=null}if(P[t])lastPiece=t;tool=t;updateSelBar();$('eraseBtn').setAttribute('aria-pressed',t==='erase'?'true':'false');
@@ -1412,24 +1451,195 @@ function renderPalette(){
 /* ---------- build order + BOM ---------- */
 // how many free-foundation links lie between a piece and its anchor (0 = not raised that way)
 function fndDepth(p,seen=new Set()){if(!p.fnd||seen.has(p))return 0;seen.add(p);const c=fndCell(p),n=raisedAt(c.x,c.y);return 1+(n?fndDepth(n,seen):0)}
-function buildOrder(){const d=new Map(pieces.map(p=>[p,fndDepth(p)]));
-  return[...pieces].sort((a,b)=>P[a.t].ph-P[b.t].ph||a.z-b.z||d.get(a)-d.get(b)||a.y-b.y||a.x-b.x)}
+/* ---------- Build order: edit it by hand, or let the planner suggest one; confirm to keep it ----------
+   The build order is the order of the pieces. While editing, ordEdit.list holds the draft (FOB excluded). */
+let ordEdit=null;
+const ctr=p=>{const r=rectOf(p);return{x:r.x+r.w/2,y:r.y+r.d/2}};
+const dist2=(a,b)=>(a.x-b.x)**2+(a.y-b.y)**2;
+// the pieces a piece stands on directly
+function supportsOf(p,list){if(!p.z||p.fnd)return[];const r=rectOf(p),out=[];
+  for(const q of list){if(q===p||q.z>=p.z||!hit(rectOf(q),r))continue;
+    let on=false;for(let x=r.x;x<r.x+r.w&&!on;x++)for(let y=r.y;y<r.y+r.d&&!on;y++)if(hit(rectOf(q),{x,y,w:1,d:1})&&cellTop(q,x,y)===p.z)on=true;
+    if(on)out.push(q)}
+  return out}
+// must be built before p: what it stands on, and the raised piece it snaps to (+1h free trick)
+function depsOf(p,list){const d=supportsOf(p,list);
+  if(p.fnd){const c=fndCell(p),n=list.find(q=>q!==p&&q.z===1&&!NO_FND.has(q.t)&&hit(rectOf(q),{x:c.x,y:c.y,w:1,d:1}));if(n)d.push(n)}
+  return d}
+// cells already built, to tell whether the next piece can snap to something
+function cellSet(list){const s=new Set();for(const p of list){const r=rectOf(p);for(let x=r.x;x<r.x+r.w;x++)for(let y=r.y;y<r.y+r.d;y++)s.add(x+','+y)}return s}
+function touchesBuilt(p,cells){const r=rectOf(p);
+  for(let x=r.x;x<r.x+r.w;x++)for(let y=r.y;y<r.y+r.d;y++){if(cells.has(x+','+y))return true;
+    for(const[dx,dy]of[[1,0],[-1,0],[0,1],[0,-1]])if(cells.has((x+dx)+','+(y+dy)))return true}
+  return false}
+// problems with an order: hard errors block Confirm, warnings don't
+function checkOrder(list){const fob=pieces.filter(p=>p.t==='fob'),all=[...fob,...list],idx=new Map(list.map((p,i)=>[p,i])),errs=new Map(),warns=new Map();
+  const cells=cellSet(fob);for(const k of alignCellSet())cells.add(k);
+  list.forEach((p,i)=>{for(const d of depsOf(p,all))if(idx.has(d)&&idx.get(d)>i)errs.set(p,`${d.z<p.z&&!p.fnd?'stands on':'snaps to'} ${P[d.t].n} #${idx.get(d)+2}: move it after that`);
+    if(i>0&&!errs.has(p)&&!touchesBuilt(p,cells))warns.set(p,"touches nothing built before it: hard to line up in game");
+    const r=rectOf(p);for(let x=r.x;x<r.x+r.w;x++)for(let y=r.y;y<r.y+r.d;y++)cells.add(x+','+y)});
+  return{errs,warns}}
+/* Greedy order for a pool of pieces: what it stands on first, then always something that snaps to what is
+   already built, the nearest one to the last piece (so the builder walks little; a piece on the last one comes next). */
+function orderPool(pool,done,cells,last,all){pool=new Set(pool);const out=[];
+  while(pool.size){
+    let cand=[...pool].filter(p=>depsOf(p,all).every(d=>done.has(d)));
+    if(!cand.length){const need=[...pool].flatMap(p=>depsOf(p,all)).find(d=>!done.has(d)&&!pool.has(d));if(need){pool.add(need);continue}cand=[...pool]}
+    const snap=cand.filter(p=>touchesBuilt(p,cells)),C=snap.length?snap:cand;
+    let best=C[0],bd=Infinity;for(const p of C){const d=dist2(ctr(p),last);if(d<bd){bd=d;best=p}}
+    out.push(best);done.add(best);pool.delete(best);last=ctr(best);
+    const r=rectOf(best);for(let x=r.x;x<r.x+r.w;x++)for(let y=r.y;y<r.y+r.d;y++)cells.add(x+','+y)}
+  return out}
+function autoEasy(){const fob=pieces.filter(p=>p.t==='fob'),rest=pieces.filter(p=>p.t!=='fob');
+  const cells=cellSet(fob);for(const k of alignCellSet())cells.add(k);
+  return orderPool(rest,new Set(fob),cells,fob[0]?ctr(fob[0]):{x:30,y:30},pieces)}
+// pieces side by side (sharing an edge)
+const sideBySide=(a,b)=>{const A=rectOf(a),B=rectOf(b);
+  return((A.x+A.w===B.x||B.x+B.w===A.x)&&A.y<B.y+B.d&&B.y<A.y+A.d)||((A.y+A.d===B.y||B.y+B.d===A.y)&&A.x<B.x+B.w&&B.x<A.x+A.w)};
+/* No grid in game: everything lines up by snapping to what is built, starting at the FOB. The shortest chain of
+   ground pieces from what is built to one of the targets (that target excluded), or [] if a target already touches. */
+function connectPath(targets,done,cells,all){const ground=all.filter(p=>!done.has(p)&&p.t!=='fob'&&!p.z&&!p.fnd);
+  const start=ground.filter(p=>touchesBuilt(p,cells));if(start.some(p=>targets.has(p)))return[];
+  const prev=new Map(start.map(p=>[p,null])),q=[...start];
+  while(q.length){const p=q.shift();if(targets.has(p)){const path=[];let c=prev.get(p);while(c){path.unshift(c);c=prev.get(c)}return path}
+    for(const n of ground)if(!prev.has(n)&&sideBySide(p,n)){prev.set(n,p);q.push(n)}}
+  return[]}
+// the outer perimeter: every piece the outside can reach (flooding in from beyond the base), and what stands on it
+function perimeterOf(all){const occ=new Set();for(const p of all)if(!INF_PASS.has(p.t)&&p.t!=='fob'){const r=rectOf(p);for(let x=r.x;x<r.x+r.w;x++)for(let y=r.y;y<r.y+r.d;y++)occ.add(x+','+y)}
+  if(!occ.size)return new Set();
+  let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;for(const k of occ){const[x,y]=k.split(',').map(Number);x0=Math.min(x0,x);y0=Math.min(y0,y);x1=Math.max(x1,x);y1=Math.max(y1,y)}
+  x0--;y0--;x1++;y1++;const out=new Set([x0+','+y0]),q=[[x0,y0]];
+  while(q.length){const[x,y]=q.pop();for(const[dx,dy]of[[1,0],[-1,0],[0,1],[0,-1]]){const nx=x+dx,ny=y+dy,k=nx+','+ny;
+    if(nx<x0||ny<y0||nx>x1||ny>y1||out.has(k)||occ.has(k))continue;out.add(k);q.push([nx,ny])}}
+  const per=new Set();
+  for(const p of all){if(INF_PASS.has(p.t)||p.t==='fob')continue;const r=rectOf(p);let edge=false;
+    for(let x=r.x;x<r.x+r.w&&!edge;x++)for(let y=r.y;y<r.y+r.d&&!edge;y++)for(const[dx,dy]of[[1,0],[-1,0],[0,1],[0,-1]])if(out.has((x+dx)+','+(y+dy))){edge=true;break}
+    if(edge)per.add(p)}
+  let grew=true;while(grew){grew=false;for(const p of all)if(!per.has(p)&&supportsOf(p,all).some(q=>per.has(q))){per.add(p);grew=true}}
+  return per}
+/* Perimeter first: the ring before anything else. Where the ground layer is lower than H2 (a jump gets over it),
+   each section is raised to H2 straight away; from H2 up the ring goes one whole layer at a time. Then the rest. */
+function autoPerimeter(){const fob=pieces.filter(p=>p.t==='fob'),rest=pieces.filter(p=>p.t!=='fob'),per=perimeterOf(pieces);
+  if(!per.size)return autoEasy();
+  const L=computeLayers(),done=new Set(fob),cells=cellSet(fob);for(const k of alignCellSet())cells.add(k);let last=fob[0]?ctr(fob[0]):{x:30,y:30};const out=[];
+  const above=q=>[...per].filter(p=>supportsOf(p,pieces).includes(q)).sort((a,b)=>a.z-b.z);
+  // first the chain of pieces that links the FOB to the ring, so the ring can snap into line
+  const ground=[...per].filter(p=>L.get(p)===0);const unitOf=new Map();
+  for(const p of connectPath(new Set(ground),done,cells,pieces)){out.push(p);done.add(p);const r=rectOf(p);for(let x=r.x;x<r.x+r.w;x++)for(let y=r.y;y<r.y+r.d;y++)cells.add(x+','+y);last=ctr(p)}
+  // phase A: the ground ring, each section topped up to H2 at once
+  for(const g of ground){const u=[g];let cur=g;while(topOf(cur)<2){const nx=above(cur)[0];if(!nx)break;u.push(nx);cur=nx}unitOf.set(g,u)}
+  for(const g of orderPool(ground,new Set(done),new Set(cells),last,pieces))for(const p of unitOf.get(g))if(!done.has(p)){out.push(p);done.add(p);const r=rectOf(p);for(let x=r.x;x<r.x+r.w;x++)for(let y=r.y;y<r.y+r.d;y++)cells.add(x+','+y);last=ctr(p)}
+  // phase B: the rest of the ring, one layer at a time
+  const left=[...per].filter(p=>!done.has(p)),maxL=Math.max(0,...left.map(p=>L.get(p)));
+  for(let n=0;n<=maxL;n++){const lay=left.filter(p=>L.get(p)===n&&!done.has(p));if(!lay.length)continue;
+    const seq=orderPool(lay,done,cells,last,pieces);out.push(...seq);if(seq.length)last=ctr(seq[seq.length-1])}
+  // phase C: everything inside
+  out.push(...orderPool(rest.filter(p=>!done.has(p)),done,cells,last,pieces));
+  return out}
+// the first step from which the base holds on foot (null: never)
+function holdsFrom(list){const fob=pieces.filter(p=>p.t==='fob'),save=pieces,foot=CAPS.find(c=>c.id==='foot');
+  const holds=k=>{pieces=[...fob,...list.slice(0,k)];try{return!climbRoute(threatGrid(),foot.cap,new Set())}catch(e){return false}finally{pieces=save}};
+  if(!list.length||!holds(list.length))return null;
+  let lo=0,hi=list.length;while(hi-lo>1){const m=(lo+hi)>>1;if(holds(m))hi=m;else lo=m}
+  return hi}   // number of pieces after the FOB; the step number is hi+1
+function startOrderEdit(list,how){window.stopAttack?.();ordEdit={list:list||pieces.filter(p=>p.t!=='fob'),clickAt:0,how:how||'Edit by hand',sealed:undefined};
+  ordEdit.sealed=holdsFrom(ordEdit.list);renderSide();draw()}
+function endOrderEdit(keep){if(!ordEdit)return;const L=ordEdit.list;ordEdit=null;
+  if(keep){snapshot();pieces=[...pieces.filter(p=>p.t==='fob'),...L];changed();flashMsg('Build order saved with the design. Save the design to keep it online.')}
+  else{renderSide();draw()}}
+function orderChanged(){ordEdit.sealed=holdsFrom(ordEdit.list);renderSide();draw()}
+function moveInOrder(p,to){const L=ordEdit.list,i=L.indexOf(p);if(i<0)return;L.splice(i,1);L.splice(Math.max(0,Math.min(L.length,to)),0,p);orderChanged()}
+// the toolbar above the list (Build view)
+function renderOrderBar(){const bar=$('ordBar');if(!bar)return;bar.replaceChildren();
+  if(!ordEdit){bar.append(el('button',{type:'button',class:'btn ghost',onclick:()=>startOrderEdit(null,'Edit by hand'),title:'Drag steps, use ▲▼, or click pieces on the map in the order you want'},'Edit order'),
+      el('button',{type:'button',class:'btn ghost',onclick:()=>startOrderEdit(autoEasy(),'Easy build'),title:'Always snapped to something built, little walking, stacks right after their base'},'Easy build'),
+      el('button',{type:'button',class:'btn ghost',onclick:()=>startOrderEdit(autoPerimeter(),'Perimeter first'),title:'Seal the outer ring first (raised to H2 straight away), then the rest'},'Perimeter first'));return}
+  const{errs}=checkOrder(ordEdit.list);
+  bar.append(el('div',{class:'ordhead'},el('b',{},ordEdit.how),' · drag, ▲▼, or click pieces on the map in order'),
+    el('div',{class:'ordrow'},el('span',{class:'status'},`Next map click becomes #${ordEdit.clickAt+2}`),el('button',{type:'button',class:'mini',onclick:()=>{ordEdit.clickAt=0;renderOrderBar()}},'Restart at #2'),
+      el('span',{class:'grow'}),el('button',{type:'button',class:'btn ghost',onclick:()=>endOrderEdit(false)},'Cancel'),
+      el('button',{type:'button',class:'btn',disabled:errs.size?'':null,title:errs.size?'Fix the red steps first':'Keep this order',onclick:()=>endOrderEdit(true)},'Confirm')),
+    el('div',{class:'ordrow'},el('button',{type:'button',class:'mini',onclick:()=>{ordEdit.list=autoEasy();ordEdit.how='Easy build';ordEdit.clickAt=0;orderChanged()}},'Easy build'),
+      el('button',{type:'button',class:'mini',onclick:()=>{ordEdit.list=autoPerimeter();ordEdit.how='Perimeter first';ordEdit.clickAt=0;orderChanged()}},'Perimeter first')),
+    errs.size?el('div',{class:'warn'},`${errs.size} step${errs.size>1?'s are':' is'} before what ${errs.size>1?'they need':'it needs'} (red). Fix before Confirm.`):null)}
+// map clicks while editing: the clicked piece takes the next number
+svg.addEventListener('pointerdown',e=>{if(mode!=='blue'||!ordEdit||e.button!==0)return;const c=cellFrom(e);if(!c)return;
+  const LY=computeLayers(),hits=ordEdit.list.filter(p=>layerShown(p,LY)&&hit(rectOf(p),{x:c.cx,y:c.cy,w:1,d:1})).sort((a,b)=>b.z-a.z);
+  if(!hits.length)return;moveInOrder(hits[0],ordEdit.clickAt);ordEdit.clickAt=Math.min(ordEdit.list.length-1,ordEdit.clickAt+1);renderOrderBar()});
+
+/* Layers (Build view): how many pieces stand under a piece, whatever their heights. Ground = 0.
+   A piece raised with the +1h free trick counts as Ground. */
+function computeLayers(list=pieces){const L=new Map();
+  const of=p=>{if(L.has(p))return L.get(p);L.set(p,0);let v=0;
+    if(p.z>0&&!p.fnd){const r=rectOf(p);for(const q of list){if(q===p||q.z>=p.z||!hit(rectOf(q),r))continue;
+      let on=false;for(let x=r.x;x<r.x+r.w&&!on;x++)for(let y=r.y;y<r.y+r.d&&!on;y++)if(hit(rectOf(q),{x,y,w:1,d:1})&&cellTop(q,x,y)===p.z)on=true;
+      if(on)v=Math.max(v,1+of(q))}}
+    L.set(p,v);return v};
+  for(const p of list)of(p);return L}
+const layerName=n=>n?'+'+n:'Ground';
+const hiddenLayers=new Set();
+function layerShown(p,L){return mode!=='blue'||!hiddenLayers.has(L.get(p))}
+function renderLayers(){const box=$('layersList');if(!box)return;box.replaceChildren();const L=computeLayers(),cnt=new Map();
+  for(const v of L.values())cnt.set(v,(cnt.get(v)||0)+1);
+  for(const k of[...hiddenLayers])if(!cnt.has(k))hiddenLayers.delete(k);
+  for(const n of[...cnt.keys()].sort((a,b)=>a-b)){const id='lyr_'+n,cb=el('input',{type:'checkbox',id});cb.checked=!hiddenLayers.has(n);
+    cb.onchange=()=>{if(cb.checked)hiddenLayers.delete(n);else hiddenLayers.add(n);draw();renderSide()};
+    box.append(el('label',{class:'lyrrow',for:id},cb,layerName(n),el('span',{class:'n'},`${cnt.get(n)} piece${cnt.get(n)>1?'s':''}`)))}}
+// the build order is the order the pieces were placed in on the Design tab (the FOB first); while editing, the draft
+function buildOrder(){return[...pieces.filter(p=>p.t==='fob'),...(ordEdit?ordEdit.list:pieces.filter(p=>p.t!=='fob'))]}
 function fndText(p){const c=fndCell(p),n=raisedAt(c.x,c.y),at=COLS(c.x)+(c.y+1);
   return n?`free foundation: snap to the ${P[n.t].n} at ${at}`:`free foundation: snap to the helper block at ${at}`}
 /* Helper blocks: where a chain of raised pieces starts at an anchor that is no longer in the design (removed after use in game).
    The helper = a small HESCO with a large HESCO on top, built before the chain and removed after its last piece. */
 function fndRoot(p,seen=new Set()){if(!p.fnd||seen.has(p))return null;seen.add(p);const c=fndCell(p),n=raisedAt(c.x,c.y);return !n?c:n.fnd?fndRoot(n,seen):null}
-function buildSteps(){const order=buildOrder(),H=new Map();
+/* Alignment helpers: there is no grid in game, so everything has to snap into line from the FOB. Where a group of
+   pieces touches neither the FOB nor anything linked to it, small HESCO are laid on the ground (not hammered, 1 supply
+   each) along the shortest free line from the FOB to that group. They go first in the build, and can be erased later. */
+let layoutRev=0,alignCache={rev:-1,ref:null,cells:[]};
+function alignHelpers(){if(alignCache.rev===layoutRev&&alignCache.ref===pieces)return alignCache.cells;
+  const fob=pieces.find(p=>p.t==='fob'),rest=pieces.filter(p=>p.t!=='fob'&&!INF_PASS_ALIGN.has(p.t));let cells=[];
+  if(fob&&rest.length){
+    const linked=(a,b)=>hit(rectOf(a),rectOf(b))||sideBySide(a,b);
+    const comp=new Map();let n=0;for(const p of rest){if(comp.has(p))continue;const q=[p];comp.set(p,n);
+      while(q.length){const c=q.pop();for(const o of rest)if(!comp.has(o)&&linked(c,o)){comp.set(o,n);q.push(o)}}n++}
+    const groups=[...Array(n)].map((_,i)=>rest.filter(p=>comp.get(p)===i));
+    const occ=new Set();for(const p of pieces){const r=rectOf(p);for(let x=r.x;x<r.x+r.w;x++)for(let y=r.y;y<r.y+r.d;y++)occ.add(x+','+y)}
+    const base=new Set(),add=(x,y)=>base.add(x+','+y);{const r=rectOf(fob);for(let x=r.x;x<r.x+r.w;x++)for(let y=r.y;y<r.y+r.d;y++)add(x,y)}
+    const N4=[[1,0],[-1,0],[0,1],[0,-1]],nextTo=(set,x,y)=>N4.some(([dx,dy])=>set.has((x+dx)+','+(y+dy)));
+    const pend=groups.filter(g=>!g.some(p=>linked(p,fob)));
+    while(pend.length){
+      // breadth-first over free ground from next to the FOB (and helpers so far) to the nearest unlinked group
+      const goal=new Map();pend.forEach((g,i)=>{for(const p of g){const r=rectOf(p);for(let x=r.x;x<r.x+r.w;x++)for(let y=r.y;y<r.y+r.d;y++)goal.set(x+','+y,i)}});
+      const prev=new Map(),q=[];for(const k of base){const[x,y]=k.split(',').map(Number);for(const[dx,dy]of N4){const nx=x+dx,ny=y+dy,nk=nx+','+ny;
+        if(nx<0||ny<0||nx>=N||ny>=N||occ.has(nk)||base.has(nk)||prev.has(nk))continue;prev.set(nk,null);q.push([nx,ny])}}
+      let hitGoal=null;
+      // a group already touching the helpers is linked
+      const touched=pend.findIndex(g=>g.some(p=>{const r=rectOf(p);for(let x=r.x;x<r.x+r.w;x++)for(let y=r.y;y<r.y+r.d;y++)if(nextTo(base,x,y))return true;return false}));
+      if(touched>=0){pend.splice(touched,1);continue}
+      while(q.length&&!hitGoal){const[x,y]=q.shift();const k=x+','+y;
+        for(const[dx,dy]of N4){const gk=(x+dx)+','+(y+dy);if(goal.has(gk)){hitGoal={k,g:goal.get(gk)};break}}
+        if(hitGoal)break;
+        for(const[dx,dy]of N4){const nx=x+dx,ny=y+dy,nk=nx+','+ny;if(nx<0||ny<0||nx>=N||ny>=N||occ.has(nk)||base.has(nk)||prev.has(nk))continue;prev.set(nk,k);q.push([nx,ny])}}
+      if(!hitGoal)break;
+      const path=[];let k=hitGoal.k;while(k){path.unshift(k);k=prev.get(k)}
+      for(const k of path){base.add(k);const[x,y]=k.split(',').map(Number);cells.push({x,y})}
+      pend.splice(hitGoal.g,1)}}
+  alignCache={rev:layoutRev,ref:pieces,cells};return cells}
+const INF_PASS_ALIGN=new Set(['barbed','hedgehog','recon_tent','sandbags']);   // field items don't need to line up
+const alignCellSet=()=>new Set(alignHelpers().map(c=>c.x+','+c.y));
+function buildSteps(){const order=buildOrder(),H=new Map(),AH=alignHelpers();
   order.forEach((p,i)=>{const c=fndRoot(p);if(!c)return;const k=c.x+','+c.y;if(!H.has(k))H.set(k,{c,first:i,last:i});else H.get(k).last=i});
   const out=[];order.forEach((p,i)=>{for(const h of H.values())if(h.first===i)out.push({kind:'helper',act:'build',h,ph:P[p.t].ph});
     out.push({kind:'piece',p,ph:P[p.t].ph});
+    if(i===0)for(const c of AH)out.push({kind:'align',c,ph:0});
     for(const h of H.values())if(h.last===i)out.push({kind:'helper',act:'remove',h,ph:P[p.t].ph})});
-  out.forEach((st,i)=>{st.no=i+1;if(st.kind==='helper')st.h[st.act]=i+1});
+  if(AH.length)out.push({kind:'alignOff',cells:AH,ph:0});
+  out.forEach((st,i)=>{st.no=i+1;if(st.kind==='helper')st.h[st.act]=i+1;if(st.kind==='align')st.c.no=i+1});
   return{steps:out,helpers:[...H.values()]}}
-function changed(){window.stopAttack?.();recheck();threatStale=false;renderThreat();draw();renderSide();window.onDesignChanged?.()}
+function changed(){layoutRev++;ordEdit=null;window.stopAttack?.();recheck();threatStale=false;renderThreat();draw();renderSide();window.onDesignChanged?.()}
 let threatStale=false;
 // while dragging out a wall: redraw only; the threat check runs once when the mouse is released
-function changedDuringStroke(){threatStale=true;draw();renderSide()}
+function changedDuringStroke(){layoutRev++;threatStale=true;draw();renderSide()}
 function where(p){const r=rectOf(p);const a=COLS(r.x)+(r.y+1),b=COLS(r.x+r.w-1)+(r.y+r.d);return a===b?a:a+'–'+b}
 function renderSide(){
   window.renderTrips?.();
@@ -1448,14 +1658,30 @@ function renderSide(){
   const unk=Object.keys(cnt).filter(id=>id!=='fob'&&P[id].q==='?');if(unk.length)w.append(el('div',{class:'warn'},'No published footprint for '+unk.map(id=>P[id].n).join(', ')+'. Check the size in game.'));
   const st=$('steps');st.replaceChildren();
   if(!pieces.length){st.append(el('li',{class:'empty'},'Place pieces to get a numbered build order.'));return}
+  const LY=computeLayers();renderLayers();
+  const CK=ordEdit?checkOrder(ordEdit.list):null;
   let ph=-1;for(const step of buildSteps().steps){
-    if(step.ph!==ph&&!(step.kind==='helper'&&step.act==='remove')){ph=step.ph;st.append(el('li',{class:'phase'},PHASES[ph]))}
+    if(step.kind==='align'){st.append(el('li',{class:'stp helper align'+(mode==='blue'&&hiddenLayers.has(0)?' lhid':'')},el('span',{class:'no'},'#'+step.no),el('span',{},'Alignment helper ',
+        el('span',{class:'where'},`${COLS(step.c.x)}${step.c.y+1} · small HESCO on the ground, don't hammer (1 supply) · snap it to the ${step.no===2?'FOB':'one before'}`))));continue}
+    if(step.kind==='alignOff'){st.append(el('li',{class:'stp helper align'},el('span',{class:'no'},'#'+step.no),el('span',{},'Erase the alignment helpers ',
+        el('span',{class:'where'},'(optional) at '+step.cells.map(c=>COLS(c.x)+(c.y+1)).join(', ')))));continue}
     if(step.kind==='helper'){const at=COLS(step.h.c.x)+(step.h.c.y+1);
-      st.append(el('li',{class:'stp helper'},el('span',{class:'no'},'#'+step.no),el('span',{},step.act==='build'?'Helper block ':'Remove helper block ',
+      st.append(el('li',{class:'stp helper'+(mode==='blue'&&hiddenLayers.has(0)?' lhid':'')},el('span',{class:'no'},'#'+step.no),el('span',{},step.act==='build'?'Helper block ':'Remove helper block ',
         el('span',{class:'where'},at+(step.act==='build'?' · small HESCO with a large HESCO on top, only to snap to':' · the raised pieces stay'))))) ;continue}
     const p=step.p,i=step.no-1,t=P[p.t];
     const hgt=p.fnd?` · ${fndText(p)}`+(t.support?`, top ${heightText(p)}`:''):t.support?` · ${p.z?'on '+hName(p.z)+', ':''}top ${heightText(p)}`:(p.z?` · on ${hName(p.z)}`:'');
-    st.append(el('li',{class:'stp'},el('span',{class:'no'},'#'+(i+1)),el('span',{},t.n,' ',el('span',{class:'where'},where(p)+hgt+(orientText(p)?' · '+orientText(p):(R(p)%2&&t.w!==t.d?' · turned':''))))))}
+    const li=el('li',{class:'stp'+(layerShown(p,LY)?'':' lhid')},el('span',{class:'no'},'#'+(i+1)),el('span',{},t.n,el('span',{class:'lyr',title:'Layer'},layerName(LY.get(p))),' ',el('span',{class:'where'},where(p)+hgt+(orientText(p)?' · '+orientText(p):(R(p)%2&&t.w!==t.d?' · turned':'')))));
+    if(ordEdit&&p.t!=='fob'){const k=ordEdit.list.indexOf(p),e=CK.errs.get(p),w=CK.warns.get(p);
+      li.classList.add('edt');if(e)li.classList.add('oerr');else if(w)li.classList.add('owarn');
+      if(e||w)li.append(el('div',{class:'onote'},e||w));
+      li.prepend(el('span',{class:'mv'},el('button',{type:'button',class:'mini','aria-label':'Earlier',disabled:k===0?'':null,onclick:()=>moveInOrder(p,k-1)},'▲'),el('button',{type:'button',class:'mini','aria-label':'Later',disabled:k===ordEdit.list.length-1?'':null,onclick:()=>moveInOrder(p,k+1)},'▼')));
+      li.draggable=true;li.addEventListener('dragstart',ev=>{ev.dataTransfer.setData('text/plain',String(k));ev.dataTransfer.effectAllowed='move';li.classList.add('drag')});
+      li.addEventListener('dragover',ev=>{ev.preventDefault();li.classList.add('over')});li.addEventListener('dragleave',()=>li.classList.remove('over'));
+      li.addEventListener('drop',ev=>{ev.preventDefault();const from=+ev.dataTransfer.getData('text/plain');const q=ordEdit.list[from];if(q&&q!==p)moveInOrder(q,ordEdit.list.indexOf(p))})}
+    st.append(li);
+    if(ordEdit&&ordEdit.sealed!=null&&p.t!=='fob'&&ordEdit.list.indexOf(p)===ordEdit.sealed-1)st.append(el('li',{class:'sealed'},`From here the base holds on foot (after step #${i+1})`))}
+  if(ordEdit&&ordEdit.sealed===null)st.prepend(el('li',{class:'sealed no'},"The finished base doesn't hold on foot, so no step seals it."));
+  renderOrderBar();
   const seals=[];for(const p of buildOrder())for(const e of entrancesOf(p))if(e.closed)seals.push({p,e});
   if(seals.length){st.append(el('li',{class:'phase'},'Seal entrances'));
     seals.forEach(({p,e},k)=>st.append(el('li',{class:'stp'},el('span',{class:'no'},'S'+(k+1)),el('span',{},P[e.sealType].n,' ',el('span',{class:'where'},`${COLS(e.x)}${e.y+1} · ${e.sealType==='door'?'door in':'closes'} the ${P[p.t].n} entrance`)))))}
@@ -1471,10 +1697,10 @@ function rebuild(list,legacy){
   const rep={unknown:[],flagged:0,fixed:0};
   const f=list.find(p=>p.t==='fob');
   const out=[{...FOB_AT,...(f&&!legacy?{x:f.x,y:f.y}:{})}];list=list.filter(p=>p.t!=='fob');
-  const sorted=[...list].sort((a,b)=>(a.l||0)-(b.l||0)||(a.z||0)-(b.z||0));
+  const sorted=[...list].sort((a,b)=>(a.l||0)-(b.l||0)||(a.z||0)-(b.z||0)),ord=new Map();
   for(const p of sorted){const np={t:p.t,x:p.x,y:p.y,r:((p.r|0)%4+4)%4};if(p.fnd&&Number.isInteger(p.fnd.dx)&&Number.isInteger(p.fnd.dy))np.fnd={dx:p.fnd.dx,dy:p.fnd.dy};
     if(!P[np.t]){rep.unknown.push(p.t);continue}
-    const q={...np};
+    const q={...np};ord.set(q,list.indexOf(p));
     // entrance seals: only entrances that exist; bunkers take HESCO, never a door
     const n=entrancesOf({...np,z:0}).length,okK=k=>Number.isInteger(k)&&k>=0&&k<n;
     let closed=(p.closed||[]).filter(okK),doors=(p.doors||[]).filter(okK);
@@ -1486,7 +1712,7 @@ function rebuild(list,legacy){
     else{q.z=looseZ(np,out);q.bad=res.err;rep.flagged++}
     out.push(q)}
   rebuild.report=rep;
-  return out;
+  return[out[0],...out.slice(1).sort((a,b)=>ord.get(a)-ord.get(b))];   // FOB first, then the order they were placed in
 }
 // height a flagged piece is drawn at: the highest top under it
 function looseZ(np,list){const r=rectOf(np);let z=0;
@@ -2446,8 +2672,12 @@ const nameOf=id=>P[id]?P[id].n:id;
 /* ---------- tabs ---------- */
 let tab='design';
 function showTab(t){tab=t;for(const b of document.querySelectorAll('#tabs button'))b.classList.toggle('on',b.dataset.tab===t);
-  for(const id of['design','haul','facts','about'])$('tab-'+id).hidden=id!==t;
-  if(t==='haul')renderHaul();if(t==='facts')renderFacts();if(t==='design')requestAnimationFrame(()=>{fitLayout();draw()})}
+  const sec=t==='build'?'design':t;for(const id of['design','haul','facts','about'])$('tab-'+id).hidden=id!==sec;
+  if(t!=='build'&&ordEdit)endOrderEdit(false);
+  $('tab-design').classList.toggle('buildmode',t==='build');
+  $('steps').hidden=t==='build'?false:$('orderBtn').getAttribute('aria-expanded')!=='true';   // Build always shows the order
+  if(sec==='design'){const m=t==='build'?'blue':'edit';if(m!==mode){window.stopAttack?.();mode=m;if(m==='blue'&&tool==='select')setTool(lastPiece)}renderSide();requestAnimationFrame(()=>{fitLayout();draw()})}
+  if(t==='haul')renderHaul();if(t==='facts')renderFacts()}
 for(const b of document.querySelectorAll('#tabs button'))b.onclick=()=>showTab(b.dataset.tab);
 const designDoc=()=>({name:designName,pieces:pieces.map(({bad,...p})=>p),plan,v:SAVE_V,gapRule:$('gapRule').checked});
 window.onDesignChanged=()=>{ls.set('wd_design_draft',designDoc());if(tab==='haul')renderHaul();updateTabBadge()};
@@ -2459,7 +2689,7 @@ window.renderTrips=()=>{const root=$('bomTrips');if(!root)return;root.replaceChi
   for(const[id,k]of[['optFobPack','fobInPack'],['optFobPack2','fobInPack'],['optHamPack','hammerInPack'],['optHamPack2','hammerInPack']])$(id).checked=!!plan[k];
   const r=Haul.needs(counts(),plan),S=WD.F('stack'),stacks=Haul.ORDER.reduce((a,t)=>a+r.haul[t]/S,0);
   if(!stacks){root.append(el('div',{class:'none'},pieces.length>1?'Nothing to haul: the new FOB\'s starting supplies cover this design.':'Place pieces to see how many trips it takes.'));return}
-  const tile=(k,v,sub)=>el('button',{class:'trip-t',type:'button',onclick:()=>showTab('haul'),title:'Open Supplies & haul'},el('span',{class:'k'},k),el('span',{class:'v'},v),el('span',{class:'s'},sub));
+  const tile=(k,v,sub)=>el('button',{class:'trip-t',type:'button',onclick:()=>showTab('haul'),title:'Open Haul'},el('span',{class:'k'},k),el('span',{class:'v'},v),el('span',{class:'s'},sub));
   const foot=Math.ceil(stacks/Math.max(1,WD.F('foot.stacks')));
   root.append(tile('On foot',`${foot} trip${foot>1?'s':''}`,`${fmt(stacks*S)} supplies`));
   for(const id of['ural','lakota']){const v=Haul.VEH.find(x=>x.id===id),best=Haul.packFor(v,r.haul,levels)[0];
@@ -2667,7 +2897,7 @@ function renderFacts(){
       `HESCO and Doors stacked on HESCO or Doors: up to H${F('stack.hesco')}. Anything built on a building: up to H${F('stack.total')}.`,
       `A Bunker can stand on the ground${F('stack.bunker')>0?' or on HESCO up to H'+F('stack.bunker'):''}. Recon Towers and Shelters must stand on the ground.`,
       `The FOB build area is a ${F('fob.area')} m square centred on the FOB. Sandbags, barbed wire, hedgehogs and recon tents may sit outside it.`,
-      `Free foundation: a piece snapped side to side to a piece standing on a small HESCO is built one level up at no cost, and it chains. Recon Towers and Shelters too; not barbed wire, recon tents, hedgehogs or sandbags. It stays when the helper is removed, and needs the same C4 as the piece on it.`,
+      `+1h free trick (free foundation): a piece snapped side to side to a piece standing on a small HESCO is built one level up at no cost, and it chains. Recon Towers and Shelters too; not barbed wire, recon tents, hedgehogs or sandbags. It stays when the helper is removed, and needs the same C4 as the piece on it.`,
       `Protected in the threat check: emplacements, stations and the FOB.`]],
   ];
   for(const[h,lines]of RULES)R.append(el('div',{class:'rgrp'},el('h4',{},h),el('ul',{},...lines.map(l=>el('li',{},l)))));
