@@ -465,7 +465,7 @@ a{color:var(--accent)}
     <button class="edit-only btn ghost" type="button" id="undoBtn" title="Undo the last change (Ctrl+Z)">Undo</button>
     <button class="edit-only btn ghost" type="button" id="rotBtn">Rotate (R)</button>
     <button class="edit-only btn ghost tool" type="button" id="eraseBtn" aria-pressed="false" title="Erase the top piece where you click (E)">Erase (E)</button>
-    <button class="edit-only btn ghost tool" type="button" id="sealToolBtn" aria-pressed="false" title="Modify an entrance (M): click a building entrance, or a square of the open centre of a trimmed Recon Tower or Shelter, to close it with HESCO or a Door, or open it again">Modify an entrance (M)</button>
+    <button class="edit-only btn ghost tool" type="button" id="sealToolBtn" aria-pressed="false" title="Modify an entrance (M): click a building entrance, or a square of the open centre of a Recon Tower or Shelter (shown with a red grid), to close it with HESCO or a Door, or open it again">Modify an entrance (M)</button>
     <span class="vsep edit-only"></span>
     <button class="edit-only btn ghost" type="button" id="clearBtn" title="Start a new, empty design">Clear</button>
     <input type="checkbox" id="gapRule" hidden>
@@ -528,6 +528,7 @@ a{color:var(--accent)}
         <div id="threat" class="tsum" role="list"></div>
         <div id="threatHint" class="status"></div>
         <label class="chk"><input type="checkbox" id="showThreat"> Show weak points on the map</label>
+        <label class="chk" title="Only FOB: attackers go for the FOB alone. Emplacements and stations outside it are ignored (walked past) in the threat check and the attack animation. Saved with the design."><input type="checkbox" id="onlyFob"> Only FOB</label>
         <button type="button" id="detailsBtn" class="tdet-h" aria-expanded="false" aria-controls="threatDetails"><span>Details</span><span class="tdet-c">SHOW ▼</span></button>
         <div id="threatDetails" class="col" style="gap:8px" hidden></div>
       </div>
@@ -1016,16 +1017,16 @@ const OUT={S:[0,1],N:[0,-1],W:[-1,0],E:[1,0]};
 function entrancesOf(p){const t=P[p.t];if(!t.sym)return[];const list=[...(t.sym.door||[]),...(t.sym.arrow||[])];
   return list.map(([side,i],k)=>{const[lx,ly]=side==='S'?[i,t.d-1]:side==='N'?[i,0]:side==='W'?[0,i]:[t.w-1,i];
     const[x,y]=toWorld(p,lx,ly);const st=sealOf(p,k);return{k,x,y,out:turnDir(OUT[side],R(p)),seal:st||SEAL_WITH(p.t),sealType:st,closed:!!st}})}
-// Trimmed Recon Tower / Shelter: the removed centre is open space. Each centre square can be closed like an entrance,
+// Recon Tower / Shelter (full or trimmed): the centre of the bottom floor is open space. Each centre square can be closed like an entrance,
 // with a Large HESCO or a Door. Keys 100+. Drawn and counted (supplies, time, steps); the threat check doesn't use them.
 const CENTRE_K=100;
-function centreOf(p){const t=P[p.t];if(!t.trimmed)return[];const[x0,y0,iw,id]=t.trimmed,out=[];
+function centreOf(p){const t=P[p.t],c=t.trimmed||t.raised;if(!c||!t.sym)return[];const[x0,y0,iw,id]=c,out=[];   // Recon Tower 2×2, Shelter 3×3: open space on the bottom floor, full or trimmed
   for(let j=0;j<id;j++)for(let i=0;i<iw;i++){const k=CENTRE_K+j*iw+i,[x,y]=toWorld(p,x0+i,y0+j),st=sealOf(p,k);
     out.push({k,x,y,lx:x0+i,ly:y0+j,centre:true,seal:st||SEAL_WITH(p.t),sealType:st,closed:!!st})}
   return out}
 const openingsOf=p=>[...entrancesOf(p),...centreOf(p)];
 // open → HESCO → Door (not bunkers) → open
-function cycleSeal(p,k){const c=new Set(p.closed||[]),d=new Set(p.doors||[]);
+function cycleSeal(p,k){const c=new Set(p.closed||[]),d=new Set(p.doors||[]);if(p.doorR&&d.has(k)){delete p.doorR[k];if(!Object.keys(p.doorR).length)delete p.doorR}
   if(d.has(k))d.delete(k);else if(c.has(k)){c.delete(k);if(DOOR_OK(p.t))d.add(k)}else c.add(k);
   p.closed=[...c].sort();p.doors=[...d].sort();if(!p.closed.length)delete p.closed;if(!p.doors.length)delete p.doors}
 function nextSealText(p,e){if(e.sealType==='door')return'Open';if(e.sealType)return DOOR_OK(p.t)?`Swap to a Door (${WD.build('door')} supplies)`:'Open';return`Seal with a ${P[SEAL_WITH(p.t)].n} (${WD.build(SEAL_WITH(p.t))} supplies)`}
@@ -1211,11 +1212,15 @@ function drawPiece(p,{ghost=false,num=null,covered=false}={}){
       g.append(s('rect',{x:x*C,y:y*C,width:iw*C,height:id*C,fill:'var(--ink)','fill-opacity':.28,stroke:'var(--ink)','stroke-width':2}));
       for(let i=1;i<iw;i++)g.append(s('line',{x1:(x+i)*C,y1:y*C,x2:(x+i)*C,y2:(y+id)*C,stroke:'var(--ink)','stroke-width':1.2}));
       for(let i=1;i<id;i++)g.append(s('line',{x1:x*C,y1:(y+i)*C,x2:(x+iw)*C,y2:(y+i)*C,stroke:'var(--ink)','stroke-width':1.2}));}
-    if(t.trimmed){const[x,y,iw,id]=t.trimmed; // removed core: dashed outline, closed squares drawn as a HESCO or a Door
-      g.append(s('rect',{x:x*C+2,y:y*C+2,width:iw*C-4,height:id*C-4,fill:'none',stroke:'var(--ink)','stroke-width':1.4,'stroke-dasharray':'4 3',opacity:.8}));
+    if(t.trimmed){const[x,y,iw,id]=t.trimmed; // removed core: dashed outline
+      g.append(s('rect',{x:x*C+2,y:y*C+2,width:iw*C-4,height:id*C-4,fill:'none',stroke:'var(--ink)','stroke-width':1.4,'stroke-dasharray':'4 3',opacity:.8}));}
+    if(t.trimmed||t.raised){const[x,y,iw,id]=t.trimmed||t.raised;
+      // Modify an entrance: the open centre squares get a thin red grid
+      if(tool==='seal'&&mode==='edit'&&!ghost){for(let j=0;j<id;j++)for(let i=0;i<iw;i++)g.append(s('rect',{x:(x+i)*C+1.5,y:(y+j)*C+1.5,width:C-3,height:C-3,fill:'none',stroke:'var(--door)','stroke-width':1,opacity:.9}))}
+      // closed squares drawn as a HESCO or a Door
       for(const e of centreOf(p)){if(!e.sealType)continue;const cg=s('g',{transform:`translate(${e.lx*C},${e.ly*C})`});
-        if(e.sealType==='door'){cg.append(s('rect',{x:2,y:2,width:C-4,height:C-4,rx:2,fill:'var(--door-g)',stroke:'var(--door-edge)','stroke-width':1.2}));
-          cg.append(s('circle',{cx:C*.72,cy:C/2,r:1.5,fill:'var(--door-edge)'}))}
+        if(e.sealType==='door'){const dg=s('g',{transform:`rotate(${((p.doorR&&p.doorR[e.k])||0)*90} ${C/2} ${C/2})`});   // same symbol as entrance doors; R turns it
+          dg.append(s('rect',{x:1.5,y:1.5,width:C-3,height:C-3,rx:2,fill:'var(--panel)',stroke:'var(--ink)','stroke-width':1.2}));drawIcon(dg,'door',C,C);cg.append(dg)}
         else{cg.append(s('rect',{x:1.5,y:1.5,width:C-3,height:C-3,rx:2,fill:'var(--entry)',stroke:'var(--ink)','stroke-width':1.2}));
           cg.append(s('line',{x1:4,y1:4,x2:C-4,y2:C-4,stroke:'var(--panel)','stroke-width':1.2,opacity:.7}));cg.append(s('line',{x1:C-4,y1:4,x2:4,y2:C-4,stroke:'var(--panel)','stroke-width':1.2,opacity:.7}))}
         g.append(cg)}}
@@ -1385,7 +1390,7 @@ function draw(){
   if(hover&&mode==='edit'){
     if(tool==='seal'){const hit_=entranceAt(hover.cx,hover.cy);
       g.append(s('rect',{x:hover.cx*C,y:hover.cy*C,width:C,height:C,fill:'none',stroke:hit_?'var(--ok)':'var(--muted)','stroke-width':2}));
-      $('msg').textContent=hit_?`${P[hit_.p.t].n} ${hit_.e.centre?'centre (open space)':'entrance'} at ${COLS(hit_.e.x)}${hit_.e.y+1}: ${hit_.e.sealType?'now '+P[hit_.e.sealType].n+' · ':'open · '}click to ${nextSealText(hit_.p,hit_.e).toLowerCase()}`:'Point at an entrance (red arrow, HESCO seal or door) or the open centre of a trimmed Recon Tower or Shelter';$('msg').className='msg'}
+      $('msg').textContent=hit_?`${P[hit_.p.t].n} ${hit_.e.centre?'centre (open space)':'entrance'} at ${COLS(hit_.e.x)}${hit_.e.y+1}: ${hit_.e.sealType?'now '+P[hit_.e.sealType].n+' · ':'open · '}click to ${nextSealText(hit_.p,hit_.e).toLowerCase()}${hit_.e.centre&&hit_.e.sealType==='door'?' · R turns the door':''}`:'Point at an entrance (red arrow, HESCO seal or door) or a square of the open centre of a Recon Tower or Shelter (red grid)';$('msg').className='msg'}
     else if(tool==='select'||tool==='brush'){}
     else if(tool==='erase'){g.append(s('rect',{x:hover.cx*C,y:hover.cy*C,width:C,height:C,fill:'none',stroke:'var(--bad)','stroke-width':2}));
       const t=topAt(hover.cx,hover.cy);$('msg').textContent=t?`Erase ${P[t.t].n} (${label(t)})`:'';$('msg').className='msg'}
@@ -1429,7 +1434,7 @@ function withStacked(set){const out=new Set(set);let grew=true;
     for(const p of out)if(q.z>p.z&&hit(rectOf(q),rectOf(p))){out.add(q);grew=true;break}}}
   return out}
 function bbox(list){let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;for(const p of list){const r=rectOf(p);x0=Math.min(x0,r.x);y0=Math.min(y0,r.y);x1=Math.max(x1,r.x+r.w);y1=Math.max(y1,r.y+r.d)}return{x:x0,y:y0,w:x1-x0,d:y1-y0}}
-const copyPiece=p=>{const q={t:p.t,x:p.x,y:p.y,r:p.r||0,z:p.z};if(p.fnd)q.fnd={...p.fnd};if(p.closed)q.closed=[...p.closed];if(p.doors)q.doors=[...p.doors];return q};
+const copyPiece=p=>{const q={t:p.t,x:p.x,y:p.y,r:p.r||0,z:p.z};if(p.fnd)q.fnd={...p.fnd};if(p.closed)q.closed=[...p.closed];if(p.doors)q.doors=[...p.doors];if(p.doorR)q.doorR={...p.doorR};return q};
 // try to put `moved` (new positions) on top of `rest`; returns {list, placed} or {err}
 function settle(rest,moved){
   const out=[...rest],placed=[],saved=stroke;stroke=new Set();
@@ -1437,7 +1442,7 @@ function settle(rest,moved){
     const order=[...moved].sort((a,b)=>(a.t==='fob'?-1:b.t==='fob'?1:0)||a.z-b.z);
     for(const m of order){const np={t:m.t,x:m.x,y:m.y,r:m.r||0};if(m.fnd)np.fnd={...m.fnd};const res=place(np,out);
       if(res.err)return{err:`${P[m.t].n} at ${COLS(m.x)}${m.y+1}: ${res.err}`};
-      const q={...np,z:res.z};if(m._o!=null)Object.defineProperty(q,'_o',{value:m._o,enumerable:false});if(m.closed)q.closed=[...m.closed];if(m.doors)q.doors=[...m.doors];out.push(q);placed.push(q)}
+      const q={...np,z:res.z};if(m._o!=null)Object.defineProperty(q,'_o',{value:m._o,enumerable:false});if(m.closed)q.closed=[...m.closed];if(m.doors)q.doors=[...m.doors];if(m.doorR)q.doorR={...m.doorR};out.push(q);placed.push(q)}
     const a=areaRect(fobOf(out)),outside=out.filter(p=>needsFob(p.t)&&!inside(rectOf(p),a));
     if(outside.length)return{err:`The FOB area would leave out ${outside.length} piece${outside.length>1?'s':''} (e.g. ${P[outside[0].t].n} at ${where(outside[0])})`};
     return{list:out,placed};
@@ -1557,12 +1562,18 @@ window.addEventListener('pointerup',()=>{if(threatStale&&!down)changed()});   //
 svg.addEventListener('pointerleave',()=>{if(!down){hover=null;$('msg').textContent='';draw()}});
 svg.addEventListener('contextmenu',e=>e.preventDefault());
 const turn=()=>{rot=(rot+1)%4;draw()};
+// a door in the open centre of a Recon Tower / Shelter can face any way: R turns the one under the mouse
+function turnCentreDoor(){const h=hover&&entranceAt(hover.cx,hover.cy);
+  if(!h||!h.e.centre||h.e.sealType!=='door'){flashMsg('Point at a door in the centre of a Recon Tower or Shelter, then press R to turn it',true);return}
+  snapshot();const p=h.p;p.doorR={...(p.doorR||{})};p.doorR[h.e.k]=((p.doorR[h.e.k]||0)+1)%4;if(!p.doorR[h.e.k])delete p.doorR[h.e.k];if(!Object.keys(p.doorR).length)delete p.doorR;
+  changed();flashMsg('Door turned 90°')}
 document.addEventListener('keydown',e=>{const tg=e.target;if((tg.tagName==='INPUT'&&!['checkbox','radio','button','submit'].includes(tg.type))||tg.tagName==='SELECT'||tg.tagName==='TEXTAREA')return;
   const mod=e.ctrlKey||e.metaKey,inSel=tool==='select';
   if(mod&&(e.key==='z'||e.key==='Z')){e.preventDefault();undo();return}
   if(mod&&(e.key==='c'||e.key==='C')&&inSel&&sel.size){e.preventDefault();copySel();return}
   if(mod&&(e.key==='v'||e.key==='V')){e.preventDefault();startPaste();return}
   if(mod)return;
+  if((e.key==='r'||e.key==='R')&&tool==='seal'){turnCentreDoor();return}
   if(e.key==='r'||e.key==='R'){if(tool==='brush'){if(brush){turnBrush();draw()}}else if(inSel&&pasting){turnClip();draw()}else if(inSel&&sel.size)turnSel();else turn()}
   else if(e.key==='e'||e.key==='E'){setTool(tool==='erase'?'hesco_wall':'erase')}
   else if(e.key==='v'||e.key==='V'){setTool('select')}
@@ -1572,7 +1583,7 @@ document.addEventListener('keydown',e=>{const tg=e.target;if((tg.tagName==='INPU
   else if((e.key==='Delete'||e.key==='Backspace')&&inSel&&sel.size){e.preventDefault();deleteSel()}
   else if(inSel&&sel.size&&e.key.startsWith('Arrow')){e.preventDefault();const k=e.shiftKey?4:1;
     moveSel(e.key==='ArrowLeft'?-k:e.key==='ArrowRight'?k:0,e.key==='ArrowUp'?-k:e.key==='ArrowDown'?k:0)}});
-$('rotBtn').onclick=()=>{if(tool==='brush'){if(brush){turnBrush();draw()}}else if(tool==='select'&&pasting){turnClip();draw()}else if(tool==='select'&&sel.size)turnSel();else turn()};
+$('rotBtn').onclick=()=>{if(tool==='seal'){turnCentreDoor();return}if(tool==='brush'){if(brush){turnBrush();draw()}}else if(tool==='select'&&pasting){turnClip();draw()}else if(tool==='select'&&sel.size)turnSel();else turn()};
 $('eraseBtn').onclick=()=>setTool(tool==='erase'?lastPiece:'erase');
 $('undoBtn').onclick=undo;
 $('selTurn').onclick=()=>{if(pasting){turnClip();draw()}else turnSel()};$('selCopy').onclick=copySel;$('selPaste').onclick=startPaste;$('selDel').onclick=deleteSel;$('selBrush').onclick=brushButton;$('brushBtn').onclick=brushButton;
@@ -1583,6 +1594,7 @@ function markAll(){for(const p of pieces)if(p.t!=='fob')p.bad='?';recheck()}
 try{$('gridLbl').checked=localStorage.getItem('wd_gridLbl')==='1'}catch(e){}
 $('gridLbl').onchange=()=>{try{localStorage.setItem('wd_gridLbl',$('gridLbl').checked?'1':'0')}catch(e){}draw()};
 $('showThreat').onchange=draw;
+$('onlyFob').onchange=()=>{changed()};
 try{const b=+localStorage.getItem('wd_builders');if(b>=1&&b<=9)$('builders').value=String(b)}catch(e){}
 $('builders').onchange=()=>{try{localStorage.setItem('wd_builders',$('builders').value)}catch(e){}renderTime()};
 
@@ -1912,6 +1924,7 @@ function rebuild(list,legacy){
     if(!DOOR_OK(np.t)&&doors.length){closed=[...new Set([...closed,...doors])];doors=[];rep.fixed++}
     doors=doors.filter(k=>!closed.includes(k));
     if(closed.length)q.closed=[...closed].sort();if(doors.length)q.doors=[...doors].sort();
+    if(p.doorR&&typeof p.doorR==='object'){const dr={};for(const[k,v]of Object.entries(p.doorR))if(doors.includes(+k)&&+k>=CENTRE_K&&v>=1&&v<=3)dr[k]=v|0;if(Object.keys(dr).length)q.doorR=dr}
     const res=place(np,out);
     if(!res.err)q.z=res.z;
     else{q.z=looseZ(np,out);q.bad=res.err;rep.flagged++}
@@ -1965,7 +1978,7 @@ function threatGrid(){setBounds();
   const H=new Array(N*N).fill(0),col=Array.from({length:N*N},()=>[]),ground=new Array(N*N).fill(null),vehBlock=new Array(N*N).fill(false),top=new Array(N*N).fill(null),target=new Array(N*N).fill(false);
   for(const p of pieces){const t=P[p.t],r=rectOf(p);
     for(let x=r.x;x<r.x+r.w;x++)for(let y=r.y;y<r.y+r.d;y++){const i=idx(x,y);
-      if(PROTECTED.has(t.cat)){target[i]=true;continue}
+      if(PROTECTED.has(t.cat)){if(p.t==='fob'||!$('onlyFob').checked)target[i]=true;continue}   // "Only FOB": the rest is just walked past
       if(p.t==='hedgehog'||p.t==='loudspeaker'||p.t==='radio'){vehBlock[i]=true;continue}   // infantry passes, vehicles don't
       if(INF_PASS.has(p.t))continue;
       const h=p.t==='bremer'?p.z+FOOT:cellTop(p,x,y);if(h>H[i]){H[i]=h;top[i]=p}   // Bremer: the footing (H1) is walkable and a step up onto an adjacent H2
@@ -1998,7 +2011,15 @@ function threatGrid(){setBounds();
     if(p.t==='bunker'||two)for(const w of windowsOf(p)){const ox=w.x+w.out[0],oy=w.y+w.out[1];if(!IB(ox,oy))continue;
       const inside=idx(w.x,w.y),outside=idx(ox,oy),need=p.z+(two?WIN:0),c4=WD.F('c4.window'),info={t:'door',x:w.x,y:w.y,r:0,z:p.z,window:true,of:p,c4,need};   // window floor: bunker floor, or tower floor 2
       portIn[outside].push({to:inside,c4,seal:info,window:true,need,fl:two?2:1});(two?portOut2:portOut)[inside].push({to:outside,c4,seal:info,window:true,need})}}
-  return{H,col,ground,vehBlock,top,target,bld,portIn,portOut,bld2,portOut2,ladderIn,ladderFoot,edge,gaps,brem,wired};
+  // Recon Tower / Shelter floor 1: only the entrance squares and the open centre are floor; the rest is wall under the roof.
+  // A closed centre square (HESCO or Door) can only be passed by blowing it.
+  const flr=new Array(N*N).fill(true),cseal=new Array(N*N).fill(null);
+  for(const p of pieces){const t=P[p.t];if(!t.sym||!(t.raised||t.trimmed))continue;
+    for(const c of pieceCells(p))flr[c]=false;
+    for(const e of entrancesOf(p))flr[idx(e.x,e.y)]=true;
+    for(const e of centreOf(p)){const c=idx(e.x,e.y);flr[c]=true;
+      if(e.sealType)cseal[c]={c4:WD.c4(e.sealType),seal:{t:e.sealType,x:e.x,y:e.y,r:0,z:p.z,seal:true,centre:true,of:p,c4:WD.c4(e.sealType)}}}}
+  return{H,col,ground,vehBlock,top,target,bld,portIn,portOut,bld2,portOut2,ladderIn,ladderFoot,edge,gaps,brem,wired,flr,cseal};
 }
 // cells a vehicle can drive to from outside the area
 function vehicleZone(G){
@@ -2043,7 +2064,8 @@ function footingJumpOK(G,i,J,standingOnFooting){if(!standingOnFooting)return tru
 function jumpOK(G,x,y,dx,dy,dist,hi){for(let k=0;k<dist;k++){const e=G.edge.get(ekey(idx(x+dx*k,y+dy*k),idx(x+dx*(k+1),y+dy*(k+1))));if(e&&hi<e.h)return false}return true}
 // neighbours of a floor-1 node: same building's floor, out through entrances (and Bunker windows)
 function interiorMoves(G,i,push){const p=G.bld[i],z=p.z;
-  for(const[dx,dy]of DIRS){const x=cx_(i)+dx,y=cy_(i)+dy;if(!IB(x,y))continue;const j=idx(x,y);if(G.bld[j]===p)push(NN+j,0)}
+  for(const[dx,dy]of DIRS){const x=cx_(i)+dx,y=cy_(i)+dy;if(!IB(x,y))continue;const j=idx(x,y);if(G.bld[j]!==p||!G.flr[j])continue;
+    if(G.cseal[j])push(NN+j,2,z,G.cseal[j].c4,G.cseal[j].seal);else push(NN+j,0)}   // kind 2: a closed centre square, only by C4
   for(const o of G.portOut[i])push(o.to,1,z,o.c4,o.seal,o)}    // walk out: target at most one step up; sealed exits and windows cost C4
 // Nodes: surface 0..NN-1 · building interior NN+cell · top of a Bremer wall face 2NN+cell (H = footing+2)
 function climbRoute(G,cap,banned,collect,seeds){
@@ -2071,7 +2093,7 @@ function climbRoute(G,cap,banned,collect,seeds){
     if(!collect&&n<NN&&G.target[n]){const path=[];for(let k=n;k>=0;k=prev[k])path.unshift(k);return path}
     if(n>=2*NN){const c=n-2*NN;fromHeight(c,faceTop(c),n,0);continue}                                  // standing on a Bremer face
     if(n>=NN){const i=n-NN;if(banned.has(i))continue;
-      interiorMoves(G,i,(j,kind,z,c4)=>{if(kind===1){if(!c4&&H[j]<=z+STEP)push(j,n)}else push(j,n)});continue}
+      interiorMoves(G,i,(j,kind,z,c4)=>{if(kind===1){if(!c4&&H[j]<=z+STEP)push(j,n)}else if(kind===0)push(j,n)});continue}
     const i=n,hi=H[i];
     for(const e of G.portIn[i])if(!e.c4&&G.bld[e.to].z<=hi+STEP)push(NN+e.to,i);   // walk in through an open entrance
     fromHeight(i,hi,i,veh&&veh[i]?cap:0);
@@ -2111,6 +2133,7 @@ function c4Route(G,banned,fixed,shut,vmode){fixed=fixed||new Set();shut=shut||ne
       continue}
     if(k>=K*NN){const i=k-K*NN,z=G.bld[i].z;            // floor 1: free to walk, leave by an entrance
       interiorMoves(G,i,(j,kind,zz,c4x,seal,po)=>{if(kind===0)relax(j>=NN?IN(j-NN):j,d,k);
+        else if(kind===2){if(!banned.has(G.bld[i]))relax(IN(j-NN),d+c4x,k,seal)}   // blow a closed centre square
         else if(kind===1){if(c4x&&banned.has(G.bld[i]))return;const lim=po&&po.window?po.need:z+STEP;opts[j].forEach((o,oj)=>{if(o.h<=lim)relax(key(j,oj),d+c4of(o.rm,[])+(c4x||0),k,c4x?(po&&po.window?{...seal,out:true}:seal):null)})}});continue}
     const i=Math.floor(k/K),oi=k%K,cur=opts[i][oi],hi=cur.h;
     for(const e of G.portIn[i]){if(cur.rm.includes(G.bld[e.to])||(e.c4&&banned.has(G.bld[e.to]))||(!e.c4&&shut.has(G.bld[e.to])))continue;
@@ -2308,10 +2331,10 @@ function renderThreat(){
   if(T.fixedSpots)cb.append(el('div',{class:'status'},`Assuming the ${T.fixedSpots} wall${T.fixedSpots>1?'s':''} climbed over on foot ${T.fixedSpots>1?'are':'is'} made unclimbable first. Blocks used to get up there stay usable.`));
   if(T.breaches.length){const lst=el('ol',{class:'weak'});
     T.breaches.forEach((b,k)=>lst.append(el('li',{},el('span',{class:'wk',style:'--c:var(--bad)'},'C'+(k+1)),' ',
-      b.blown.length?`${b.c4} C4: `+b.blown.map(p=>p.window&&p.out?`Window of the ${P[p.of.t].n} at ${where(p)}, blown from inside and climbed out (${p.c4})`:p.window?`Window of the ${P[p.of.t].n} at ${where(p)}, crawled into level with its floor at H${p.need}${p.from==='car'?' from a car roof':p.from==='ural'?' from a Ural roof':''} (${p.c4})${altWays(T,p)}`:p.seal?`${p.t==='door'?'Door':P[p.t].n+' seal'} in the ${P[p.of.t].n} entrance at ${where(p)} (${WD.c4(p.t)})`:`${P[p.t].n}${p.z?' on H'+p.z:''} at ${where(p)} (${WD.c4(p.t)})`).join(' then ')+(b.blown.some(p=>p.z)?', then climb what is left':'')+(b.ladders&&b.ladders.length?` · uses the ${P[b.ladders[0].of.t].n} ladder at ${COLS(b.ladders[0].x)}${b.ladders[0].y+1} to floor 2`:''):(T.modeIndex===0?'No C4 needed: it can be climbed on foot (see J1)':'No wall to blow: there is an open way in'))));
+      b.blown.length?`${b.c4} C4: `+b.blown.map(p=>p.window&&p.out?`Window of the ${P[p.of.t].n} at ${where(p)}, blown from inside and climbed out (${p.c4})`:p.window?`Window of the ${P[p.of.t].n} at ${where(p)}, crawled into level with its floor at H${p.need}${p.from==='car'?' from a car roof':p.from==='ural'?' from a Ural roof':''} (${p.c4})${altWays(T,p)}`:p.seal?`${p.t==='door'?'Door':P[p.t].n+' seal'} in the ${P[p.of.t].n} ${p.centre?'centre':'entrance'} at ${where(p)} (${WD.c4(p.t)})`:`${P[p.t].n}${p.z?' on H'+p.z:''} at ${where(p)} (${WD.c4(p.t)})`).join(' then ')+(b.blown.some(p=>p.z)?', then climb what is left':'')+(b.ladders&&b.ladders.length?` · uses the ${P[b.ladders[0].of.t].n} ladder at ${COLS(b.ladders[0].x)}${b.ladders[0].y+1} to floor 2`:''):(T.modeIndex===0?'No C4 needed: it can be climbed on foot (see J1)':'No wall to blow: there is an open way in'))));
     cb.append(lst)}
   for(const[v,n]of[['carC4','a car'],['uralC4','a Ural Defender']]){const b=T.ways[v];if(!b)continue;
-    cb.append(el('div',{class:'status'},el('b',{},`With ${n}: ${b.c4} C4`),' — '+(b.blown.map(p=>p.window?`window of the ${P[p.of.t].n} at ${where(p)}`:p.seal?`${p.t==='door'?'Door':P[p.t].n+' seal'} in the ${P[p.of.t].n} entrance at ${where(p)}`:`${P[p.t].n}${p.z?' on H'+p.z:''} at ${where(p)}`).join(', ')||'nothing to blow')+', using the vehicle to get up.'))}
+    cb.append(el('div',{class:'status'},el('b',{},`With ${n}: ${b.c4} C4`),' — '+(b.blown.map(p=>p.window?`window of the ${P[p.of.t].n} at ${where(p)}`:p.seal?`${p.t==='door'?'Door':P[p.t].n+' seal'} in the ${P[p.of.t].n} ${p.centre?'centre':'entrance'} at ${where(p)}`:`${P[p.t].n}${p.z?' on H'+p.z:''} at ${where(p)}`).join(', ')||'nothing to blow')+', using the vehicle to get up.'))}
   root.append(cb);
   // building weak points (as built)
   const wb=el('div',{class:'tblock'},el('div',{class:'thead'},el('b',{},'Building weak points'),
@@ -3024,7 +3047,7 @@ function showTab(t){tab=t;for(const b of document.querySelectorAll('#tabs button
   if(t==='haul')renderHaul();if(t==='facts')renderFacts();
   closeTip();later(()=>requestAnimationFrame(()=>{if(t==='build')showTip('order');if(t==='haul'&&document.querySelector('#hPlans .rec')){if(!showTip('packlist'))showTip('team')}}))}
 for(const b of document.querySelectorAll('#tabs button'))b.onclick=()=>showTab(b.dataset.tab);
-const designDoc=()=>({name:designName,pieces:pieces.map(({bad,...p})=>p),plan,v:SAVE_V,gapRule:$('gapRule').checked});
+const designDoc=()=>({name:designName,pieces:pieces.map(({bad,...p})=>p),plan,v:SAVE_V,gapRule:$('gapRule').checked,onlyFob:$('onlyFob').checked});
 window.onDesignChanged=()=>{ls.set('wd_design_draft',designDoc());if(tab==='haul')renderHaul();updateTabBadge()};
 function updateTabBadge(){}
 const TEAM_KINDS=['foot','driver','lakota','mh6'];
@@ -3409,7 +3432,7 @@ let db=null;   // the claude.ai page database, when running there
 S.local=ls.get('wd_designs')||[];
 let statusTimer=0;
 function status(t){const e=$('saveStatus');e.textContent=t;clearTimeout(statusTimer);if(t)statusTimer=setTimeout(()=>{e.textContent=''},7000)}
-function load(d){snapshot();$('gapRule').checked=false;pieces=rebuild(d.pieces||[],isLegacy(d));sel=new Set();updateSelBar();plan={...Haul.PLAN_DEFAULT,...(d.plan||{})};designName=d.name||'';$('dName').value=designName;changed();renderSaved();
+function load(d){snapshot();$('gapRule').checked=false;$('onlyFob').checked=!!d.onlyFob;pieces=rebuild(d.pieces||[],isLegacy(d));sel=new Set();updateSelBar();plan={...Haul.PLAN_DEFAULT,...(d.plan||{})};designName=d.name||'';$('dName').value=designName;changed();renderSaved();
   const r=flaggedText();flashMsg(r?`Loaded "${designName||'design'}". ${r}.`:'',!!r)}
 const userName=()=>{const u=S.user;if(!u)return'';const n=u.displayName||(u.email||'').split('@')[0];return n.charAt(0).toUpperCase()+n.slice(1)};
 function parseDoc(r){try{return{...JSON.parse(r.data),name:r.name}}catch(e){return{name:r.name,pieces:[]}}}
@@ -3578,7 +3601,7 @@ async function startFirebase(){
 /* ---------- start-up ---------- */
 const draft=ls.get('wd_design_draft');
 const start=draft&&draft.pieces&&draft.pieces.filter(p=>p.t!=='fob').length?draft:{v:SAVE_V,pieces:[]};
-$('gapRule').checked=false;pieces=rebuild(start.pieces,isLegacy(start));designName=start.name||'';plan={...Haul.PLAN_DEFAULT,...(start.plan||{})};
+$('gapRule').checked=false;$('onlyFob').checked=!!start.onlyFob;pieces=rebuild(start.pieces,isLegacy(start));designName=start.name||'';plan={...Haul.PLAN_DEFAULT,...(start.plan||{})};
 $('dName').value=designName;
 renderPalette();renderLegend();renderThreat();draw();renderSide();renderSaved();updateTabBadge();
 {const r=flaggedText();if(r)flashMsg(r+'.',true)}
