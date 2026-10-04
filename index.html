@@ -2348,7 +2348,7 @@ applyRules();
    never changes the design. Any edit stops it. Silent. Camera follows.
    ===================================================================== */
 (function(){
-  const NAMES=['Barba','HE','Snurra','Upprord'];
+  const NAMES=['Barba','HE','Snurra','Upprord','Yaruto'];
   const BANDS=['#D0261C','#2F9E44','#1F6FD1'];            // arm band: red, green or blue
   const SPEED={walk:.3,diag:.4,crawl:1.1,ladder:1.15,enter:.45};
   const JUMP={pre:.2,post:.16};                         // stop + crouch before a jump, land + squash after it
@@ -2613,8 +2613,10 @@ applyRules();
     if(attacker==='HE')pool.push('Danskjävel');
     if(victim==='Barba')pool.push('Kuken helvetes jävlar');
     if(victim==='Upprord')pool.push('Oj då');
-    if(victim==='Snurra')pool.push('fan');
-    if(victim==='HE')pool.push('Svensker...','Oh..');
+    if(victim==='Snurra')pool.push(attacker==='Yaruto'?'Betrayed by my own brother':'fan');   // his brother did it
+    if(victim==='HE')pool.push('Svensker...','Oh..','De må være kommet over isen');
+    if(victim==='Yaruto')pool.push('Argh!');   // placeholder until Yaruto gets his own lines
+    if(!pool.length)pool.push('Argh!');        // anyone without a line of their own
     return pool[rnd(pool.length)]}
   function bubble(g,x,y,text,age,dur=SAY){const[px,py]=P_(x,y),fs=10,w=Math.max(22,text.length*fs*.56+12),h=fs+9;
     const pop=REDUCED?1:Math.min(1,age/.15),fade=Math.min(1,(dur-age)/.4);
