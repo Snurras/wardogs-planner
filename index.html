@@ -336,6 +336,16 @@ section.tab{display:flex;flex-direction:column;gap:16px}
 .packtxt{margin:0;padding:10px 12px;background:var(--bg);border:1px solid var(--line);border-radius:4px;font:12.5px/1.5 var(--f-mono);white-space:pre-wrap;overflow-wrap:anywhere;user-select:all}
 .cash .who-h{font-weight:600;padding-top:6px}
 .cash .who-r{padding-left:12px;color:var(--muted);font-size:13px}
+.tipb{position:fixed;z-index:60;width:290px;background:#1F251B;color:#F4F6EF;border-radius:8px;padding:12px 14px 10px;box-shadow:0 6px 20px rgba(0,0,0,.25);font:14px/1.4 var(--f-body)}
+.tipb.b::before{content:"";position:absolute;top:-8px;left:var(--ax);border:8px solid transparent;border-top:0;border-bottom-color:#1F251B}
+.tipb.t::before{content:"";position:absolute;bottom:-8px;left:var(--ax);border:8px solid transparent;border-bottom:0;border-top-color:#1F251B}
+.tipb.l::before{content:"";position:absolute;right:-8px;top:var(--ay);border:8px solid transparent;border-right:0;border-left-color:#1F251B}
+.tipb.r::before{content:"";position:absolute;left:-8px;top:var(--ay);border:8px solid transparent;border-left:0;border-right-color:#1F251B}
+.tipb h4{margin:0 0 4px;font:700 13px var(--f-head);letter-spacing:.08em;text-transform:uppercase;color:#D9A400}
+.tipb p{margin:0 0 8px}.tipb b{color:#fff}
+.tipb label{display:flex;gap:6px;align-items:center;font-size:12.5px;color:#C9CFBE;cursor:pointer}
+.tipb .x{position:absolute;top:4px;right:6px;background:none;border:0;color:#C9CFBE;font-size:17px;line-height:1;padding:2px 5px;cursor:pointer}
+.tip-on{outline:3px solid #D9A400!important;outline-offset:2px;border-radius:4px}
 .pack-h{display:flex;justify-content:space-between;align-items:center;gap:8px}
 .plan .round{font:600 10px var(--f-head);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);border-bottom:1px dashed var(--line);padding:6px 0 2px;margin-bottom:2px}
 .trip .who{display:block;font:500 10px var(--f-mono);color:var(--muted);text-transform:none;letter-spacing:0;margin-top:2px}
@@ -1532,6 +1542,7 @@ function act(c){
     if(!strokeSaved){snapshot();strokeSaved=true}pieces.splice(pieces.indexOf(t),1);changedDuringStroke();return}
   const gp=withFnd(ghostAt(c.cx,c.cy));const res=place(gp);if(res.err)return;
   if(!strokeSaved){snapshot();strokeSaved=true}const np={...gp,z:res.z};pieces.push(np);stroke.add(np);changedDuringStroke();
+  window.tipAfterPlace?.(np);
 }
 svg.addEventListener('pointerdown',e=>{if(mode!=='edit'||e.button===1)return;e.preventDefault();down=true;strokeSaved=false;stroke=new Set();erasing=e.button===2;svg.setPointerCapture(e.pointerId);const c=cellFrom(e);hover=c;
   if(tool==='select'&&!erasing){if(c)selDown(e,c);return}
@@ -1540,7 +1551,8 @@ svg.addEventListener('pointerdown',e=>{if(mode!=='edit'||e.button===1)return;e.p
 svg.addEventListener('pointermove',e=>{const c=cellFrom(e);if(!c){hover=null;draw();return}if(hover&&c.cx===hover.cx&&c.cy===hover.cy)return;hover=c;if(down&&tool==='select'&&!erasing){selMove(c);return}
   if(down&&tool==='brush'&&!erasing){if(brushBox){brushBox.x1=c.cx;brushBox.y1=c.cy;draw()}else paintBrush(c,false);return}
   if(down)act(c);else draw()});
-svg.addEventListener('pointerup',()=>{const wasSel=down&&tool==='select'&&!erasing;down=false;erasing=false;stroke=new Set();if(wasSel)selUp();else if(brushBox)pickBrush();else if(threatStale)changed();else draw()});
+svg.addEventListener('pointerup',()=>{const wasSel=down&&tool==='select'&&!erasing,placed=down&&!erasing&&strokeSaved;down=false;erasing=false;stroke=new Set();if(wasSel)selUp();else if(brushBox)pickBrush();else if(threatStale)changed();else draw();
+  if(placed)window.tipAfterStroke?.()});
 window.addEventListener('pointerup',()=>{if(threatStale&&!down)changed()});   // released outside the map
 svg.addEventListener('pointerleave',()=>{if(!down){hover=null;$('msg').textContent='';draw()}});
 svg.addEventListener('contextmenu',e=>e.preventDefault());
@@ -1576,7 +1588,7 @@ $('builders').onchange=()=>{try{localStorage.setItem('wd_builders',$('builders')
 
 
 let lastPiece='hesco_wall';
-function setTool(t){if(t!=='select'){pasting=false;drag=null;selBox=null}if(t!=='brush')brushBox=null;if(P[t])lastPiece=t;tool=t;updateSelBar();$('eraseBtn').setAttribute('aria-pressed',t==='erase'?'true':'false');
+function setTool(t){if(t==='bremer')setTimeout(()=>window.showTip?.('bremer'),0);if(t!=='select'){pasting=false;drag=null;selBox=null}if(t!=='brush')brushBox=null;if(P[t])lastPiece=t;tool=t;updateSelBar();$('eraseBtn').setAttribute('aria-pressed',t==='erase'?'true':'false');
   $('selToolBtn').setAttribute('aria-pressed',t==='select'?'true':'false');$('sealToolBtn').setAttribute('aria-pressed',t==='seal'?'true':'false');$('brushBtn').setAttribute('aria-pressed',t==='brush'?'true':'false');renderPalette();draw()}
 $('selToolBtn').onclick=()=>setTool(tool==='select'?lastPiece:'select');
 $('sealToolBtn').onclick=()=>setTool(tool==='seal'?lastPiece:'seal');
@@ -2964,13 +2976,53 @@ const nameOf=id=>P[id]?P[id].n:id;
 
 /* ---------- tabs ---------- */
 let tab='design';
+/* ---------- tips: one small bubble pointing at a tool you might miss ----------
+   One on screen at a time, each at most once per visit, only right after you do the thing it is about.
+   "Never show this tip" is kept per tip: on your account when logged in (users/{uid}.tipsOff), else in this browser. */
+const TIPS={
+  entrances:{sel:'#sealToolBtn',side:'b',title:'Entrances',text:a=>`Your <b>${a?P[a.t].n:'building'}</b> has open entrances. Use <b>Modify an entrance (M)</b> to close one with HESCO or a Door, or open it again.`},
+  bremer:{sel:'#rotBtn',side:'b',title:'Bremer face',text:()=>`A Bremer’s wall face can’t be jumped, but its footing can be walked on. Press <b>R</b> before placing to turn the face outward.`},
+  brush:{sel:'#brushBtn',side:'b',title:'Brush',text:()=>`Building the same stack again? Pick it up with <b>Brush (B)</b> and paint copies with one click or drag.`},
+  play:{sel:'#threat .tplay:not([disabled])',side:'l',title:'Watch the attack',text:()=>`Your base can be got into. Press <b>▶</b> to watch how, and tick <b>Show weak points on the map</b> to see where.`},
+  order:{sel:'#ordBar .btn:nth-child(2)',side:'b',title:'Build order',text:()=>`The order follows how you placed the pieces. <b>Easy build</b> or <b>Perimeter first</b> reorder it for you; <b>Edit order</b> lets you do it by hand.`},
+  team:{sel:'#teamGrid',side:'t',title:'Team',text:()=>`Hauling with friends? Fill in the <b>Team</b> and each player gets their own trips, cost and pack list.`},
+  packlist:{sel:'.packlist summary',side:'t',title:'Pack list',text:()=>`Open the <b>Pack list</b> and copy it to your drivers in Discord. Everyone gets their trips as plain text.`}};
+let tipsOff=new Set(ls.get('wd_tipsOff')||[]);const tipsShown=new Set();let tipEl=null,tipTarget=null;
+function closeTip(){if(tipEl){tipEl.remove();tipEl=null}if(tipTarget){tipTarget.classList.remove('tip-on');tipTarget=null}}
+function saveTips(){ls.set('wd_tipsOff',[...tipsOff]);
+  if(S.mode==='firebase'&&S.user&&S.fb){const F=S.fb;F.setDoc(F.doc(F.db,'users',S.user.uid),{tipsOff:[...tipsOff]},{merge:true}).catch(()=>{})}}   // refused (older rules): kept in this browser
+function showTip(id,arg){const T=TIPS[id];if(!T||tipsOff.has(id)||tipsShown.has(id)||tipEl)return false;
+  const t=document.querySelector(T.sel);if(!t||!t.offsetParent)return false;
+  const r0=t.getBoundingClientRect();if(r0.bottom<0||r0.top>innerHeight)t.scrollIntoView({block:'center'});
+  tipsShown.add(id);tipTarget=t;t.classList.add('tip-on');
+  const cb=el('input',{type:'checkbox'}),x=el('button',{type:'button',class:'x','aria-label':'Close tip'},'×');
+  const d=el('div',{class:'tipb '+T.side,role:'status'},x,el('h4',{},'Tip · '+T.title),el('p',{}),el('label',{},cb,' Never show this tip'));
+  d.querySelector('p').innerHTML=T.text(arg);
+  x.onclick=closeTip;cb.onchange=()=>{if(cb.checked)tipsOff.add(id);else tipsOff.delete(id);saveTips()};
+  document.body.append(d);tipEl=d;
+  const r=t.getBoundingClientRect(),W=d.offsetWidth,h=d.offsetHeight;let L,Tp;
+  if(T.side==='b'||T.side==='t'){L=Math.max(8,Math.min(innerWidth-W-8,r.left+r.width/2-W/2));Tp=T.side==='b'?r.bottom+12:r.top-h-12;d.style.setProperty('--ax',(r.left+r.width/2-L-8)+'px')}
+  else{L=T.side==='l'?r.left-W-12:r.right+12;Tp=Math.max(8,Math.min(innerHeight-h-8,r.top+r.height/2-30));d.style.setProperty('--ay',(r.top+r.height/2-Tp-8)+'px')}
+  d.style.left=L+'px';d.style.top=Math.max(8,Tp)+'px';return true}
+window.showTip=showTip;
+// close on Escape, on a click anywhere else, or when the window changes size or scrolls
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeTip()});
+document.addEventListener('pointerdown',e=>{if(tipEl&&!tipEl.contains(e.target))closeTip()},true);
+addEventListener('resize',closeTip);addEventListener('scroll',closeTip,true);
+// what triggers them
+const stackCount=new Map();
+window.tipAfterPlace=np=>{
+  if(entrancesOf(np).length)later(()=>showTip('entrances',np));
+  else if(np.z>0&&tool!=='brush'){const k=np.t+'@'+np.z,n=(stackCount.get(k)||0)+1;stackCount.set(k,n);if(n>=3)later(()=>showTip('brush'))}};
+window.tipAfterStroke=()=>later(()=>{if(/GETS IN/i.test($('threat').textContent))showTip('play')});
 function showTab(t){tab=t;for(const b of document.querySelectorAll('#tabs button'))b.classList.toggle('on',b.dataset.tab===t);
   const sec=t==='build'?'design':t;for(const id of['design','haul','facts','about'])$('tab-'+id).hidden=id!==sec;
   if(t!=='build'&&ordEdit)endOrderEdit(false);
   $('tab-design').classList.toggle('buildmode',t==='build');
   $('steps').hidden=t==='build'?false:$('orderBtn').getAttribute('aria-expanded')!=='true';   // Build always shows the order
   if(sec==='design'){const m=t==='build'?'blue':'edit';if(m!==mode){window.stopAttack?.();mode=m;if(m==='blue'&&(tool==='select'||tool==='brush'))setTool(lastPiece)}renderSide();requestAnimationFrame(()=>{fitLayout();draw()})}
-  if(t==='haul')renderHaul();if(t==='facts')renderFacts()}
+  if(t==='haul')renderHaul();if(t==='facts')renderFacts();
+  closeTip();later(()=>requestAnimationFrame(()=>{if(t==='build')showTip('order');if(t==='haul'&&document.querySelector('#hPlans .rec')){if(!showTip('packlist'))showTip('team')}}))}
 for(const b of document.querySelectorAll('#tabs button'))b.onclick=()=>showTab(b.dataset.tab);
 const designDoc=()=>({name:designName,pieces:pieces.map(({bad,...p})=>p),plan,v:SAVE_V,gapRule:$('gapRule').checked});
 window.onDesignChanged=()=>{ls.set('wd_design_draft',designDoc());if(tab==='haul')renderHaul();updateTabBadge()};
@@ -3265,9 +3317,11 @@ function setLevelInputs(){for(const t of['support','driver','pilot'])$('lv_'+t).
 let lvTimer=0;
 function saveLevels(){ls.set('wd_levels',levels);
   if(S.mode!=='firebase'||!S.user||!S.fb)return;clearTimeout(lvTimer);const F=S.fb,u=S.user;
-  lvTimer=setTimeout(()=>F.setDoc(F.doc(F.db,'users',u.uid),{levels:{support:levels.support??null,driver:levels.driver??null,pilot:levels.pilot??null},updated:new Date().toISOString()}).catch(e=>status('Could not save your levels: '+errText(e))),500)}
+  lvTimer=setTimeout(()=>F.setDoc(F.doc(F.db,'users',u.uid),{levels:{support:levels.support??null,driver:levels.driver??null,pilot:levels.pilot??null},updated:new Date().toISOString()},{merge:true}).catch(e=>status('Could not save your levels: '+errText(e))),500)}
 // on login: take the levels saved to the user; a user with none saved yet keeps what this browser has, and saves it
 function loadLevels(u){const F=S.fb;F.getDoc(F.doc(F.db,'users',u.uid)).then(sn=>{if(S.user!==u)return;
+  if(sn.exists()&&Array.isArray(sn.data().tipsOff)){const had=tipsOff.size;for(const k of sn.data().tipsOff)tipsOff.add(k);ls.set('wd_tipsOff',[...tipsOff]);if(tipsOff.size>sn.data().tipsOff.length)saveTips()}
+  else if(tipsOff.size)saveTips();   // turned off before logging in: keep that on the account
   if(sn.exists()&&sn.data().levels){const v=sn.data().levels;levels={support:v.support??null,driver:v.driver??null,pilot:v.pilot??null};ls.set('wd_levels',levels);setLevelInputs();renderHaul();renderTrips()}
   else if(['support','driver','pilot'].some(filledLv))saveLevels();else renderLevelNotes()},()=>{})}
 setLevelInputs();
