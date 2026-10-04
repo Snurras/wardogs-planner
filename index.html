@@ -68,15 +68,18 @@ button{cursor:pointer}
 
 .pal{background:var(--panel);border:1px solid var(--line);border-radius:6px;overflow:hidden}
 .pal{padding:2px 0 4px;flex:none}
-.pal h4{margin:0;padding:4px 10px 0;font:600 11px var(--f-head);text-transform:uppercase;letter-spacing:.12em;color:var(--muted);display:flex;align-items:center;gap:8px}
+.pal h4{margin:0;padding:4px 10px 0;font:600 11px var(--f-head);text-transform:uppercase;letter-spacing:.12em;color:var(--muted);display:flex;align-items:center;gap:6px}
 .pal h4::after{content:'';flex:1 1 auto;height:1px;background:var(--line)}
-.pc{display:grid;grid-template-columns:14px 1fr auto auto;gap:6px;align-items:center;width:100%;border:0;background:none;padding:2px 10px;min-height:25px;box-sizing:border-box;text-align:left;font-size:14px;cursor:pointer}
+.pc{display:grid;grid-template-columns:14px 1fr auto auto 28px;gap:6px;align-items:center;width:100%;border:0;background:none;padding:2px 10px;min-height:25px;box-sizing:border-box;text-align:left;font-size:14px;cursor:pointer}
 .pc:hover{background:var(--hi)}
 .pc.on{background:var(--hi);box-shadow:inset 3px 0 0 var(--accent)}
 .pc .sw{width:12px;height:12px;border-radius:2px;background:var(--c)}
 .pc .sz{font:500 11px var(--f-mono);color:var(--muted)}
 .stp.helper{color:var(--muted)}
 .stp.align{color:var(--entry)}
+#aidCard{padding:8px 12px;display:flex;flex-direction:column;gap:6px;flex:none}
+.aid{display:flex;align-items:center;gap:8px;font-size:13px;line-height:1.3;cursor:help}
+.aid svg{width:22px;height:22px;flex:none}
 .build-only{display:none!important}
 #tab-design.buildmode .build-only{display:revert!important}
 #tab-design.buildmode #layersCard{display:block!important}
@@ -102,7 +105,15 @@ button{cursor:pointer}
 .lyrrow{display:flex;align-items:center;gap:8px;font-size:15px}
 .lyrrow .n{margin-left:auto;font:500 12px var(--f-mono);color:var(--muted)}
 .stp.helper>span:last-child{font-style:italic}
-.pc .pcost{font-weight:600;color:var(--ink);margin-left:3px}
+.pc .pcost{font:600 11px var(--f-mono);color:var(--ink);text-align:right}
+.pc .sz{text-align:right}
+#timeCard .time-h{display:flex;align-items:center;justify-content:space-between;gap:8px}
+#timeCard .time-h h3{margin:0}
+#timeCard .time-v{display:flex;align-items:baseline;gap:10px;margin-top:6px;cursor:help}
+#timeCard #timeTot{font-size:26px;font-weight:700;font-variant-numeric:tabular-nums}
+#timeCard select{font:inherit;padding:1px 4px}
+.pal h4 .phl{order:1;font:600 10px var(--f-head);letter-spacing:.08em;color:var(--muted);text-align:right}
+.pal h4 .phl.c{width:28px}
 #threatHint:empty{display:none}
 .pc .q{color:var(--entry);font:600 10px var(--f-head);text-transform:uppercase;margin-left:4px}
 
@@ -266,6 +277,8 @@ dialog#loginDlg::backdrop{background:rgba(20,25,15,.45)}
 .leftcol{gap:6px}
 .tabs button{border:0;background:none;padding:8px 14px;font:700 15px var(--f-head);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);border-bottom:3px solid transparent;margin-bottom:-2px;display:inline-flex;gap:8px;align-items:center}
 .tabs button.on{color:var(--ink);border-bottom-color:var(--accent)}
+.tabs button[data-tab=facts]{margin-left:28px;position:relative}
+.tabs button[data-tab=facts]::before{content:'';position:absolute;left:-15px;top:30%;bottom:30%;width:1px;background:var(--line)}   /* reference pages, apart from the Design → Haul → Build steps */
 .tabs .badge{font:600 11px var(--f-mono);background:var(--hi);color:var(--ink);border-radius:8px;padding:1px 7px}
 .tabs .badge:empty{display:none}
 section.tab{display:flex;flex-direction:column;gap:16px}
@@ -296,6 +309,33 @@ section.tab{display:flex;flex-direction:column;gap:16px}
 .prow .pname{font-weight:600;min-width:120px}
 .prow .ptot{margin-left:auto;font-family:var(--f-mono);font-variant-numeric:tabular-nums}
 .prow.extra{border-left-color:var(--line)}
+.sgrid{display:grid;grid-template-columns:minmax(96px,auto) repeat(4,minmax(0,1fr));gap:6px 8px;align-items:center;font-size:13px;padding:6px 0 2px 11px}
+.sgrid .sg-h{color:var(--c);font:600 11px var(--f-head);text-transform:uppercase;letter-spacing:.06em}
+.sgrid .sg-l{font-weight:600}
+.sgrid .sg-in{display:flex;align-items:center;gap:3px;min-width:0}
+.sgrid input{-moz-appearance:textfield;appearance:textfield}
+.sgrid input::-webkit-inner-spin-button,.sgrid input::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+.sgrid{grid-template-columns:auto repeat(4,minmax(0,1fr))!important;gap:6px!important}
+.pal-add{flex:none;width:22px;height:22px;padding:0;display:grid;place-items:center;border:1px solid var(--line);border-radius:3px;background:var(--bg);cursor:pointer}
+.pal-add:hover{border-color:var(--c)}
+.pal-add svg{width:15px;height:12px;fill:none;stroke:var(--c);stroke-width:1.4}
+.pal-add svg rect{fill:var(--c);fill-opacity:.25}
+.sgrid input{width:100%;min-width:0;box-sizing:border-box;background:var(--bg);border:1px solid var(--line);border-radius:3px;padding:3px 4px;font:500 13px var(--f-mono);color:var(--ink)}
+.sgrid .sg-v{color:var(--c);font:700 14px var(--f-mono);font-variant-numeric:tabular-nums;padding-left:7px;border-top:2px solid var(--line);padding-top:4px}
+.rec-opts{display:flex;gap:12px;flex-wrap:wrap}
+.team{display:flex;flex-direction:column;gap:6px;font-size:14px;margin-top:6px;padding-top:8px;border-top:1px solid var(--line)}
+.team-h{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline}.team-h .muted{font-size:12px}
+.team-g{display:grid;grid-template-columns:auto repeat(4,minmax(0,1fr));gap:4px 8px;align-items:center}
+.team-g .tg-h{font:600 11px var(--f-head);text-transform:uppercase;letter-spacing:.05em;color:var(--muted);cursor:help}
+.team-g .tg-l{font-weight:600;cursor:help}
+.team-g select{font:inherit;padding:1px 4px;width:100%;max-width:64px}
+.team-warn{color:var(--bad);font-weight:700;font-size:13px}
+.packtxt{margin:0;padding:10px 12px;background:var(--bg);border:1px solid var(--line);border-radius:4px;font:12.5px/1.5 var(--f-mono);white-space:pre-wrap;overflow-wrap:anywhere;user-select:all}
+.cash .who-h{font-weight:600;padding-top:6px}
+.cash .who-r{padding-left:12px;color:var(--muted);font-size:13px}
+.pack-h{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.plan .round{font:600 10px var(--f-head);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);border-bottom:1px dashed var(--line);padding:6px 0 2px;margin-bottom:2px}
+.trip .who{display:block;font:500 10px var(--f-mono);color:var(--muted);text-transform:none;letter-spacing:0;margin-top:2px}
 .xin{display:inline-flex;gap:5px;align-items:center;color:var(--c);font:600 12px var(--f-head);text-transform:uppercase;letter-spacing:.06em}
 .xin input{width:70px}
 .est{color:var(--entry);font-size:11px}
@@ -314,6 +354,8 @@ section.tab{display:flex;flex-direction:column;gap:16px}
 .plan{padding:10px 14px;border-top:1px dashed var(--line);display:flex;flex-direction:column;gap:6px}
 .veh-h+.plan{border-top:0}
 .plan-h{display:flex;gap:8px;align-items:baseline;flex-wrap:wrap;justify-content:space-between}
+.plan-r{display:flex;align-items:center;gap:8px;margin-left:auto}
+.plan-sel{min-width:68px}.plan-sel.on{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);opacity:1}
 .tag{font:600 11px var(--f-head);text-transform:uppercase;letter-spacing:.1em;border:1px solid var(--line);border-radius:2px;padding:1px 6px;color:var(--muted)}
 .tag.best{border-color:var(--accent);color:var(--accent)}
 .trip{display:grid;grid-template-columns:56px minmax(0,1fr);gap:8px;font-size:14px}
@@ -334,6 +376,7 @@ section.tab{display:flex;flex-direction:column;gap:16px}
 .rec-t{font:600 24px var(--f-head);letter-spacing:.02em}
 .rec-t .mono{font:600 20px var(--f-mono)}
 .rec-s{font-size:13px;color:var(--muted)}
+.rec-u{font-size:14px;margin-top:2px;cursor:help}
 .plan.big{padding:6px 0 0;border-top:1px solid var(--line)}
 .plan.big .trip{font-size:15px}
 .plan.big .pill{font-size:14px;padding:3px 9px}
@@ -370,7 +413,7 @@ a{color:var(--accent)}
     <h1 title="Design a base on the HESCO grid, check where it can be climbed or blown open, then see exactly what to haul and how to pack it.">WARDOGS BASE PLANNER</h1>
     <nav class="tabs" id="tabs" aria-label="Sections">
       <button type="button" data-tab="design" class="on">Design</button>
-      <button type="button" data-tab="haul">Haul <span class="badge" id="haulBadge" title="Supplies to haul"></span></button>
+      <button type="button" data-tab="haul">Haul</button>
       <button type="button" data-tab="build">Build</button>
       <button type="button" data-tab="facts">Fact sheet</button>
       <button type="button" data-tab="about">About</button>
@@ -405,14 +448,15 @@ a{color:var(--accent)}
   <div class="bar toolbar">
     <span class="build-only bt-title">Build view · numbers show the build order</span>
     <button class="edit-only btn ghost tool" type="button" id="selToolBtn" aria-pressed="false" title="Select, move and copy (V)">Select (V)</button>
-    <button class="edit-only btn ghost tool" type="button" id="sealToolBtn" aria-pressed="false" title="Click a building entrance to close it with HESCO or a Door, or open it again">Close an entrance</button>
+    <button class="edit-only btn ghost tool" type="button" id="brushBtn" aria-pressed="false" title="Brush (B): click a square, or drag over several, to pick up everything there (stacks too, e.g. a small HESCO with a Bremer on top). Then click or drag to paint copies. R turns the brush, Esc picks a new one. With pieces selected, the selection becomes the brush.">Brush (B)</button>
+    <button class="edit-only btn ghost" type="button" id="undoBtn" title="Undo the last change (Ctrl+Z)">Undo</button>
     <button class="edit-only btn ghost" type="button" id="rotBtn">Rotate (R)</button>
     <button class="edit-only btn ghost tool" type="button" id="eraseBtn" aria-pressed="false" title="Erase the top piece where you click (E)">Erase (E)</button>
+    <button class="edit-only btn ghost tool" type="button" id="sealToolBtn" aria-pressed="false" title="Modify an entrance (M): click a building entrance, or a square of the open centre of a trimmed Recon Tower or Shelter, to close it with HESCO or a Door, or open it again">Modify an entrance (M)</button>
     <span class="vsep edit-only"></span>
-    <button class="edit-only btn ghost" type="button" id="undoBtn" title="Undo the last change (Ctrl+Z)">Undo</button>
     <button class="edit-only btn ghost" type="button" id="clearBtn" title="Start a new, empty design">Clear</button>
-    <label class="chk edit-only" title="Emplacements need one free block around them: when ticked, the planner won't let you build in that ring"><input type="checkbox" id="gapRule"> 1 block free around emplacements</label>
-    <label class="chk edit-only" title="+1h free trick: build a small HESCO with a large HESCO or Bremer on top. Anything you place touching it side to side is built one level up, on a free foundation, and the next piece touching that one too. Works for Recon Towers and Shelters; not for barbed wire, recon tents, hedgehogs or sandbags. The raised pieces stay if you remove the small HESCO afterwards: it then shows as a Helper block in the build order. Untick to build on the ground next to raised pieces."><input type="checkbox" id="fndMode" checked> +1h free trick</label>
+    <input type="checkbox" id="gapRule" hidden>
+    <label class="chk edit-only" title="Elevation Stacking: build a Bumper block (a small HESCO with a large HESCO or Bremer on top). Anything you place touching it side to side is built one level up on a free foundation, at no extra cost, and the next piece touching that one too, so it chains. Works for walls, Recon Towers, Shelters and the rest; not for barbed wire, recon tents, hedgehogs or sandbags. The raised pieces stay when the Bumper block is removed, and the build order tells you when to build and remove it. Untick to place on the ground next to raised pieces."><input type="checkbox" id="fndMode" checked> Elevation Stacking</label>
     <span class="grow"></span>
     <button class="mini" type="button" id="zoomOut" aria-label="Zoom out">−</button><span class="mono status" id="zoomLbl">25×25</span><button class="mini" type="button" id="zoomIn" aria-label="Zoom in">+</button>
     <button class="mini" type="button" id="zoomFit" title="Zoom to show the whole design">Fit</button>
@@ -423,9 +467,17 @@ a{color:var(--accent)}
       <div class="card build-only" id="layersCard">
         <h3>Layers</h3>
         <div class="col" id="layersList" style="gap:4px;margin-top:8px"></div>
-        <p class="status" style="margin:8px 0 0">A layer counts the pieces standing under a piece, not its height. Pieces raised with the +1h free trick count as Ground.</p>
+        <p class="status" style="margin:8px 0 0">A layer counts the pieces standing under a piece, not its height. Pieces raised with Elevation Stacking count as Ground.</p>
       </div>
       <div class="pal edit-only" id="palette"></div>
+      <div class="card" id="aidCard" hidden>
+        <div class="aid" id="aidGB" hidden title="Guide block: a small HESCO laid on the ground and not hammered (1 supply). The game has no grid: pieces only line up by snapping to what is already built, starting at the FOB. Part of this design touches neither the FOB nor anything linked to it, so guide blocks are added along the shortest free line from the FOB. Build them first (they are in the build order) and erase them afterwards if you like. Placing a real piece there makes them unnecessary.">
+          <svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2" y="2" width="16" height="16" rx="2" fill="var(--entry)" fill-opacity=".22" stroke="var(--entry)" stroke-width="1.6" stroke-dasharray="3 2"/><text x="10" y="13.5" text-anchor="middle" font-size="7.5" font-weight="700" fill="var(--ink)" font-family="var(--f-mono)">GB</text></svg>
+          <span>A Guide block was added to help you align the build</span></div>
+        <div class="aid" id="aidBB" hidden title="Bumper block: a small HESCO with a large HESCO (or Bremer) on top. A piece snapped side to side to it is built one level up on a free foundation (Elevation Stacking), and the next piece snapped to that one too. The build order says when to build it, right before the first raised piece, and when to remove it, right after. The raised pieces stay.">
+          <svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2" y="2" width="16" height="16" rx="2" fill="var(--fnd)" fill-opacity=".35" stroke="var(--fnd)" stroke-width="1.6" stroke-dasharray="3 2"/><text x="10" y="13.5" text-anchor="middle" font-size="7.5" font-weight="700" fill="var(--ink)" font-family="var(--f-mono)">BB</text></svg>
+          <span>A Bumper Block was added to get free elevation</span></div>
+      </div>
       <div class="card edit-only" id="legendCard">
         <div class="twohead"><button type="button" class="tdet-h top" id="legendBtn" aria-expanded="false" aria-controls="legendBody"><span>Legend</span><span class="tdet-c">▼</span></button><button type="button" class="tdet-h top" id="cmBtn" aria-expanded="false" aria-controls="cmBody" hidden><span id="cmTitle">Comments</span><span class="tdet-c">▼</span></button></div>
         <div id="legendBody" class="col" style="gap:10px" hidden>
@@ -449,7 +501,7 @@ a{color:var(--accent)}
       <div class="board">
         <div class="selbar" id="selBar" hidden><b id="selCount"></b>
           <button class="mini" type="button" id="selTurn">Turn 90° (R)</button><button class="mini" type="button" id="selCopy">Copy (Ctrl+C)</button>
-          <button class="mini" type="button" id="selPaste">Paste (Ctrl+V)</button><button class="mini" type="button" id="selDel">Delete</button>
+          <button class="mini" type="button" id="selPaste">Paste (Ctrl+V)</button><button class="mini" type="button" id="selDel">Delete</button><button class="mini" type="button" id="selBrush">Use as brush (B)</button>
           <span class="status">Drag or use arrow keys to move · Shift+arrows moves 4 · Esc clears</span></div>
         <div class="vpwrap"><div class="emptyhint" id="emptyHint" hidden><b>Start here</b>Pick a piece on the left, then click the map.<br>R turns it · E erases · drag to place a row.</div><span class="ref" id="refCol" hidden></span><span class="ref row" id="refRow" hidden></span>
         <div class="vp" id="vp"><svg id="svg" role="img" aria-label="Base layout grid"></svg></div></div>
@@ -465,6 +517,12 @@ a{color:var(--accent)}
         <label class="chk"><input type="checkbox" id="showThreat"> Show weak points on the map</label>
         <button type="button" id="detailsBtn" class="tdet-h" aria-expanded="false" aria-controls="threatDetails"><span>Details</span><span class="tdet-c">SHOW ▼</span></button>
         <div id="threatDetails" class="col" style="gap:8px" hidden></div>
+      </div>
+      <div class="card" id="timeCard" title="Build times are best guesses. They don't account for unloading, arguing in the team or dodging snipers.">
+        <div class="time-h"><h3>Total time to build</h3>
+          <label class="chk" title="Builders hammering at the same time">Builders <select id="builders"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option></select></label></div>
+        <div class="time-v"><b id="timeTot" class="mono">—</b><span id="timeSub" class="status"></span></div>
+        <div id="timeNote" class="status"></div>
       </div>
       <div id="warns" class="col edit-only" style="gap:6px"></div>
       <div class="card edit-only">
@@ -497,7 +555,7 @@ a{color:var(--accent)}
     <div class="hgrid">
       <div class="col">
         <div class="card"><h3>From the design</h3><div class="parts" id="hParts"></div></div>
-        <div class="card"><h3>Ammo, fuel and mechanical</h3><div class="col" style="gap:6px" id="hPlan"></div>
+        <div class="card"><h3>Supplies, ammo, fuel and mechanical</h3><div class="col" style="gap:6px" id="hPlan"></div>
           <button class="btn ghost" type="button" id="planReset" style="align-self:flex-start">Reset plan</button></div>
         <div class="card"><h3>Options</h3>
           <label class="opt"><input type="checkbox" id="optStock"> Subtract the new FOB's starting build supplies</label>
@@ -505,6 +563,11 @@ a{color:var(--accent)}
           <label class="opt"><input type="checkbox" id="optHamPack2"> Hammer in backpack (vehicles; on foot it always is)</label>
           <label class="opt" for="optReserve">Repair reserve on build supplies
             <select id="optReserve"><option value="0">none</option><option value="10">+10%</option><option value="25">+25%</option><option value="50">+50%</option></select></label>
+          <div class="team">
+            <div class="team-h"><b>Team</b><span class="muted">Count yourself in. Team plans start at 2 players; at 0 the plans are for one vehicle, as before.</span></div>
+            <div class="team-g" id="teamGrid"></div>
+            <div class="team-warn" id="teamWarn" hidden>A team must be at least 2 players, including you.</div>
+          </div>
         </div>
       </div>
       <div class="col">
@@ -635,6 +698,7 @@ a{color:var(--accent)}
     ['hedgehog','Hedgehog',14,1,null],
     ['recon_tent','Recon Tent',5,1,null],
   ];
+  const BUILD_S={hesco_s: 3, hesco_l: 4, hesco_wall: 7, bremer: 3, door: 4, gate: 8, bunker: 8, ifs: 10, recon_tower: 8, loudspeaker: 10, radio: 4, refuel: 17, repair: 17, drill: 186, mortar: 11, stingray: 11, talon: 70, ciws: 133, sandbags: 3, barbed: 2, hedgehog: 4, recon_tent: 2};   // seconds per piece, timed in game 4 Oct 2026 (drill guessed)
   const GROUPS=[
     {name:'General',rows:[
       ['stack','Supplies per stack / crate slot',50],
@@ -657,6 +721,14 @@ a{color:var(--accent)}
       ['drill.max','Drill Rig · fuel for full duration',6000,'Tested in game'],
     ]},
     {name:'Build supplies per piece',rows:PIECE_FACTS.map(([id,n,b,,,note])=>['b.'+id,n,b,note])},
+    {name:'Build time per piece (seconds, one builder, Large Hammer)',rows:[
+      ...PIECE_FACTS.filter(([id])=>id!=='recon_trim'&&id!=='ifs_trim').map(([id,n])=>['t.'+id,n,BUILD_S[id]??0,
+        id==='drill'?'Not buildable in a test: guessed from supplies (about 0.14 s per supply, as timed for the others)':'Timed in game, 4 Oct 2026',id==='drill']),
+      ['t.trim.recon_tower','Trim the Recon Tower (extra, after building it)',30,'Timed in game, 4 Oct 2026'],
+      ['t.trim.ifs','Trim the Shelter (extra, after building it)',60,'Timed in game, 4 Oct 2026'],
+      ['t.fob','Deploy the FOB kit',4,'Timed in game, 4 Oct 2026'],
+      ['t.remove','Remove a built piece with the hammer',7,'Timed in game, 4 Oct 2026'],
+      ['t.place','Place a block without hammering (Guide block, top of a Bumper block)',1,'Placed only, never built: 1 supply each']]},
     {name:'Hammer tier per piece (1 small · 2 medium · 3 large)',rows:PIECE_FACTS.map(([id,n,,h])=>['h.'+id,n,h])},
     {name:'C4 to breach',rows:[...PIECE_FACTS.filter(p=>p[4]!=null).map(([id,n,,,c])=>['c4.'+id,n,c]),
       ['c4.window','Bunker / Recon Tower window (blow a hole, then crawl in level with it)',1]]},
@@ -687,6 +759,11 @@ a{color:var(--accent)}
       ['ham.l.price','Large Hammer price ($)',2400],
       ['ham.l.unlock','Large Hammer unlock fee ($)',75000],
     ]},
+    {name:'Unloading at the FOB',rows:[
+      ['unpack.pallet','Drop a supply pallet and let it unload (s)',10],
+      ['unpack.runFull','Crate → backpack → FOB and back, full backpack, 10 m run (s)',20],
+      ['unpack.run1','The same with one stack (s)',14],
+      ['unpack.slots','Free backpack slots when unloading crates (one stack each)',6]]},
     {name:'Crates and pallets',rows:[
       ['c.pallet.w','Pallet · width (bed cells)',2,'Checked in game, 2 Oct 2026'],
       ['c.pallet.l','Pallet · length (bed cells)',4,'Checked in game, 2 Oct 2026'],
@@ -705,18 +782,24 @@ a{color:var(--accent)}
       ['v.ural.l','Ural · bed length (cells)',8,'2 pallets or 4 large crates. Checked in game, 2 Oct 2026'],
       ['v.ural.trunk','Ural · trunk items',6],
       ['v.ural.spawn','Ural · spawn cost ($)',5000],
-      ['v.ural.lvl','Ural · Driver level',3],
+      ['v.ural.lvl','Ural · Driver level',0,'No level needed (4 Oct 2026)'],
       ['v.lakota.w','Z20 Lakota · bed width (cells)',2,'Checked in game, 2 Oct 2026'],
       ['v.lakota.l','Z20 Lakota · bed length (cells)',4,'1 pallet or 2 large crates. Checked in game, 2 Oct 2026'],
       ['v.lakota.trunk','Z20 Lakota · trunk items',20],
       ['v.lakota.spawn','Z20 Lakota · spawn cost ($)',7400],
       ['v.lakota.lvl','Z20 Lakota · Pilot level',10],
-      ['v.humvee.w','Humvee · bed width (cells)',1,'Assumed same as the Kodiak (1 × 4)',true],
-      ['v.humvee.l','Humvee · bed length (cells)',4,'Assumed same as the Kodiak (1 × 4)',true],
-      ['v.humvee.lvl','Humvee · Driver level',0,null,true],
+      ['v.kodiak.w','Kodiak · bed width (cells)',1,'Checked in game, 2 Oct 2026'],
+      ['v.kodiak.l','Kodiak · bed length (cells)',4,'One crate · no pallets. Checked in game, 2 Oct 2026'],
+      ['v.kodiak.spawn','Kodiak · spawn cost ($)',2500],
+      ['v.kodiak.lvl','Kodiak · Driver level',0],
+      ['v.humvee.w','Humvee · bed width (cells)',1,'Same bed as the Kodiak'],
+      ['v.humvee.l','Humvee · bed length (cells)',4,'Same bed as the Kodiak'],
+      ['v.humvee.spawn','Humvee · spawn cost ($)',3000],
+      ['v.humvee.lvl','Humvee · Driver level',15],
       ['v.mh6.racks','MH-6 · crate racks',2,'One small crate per rack. Checked in game, 2 Oct 2026'],
       ['v.mh6.w','MH-6 · rack width (cells)',1,'Checked in game, 2 Oct 2026'],
       ['v.mh6.l','MH-6 · rack length (cells)',3,'Checked in game, 2 Oct 2026'],
+      ['v.mh6.spawn','MH-6 · spawn cost ($)',6250],
       ['v.mh6.lvl','MH-6 · Pilot level',0],
     ]},
   ];
@@ -730,6 +813,9 @@ a{color:var(--accent)}
     if(k==='stack')return[1,1000];
     if(k==='palletSize')return[50,100000];
     if(k.startsWith('ht.'))return[1,10];
+    if(k.startsWith('t.'))return[0,3600];
+    if(k==='unpack.slots')return[1,50];
+    if(k.startsWith('unpack.'))return[0,600];
     if(k==='move.step'||k==='move.jumpUp')return[0,3];
     if(k==='move.longGap')return[1,4];
     if(k.startsWith('climb.'))return[0,10];
@@ -807,7 +893,7 @@ const P={
   repair:{glyph:'repair',n:'Repair Station',w:2,d:2,h:2,c:'station',cat:'Stations',ph:4,ab:'REP'},
   drill:{glyph:'drill',n:'Drill Rig',w:2,d:3,h:3,c:'station',cat:'Stations',ph:4,ab:'DRILL'},
   mortar:{glyph:'mortar',n:'L81 Mortar',w:3,d:3,h:1,c:'emp',cat:'Emplacements',ph:5,ab:'M',clear:1},
-  stingray:{glyph:'stingray',n:'Stingray',w:3,d:3,h:1,c:'emp',cat:'Emplacements',ph:5,q:'?',ab:'STG',clear:1},
+  stingray:{glyph:'stingray',n:'Stingray',w:3,d:3,h:1,c:'emp',cat:'Emplacements',ph:5,ab:'STG',clear:1},
   talon:{glyph:'talon',n:'Talon 9K-SAM',w:2,d:2,h:2,c:'emp',cat:'Emplacements',ph:5,ab:'SAM',clear:1},
   ciws:{glyph:'ciws',n:'Vanguard CIWS',w:4,d:4,h:2,c:'emp',cat:'Emplacements',ph:5,ab:'CIWS',clear:1},
   sandbags:{n:'Sandbags',w:2,d:1,h:1,c:'field',icon:'sandbags',cat:'Field',ph:6,q:'≈',ab:'sb',low:1},
@@ -864,11 +950,13 @@ function withFnd(gp,list=pieces){if(!$('fndMode')||!$('fndMode').checked||NO_FND
   const side=[];for(let x=r.x;x<r.x+r.w;x++){side.push([x,r.y-1],[x,r.y+r.d])}for(let y=r.y;y<r.y+r.d;y++){side.push([r.x-1,y],[r.x+r.w,y])}
   for(const[x,y]of side)if(raisedAt(x,y,list))return{...gp,fnd:{dx:x-gp.x,dy:y-gp.y}};
   return gp}   // nothing raised to snap to: an ordinary piece on the ground
+const ONE_PER_FOB=new Set(['refuel','repair']);   // a FOB takes one of each, never two
 function place(np,list=pieces){
   const r=rectOf(np),t=P[np.t];
   if(np.fndMiss)return{err:'Free foundation: touch a piece that stands one level up (on a small HESCO), side to side'};
   if(r.x<0||r.y<0||r.x+r.w>N||r.y+r.d>N)return{err:'Off the map'};
   if(needsFob(np.t)&&!inside(r,areaRect(fobOf(list))))return{err:'Outside the FOB build area'};
+  if(ONE_PER_FOB.has(np.t)&&list.some(q=>q.t===np.t&&q!==np))return{err:`Only one ${t.n} per FOB`};
   let z=null;
   for(let x=r.x;x<r.x+r.w;x++)for(let y=r.y;y<r.y+r.d;y++){
     const u=topAt(x,y,list);
@@ -915,6 +1003,14 @@ const OUT={S:[0,1],N:[0,-1],W:[-1,0],E:[1,0]};
 function entrancesOf(p){const t=P[p.t];if(!t.sym)return[];const list=[...(t.sym.door||[]),...(t.sym.arrow||[])];
   return list.map(([side,i],k)=>{const[lx,ly]=side==='S'?[i,t.d-1]:side==='N'?[i,0]:side==='W'?[0,i]:[t.w-1,i];
     const[x,y]=toWorld(p,lx,ly);const st=sealOf(p,k);return{k,x,y,out:turnDir(OUT[side],R(p)),seal:st||SEAL_WITH(p.t),sealType:st,closed:!!st}})}
+// Trimmed Recon Tower / Shelter: the removed centre is open space. Each centre square can be closed like an entrance,
+// with a Large HESCO or a Door. Keys 100+. Drawn and counted (supplies, time, steps); the threat check doesn't use them.
+const CENTRE_K=100;
+function centreOf(p){const t=P[p.t];if(!t.trimmed)return[];const[x0,y0,iw,id]=t.trimmed,out=[];
+  for(let j=0;j<id;j++)for(let i=0;i<iw;i++){const k=CENTRE_K+j*iw+i,[x,y]=toWorld(p,x0+i,y0+j),st=sealOf(p,k);
+    out.push({k,x,y,lx:x0+i,ly:y0+j,centre:true,seal:st||SEAL_WITH(p.t),sealType:st,closed:!!st})}
+  return out}
+const openingsOf=p=>[...entrancesOf(p),...centreOf(p)];
 // open → HESCO → Door (not bunkers) → open
 function cycleSeal(p,k){const c=new Set(p.closed||[]),d=new Set(p.doors||[]);
   if(d.has(k))d.delete(k);else if(c.has(k)){c.delete(k);if(DOOR_OK(p.t))d.add(k)}else c.add(k);
@@ -928,7 +1024,7 @@ function laddersOf(p){const t=P[p.t];return(t.sym&&t.sym.ladder||[]).map(([lx,ly
 // Recon Tower ladder: on the outer wall, climbed from the cell just outside it, straight up to floor 2 (open, no C4)
 function ladderSpots(p){const t=P[p.t];return(t.sym&&t.sym.ladder||[]).map(([lx,ly])=>{const side=ly===t.d-1?'S':ly===0?'N':lx===0?'W':'E';
   const[x,y]=toWorld(p,lx,ly);return{x,y,out:turnDir(OUT[side],R(p))}})}
-function entranceAt(cx,cy){for(const p of[...pieces].sort((a,b)=>b.z-a.z))for(const e of entrancesOf(p))if(e.x===cx&&e.y===cy)return{p,e};return null}
+function entranceAt(cx,cy){for(const p of[...pieces].sort((a,b)=>b.z-a.z))for(const e of openingsOf(p))if(e.x===cx&&e.y===cy)return{p,e};return null}
 // Shooting gap: two neighbouring Bremers whose wall faces sit on opposite sides of the line joining them
 // (e.g. one face east, the other west). The footings end up offset and leave a ~20 cm slit: you can shoot
 // through it along that line, but not walk through. Neighbours with faces on the same side form a tight seal.
@@ -940,7 +1036,7 @@ function bremerGaps(){const out=[],at=new Map();for(const p of pieces)if(p.t==='
     if(perp&&opposite)out.push({a:p,b:q,dx,dy})}
   return out}
 // piece counts including the HESCO used to seal entrances
-function pieceCounts(){const c={};for(const p of pieces){c[p.t]=(c[p.t]||0)+1;for(const e of entrancesOf(p))if(e.sealType)c[e.sealType]=(c[e.sealType]||0)+1}return c}
+function pieceCounts(){const c={};for(const p of pieces){c[p.t]=(c[p.t]||0)+1;for(const e of openingsOf(p))if(e.sealType)c[e.sealType]=(c[e.sealType]||0)+1}return c}
 const SIDES=['south','west','north','east']; // where a south-side feature ends up after r quarter turns
 function orientText(p){const t=P[p.t];if(p.t==='bunker')return'entrance '+SIDES[R(p)]+' side';if(p.t==='recon_tower'||p.t==='recon_trim'||p.t==='loudspeaker')return'ladder '+SIDES[R(p)]+' side';if(p.t==='bremer')return'footing '+SIDES[R(p)]+' side';return''}
 function heightText(p){const t=P[p.t];
@@ -969,7 +1065,8 @@ const ICONS={
   barbed(g,w,d){ // A-frame ends, top rails, coil
     for(const x of[w*.07,w*.93]){Ln(g,x,d*.1,x,d*.9,'var(--wire)',2.2,'butt');Ln(g,x-2,d*.15,x+2,d*.85,'var(--wire)',.8)}
     Ln(g,w*.07,d*.22,w*.93,d*.22,'var(--wire)',.9);Ln(g,w*.07,d*.78,w*.93,d*.78,'var(--wire)',.9);
-    for(let x=w*.11;x<w*.9;x+=w*.045)g.append(s('ellipse',{cx:x,cy:d/2,rx:w*.035,ry:d*.36,fill:'none',stroke:'var(--wire)','stroke-width':.7}))},
+    const cl=s('g',{class:'coil'});g.append(cl);
+    for(let x=w*.11;x<w*.9;x+=w*.045)cl.append(s('ellipse',{cx:x,cy:d/2,rx:w*.035,ry:d*.36,fill:'none',stroke:'var(--wire)','stroke-width':.7}))},
   hedgehog(g,w,d){ // three crossed beams of rusty iron seen from above
     const c=[w/2,d/2],arm=Math.min(w,d)*.46,bw=Math.min(w,d)*.13;
     for(const a of[38,142]){const r=a*Math.PI/180,dx=Math.cos(r)*arm,dy=Math.sin(r)*arm;
@@ -990,7 +1087,8 @@ const ICONS={
     for(const x0 of[w*.06,w*.5]){g.append(s('rect',{x:x0,y:d*.36,width:w*.44,height:d*.28,fill:'var(--door-g)','fill-opacity':.55,stroke:'var(--door-edge)','stroke-width':.8}));
       Ln(g,x0,d*.36,x0+w*.44,d*.64,'var(--door-edge)',.6);Ln(g,x0,d*.64,x0+w*.44,d*.36,'var(--door-edge)',.6)}
     Ln(g,w*.5,d*.3,w*.5,d*.7,'var(--door-edge)',1.4);
-    for(let x=w*.08;x<w*.93;x+=w*.022)g.append(s('ellipse',{cx:x,cy:d/2,rx:w*.016,ry:d*.42,fill:'none',stroke:'var(--wire)','stroke-width':.6}))},
+    const cl=s('g',{class:'coil'});g.append(cl);
+    for(let x=w*.08;x<w*.93;x+=w*.022)cl.append(s('ellipse',{cx:x,cy:d/2,rx:w*.016,ry:d*.42,fill:'none',stroke:'var(--wire)','stroke-width':.6}))},
   tent(g,w,d){ // from above: ridge along the long side, one half in shade, camouflage, guy lines, entrance flap at the front (right)
     const x0=w*.17,x1=w*.83,y0=d*.2,y1=d*.8,ym=d/2;
     for(const[ax,ay,bx,by]of[[x0,y0,w*.05,d*.06],[x1,y0,w*.95,d*.06],[x0,y1,w*.05,d*.94],[x1,y1,w*.95,d*.94],[x0,ym,w*.03,ym]]){
@@ -1100,8 +1198,14 @@ function drawPiece(p,{ghost=false,num=null,covered=false}={}){
       g.append(s('rect',{x:x*C,y:y*C,width:iw*C,height:id*C,fill:'var(--ink)','fill-opacity':.28,stroke:'var(--ink)','stroke-width':2}));
       for(let i=1;i<iw;i++)g.append(s('line',{x1:(x+i)*C,y1:y*C,x2:(x+i)*C,y2:(y+id)*C,stroke:'var(--ink)','stroke-width':1.2}));
       for(let i=1;i<id;i++)g.append(s('line',{x1:x*C,y1:(y+i)*C,x2:(x+iw)*C,y2:(y+i)*C,stroke:'var(--ink)','stroke-width':1.2}));}
-    if(t.trimmed){const[x,y,iw,id]=t.trimmed; // removed core: dashed outline only
-      g.append(s('rect',{x:x*C+2,y:y*C+2,width:iw*C-4,height:id*C-4,fill:'none',stroke:'var(--ink)','stroke-width':1.4,'stroke-dasharray':'4 3',opacity:.8}));}
+    if(t.trimmed){const[x,y,iw,id]=t.trimmed; // removed core: dashed outline, closed squares drawn as a HESCO or a Door
+      g.append(s('rect',{x:x*C+2,y:y*C+2,width:iw*C-4,height:id*C-4,fill:'none',stroke:'var(--ink)','stroke-width':1.4,'stroke-dasharray':'4 3',opacity:.8}));
+      for(const e of centreOf(p)){if(!e.sealType)continue;const cg=s('g',{transform:`translate(${e.lx*C},${e.ly*C})`});
+        if(e.sealType==='door'){cg.append(s('rect',{x:2,y:2,width:C-4,height:C-4,rx:2,fill:'var(--door-g)',stroke:'var(--door-edge)','stroke-width':1.2}));
+          cg.append(s('circle',{cx:C*.72,cy:C/2,r:1.5,fill:'var(--door-edge)'}))}
+        else{cg.append(s('rect',{x:1.5,y:1.5,width:C-3,height:C-3,rx:2,fill:'var(--entry)',stroke:'var(--ink)','stroke-width':1.2}));
+          cg.append(s('line',{x1:4,y1:4,x2:C-4,y2:C-4,stroke:'var(--panel)','stroke-width':1.2,opacity:.7}));cg.append(s('line',{x1:C-4,y1:4,x2:4,y2:C-4,stroke:'var(--panel)','stroke-width':1.2,opacity:.7}))}
+        g.append(cg)}}
     const S=t.sym;
     // windows: a light gap in the wall with two ticks
     for(const[side,cells]of Object.entries(S.win||{}))for(const i of cells){
@@ -1207,8 +1311,9 @@ function placeHoverRef(c){const col=$('refCol'),row=$('refRow');if(!col)return;
   col.style.left=Math.max(4,Math.min(vp.clientWidth-col.offsetWidth-4,x-col.offsetWidth/2))+'px';
   row.style.top=Math.max(4,Math.min(vp.clientHeight-row.offsetHeight-4,y-row.offsetHeight/2))+'px'}
 vp?.addEventListener?.('scroll',()=>placeHoverRef(null));
+const WIRE_EL=new Map();   // barbed wire or gate piece → its drawn coils (the attack animation shakes them)
 function draw(){
-  svg.replaceChildren();
+  svg.replaceChildren();WIRE_EL.clear();
   {const h=$('emptyHint');if(h)h.hidden=pieces.some(p=>p.t!=='fob')||mode!=='edit'}
   const g=s('g',{transform:`translate(${M},${M})`});
   g.append(s('rect',{x:0,y:0,width:N*C,height:N*C,fill:'var(--bg)'}));
@@ -1229,7 +1334,7 @@ function draw(){
     const t=P[p.t];if(!layerShown(p,LY))continue;
     if(t.clear&&!p.z&&$('gapRule').checked&&mode==='edit'){const h=grow(rectOf(p),t.clear);
       g.append(s('rect',{x:h.x*C+1,y:h.y*C+1,width:h.w*C-2,height:h.d*C-2,fill:'none',stroke:`var(--${t.c})`,'stroke-dasharray':'3 3','stroke-width':1,opacity:.7}))}
-    g.append(drawPiece(p,{num:mode==='blue'?num.get(p):null,covered:t.sym&&supports(p)}));
+    {const pe=drawPiece(p,{num:mode==='blue'?num.get(p):null,covered:t.sym&&supports(p)});if(p.t==='barbed'||p.t==='gate')WIRE_EL.set(p,[...pe.querySelectorAll('.coil')]);g.append(pe)}
     if(p.bad){const r=rectOf(p);g.append(s('rect',{x:r.x*C+1,y:r.y*C+1,width:r.w*C-2,height:r.d*C-2,fill:'var(--bad)','fill-opacity':.12,stroke:'var(--bad)','stroke-width':2.2,'stroke-dasharray':'5 3'},null))}
   }
   for(const p of pieces)if(p.fnd&&layerShown(p,LY)){const r=rectOf(p),c=fndCell(p);   // free foundation: sandbag edge, an F, and the helper spot if the anchor is gone
@@ -1240,21 +1345,21 @@ function draw(){
   }
   if(!(mode==='blue'&&hiddenLayers.has(0)))for(const c of alignHelpers()){const ag=s('g',{});   // alignment helpers: ground HESCO to snap the build into line
     ag.append(s('rect',{x:c.x*C+3,y:c.y*C+3,width:C-6,height:C-6,rx:2,fill:'var(--entry)','fill-opacity':.22,stroke:'var(--entry)','stroke-width':1.6,'stroke-dasharray':'3 2'}));
-    const tx=s('text',{x:(c.x+.5)*C,y:(c.y+.5)*C+3,'text-anchor':'middle','font-size':mode==='blue'?8:7,'font-weight':700,fill:'var(--ink)','font-family':'var(--f-mono)'});tx.textContent=mode==='blue'&&c.no?String(c.no):'AH';ag.append(tx);
-    const tt=s('title');tt.textContent=`Alignment helper at ${COLS(c.x)}${c.y+1}: a small HESCO laid on the ground, not hammered (1 supply), so the build can snap into line from the FOB. Erase it afterwards if you like.`;ag.append(tt);g.append(ag)}
+    const tx=s('text',{x:(c.x+.5)*C,y:(c.y+.5)*C+3,'text-anchor':'middle','font-size':mode==='blue'?8:7,'font-weight':700,fill:'var(--ink)','font-family':'var(--f-mono)'});tx.textContent=mode==='blue'&&c.no?String(c.no):'GB';ag.append(tx);
+    const tt=s('title');tt.textContent=`Guide block at ${COLS(c.x)}${c.y+1}: a small HESCO laid on the ground, not hammered (1 supply), so the build can snap into line from the FOB. Erase it afterwards if you like.`;ag.append(tt);g.append(ag)}
   for(const h of BS.helpers){if(mode==='blue'&&hiddenLayers.has(0))break;const{x,y}=h.c,hg=s('g',{});   // helper blocks: built for the snap, removed after
     hg.append(s('rect',{x:x*C+2,y:y*C+2,width:C-4,height:C-4,rx:2,fill:'var(--fnd)','fill-opacity':.35,stroke:'var(--fnd)','stroke-width':1.6,'stroke-dasharray':'3 2'}));
     const tx=s('text',{x:(x+.5)*C,y:(y+.5)*C+(mode==='blue'?-1:3),'text-anchor':'middle','font-size':mode==='blue'?6.5:8,'font-weight':700,fill:'var(--ink)','font-family':'var(--f-mono)'});
-    tx.textContent=mode==='blue'?`#${h.build}`:'HB';hg.append(tx);
+    tx.textContent=mode==='blue'?`#${h.build}`:'BB';hg.append(tx);
     if(mode==='blue'){const t2=s('text',{x:(x+.5)*C,y:(y+.5)*C+6.5,'text-anchor':'middle','font-size':6.5,'font-weight':700,fill:'var(--bad)','font-family':'var(--f-mono)'});t2.textContent=`✕${h.remove}`;hg.append(t2)}
-    const tt=s('title');tt.textContent=`Helper block at ${COLS(x)}${y+1}: a small HESCO with a large HESCO on top. Build it at step ${h.build}, remove it at step ${h.remove}.`;hg.append(tt);g.append(hg)}
+    const tt=s('title');tt.textContent=`Bumper block at ${COLS(x)}${y+1}: a small HESCO with a large HESCO on top. Build it at step ${h.build}, remove it at step ${h.remove}.`;hg.append(tt);g.append(hg)}
   for(const gp of bremerGaps()){ // sight line through the gap
     const mx=(gp.a.x+.5+gp.dx*.5)*C,my=(gp.a.y+.5+gp.dy*.5)*C,vx=gp.dx,vy=gp.dy;   // the shot goes through the slit, across the shared edge
     g.append(s('line',{x1:mx-vx*C*.8,y1:my-vy*C*.8,x2:mx+vx*C*.8,y2:my+vy*C*.8,stroke:'var(--gap)','stroke-width':1.3,'stroke-dasharray':'2 1.5'}));
     g.append(s('circle',{cx:mx,cy:my,r:2.6,fill:'var(--panel)',stroke:'var(--gap)','stroke-width':1.3}));
     g.append(s('circle',{cx:mx,cy:my,r:.9,fill:'var(--gap)'}));}
   drawThreat(g);
-  drawSelection(g);
+  drawSelection(g);drawBrush(g);
   window.drawAttack?.(g);
   if(!showLbl&&hover&&mode==='edit'){const a=areaRect(),hx=(hover.cx+.5)*C,hy=(hover.cy+.5)*C;   // where am I: column at the area's bottom, row at its left
     g.append(s('line',{x1:hx,y1:hover.cy*C,x2:hx,y2:(a.y+a.d)*C,stroke:'var(--accent)','stroke-width':.8,'stroke-dasharray':'2 3',opacity:.6}));
@@ -1267,8 +1372,8 @@ function draw(){
   if(hover&&mode==='edit'){
     if(tool==='seal'){const hit_=entranceAt(hover.cx,hover.cy);
       g.append(s('rect',{x:hover.cx*C,y:hover.cy*C,width:C,height:C,fill:'none',stroke:hit_?'var(--ok)':'var(--muted)','stroke-width':2}));
-      $('msg').textContent=hit_?`${P[hit_.p.t].n} entrance at ${COLS(hit_.e.x)}${hit_.e.y+1}: ${hit_.e.sealType?'now '+P[hit_.e.sealType].n+' · ':'open · '}click to ${nextSealText(hit_.p,hit_.e).toLowerCase()}`:'Point at an entrance (red arrow, HESCO seal or door)';$('msg').className='msg'}
-    else if(tool==='select'){}
+      $('msg').textContent=hit_?`${P[hit_.p.t].n} ${hit_.e.centre?'centre (open space)':'entrance'} at ${COLS(hit_.e.x)}${hit_.e.y+1}: ${hit_.e.sealType?'now '+P[hit_.e.sealType].n+' · ':'open · '}click to ${nextSealText(hit_.p,hit_.e).toLowerCase()}`:'Point at an entrance (red arrow, HESCO seal or door) or the open centre of a trimmed Recon Tower or Shelter';$('msg').className='msg'}
+    else if(tool==='select'||tool==='brush'){}
     else if(tool==='erase'){g.append(s('rect',{x:hover.cx*C,y:hover.cy*C,width:C,height:C,fill:'none',stroke:'var(--bad)','stroke-width':2}));
       const t=topAt(hover.cx,hover.cy);$('msg').textContent=t?`Erase ${P[t.t].n} (${label(t)})`:'';$('msg').className='msg'}
     else{const gp=withFnd(ghostAt(hover.cx,hover.cy)),r=rectOf(gp),res=place(gp),bad=res.err;
@@ -1374,6 +1479,40 @@ function drawSelection(g){
     else{const ps=clip.map(p=>({...p,x:p.x+hover.cx,y:p.y+hover.cy}));outline(bbox(ps),'bad');flashMsg(res?res.err:'',true)}}
 }
 
+/* ---------- brush: pick up what stands on one or more squares, then paint copies of it ----------
+   Like an eyedropper: the first click (or drag) picks every piece touching those squares, stacks included.
+   Then each click, or each square of a drag, stamps a copy centred on the pointer, checked like a paste. */
+let brush=null,brushBox=null;
+const brushName=list=>{const n={};for(const p of list)n[P[p.t].n]=(n[P[p.t].n]||0)+1;return Object.entries(n).map(([k,v])=>(v>1?v+'× ':'')+k).join(' + ')};
+function setBrush(list){list=list.filter(p=>!P[p.t].fixed);if(!list.length){flashMsg('Nothing to pick up there (the FOB can\'t be copied)',true);return false}
+  list=[...list].sort((a,b)=>pieces.indexOf(a)-pieces.indexOf(b));const b=bbox(list);brush=list.map(p=>({...copyPiece(p),x:p.x-b.x,y:p.y-b.y}));
+  flashMsg(`Brush: ${brushName(brush)} · click or drag to paint · R turns · Esc picks a new one`);return true}
+function brushAt(c){if(!brush||!c)return null;const b=bbox(brush),ox=c.cx-Math.floor((b.w-1)/2),oy=c.cy-Math.floor((b.d-1)/2);
+  return{res:settle(pieces,brush.map(p=>({...p,x:p.x+ox,y:p.y+oy}))),rect:{x:ox,y:oy,w:b.w,d:b.d}}}
+function turnBrush(){const b=bbox(brush);brush=brush.map(p=>turnCW(p,{...b,x:0,y:0}))}
+function pickBrush(){const b=brushBox;brushBox=null;const r={x:Math.min(b.x0,b.x1),y:Math.min(b.y0,b.y1),w:Math.abs(b.x1-b.x0)+1,d:Math.abs(b.y1-b.y0)+1};
+  setBrush([...withStacked(pieces.filter(p=>hit(rectOf(p),r)))]);draw()}
+// one stamp; during a drag it never lands on what this same stroke just painted
+function paintBrush(c,click){const at=brushAt(c);if(!at)return;
+  if(!click&&[...stroke].some(q=>hit(rectOf(q),at.rect)))return;
+  if(at.res.err){if(click)flashMsg(at.res.err,true);return}
+  if(!strokeSaved){snapshot();strokeSaved=true}pieces=at.res.list;for(const q of at.res.placed)stroke.add(q);changedDuringStroke()}
+function drawBrush(g){if(tool!=='brush'||mode!=='edit')return;
+  const outline=(r,col,dash)=>g.append(s('rect',{x:r.x*C-1.5,y:r.y*C-1.5,width:r.w*C+3,height:r.d*C+3,fill:'none',stroke:`var(--${col})`,'stroke-width':2,'stroke-dasharray':dash||'none',rx:2}));
+  if(brushBox){const b=brushBox,r={x:Math.min(b.x0,b.x1),y:Math.min(b.y0,b.y1),w:Math.abs(b.x1-b.x0)+1,d:Math.abs(b.y1-b.y0)+1};
+    g.append(s('rect',{x:r.x*C,y:r.y*C,width:r.w*C,height:r.d*C,fill:'var(--accent)','fill-opacity':.1,stroke:'var(--accent)','stroke-width':1.5,'stroke-dasharray':'5 3'}));return}
+  if(!hover)return;
+  if(!brush){outline({x:hover.cx,y:hover.cy,w:1,d:1},'accent','4 2');const t=topAt(hover.cx,hover.cy);
+    flashMsg(t?`Brush: click to pick up ${brushName([...withStacked(pieces.filter(p=>hit(rectOf(p),{x:hover.cx,y:hover.cy,w:1,d:1})))])}, or drag over several squares`:'Brush: click a square, or drag over several, to pick up what stands there');return}
+  if(down&&!erasing)return;   // painting: the real pieces show
+  const at=brushAt(hover);
+  if(!at.res.err){const gg=s('g',{opacity:.55});for(const q of at.res.placed)gg.append(drawPiece(q,{ghost:true}));g.append(gg);outline(at.rect,'ok');
+    flashMsg(`Brush: ${brushName(brush)} · click or drag to paint · R turns · Esc picks a new one`)}
+  else{outline(at.rect,'bad');flashMsg(at.res.err,true)}}
+function brushButton(){if(tool==='select'&&sel.size){if(setBrush([...sel])){sel=new Set();setTool('brush')}return}
+  if(tool!=='brush'){setTool('brush');return}
+  if(brush){brush=null;draw()}else setTool(lastPiece)}
+
 /* ---------- interaction ---------- */
 function cellFrom(ev){const pt=svg.createSVGPoint();pt.x=ev.clientX;pt.y=ev.clientY;const p=pt.matrixTransform(svg.getScreenCTM().inverse());
   const cx=Math.floor((p.x-M)/C),cy=Math.floor((p.y-M)/C);return(cx<0||cy<0||cx>=N||cy>=N)?null:{cx,cy}}
@@ -1392,9 +1531,13 @@ function act(c){
   if(!strokeSaved){snapshot();strokeSaved=true}const np={...gp,z:res.z};pieces.push(np);stroke.add(np);changedDuringStroke();
 }
 svg.addEventListener('pointerdown',e=>{if(mode!=='edit'||e.button===1)return;e.preventDefault();down=true;strokeSaved=false;stroke=new Set();erasing=e.button===2;svg.setPointerCapture(e.pointerId);const c=cellFrom(e);hover=c;
-  if(tool==='select'&&!erasing){if(c)selDown(e,c);return}act(c)});
-svg.addEventListener('pointermove',e=>{const c=cellFrom(e);if(!c){hover=null;draw();return}if(hover&&c.cx===hover.cx&&c.cy===hover.cy)return;hover=c;if(down&&tool==='select'&&!erasing){selMove(c);return}if(down)act(c);else draw()});
-svg.addEventListener('pointerup',()=>{const wasSel=down&&tool==='select'&&!erasing;down=false;erasing=false;stroke=new Set();if(wasSel)selUp();else if(threatStale)changed();else draw()});
+  if(tool==='select'&&!erasing){if(c)selDown(e,c);return}
+  if(tool==='brush'&&!erasing){if(!c)return;if(!brush){brushBox={x0:c.cx,y0:c.cy,x1:c.cx,y1:c.cy};draw()}else paintBrush(c,true);return}
+  act(c)});
+svg.addEventListener('pointermove',e=>{const c=cellFrom(e);if(!c){hover=null;draw();return}if(hover&&c.cx===hover.cx&&c.cy===hover.cy)return;hover=c;if(down&&tool==='select'&&!erasing){selMove(c);return}
+  if(down&&tool==='brush'&&!erasing){if(brushBox){brushBox.x1=c.cx;brushBox.y1=c.cy;draw()}else paintBrush(c,false);return}
+  if(down)act(c);else draw()});
+svg.addEventListener('pointerup',()=>{const wasSel=down&&tool==='select'&&!erasing;down=false;erasing=false;stroke=new Set();if(wasSel)selUp();else if(brushBox)pickBrush();else if(threatStale)changed();else draw()});
 window.addEventListener('pointerup',()=>{if(threatStale&&!down)changed()});   // released outside the map
 svg.addEventListener('pointerleave',()=>{if(!down){hover=null;$('msg').textContent='';draw()}});
 svg.addEventListener('contextmenu',e=>e.preventDefault());
@@ -1405,17 +1548,19 @@ document.addEventListener('keydown',e=>{const tg=e.target;if((tg.tagName==='INPU
   if(mod&&(e.key==='c'||e.key==='C')&&inSel&&sel.size){e.preventDefault();copySel();return}
   if(mod&&(e.key==='v'||e.key==='V')){e.preventDefault();startPaste();return}
   if(mod)return;
-  if(e.key==='r'||e.key==='R'){if(inSel&&pasting){turnClip();draw()}else if(inSel&&sel.size)turnSel();else turn()}
+  if(e.key==='r'||e.key==='R'){if(tool==='brush'){if(brush){turnBrush();draw()}}else if(inSel&&pasting){turnClip();draw()}else if(inSel&&sel.size)turnSel();else turn()}
   else if(e.key==='e'||e.key==='E'){setTool(tool==='erase'?'hesco_wall':'erase')}
   else if(e.key==='v'||e.key==='V'){setTool('select')}
-  else if(e.key==='Escape'){pasting=false;sel=new Set();selBox=null;drag=null;updateSelBar();flashMsg('');draw()}
+  else if(e.key==='b'||e.key==='B'){brushButton()}
+  else if(e.key==='m'||e.key==='M'){setTool(tool==='seal'?lastPiece:'seal')}
+  else if(e.key==='Escape'){if(tool==='brush'){brush=null;brushBox=null}pasting=false;sel=new Set();selBox=null;drag=null;updateSelBar();flashMsg('');draw()}
   else if((e.key==='Delete'||e.key==='Backspace')&&inSel&&sel.size){e.preventDefault();deleteSel()}
   else if(inSel&&sel.size&&e.key.startsWith('Arrow')){e.preventDefault();const k=e.shiftKey?4:1;
     moveSel(e.key==='ArrowLeft'?-k:e.key==='ArrowRight'?k:0,e.key==='ArrowUp'?-k:e.key==='ArrowDown'?k:0)}});
-$('rotBtn').onclick=()=>{if(tool==='select'&&pasting){turnClip();draw()}else if(tool==='select'&&sel.size)turnSel();else turn()};
+$('rotBtn').onclick=()=>{if(tool==='brush'){if(brush){turnBrush();draw()}}else if(tool==='select'&&pasting){turnClip();draw()}else if(tool==='select'&&sel.size)turnSel();else turn()};
 $('eraseBtn').onclick=()=>setTool(tool==='erase'?lastPiece:'erase');
 $('undoBtn').onclick=undo;
-$('selTurn').onclick=()=>{if(pasting){turnClip();draw()}else turnSel()};$('selCopy').onclick=copySel;$('selPaste').onclick=startPaste;$('selDel').onclick=deleteSel;
+$('selTurn').onclick=()=>{if(pasting){turnClip();draw()}else turnSel()};$('selCopy').onclick=copySel;$('selPaste').onclick=startPaste;$('selDel').onclick=deleteSel;$('selBrush').onclick=brushButton;$('brushBtn').onclick=brushButton;
 function undo(){if(!history.length)return;pieces=JSON.parse(history.pop());sel=new Set();updateSelBar();changed()}
 $('gapRule').onchange=()=>{markAll();changed()};
 // check every piece against the rules again (after a rule toggle)
@@ -1423,21 +1568,23 @@ function markAll(){for(const p of pieces)if(p.t!=='fob')p.bad='?';recheck()}
 try{$('gridLbl').checked=localStorage.getItem('wd_gridLbl')==='1'}catch(e){}
 $('gridLbl').onchange=()=>{try{localStorage.setItem('wd_gridLbl',$('gridLbl').checked?'1':'0')}catch(e){}draw()};
 $('showThreat').onchange=draw;
+try{const b=+localStorage.getItem('wd_builders');if(b>=1&&b<=9)$('builders').value=String(b)}catch(e){}
+$('builders').onchange=()=>{try{localStorage.setItem('wd_builders',$('builders').value)}catch(e){}renderTime()};
 
 
 let lastPiece='hesco_wall';
-function setTool(t){if(t!=='select'){pasting=false;drag=null;selBox=null}if(P[t])lastPiece=t;tool=t;updateSelBar();$('eraseBtn').setAttribute('aria-pressed',t==='erase'?'true':'false');
-  $('selToolBtn').setAttribute('aria-pressed',t==='select'?'true':'false');$('sealToolBtn').setAttribute('aria-pressed',t==='seal'?'true':'false');renderPalette();draw()}
+function setTool(t){if(t!=='select'){pasting=false;drag=null;selBox=null}if(t!=='brush')brushBox=null;if(P[t])lastPiece=t;tool=t;updateSelBar();$('eraseBtn').setAttribute('aria-pressed',t==='erase'?'true':'false');
+  $('selToolBtn').setAttribute('aria-pressed',t==='select'?'true':'false');$('sealToolBtn').setAttribute('aria-pressed',t==='seal'?'true':'false');$('brushBtn').setAttribute('aria-pressed',t==='brush'?'true':'false');renderPalette();draw()}
 $('selToolBtn').onclick=()=>setTool(tool==='select'?lastPiece:'select');
 $('sealToolBtn').onclick=()=>setTool(tool==='seal'?lastPiece:'seal');
 const TRIM_OF={recon_tower:'recon_trim',ifs:'ifs_trim'},TRIMMED=new Set(Object.values(TRIM_OF));
 const SHORT_NAME={ifs:'Shelter',hesco_s:'HESCO Small',hesco_l:'HESCO Large'};   // palette label (full name in the tooltip)
 function renderPalette(){
   const root=$('palette');root.replaceChildren();
-  for(const cat of CATS){root.append(el('h4',{},cat));
+  CATS.forEach((cat,ci)=>{root.append(el('h4',{},cat,...(ci?[]:[el('span',{class:'phl',title:'Footprint in blocks, and height where it can be stood on'},'Space'),el('span',{class:'phl c',title:'Build supplies'},'$')])));
     for(const[id,t]of Object.entries(P)){if(t.cat!==cat||TRIMMED.has(id))continue;
       const tid=TRIM_OF[id],cur=tid&&tool===tid?tid:id,ct=P[cur];
-      const hs=ct.support?(ct.hm?` · H${ct.hm(0,0)}/${ct.h}`:' · H'+ct.h):'';
+      const hs=ct.support?(ct.hm?` · H${ct.hm(0,0)}/${ct.h}`:' · H'+ct.h):'';
       const cost=WD.build(cur);
       const row=el('div',{class:'pc'+(tool===id||tool===tid?' on':''),style:`--c:var(--${t.c})`,title:`${ct.n}: ${ct.w}×${ct.d} blocks${ct.support?', H'+(ct.hm?ct.hm(0,0)+'–'+ct.h:ct.h)+' high':''}, ${cost} build supplies`+(tid?`\nTrim: ${P[tid].n} (${P[tid].note||'flat roof'})`:'')});
       row.addEventListener('click',()=>setTool(tool===tid?tid:id));
@@ -1445,7 +1592,7 @@ function renderPalette(){
       let trim=null;
       if(tid){trim=el('button',{type:'button',class:'trim'+(tool===tid?' on':''),'aria-pressed':tool===tid?'true':'false','aria-label':`Trimmed version: ${P[tid].n}`,title:`Trimmed version: ${P[tid].note||'centre removed, flat roof'}`},'trim');
         trim.addEventListener('click',e=>{e.stopPropagation();setTool(tool===tid?id:tid)})}
-      row.append(el('span',{class:'sw'}),name,trim||el('span'),el('span',{class:'sz'},`${ct.w}×${ct.d}${hs} `,el('b',{class:'pcost'},String(cost))));root.append(row)}}
+      row.append(el('span',{class:'sw'}),name,trim||el('span'),el('span',{class:'sz'},`${ct.w}×${ct.d}${hs}`),el('b',{class:'pcost'},String(cost)));root.append(row)}})
 }
 
 /* ---------- build order + BOM ---------- */
@@ -1463,9 +1610,7 @@ function supportsOf(p,list){if(!p.z||p.fnd)return[];const r=rectOf(p),out=[];
     if(on)out.push(q)}
   return out}
 // must be built before p: what it stands on, and the raised piece it snaps to (+1h free trick)
-function depsOf(p,list){const d=supportsOf(p,list);
-  if(p.fnd){const c=fndCell(p),n=list.find(q=>q!==p&&q.z===1&&!NO_FND.has(q.t)&&hit(rectOf(q),{x:c.x,y:c.y,w:1,d:1}));if(n)d.push(n)}
-  return d}
+function depsOf(p,list){return supportsOf(p,list)}   // raised (+1h) pieces get a helper block when nothing raised is built next to them
 // cells already built, to tell whether the next piece can snap to something
 function cellSet(list){const s=new Set();for(const p of list){const r=rectOf(p);for(let x=r.x;x<r.x+r.w;x++)for(let y=r.y;y<r.y+r.d;y++)s.add(x+','+y)}return s}
 function touchesBuilt(p,cells){const r=rectOf(p);
@@ -1476,7 +1621,7 @@ function touchesBuilt(p,cells){const r=rectOf(p);
 function checkOrder(list){const fob=pieces.filter(p=>p.t==='fob'),all=[...fob,...list],idx=new Map(list.map((p,i)=>[p,i])),errs=new Map(),warns=new Map();
   const cells=cellSet(fob);for(const k of alignCellSet())cells.add(k);
   list.forEach((p,i)=>{for(const d of depsOf(p,all))if(idx.has(d)&&idx.get(d)>i)errs.set(p,`${d.z<p.z&&!p.fnd?'stands on':'snaps to'} ${P[d.t].n} #${idx.get(d)+2}: move it after that`);
-    if(i>0&&!errs.has(p)&&!touchesBuilt(p,cells))warns.set(p,"touches nothing built before it: hard to line up in game");
+    if(i>0&&!errs.has(p)&&!p.fnd&&!touchesBuilt(p,cells))warns.set(p,"touches nothing built before it: hard to line up in game");
     const r=rectOf(p);for(let x=r.x;x<r.x+r.w;x++)for(let y=r.y;y<r.y+r.d;y++)cells.add(x+','+y)});
   return{errs,warns}}
 /* Greedy order for a pool of pieces: what it stands on first, then always something that snaps to what is
@@ -1587,8 +1732,11 @@ function renderLayers(){const box=$('layersList');if(!box)return;box.replaceChil
     box.append(el('label',{class:'lyrrow',for:id},cb,layerName(n),el('span',{class:'n'},`${cnt.get(n)} piece${cnt.get(n)>1?'s':''}`)))}}
 // the build order is the order the pieces were placed in on the Design tab (the FOB first); while editing, the draft
 function buildOrder(){return[...pieces.filter(p=>p.t==='fob'),...(ordEdit?ordEdit.list:pieces.filter(p=>p.t!=='fob'))]}
-function fndText(p){const c=fndCell(p),n=raisedAt(c.x,c.y),at=COLS(c.x)+(c.y+1);
-  return n?`free foundation: snap to the ${P[n.t].n} at ${at}`:`free foundation: snap to the helper block at ${at}`}
+function fndText(p){const sn=lastSnap.get(p);
+  if(sn&&sn.n)return`stacked: snap to the ${P[sn.n.t].n} at ${where(sn.n)}`;
+  if(sn&&sn.h)return`stacked: snap to the bumper block at ${COLS(sn.h.c.x)}${sn.h.c.y+1}`;
+  const c=fndCell(p),n=raisedAt(c.x,c.y),at=COLS(c.x)+(c.y+1);
+  return n?`stacked: snap to the ${P[n.t].n} at ${at}`:`stacked: snap to the bumper block at ${at}`}
 /* Helper blocks: where a chain of raised pieces starts at an anchor that is no longer in the design (removed after use in game).
    The helper = a small HESCO with a large HESCO on top, built before the chain and removed after its last piece. */
 function fndRoot(p,seen=new Set()){if(!p.fnd||seen.has(p))return null;seen.add(p);const c=fndCell(p),n=raisedAt(c.x,c.y);return !n?c:n.fnd?fndRoot(n,seen):null}
@@ -1606,6 +1754,9 @@ function alignHelpers(){if(alignCache.rev===layoutRev&&alignCache.ref===pieces)r
     const occ=new Set();for(const p of pieces){const r=rectOf(p);for(let x=r.x;x<r.x+r.w;x++)for(let y=r.y;y<r.y+r.d;y++)occ.add(x+','+y)}
     const base=new Set(),add=(x,y)=>base.add(x+','+y);{const r=rectOf(fob);for(let x=r.x;x<r.x+r.w;x++)for(let y=r.y;y<r.y+r.d;y++)add(x,y)}
     const N4=[[1,0],[-1,0],[0,1],[0,-1]],nextTo=(set,x,y)=>N4.some(([dx,dy])=>set.has((x+dx)+','+(y+dy)));
+    // everything already linked to the FOB is a place to snap from: its cells join the base (not just the FOB and the guide blocks)
+    const addGroup=g=>{for(const p of g){const r=rectOf(p);for(let x=r.x;x<r.x+r.w;x++)for(let y=r.y;y<r.y+r.d;y++)add(x,y)}};
+    for(const g of groups)if(g.some(p=>linked(p,fob)))addGroup(g);
     const pend=groups.filter(g=>!g.some(p=>linked(p,fob)));
     while(pend.length){
       // breadth-first over free ground from next to the FOB (and helpers so far) to the nearest unlinked group
@@ -1615,34 +1766,73 @@ function alignHelpers(){if(alignCache.rev===layoutRev&&alignCache.ref===pieces)r
       let hitGoal=null;
       // a group already touching the helpers is linked
       const touched=pend.findIndex(g=>g.some(p=>{const r=rectOf(p);for(let x=r.x;x<r.x+r.w;x++)for(let y=r.y;y<r.y+r.d;y++)if(nextTo(base,x,y))return true;return false}));
-      if(touched>=0){pend.splice(touched,1);continue}
+      if(touched>=0){addGroup(pend[touched]);pend.splice(touched,1);continue}
       while(q.length&&!hitGoal){const[x,y]=q.shift();const k=x+','+y;
         for(const[dx,dy]of N4){const gk=(x+dx)+','+(y+dy);if(goal.has(gk)){hitGoal={k,g:goal.get(gk)};break}}
         if(hitGoal)break;
         for(const[dx,dy]of N4){const nx=x+dx,ny=y+dy,nk=nx+','+ny;if(nx<0||ny<0||nx>=N||ny>=N||occ.has(nk)||base.has(nk)||prev.has(nk))continue;prev.set(nk,k);q.push([nx,ny])}}
       if(!hitGoal)break;
       const path=[];let k=hitGoal.k;while(k){path.unshift(k);k=prev.get(k)}
-      for(const k of path){base.add(k);const[x,y]=k.split(',').map(Number);cells.push({x,y})}
-      pend.splice(hitGoal.g,1)}}
+      // what the first guide block of this path snaps to: the FOB, an earlier guide block, or a piece already linked
+      {const[x0,y0]=path[0].split(',').map(Number),gb=new Set(cells.map(c=>c.x+','+c.y));let from=null;
+        for(const[dx,dy]of N4){const nk=(x0+dx)+','+(y0+dy);if(!base.has(nk))continue;const[nx,ny]=[x0+dx,y0+dy];
+          if(gb.has(nk)){from={gb:{x:nx,y:ny}};break}const q=pieces.find(p=>hit(rectOf(p),{x:nx,y:ny,w:1,d:1}));if(q){from={p:q};if(q===fob)break}}
+        const anchor=from&&from.gb?(cells.find(c=>c.x===from.gb.x&&c.y===from.gb.y)||{}).anchor||fob:from&&from.p?from.p:fob;
+        path.forEach((k,i)=>{base.add(k);const[x,y]=k.split(',').map(Number);cells.push(i?{x,y,anchor}:{x,y,from,anchor})})}
+      addGroup(pend[hitGoal.g]);pend.splice(hitGoal.g,1)}}
   alignCache={rev:layoutRev,ref:pieces,cells};return cells}
 const INF_PASS_ALIGN=new Set(['barbed','hedgehog','recon_tent','sandbags']);   // field items don't need to line up
 const alignCellSet=()=>new Set(alignHelpers().map(c=>c.x+','+c.y));
-function buildSteps(){const order=buildOrder(),H=new Map(),AH=alignHelpers();
-  order.forEach((p,i)=>{const c=fndRoot(p);if(!c)return;const k=c.x+','+c.y;if(!H.has(k))H.set(k,{c,first:i,last:i});else H.get(k).last=i});
-  const out=[];order.forEach((p,i)=>{for(const h of H.values())if(h.first===i)out.push({kind:'helper',act:'build',h,ph:P[p.t].ph});
-    out.push({kind:'piece',p,ph:P[p.t].ph});
-    if(i===0)for(const c of AH)out.push({kind:'align',c,ph:0});
-    for(const h of H.values())if(h.last===i)out.push({kind:'helper',act:'remove',h,ph:P[p.t].ph})});
+/* The steps in order. A piece raised with the +1h free trick snaps to a raised piece already built next to it;
+   when there is none (the first of a ring, or the anchor was removed) a Helper block (small HESCO with a large HESCO
+   on top) is built next to it first and erased right after. */
+let lastSnap=new Map();
+function buildSteps(){const order=buildOrder(),AH=alignHelpers(),out=[],built=[],helpers=[],snap=new Map();
+  const guides=p=>{for(const c of AH)if((c.anchor||order[0])===p)out.push({kind:'align',c,ph:0})};   // guide blocks go in right after what they snap to
+  const occupied=(x,y)=>built.some(q=>hit(rectOf(q),{x,y,w:1,d:1}));
+  order.forEach((p,i)=>{
+    if(p.fnd){const nb=built.find(q=>q.z===1&&!NO_FND.has(q.t)&&sideBySide(p,q));
+      if(nb)snap.set(p,{n:nb});
+      else{// the helper goes where nothing will ever stand if possible (outside the base), else where nothing stands yet
+        const r=rectOf(p),side=[fndCell(p)];for(let x=r.x;x<r.x+r.w;x++){side.push({x,y:r.y-1},{x,y:r.y+r.d})}for(let y=r.y;y<r.y+r.d;y++){side.push({x:r.x-1,y},{x:r.x+r.w,y})}
+        const inMap=q=>q.x>=0&&q.y>=0&&q.x<N&&q.y<N,used=(x,y)=>pieces.some(q=>hit(rectOf(q),{x,y,w:1,d:1}));
+        const c=side.find(q=>inMap(q)&&!used(q.x,q.y))||side.find(q=>inMap(q)&&!occupied(q.x,q.y))||side[0];
+        const h={c,for:p};helpers.push(h);snap.set(p,{h});out.push({kind:'helper',act:'build',h,ph:P[p.t].ph});
+        out.push({kind:'piece',p,ph:P[p.t].ph});built.push(p);out.push({kind:'helper',act:'remove',h,ph:P[p.t].ph});guides(p);return}}
+    out.push({kind:'piece',p,ph:P[p.t].ph});built.push(p);
+    guides(p)});
   if(AH.length)out.push({kind:'alignOff',cells:AH,ph:0});
   out.forEach((st,i)=>{st.no=i+1;if(st.kind==='helper')st.h[st.act]=i+1;if(st.kind==='align')st.c.no=i+1});
-  return{steps:out,helpers:[...H.values()]}}
+  lastSnap=snap;
+  {const gb=AH.length>0,bb=helpers.length>0,c=$('aidCard');if(c){$('aidGB').hidden=!gb;$('aidBB').hidden=!bb;c.hidden=!(gb||bb)}}
+  return{steps:out,helpers}}
+/* Time to build: every step of the build order, at the timed seconds per piece. Trimmed buildings = the full one + the trim.
+   Guide blocks and the top of a Bumper block are only placed (t.place); the Bumper block's small HESCO is built, then removed. */
+function buildTime(){const F=WD.F,missing=new Set();let sec=0;
+  const T=(k,name)=>{const v=F(k);if(!v&&name)missing.add(name);return v||0};
+  const piece=t=>t==='fob'?T('t.fob','FOB kit'):t==='recon_trim'?T('t.recon_tower',P.recon_tower.n)+T('t.trim.recon_tower','Recon Tower trim'):
+    t==='ifs_trim'?T('t.ifs',P.ifs.n)+T('t.trim.ifs','Shelter trim'):T('t.'+t,P[t].n);
+  for(const st of buildSteps().steps){
+    if(st.kind==='piece')sec+=piece(st.p.t);
+    else if(st.kind==='helper')sec+=st.act==='build'?T('t.hesco_s',P.hesco_s.n)+T('t.place'):T('t.remove','Removing a piece')+T('t.place');
+    else if(st.kind==='align')sec+=T('t.place');
+    else if(st.kind==='alignOff')sec+=st.cells.length*T('t.place')}
+  for(const p of pieces)for(const e of openingsOf(p))if(e.sealType)sec+=piece(e.sealType);
+  return{sec,missing:[...missing]}}
+const mmss=s=>{s=Math.round(s);const h=Math.floor(s/3600),m=Math.floor(s%3600/60),x=s%60;return(h?h+':'+String(m).padStart(2,'0'):m)+':'+String(x).padStart(2,'0')};
+function renderTime(){const box=$('timeCard');if(!box)return;const real=pieces.filter(p=>p.t!=='fob');
+  const n=+$('builders').value||1;
+  if(!real.length){$('timeTot').textContent='—';$('timeSub').textContent='';$('timeNote').textContent='Place pieces to see how long the build takes.';return}
+  const{sec,missing}=buildTime(),t=sec/n;
+  $('timeTot').textContent=mmss(t);$('timeSub').textContent=`min:sec · ${n} builder${n>1?'s':''}`+(n>1?` (${mmss(sec)} for one)`:'');
+  $('timeNote').textContent=missing.length?`Not timed yet, counted as 0: ${missing.join(', ')}. Add them on the Fact sheet.`:''}
 function changed(){layoutRev++;ordEdit=null;window.stopAttack?.();recheck();threatStale=false;renderThreat();draw();renderSide();window.onDesignChanged?.()}
 let threatStale=false;
 // while dragging out a wall: redraw only; the threat check runs once when the mouse is released
 function changedDuringStroke(){layoutRev++;threatStale=true;draw();renderSide()}
 function where(p){const r=rectOf(p);const a=COLS(r.x)+(r.y+1),b=COLS(r.x+r.w-1)+(r.y+r.d);return a===b?a:a+'–'+b}
 function renderSide(){
-  window.renderTrips?.();
+  window.renderTrips?.();renderTime();
   const bom=$('bom');bom.replaceChildren();const cnt=pieceCounts();
   let tot=0;
   for(const cat of CATS)for(const[id,t]of Object.entries(P)){if(t.cat!==cat||!cnt[id])continue;const c=cnt[id]*WD.build(id);tot+=c;
@@ -1661,13 +1851,13 @@ function renderSide(){
   const LY=computeLayers();renderLayers();
   const CK=ordEdit?checkOrder(ordEdit.list):null;
   let ph=-1;for(const step of buildSteps().steps){
-    if(step.kind==='align'){st.append(el('li',{class:'stp helper align'+(mode==='blue'&&hiddenLayers.has(0)?' lhid':'')},el('span',{class:'no'},'#'+step.no),el('span',{},'Alignment helper ',
-        el('span',{class:'where'},`${COLS(step.c.x)}${step.c.y+1} · small HESCO on the ground, don't hammer (1 supply) · snap it to the ${step.no===2?'FOB':'one before'}`))));continue}
-    if(step.kind==='alignOff'){st.append(el('li',{class:'stp helper align'},el('span',{class:'no'},'#'+step.no),el('span',{},'Erase the alignment helpers ',
+    if(step.kind==='align'){st.append(el('li',{class:'stp helper align'+(mode==='blue'&&hiddenLayers.has(0)?' lhid':'')},el('span',{class:'no'},'#'+step.no),el('span',{},'Guide block ',
+        el('span',{class:'where'},`${COLS(step.c.x)}${step.c.y+1} · small HESCO on the ground, don't hammer (1 supply) · snap it to the ${step.c.from?step.c.from.gb?'guide block at '+COLS(step.c.from.gb.x)+(step.c.from.gb.y+1):step.c.from.p.t==='fob'?'FOB':P[step.c.from.p.t].n+' at '+where(step.c.from.p):'one before'}`))));continue}
+    if(step.kind==='alignOff'){st.append(el('li',{class:'stp helper align'},el('span',{class:'no'},'#'+step.no),el('span',{},'Erase the guide blocks ',
         el('span',{class:'where'},'(optional) at '+step.cells.map(c=>COLS(c.x)+(c.y+1)).join(', ')))));continue}
     if(step.kind==='helper'){const at=COLS(step.h.c.x)+(step.h.c.y+1);
-      st.append(el('li',{class:'stp helper'+(mode==='blue'&&hiddenLayers.has(0)?' lhid':'')},el('span',{class:'no'},'#'+step.no),el('span',{},step.act==='build'?'Helper block ':'Remove helper block ',
-        el('span',{class:'where'},at+(step.act==='build'?' · small HESCO with a large HESCO on top, only to snap to':' · the raised pieces stay'))))) ;continue}
+      st.append(el('li',{class:'stp helper'+(mode==='blue'&&hiddenLayers.has(0)?' lhid':'')},el('span',{class:'no'},'#'+step.no),el('span',{},step.act==='build'?'Bumper block ':'Remove bumper block ',
+        el('span',{class:'where'},at+(step.act==='build'?` · small HESCO with a large HESCO on top, so the ${P[step.h.for.t].n} can snap to it`:' · the raised piece stays'))))) ;continue}
     const p=step.p,i=step.no-1,t=P[p.t];
     const hgt=p.fnd?` · ${fndText(p)}`+(t.support?`, top ${heightText(p)}`:''):t.support?` · ${p.z?'on '+hName(p.z)+', ':''}top ${heightText(p)}`:(p.z?` · on ${hName(p.z)}`:'');
     const li=el('li',{class:'stp'+(layerShown(p,LY)?'':' lhid')},el('span',{class:'no'},'#'+(i+1)),el('span',{},t.n,el('span',{class:'lyr',title:'Layer'},layerName(LY.get(p))),' ',el('span',{class:'where'},where(p)+hgt+(orientText(p)?' · '+orientText(p):(R(p)%2&&t.w!==t.d?' · turned':'')))));
@@ -1682,9 +1872,9 @@ function renderSide(){
     if(ordEdit&&ordEdit.sealed!=null&&p.t!=='fob'&&ordEdit.list.indexOf(p)===ordEdit.sealed-1)st.append(el('li',{class:'sealed'},`From here the base holds on foot (after step #${i+1})`))}
   if(ordEdit&&ordEdit.sealed===null)st.prepend(el('li',{class:'sealed no'},"The finished base doesn't hold on foot, so no step seals it."));
   renderOrderBar();
-  const seals=[];for(const p of buildOrder())for(const e of entrancesOf(p))if(e.closed)seals.push({p,e});
+  const seals=[];for(const p of buildOrder())for(const e of openingsOf(p))if(e.closed)seals.push({p,e});
   if(seals.length){st.append(el('li',{class:'phase'},'Seal entrances'));
-    seals.forEach(({p,e},k)=>st.append(el('li',{class:'stp'},el('span',{class:'no'},'S'+(k+1)),el('span',{},P[e.sealType].n,' ',el('span',{class:'where'},`${COLS(e.x)}${e.y+1} · ${e.sealType==='door'?'door in':'closes'} the ${P[p.t].n} entrance`)))))}
+    seals.forEach(({p,e},k)=>st.append(el('li',{class:'stp'},el('span',{class:'no'},'S'+(k+1)),el('span',{},P[e.sealType].n,' ',el('span',{class:'where'},`${COLS(e.x)}${e.y+1} · ${e.sealType==='door'?'door in':'closes'} the ${P[p.t].n} ${e.centre?'centre':'entrance'}`)))))}
 }
 
 /* ---------- templates (heights are worked out on load) ---------- */
@@ -1702,7 +1892,7 @@ function rebuild(list,legacy){
     if(!P[np.t]){rep.unknown.push(p.t);continue}
     const q={...np};ord.set(q,list.indexOf(p));
     // entrance seals: only entrances that exist; bunkers take HESCO, never a door
-    const n=entrancesOf({...np,z:0}).length,okK=k=>Number.isInteger(k)&&k>=0&&k<n;
+    const n=entrancesOf({...np,z:0}).length,nc=centreOf({...np,z:0}).length,okK=k=>Number.isInteger(k)&&(k>=0&&k<n||k>=CENTRE_K&&k<CENTRE_K+nc);
     let closed=(p.closed||[]).filter(okK),doors=(p.doors||[]).filter(okK);
     if(!DOOR_OK(np.t)&&doors.length){closed=[...new Set([...closed,...doors])];doors=[];rep.fixed++}
     doors=doors.filter(k=>!closed.includes(k));
@@ -1841,14 +2031,15 @@ function interiorMoves(G,i,push){const p=G.bld[i],z=p.z;
   for(const[dx,dy]of DIRS){const x=cx_(i)+dx,y=cy_(i)+dy;if(!IB(x,y))continue;const j=idx(x,y);if(G.bld[j]===p)push(NN+j,0)}
   for(const o of G.portOut[i])push(o.to,1,z,o.c4,o.seal,o)}    // walk out: target at most one step up; sealed exits and windows cost C4
 // Nodes: surface 0..NN-1 · building interior NN+cell · top of a Bremer wall face 2NN+cell (H = footing+2)
-function climbRoute(G,cap,banned,collect){
+function climbRoute(G,cap,banned,collect,seeds){
   const H=G.H.map((h,i)=>banned.has(i)?99:h),hOf=k=>H[k];
   const veh=cap?vehicleZone(G):null;
   const prev=new Array(3*NN).fill(-2),q=[];
   const push=(j,from)=>{if(prev[j]===-2){prev[j]=from;q.push(j)}};
   const inGrid=(x,y)=>IB(x,y);
   const faceTop=c=>G.brem[c]&&!banned.has(c)&&!G.wired[c]?G.brem[c].z+FACE:null;   // can't stand on a wire-topped face
-  for(let i=0;i<NN;i++)if(onEdge(i)&&(H[i]<=STEP||(cap&&H[i]<=cap)))push(i,-1);
+  if(seeds)for(const c of seeds)push(c,-1);   // start from given cells (the attack animation: after landing inside)
+  else for(let i=0;i<NN;i++)if(onEdge(i)&&(H[i]<=STEP||(cap&&H[i]<=cap)))push(i,-1);
   // moves from standing height hi at cell i (surface or a face top)
   const fromHeight=(i,hi,n,vcap)=>{const x=cx_(i),y=cy_(i),onFoot=n===i&&G.brem[i]&&hi===G.brem[i].z+FOOT;
     for(const[dx,dy]of DIR8){const x1=x+dx,y1=y+dy;if(!inGrid(x1,y1))continue;const j=idx(x1,y1),diag=dx&&dy;
@@ -2183,6 +2374,36 @@ applyRules();
     if(pts.length>1){const[a,b]=pts,d=[a[0]-b[0],a[1]-b[1]];pts.unshift([a[0]+d[0]*6,a[1]+d[1]*6])}
     else pts.unshift([pts[0][0],pts[0][1]+6]);
     return pts}
+  /* Where to park for a climb from the vehicle roof: the ground cell straight north, east, south or west of the weak
+     point W (the first cell climbed from the roof), with a straight run-in along that line and room to park side-on
+     to the wall. Prefers the cell the threat route used. null = no such spot (then the car parks nose-in, as before). */
+  function parkSpot(G,veh,pts){const V=VEH[veh.type],zone=vehicleZone(G),cap=(CAPS.find(m=>m.id===veh.type)||{cap:0}).cap;
+    const A=pts[veh.d].c,Wp=pts[veh.d+1],W=Wp.c;
+    const cellAt=(x,y)=>{x=Math.floor(x);y=Math.floor(y);return IB(x,y)?idx(x,y):-1};
+    const free=c=>c>=0&&zone[c]&&!G.H[c]&&!G.bld[c];
+    let best=null;
+    for(const f of DIRS){const pc=cellAt(cx_(W)-f[0],cy_(W)-f[1]);if(!free(pc))continue;
+      if(!Wp.fl&&!crossOK(G,pc,W,0,cap))continue;                 // a Bremer face too high in the way from this side
+      if(Wp.fl&&pc!==A)continue;                                  // a window: only from the outside cell the route used
+      let run=0;while(run<8&&free(cellAt(cx_(pc)-f[0]*(run+1),cy_(pc)-f[1]*(run+1))))run++;
+      const R=[cx_(pc)+.5-f[0]*.3,cy_(pc)+.5-f[1]*.3];
+      for(const h of[[f[1],-f[0]],[-f[1],f[0]]]){let bad=0;   // the car's footprint, side-on to the wall
+        for(let s=-(V.l-V.roof)+.25;s<=V.roof-.25;s+=.5)for(const o of[-V.w/2+.2,V.w/2-.2]){const c=cellAt(R[0]+h[0]*s-f[0]*o,R[1]+h[1]*s-f[1]*o);if(c!==pc&&!free(c))bad++}
+        const score=(pc===A?0:3+Math.abs(cx_(pc)-cx_(A))+Math.abs(cy_(pc)-cy_(A)))+bad*2+(run<2?4:0);
+        if(!best||score<best.score)best={pc,f,h,V,run,score}}}
+    return best}
+  // the car's pose during the handbrake slide (u 0..1): slows down, swings side-on
+  function slidePose(sl,u){const e=1-(1-u)*(1-u),r=Math.min(1,u*1.35),er=REDUCED?u:.5-.5*Math.cos(Math.PI*r);
+    const a=sl.a0+(sl.a1-sl.a0)*er,rad=a*Math.PI/180,d=[Math.sin(rad),-Math.cos(rad)],L=sl.V.l;
+    const c=[sl.C0[0]+(sl.C1[0]-sl.C0[0])*e,sl.C0[1]+(sl.C1[1]-sl.C0[1])*e];
+    return{x:c[0]+d[0]*L/2,y:c[1]+d[1]*L/2,hd:a,d,c}}
+  // skid marks: where the four wheels went during the slide
+  function skidTracks(sl){const V=sl.V,ax=sl.type==='car'?[.17,.8]:[.12,.84],tr=[[],[],[],[]],n=24;
+    for(let k=0;k<=n;k++){const p=slidePose(sl,k/n),sd=[-p.d[1],p.d[0]];let i=0;
+      for(const a of ax)for(const o of[-1,1]){const back=a*V.l,w=o*(V.w/2-.12);tr[i++].push([p.x-p.d[0]*back+sd[0]*w,p.y-p.d[1]*back+sd[1]*w])}}
+    return tr}
+  function skids(g,sl,u){const n=Math.max(1,Math.round(u*(sl.skid[0].length-1))+1);
+    sl.skid.forEach((t,i)=>{if(n<2)return;g.append(s('polyline',{points:t.slice(0,n).map(([x,y])=>P_(x,y).join(',')).join(' '),fill:'none',stroke:'#1a1a1a','stroke-width':i>1?3:2.2,'stroke-linecap':'round','stroke-linejoin':'round',opacity:i>1?.42:.28}))})}
   const c4For=b=>b.piece?WD.c4(b.piece.t):b.info.c4!=null?b.info.c4:WD.c4(b.info.t);
   // rowId: foot / car / ural (climb in) or footC4 / carC4 / uralC4 (cheapest C4 with that way in)
   const ROW_LABEL={foot:'On foot',car:'With a car',ural:'With a Ural Defender',footC4:'On foot with C4',carC4:'Car and C4',uralC4:'Ural and C4'};
@@ -2201,13 +2422,38 @@ applyRules();
         if(d>=0){const inf=pts[d+1].info;veh={type:vm,d,roofH:inf.from?inf.need:roofOf(vm)}}}}
     if(pts.length<2)return{err:'Nothing to animate.'};
     // with a vehicle: drive to the spot, then the soldier route starts on the roof
-    let drive=null;
-    if(veh){const cell=pts[veh.d].c,next=pts[veh.d+1].c;drive=drivePath(T.G,cell);
+    let drive=null,slide=null;const G=T.G;
+    const isGate=c=>!!(G.top[c]&&G.top[c].t==='gate');
+    if(veh){const park=parkSpot(G,veh,pts);
+      if(park){const{pc,f,h,V,run:rn}=park,deg=v=>Math.atan2(v[0],-v[1])*180/Math.PI;
+        // parked along the wall, side to it; the roof spot right in line with the weak point
+        const R=[cx_(pc)+.5-f[0]*.3,cy_(pc)+.5-f[1]*.3],front=[R[0]+h[0]*V.roof,R[1]+h[1]*V.roof],lft=[h[1],-h[0]];
+        const sg=lft[0]*-f[0]+lft[1]*-f[1]>0?1:-1;   // get out on the side away from the wall
+        const at=(back,side)=>[front[0]-h[0]*back+lft[0]*side,front[1]-h[1]*back+lft[1]*side];
+        // drive up straight along the line, nose towards the weak point, then a handbrake slide
+        const front0=[R[0]+f[0]*.4,R[1]+f[1]*.4],S=idx(cx_(pc)-f[0]*rn,cy_(pc)-f[1]*rn);
+        drive=drivePath(G,S);drive.push(front0);
+        const a0=deg(f),a1=a0+(((deg(h)-a0)%360+540)%360-180),C0=[front0[0]-f[0]*V.l/2,front0[1]-f[1]*V.l/2],C1=[front[0]-h[0]*V.l/2,front[1]-h[1]*V.l/2];
+        slide={kind:'slide',type:veh.type,V,C0,C1,a0,a1,dur:REDUCED?.3:1.1};slide.skid=skidTracks(slide);
+        veh={...veh,V,f,heading:deg(h),front,approachHd:a0,seat:at(V.door,sg*V.w*.18),door:at(V.door,sg*(V.w/2+.4)),hood:at(V.hood,0),roof:R};
+        // the jump: straight from the roof over a gate (never onto it, the wire is on top) or onto the block in reach
+        const W=pts[veh.d+1];let rest=pts.slice(veh.d+1);
+        if(!W.fl&&isGate(W.c)){let L=-1;
+          for(let k=1;k<=3;k++){const x=cx_(W.c)+f[0]*k,y=cy_(W.c)+f[1]*k;if(!IB(x,y))break;const c=idx(x,y);if(!isGate(c)){L=c;break}}
+          if(L>=0){const m=pts.findIndex((p,k)=>k>veh.d+1&&!p.fl&&p.c===L),c4Left=pts.slice(veh.d+2).some(p=>p.rm&&p.rm.length||p.info&&(p.info.c4||p.info.seal));
+            let r=null;if(m>0)r=pts.slice(m);else if(!c4Left){const raw=climbRoute(G,0,new Set(),false,[L]);if(raw)r=pointsFromClimb(G,raw)}
+            if(r){rest=[{...r[0],ouch:true},...r.slice(1)]}}}
+        pts=[{c:pc,h:0,fl:0},...rest]}
+      else{const cell=pts[veh.d].c,next=pts[veh.d+1].c;drive=drivePath(T.G,cell);
       const an=Math.round(Math.atan2(cy_(next)-cy_(cell),cx_(next)-cx_(cell))/(Math.PI/4))*(Math.PI/4),f=[Math.cos(an),Math.sin(an)],lft=[f[1],-f[0]];   // park square to the wall (nearest 45°)
       const V=VEH[veh.type],front=[cx_(cell)+.5+f[0]*.42,cy_(cell)+.5+f[1]*.42],at=(back,side)=>[front[0]-f[0]*back+lft[0]*side,front[1]-f[1]*back+lft[1]*side];
       drive.push(front);veh={...veh,V,f,heading:Math.atan2(f[0],-f[1])*180/Math.PI,front,
         seat:at(V.door,V.w*.18),door:at(V.door,V.w/2+.4),hood:at(V.hood,0),roof:at(V.roof,0)};
-      pts=pts.slice(veh.d)}
+      pts=pts.slice(veh.d)}}
+    // never land on a gate (barbed wire on top): jump over it in one go instead, with an "Ouch!" as you pass the wire
+    for(let k=1;k<pts.length-1;k++){const p=pts[k];
+      if(!p.fl&&isGate(p.c)&&p.h===G.H[p.c]&&!(p.rm&&p.rm.length)&&!p.info){pts[k+1]={...pts[k+1],ouch:true};pts.splice(k,1);k--}}
+    const wire=new Map();for(const p of pieces)if(p.t==='barbed'&&!p.z||p.t==='gate')for(const c of pieceCells(p))wire.set(c,[...(wire.get(c)||[]),p]);
     const end=pts[pts.length-1],ex=cx_(end.c)+.5,ey=cy_(end.c)+.5;
     const segs=[],blownSeen=new Set();
     for(let k=1;k<pts.length;k++){const a=pts[k-1],b=pts[k];
@@ -2242,7 +2488,7 @@ applyRules();
       const L=drive.length,dd=drive.reduce((a,p,i)=>i?a+Math.hypot(p[0]-drive[i-1][0],p[1]-drive[i-1][1]):0,0);
       const J=(a,b,ha,hb)=>({kind:'jump',ax:a[0],ay:a[1],bx:b[0],by:b[1],ha,hb,fla:0,flb:0,dist:1,dur:JUMP.pre+.42+JUMP.post});
       const face=Math.atan2(ex-R[0],-(ey-R[1]))*180/Math.PI;
-      segs.unshift({kind:'drive',path:drive,len:dd,dur:Math.max(.8,dd*.12)},
+      segs.unshift({kind:'drive',path:drive,len:dd,dur:Math.max(.8,dd*.12),endHd:slide?veh.approachHd:veh.heading},...(slide?[slide]:[]),
         {kind:'exit',ax:veh.seat[0],ay:veh.seat[1],bx:veh.door[0],by:veh.door[1],ha:0,hb:0,fla:0,flb:0,dist:1,dur:.5},
         J(veh.door,veh.hood,0,hood),J(veh.hood,veh.roof,hood,veh.roofH),
         {kind:'fire',x:R[0],y:R[1],h:veh.roofH,face,bursts:1+rnd(2),dur:.75})}
@@ -2254,13 +2500,13 @@ applyRules();
     for(const i of[...picks].sort((a,b)=>b-a)){const s=segs[i];
       segs.splice(i,0,{kind:'fire',x:s.ax,y:s.ay,h:0,face:Math.atan2(ex-s.ax,-(ey-s.ay))*180/Math.PI,bursts:1+rnd(2),dur:.75})}
     // once inside: stop and shoot the defender, then run on to the target
-    let lastHard=-1;segs.forEach((s,i)=>{if(!['walk','fire','back','drive','exit'].includes(s.kind))lastHard=i});
+    let lastHard=-1;segs.forEach((s,i)=>{if(!['walk','fire','back','drive','slide','exit'].includes(s.kind))lastHard=i});
     if(lastHard>=0&&segs[lastHard].kind==='c4')lastHard=Math.min(segs.length-1,lastHard+2);   // after the bang: back, then through the hole
     const at=lastHard>=0?segs[lastHard]:segs[segs.length-1];
     const sx_=at.bx??at.x??ex,sy_=at.by??at.y??ey,sh_=at.hb??at.h??0;
     segs.splice(lastHard>=0?lastHard+1:Math.max(0,segs.length-1),0,{kind:'shoot',x:lastHard>=0?sx_:(at.ax??sx_),y:lastHard>=0?sy_:(at.ay??sy_),h:lastHard>=0?sh_:(at.ha??0),dur:1.3});
     segs.push({kind:'cheer',x:ex,y:ey,h:end.h||0,dur:3.8});
-    return{segs,label,text,end:{x:ex,y:ey,h:end.h||0},veh};
+    return{segs,label,text,end:{x:ex,y:ey,h:end.h||0},veh,slide,wire};
   }
 
   // ---------- drawing ----------
@@ -2357,7 +2603,7 @@ applyRules();
     g.append(s('rect',{x:px+1,y:py+1,width:C-2,height:C-2,fill:'var(--panel)',opacity:.6}));
     g.append(s('path',{d:`M${px+3},${py+5} l4,3 l-2,4 l5,2 l2,4 M${px+14},${py+3} l-3,5 l3,3`,fill:'none',stroke:'var(--ink)','stroke-width':.8,opacity:.6}))}}
   // what the defender says: a general line when the attacker breaks in, then last words that depend on who is who
-  const SAY=2.8,LAST=SAY*2,FREEZE=.7,VICTORY='All your base are belong to us';
+  const SAY=2.8,LAST=SAY*2,FREEZE=.7,OUCH=1.2,VICTORY='All your base are belong to us';
   const ALARM_LINES=['Ahhhaaa','Who left the gate open?','There is a gap!'];
   function lastWords(victim,attacker){
     const pool=[];
@@ -2421,10 +2667,11 @@ applyRules();
     if(run.t0==null)run.t0=now;let t=(now-run.t0)/1000,i=0;
     while(i<run.segs.length&&t>run.segs[i].dur){const sg=run.segs[i];t-=sg.dur;
       if(sg.kind==='c4'&&!sg.applied){sg.applied=true;for(const b of sg.blow)run.rubble.push(...(b.piece?pieceCells(b.piece).map(c=>[cx_(c),cy_(c)]):[[b.cell.x,b.cell.y]]))}
-      if(sg.kind==='drive')run.vpos={x:run.veh.front[0],y:run.veh.front[1],hd:run.veh.heading};   // parked square to the wall
+      if(sg.kind==='drive'){const e=sg.path[sg.path.length-1];run.vpos=run.slide?{x:e[0],y:e[1],hd:sg.endHd}:{x:run.veh.front[0],y:run.veh.front[1],hd:run.veh.heading}}   // parked square to the wall
+      if(sg.kind==='slide'){run.vpos={x:run.veh.front[0],y:run.veh.front[1],hd:run.veh.heading};run.skidDone=sg}   // parked side-on, skid marks stay
       if(sg.bx!=null){run.pos={x:sg.bx,y:sg.by,h:sg.hb}}i++}
     const g=layer;if(!g){raf=requestAnimationFrame(frame);return}
-    g.replaceChildren();if(talk)talk.replaceChildren();rubble(g,run.rubble);
+    g.replaceChildren();if(talk)talk.replaceChildren();rubble(g,run.rubble);if(run.skidDone)skids(g,run.skidDone,1);
     if(run.trail.length>1)g.append(s('polyline',{points:run.trail.map(([x,y])=>P_(x,y).join(',')).join(' '),fill:'none',stroke:'var(--bad)','stroke-width':1.2,'stroke-dasharray':'2 2.5',opacity:.55}));
     const base={name:run.name,band:run.band,t:(now-run.t0)/1000},T=base.t;
     // the defender: pottering about near the target until the walls are breached, then panic
@@ -2436,7 +2683,7 @@ applyRules();
     else{const dp=defAt(D,T),panic=D.alarm!=null;D.lastHd=dp.hd;run.defPos=dp;const still=panic&&T-D.alarm<FREEZE;
       soldier(g,dp.x,dp.y,D.h,dp.hd,{name:D.name,band:D.band,hammer:true,panic,inside:D.inside,moving:!still,t:T*(panic?1.6:.6)});
       if(panic&&T-D.alarm<SAY)bubble(talk||g,dp.x,dp.y,D.shout,T-D.alarm)}
-    if(run.veh&&run.vpos&&!(run.segs[i]&&run.segs[i].kind==='drive'))vehicle(g,run.veh.type,run.vpos.x,run.vpos.y,run.vpos.hd);
+    if(run.veh&&run.vpos&&!(run.segs[i]&&(run.segs[i].kind==='drive'||run.segs[i].kind==='slide')))vehicle(g,run.veh.type,run.vpos.x,run.vpos.y,run.vpos.hd);
     if(i>=run.segs.length){flag(g,run.end.x,run.end.y);soldier(g,run.end.x,run.end.y,run.pos.h||0,180,{...base,cheer:true,t:0});
       if(!run.done){run.done=true;run.endT=T;finish();centreOn(run.end.x,run.end.y)}
       if(T-run.endT<LAST)bubble(talk||g,run.end.x,run.end.y,VICTORY,T-run.endT,LAST);
@@ -2447,8 +2694,10 @@ applyRules();
       for(let j=1;j<sg.path.length;j++){const[a0,a1]=sg.path[j-1],[b0,b1]=sg.path[j],l=Math.hypot(b0-a0,b1-a1);
         if(acc+l>=want||j===sg.path.length-1){const u=l?Math.min(1,(want-acc)/l):1;x=a0+(b0-a0)*u;y=a1+(b1-a1)*u;
           const tgt=Math.atan2(b0-a0,-(b1-a1))*180/Math.PI;let dlt=((tgt-hd+540)%360)-180;hd+=dlt*.25;break}acc+=l}
-      if(k>=1)hd=run.veh.heading;
+      if(k>=1)hd=sg.endHd??run.veh.heading;
       run.vpos={x,y,hd};vehicle(g,run.veh.type,x,y,hd,run.name);follow({x,y});raf=requestAnimationFrame(frame);return}
+    if(sg.kind==='slide'){const u=Math.min(1,t/sg.dur),p=slidePose(sg,u);skids(g,sg,u);
+      run.vpos={x:p.x,y:p.y,hd:p.hd};vehicle(g,sg.type,p.x,p.y,p.hd,run.name);follow({x:p.x,y:p.y});raf=requestAnimationFrame(frame);return}
     if(sg.kind==='c4'){charges(g,sg,t);run.heading=sg.face;
       // place the charges, back away (still facing them), crouch until the bang
       const back=Math.min(1,Math.max(0,(t-sg.place)/.45)),e=.5-.5*Math.cos(Math.PI*back);
@@ -2480,9 +2729,18 @@ applyRules();
       const k=t/sg.dur,inside=(sg.fla>0&&k<.5)||(sg.flb>0&&k>=.5),moving=sg.kind==='walk'||sg.kind==='enter'||sg.kind==='exit'||sg.kind==='back';
       soldier(g,x,y,Math.max(0,h),run.heading,{...base,t:base.t,lift,squash:Math.max(0,squash)*.8,moving,crawl:sg.kind==='crawl',inside});
       run.pos={x,y,h:Math.max(0,h)};
+      {const fx=Math.floor(x),fy=Math.floor(y),over=(IB(fx,fy)&&run.wire.get(idx(fx,fy))||[]).filter(wp=>wp.t==='gate'||h+lift<.8);   // in ground wire, or over a gate's coil
+        for(const wp of over)run.shake.set(wp,T);
+        if(over.length)run.inWire=true;else if(run.inWire){run.inWire=false;run.ouchT=T}}   // "Ouch!" right after getting through
       const lt=run.trail[run.trail.length-1];if(!lt||Math.hypot(lt[0]-x,lt[1]-y)>.35)run.trail.push([x,y]);
       follow({x,y})}
+    shakeWire(T);
+    if(run.ouchT!=null&&T-run.ouchT<OUCH)bubble(talk||g,run.pos.x,run.pos.y,'Ouch!',T-run.ouchT,OUCH);
     raf=requestAnimationFrame(frame)}
+  // barbed wire the attacker is in (or just left) shivers, fading out over a third of a second
+  function shakeWire(T){for(const[wp,t0]of run.shake){const ws=WIRE_EL.get(wp);if(!ws){run.shake.delete(wp);continue}
+      const k=Math.max(0,1-(T-t0)/.35);if(!k||REDUCED){for(const w of ws)w.removeAttribute('transform');run.shake.delete(wp);continue}
+      for(const w of ws)w.setAttribute('transform',`translate(${(Math.sin(T*70)*1.3*k).toFixed(2)},${(Math.cos(T*53)*.9*k).toFixed(2)})`)}}
   function follow(p){if(run&&run.def&&run.def.alarm!=null&&!run.def.dead&&run.defPos)p={x:(p.x+run.defPos.x)/2,y:(p.y+run.defPos.y)/2};   // keep both in view during the fight
     const tx=(M+p.x*C)*scale-vp.clientWidth/2,ty=(M+p.y*C)*scale-vp.clientHeight/2;
     vp.scrollLeft+=(tx-vp.scrollLeft)*.18;vp.scrollTop+=(ty-vp.scrollTop)*.18}
@@ -2500,11 +2758,11 @@ applyRules();
     const area=defenderArea(threat.G);
     const def={name:others[rnd(others.length)],band:obands[rnd(obands.length)],path:defenderPath(area),h:area.h,inside:area.inside,alarm:null,dead:null,deadT:null};
     def.quote=lastWords(def.name,name);def.shout=ALARM_LINES[rnd(ALARM_LINES.length)];
-    run={...p,def,vpos:null,name,band,t0:null,trail:first?[[first.ax,first.ay]]:[],rubble:[],heading:0,done:false,
+    run={...p,def,vpos:null,shake:new Map(),inWire:false,ouchT:null,skidDone:null,name,band,t0:null,trail:first?[[first.ax,first.ay]]:[],rubble:[],heading:0,done:false,
       pos:first?{x:first.ax,y:first.ay,h:first.ha}:{x:p.end.x,y:p.end.y,h:0}};
     markPlaying(row,'play');flashMsg(`${run.name} attacks: ${run.label}${run.text?', '+run.text:''}…`);
     draw();raf=requestAnimationFrame(frame)}
-  function stop(quiet){cancelAnimationFrame(raf);const had=!!run;run=null;
+  function stop(quiet){cancelAnimationFrame(raf);const had=!!run;if(run)for(const wp of run.shake.keys())for(const w of WIRE_EL.get(wp)||[])w.removeAttribute('transform');run=null;
     markPlaying(null);
     if(had&&!quiet){layer&&layer.replaceChildren();talk&&talk.replaceChildren();flashMsg('')}}
   // hooks used by the design module
@@ -2526,8 +2784,8 @@ applyRules();
   const F=WD.F;
   const TYPES={build:'Build',ammo:'Ammo',fuel:'Fuel',mech:'Mechanical'};
   const ORDER=['build','ammo','fuel','mech'];
-  const PLAN_DEFAULT={fobInPack:false,hammerInPack:true,noHeli:false,mortarShells:24,ciwsRounds:2000,talonMissiles:4,stingShots:1,drillFuel:'min',refuelStock:1800,repairStock:900,
-    extra:{ammo:0,fuel:0,mech:0},useFobStock:true,reserve:0};
+  const PLAN_DEFAULT={fobInPack:false,hammerInPack:true,noHeli:false,palletPrio:true,team:{oneway:{foot:0,driver:0,lakota:0,mh6:0},trans:{foot:0,driver:0,lakota:0,mh6:0}},mortarShells:24,ciwsRounds:2000,talonMissiles:4,stingShots:1,drillFuel:'min',refuelStock:1800,repairStock:900,
+    extra:{build:0,ammo:0,fuel:0,mech:0},useFobStock:true,reserve:0};
 
   // What each consumer burns. Add a new emplacement here and nowhere else.
   const CONSUMERS={
@@ -2540,7 +2798,7 @@ applyRules();
       shotsFrom:a=>Math.floor(a/F('talon.ammo'))},
     stingray:{type:'mech',input:'stingShots',unit:'shots',per:()=>F('sting.mech'),
       shotsFrom:a=>Math.floor(a/F('sting.mech')),cash:()=>F('sting.cash')},
-    drill:{type:'fuel',fixed:p=>p.drillFuel==='max'?F('drill.max'):F('drill.min')},
+    drill:{type:'fuel',fixed:p=>{const d=p.drillFuel;if(!d||d==='min')return F('drill.min');return F('drill.max')*(d==='max'?1:Math.min(5,Math.max(1,+String(d).slice(1)||1)))}},   // 'min' or 'x1'…'x5' full runs
     refuel:{type:'fuel',fixed:p=>+p.refuelStock||0},
     repair:{type:'mech',fixed:p=>+p.repairStock||0},
   };
@@ -2551,7 +2809,7 @@ applyRules();
     for(const[id,n]of Object.entries(counts)){if(id==='fob'||!n)continue;
       need.build+=WD.build(id)*n;maxTier=Math.max(maxTier,WD.tier(id))}
     const buildRaw=need.build;
-    need.build=Math.ceil(buildRaw*(1+(+plan.reserve||0)/100));
+    need.build=Math.ceil(buildRaw*(1+(+plan.reserve||0)/100))+Math.max(0,+plan.extra.build||0);
     for(const[id,c]of Object.entries(CONSUMERS)){const n=counts[id]||0;if(!n)continue;
       let total;
       if(c.fixed)total=c.fixed(plan)*n;
@@ -2565,14 +2823,18 @@ applyRules();
     for(const pool of['ammo','mech']){const users=Object.entries(CONSUMERS).filter(([id,c])=>c.type===pool&&c.shotsFrom&&counts[id]);
       const units=users.reduce((a,[id])=>a+counts[id],0);
       for(const[id,c]of users)shots[id]={alone:c.shotsFrom(need[pool]),shared:c.shotsFrom(need[pool]/units),units,unit:c.unit,estimate:!!c.estimate}}
-    return{need,buildRaw,haul,stock,lines,shots,cash,maxTier,plan};
+    // trip order: what must arrive first (in stacks). Required build (after the FOB's own stock) before extra/reserve;
+    // the first drill's minimum run before any other fuel.
+    const first={build:Math.ceil(Math.max(0,buildRaw-stock)/S),fuel:counts.drill?Math.ceil(F('drill.min')/S):0};
+    return{need,buildRaw,haul,stock,lines,shots,cash,maxTier,plan,first};
   }
 
   /* ---------- packing ---------- */
   const VEH=[
     {id:'ural',name:'Ural',track:'driver',allow:['pallet','large','small'],sub:'2 pallets or 4 large crates · 6-item trunk'},
     {id:'lakota',name:'Z20 Lakota',track:'pilot',allow:['pallet','large','small'],sub:'1 pallet or 2 large crates'},
-    {id:'humvee',name:'Humvee',track:'driver',allow:['large','small'],sub:'One crate on the bed · no pallets'},
+    {id:'kodiak',name:'Kodiak',track:'driver',allow:['large','small'],sub:'One crate on the bed · no pallets · unarmoured'},
+    {id:'humvee',name:'Humvee',track:'driver',allow:['large','small'],sub:'One crate on the bed · no pallets · armoured'},
     {id:'mh6',name:'MH-6',track:'pilot',allow:['small'],sub:'Two crate racks, one small crate each · no pallets'},
   ];
   const CNAME={pallet:'Pallet',large:'Large crate',small:'Small crate'};
@@ -2603,7 +2865,9 @@ applyRules();
   const contAvail=(k,levels)=>{if(k!=='large')return true;const d=lvl(levels,'driver');return d==null||d>=F('c.large.lvl')};
   const hammerOk=(tier,levels)=>{if(tier<=1)return true;const s=lvl(levels,'support');return s==null||s>=(tier===2?F('ham.m.lvl'):F('ham.l.lvl'))};
 
-  function packFor(v,haul,levels){
+  /* opt.palletPrio: pallets first. Crates on one trip at most, and only when that saves a trip over pallets alone.
+     Vehicles without a pallet bed (Kodiak, Humvee, MH-6) keep their crate plans. */
+  function packFor(v,haul,levels,opt){
     const S=F('stack');const st={};for(const t of ORDER)st[t]=haul[t]/S;
     if(!ORDER.some(t=>st[t]))return[];
     const bed=bedOf(v),cells=bedCells(bed),allow=v.allow.filter(k=>contAvail(k,levels));
@@ -2612,8 +2876,14 @@ applyRules();
     const maxP=allow.includes('pallet')?cap(cells/P.cells):0,maxL=allow.includes('large')?cap(cells/L.cells):0,maxS=allow.includes('small')?cap(cells/Sm.cells):0;
     for(let p=0;p<=maxP;p++)for(let l=0;l<=maxL;l++)for(let s=0;s<=maxS;s++){
       if(!(p+l+s)||!fits(bed,{pallet:p,large:l,small:s}))continue;
-      for(let T=1;T<=40;T++){const r=tryPack(st,p,l,s,T,P,L,Sm,cells);if(r){res.push(r);break}}}
-    const seen=new Set(),uniq=[];res.sort((a,b)=>a.trips-b.trips||a.cost-b.cost);
+      for(let T=1;T<=40;T++){const r=tryPack(st,p,l,s,T,P,L,Sm,cells,opt&&opt.first);if(r){res.push(r);break}}}
+    for(const r of res)r.unpack=unpackTime(r);
+    if(opt&&opt.palletPrio&&allow.includes('pallet')){const crateTrips=r=>r.tripList.filter(t=>t.crates.length).length;
+      const p0=Math.min(...res.filter(r=>!r.crates.length).map(r=>r.trips));
+      const keep=res.filter(r=>!r.crates.length||crateTrips(r)<=1&&r.trips<p0);
+      if(keep.length)res.splice(0,res.length,...keep)}
+    // pallets first: at the same number of trips, the plan that unloads fastest (pallets unload themselves) wins over a cheaper crate load
+    const seen=new Set(),uniq=[];res.sort((a,b)=>a.trips-b.trips||a.unpack-b.unpack||a.cost-b.cost);
     for(const r of res)if(!seen.has(r.sig)){seen.add(r.sig);uniq.push(r)}
     const pick=[],add=(r,tag)=>{if(r&&!pick.includes(r)){r.tag=tag;pick.push(r)}};
     add(uniq[0],'Fewest trips');
@@ -2622,18 +2892,26 @@ applyRules();
     add([...uniq].sort((a,b)=>a.cost-b.cost||a.trips-b.trips)[0],'Cheapest');
     return pick.slice(0,3);
   }
-  function tryPack(st,p,l,s,T,P,L,Sm,cells){
+  /* Trip order (first trips first): required build · ammo · fuel for the first drill (whole pallets, never split into crates
+     just for it) · mechanical · the rest of the fuel · extra build (reserve and "extra on top"). */
+  const RANK={build:[1,6],ammo:[2,2],fuel:[3,5],mech:[4,4]};
+  function tryPack(st,p,l,s,T,P,L,Sm,cells,first){
+    const firstN=t=>t==='build'?(first?first.build:Infinity):t==='fuel'?(first?first.fuel:0):Infinity;
     const rem={...st},alloc=[],PT=p*T,ST=(L.stacks*l+Sm.stacks*s)*T;
     const maxT=()=>ORDER.reduce((m,t)=>rem[t]>rem[m]?t:m,'build'),sum=()=>ORDER.reduce((a,t)=>a+rem[t],0);
     while(alloc.length<PT){const t=maxT();if(rem[t]<P.stacks)break;alloc.push(t);rem[t]-=P.stacks}
     while(sum()>ST&&alloc.length<PT){const t=maxT();if(rem[t]<=0)break;alloc.push(t);rem[t]=Math.max(0,rem[t]-P.stacks)}
     if(sum()>ST)return null;
     const trips=Array.from({length:T},()=>({pallets:[],crates:[]}));
-    alloc.sort((a,b)=>ORDER.indexOf(a)-ORDER.indexOf(b)).forEach((t,i)=>trips[Math.floor(i/p)].pallets.push(t));
-    const queue=[];for(const t of ORDER)if(rem[t]>0)queue.push([t,rem[t]]);const crates=[];
+    const seen={},ranked=alloc.map(t=>{const k=seen[t]||0;seen[t]=k+1;return{t,r:k*P.stacks<firstN(t)?RANK[t][0]:RANK[t][1]}});
+    ranked.sort((a,b)=>a.r-b.r||ORDER.indexOf(a.t)-ORDER.indexOf(b.t)).forEach((x,i)=>trips[Math.floor(i/p)].pallets.push(x.t));
+    // what is left for crates, in the same order
+    const segs=[];for(const t of ORDER){if(!(rem[t]>0))continue;const left=Math.max(0,firstN(t)-(seen[t]||0)*P.stacks),a=Math.min(rem[t],left);
+      if(a>0)segs.push([t,a,RANK[t][0]]);if(rem[t]-a>0)segs.push([t,rem[t]-a,RANK[t][1]])}
+    segs.sort((a,b)=>a[2]-b[2]);const queue=segs.map(x=>[x[0],x[1]]);const crates=[];
     outer:for(let i=0;i<T;i++)for(const kind of[...Array(l).fill('large'),...Array(s).fill('small')]){
       if(!queue.length)break outer;const capTot=kind==='large'?L.stacks:Sm.stacks;let cap=capTot;const c={kind,fill:[],cap:capTot};
-      while(cap>0&&queue.length){const q=queue[0],n=Math.min(cap,q[1]);c.fill.push([q[0],n]);cap-=n;q[1]-=n;if(!q[1])queue.shift()}
+      while(cap>0&&queue.length){const q=queue[0],n=Math.min(cap,q[1]),last=c.fill[c.fill.length-1];if(last&&last[0]===q[0])last[1]+=n;else c.fill.push([q[0],n]);cap-=n;q[1]-=n;if(!q[1])queue.shift()}
       c.free=cap;trips[i].crates.push(c);crates.push(c)}
     const used=trips.filter(t=>t.pallets.length||t.crates.length);
     for(const t of used)t.load={pallet:t.pallets.length,large:t.crates.filter(c=>c.kind==='large').length,small:t.crates.filter(c=>c.kind==='small').length};
@@ -2642,13 +2920,20 @@ applyRules();
     const shape=t=>t.pallets.length+'p'+t.crates.map(c=>c.kind[0]).join('');
     return{trips:used.length,tripList:used,pallets:alloc,crates,cost,sig:used.map(shape).join('|')};
   }
+  /* Unloading at the FOB (an indicator, not a measurement of your run): a pallet unloads itself once dropped;
+     crate stacks go crate → backpack → FOB and back, a few stacks per run. */
+  function unpackTime(r){const sl=Math.max(1,F('unpack.slots')),r1=F('unpack.run1'),rf=F('unpack.runFull');
+    const run=k=>r1+(k-1)*(sl>1?(rf-r1)/(sl-1):0);let pal=0,hand=0;
+    for(const t of r.tripList){pal+=t.pallets.length*F('unpack.pallet');
+      let n=t.crates.reduce((a,c)=>a+c.fill.reduce((x,f)=>x+f[1],0),0);while(n>0){const k=Math.min(sl,n);hand+=run(k);n-=k}}
+    r.unpackHand=hand;return pal+hand}
   function freeFits(load,v,levels){   // what else would still fit next to this trip's load
     const out=[],allow=v.allow.filter(k=>contAvail(k,levels)),bed=bedOf(v);
     for(const[k,word]of[['pallet','more pallet'],['large','large crate'],['small','small crate']]){
       if(!allow.includes(k))continue;let n=0;while(n<8&&fits(bed,{...load,[k]:load[k]+n+1}))n++;if(n)out.push(`${n} ${word}${n>1?'s':''}`)}
     return out;
   }
-  window.Haul={TYPES,ORDER,PLAN_DEFAULT,CONSUMERS,VEH,CNAME,needs,packFor,freeFits,fits,bedOf,vehAvail,contAvail,hammerOk};
+  window.Haul={TYPES,ORDER,PLAN_DEFAULT,CONSUMERS,VEH,CNAME,needs,packFor,freeFits,fits,bedOf,vehAvail,contAvail,hammerOk,unpackTime};
 })();
 </script>
 
@@ -2676,13 +2961,17 @@ function showTab(t){tab=t;for(const b of document.querySelectorAll('#tabs button
   if(t!=='build'&&ordEdit)endOrderEdit(false);
   $('tab-design').classList.toggle('buildmode',t==='build');
   $('steps').hidden=t==='build'?false:$('orderBtn').getAttribute('aria-expanded')!=='true';   // Build always shows the order
-  if(sec==='design'){const m=t==='build'?'blue':'edit';if(m!==mode){window.stopAttack?.();mode=m;if(m==='blue'&&tool==='select')setTool(lastPiece)}renderSide();requestAnimationFrame(()=>{fitLayout();draw()})}
+  if(sec==='design'){const m=t==='build'?'blue':'edit';if(m!==mode){window.stopAttack?.();mode=m;if(m==='blue'&&(tool==='select'||tool==='brush'))setTool(lastPiece)}renderSide();requestAnimationFrame(()=>{fitLayout();draw()})}
   if(t==='haul')renderHaul();if(t==='facts')renderFacts()}
 for(const b of document.querySelectorAll('#tabs button'))b.onclick=()=>showTab(b.dataset.tab);
 const designDoc=()=>({name:designName,pieces:pieces.map(({bad,...p})=>p),plan,v:SAVE_V,gapRule:$('gapRule').checked});
 window.onDesignChanged=()=>{ls.set('wd_design_draft',designDoc());if(tab==='haul')renderHaul();updateTabBadge()};
-function updateTabBadge(){const r=Haul.needs(counts(),plan);const tot=Haul.ORDER.reduce((a,t)=>a+r.haul[t],0);
-  $('haulBadge').textContent=tot?fmt(tot)+' supplies':'';$('haulBadge').title=tot?`${fmt(tot)} supplies to haul`:''}
+function updateTabBadge(){}
+const TEAM_KINDS=['foot','driver','lakota','mh6'];
+// plan.team = {oneway:{foot,driver,lakota,mh6}, trans:{…}}; anything else (older drafts) counts as no team
+function teamOf(){const t=plan.team||{},z=()=>({foot:0,driver:0,lakota:0,mh6:0});
+  return{oneway:{...z(),...(t.oneway||{})},trans:{...z(),...(t.trans||{})}}}
+const teamSize=t=>TEAM_KINDS.reduce((a,k)=>a+(+t.oneway[k]||0)+(+t.trans[k]||0),0);   // the Haul tab no longer shows a supplies count
 
 /* ---------- trips summary (top of the bill of materials) ---------- */
 window.renderTrips=()=>{const root=$('bomTrips');if(!root)return;root.replaceChildren();
@@ -2692,11 +2981,11 @@ window.renderTrips=()=>{const root=$('bomTrips');if(!root)return;root.replaceChi
   const tile=(k,v,sub)=>el('button',{class:'trip-t',type:'button',onclick:()=>showTab('haul'),title:'Open Haul'},el('span',{class:'k'},k),el('span',{class:'v'},v),el('span',{class:'s'},sub));
   const foot=Math.ceil(stacks/Math.max(1,WD.F('foot.stacks')));
   root.append(tile('On foot',`${foot} trip${foot>1?'s':''}`,`${fmt(stacks*S)} supplies`));
-  for(const id of['ural','lakota']){const v=Haul.VEH.find(x=>x.id===id),best=Haul.packFor(v,r.haul,levels)[0];
+  for(const id of['ural','lakota']){const v=Haul.VEH.find(x=>x.id===id),best=Haul.packFor(v,r.haul,levels,{palletPrio:plan.palletPrio,first:r.first})[0];
     root.append(tile(v.name,best?`${best.trips} trip${best.trips>1?'s':''}`:'—',Haul.vehAvail(v,levels)?(best?'best plan':'too much'):el('span',{class:'lockd'},'Locked at your level')))}};
 
 /* ---------- Supplies & haul ---------- */
-let haulPick={sig:'',i:0};   // which option the recommended card shows
+let haulPick={sig:'',i:0},haulAllOpen=false,packOpen=false;   // which option the recommended card shows (and the cash estimate uses); "All options" open or not
 function renderHaul(){
   const c=counts(),r=Haul.needs(c,plan);
   // parts from the design
@@ -2715,18 +3004,25 @@ function renderHaul(){
       el('span',{class:'pname'},`${nameOf(line.id)} ×${line.n}`));
     if(line.input)row.append(num(line.input,plan[line.input],line.id==='ciws'?WD.F('ciws.rounds'):1,line.unit+' each'),el('span',{class:'muted'},`${line.unit} each`));
     else if(line.id==='drill'){const sel=el('select',{id:'pl_drill','aria-label':'Drill fuel'},
-        el('option',{value:'min'},`Minimum run · ${fmt(WD.F('drill.min'))}`),el('option',{value:'max'},`Full duration · ${fmt(WD.F('drill.max'))}`));
-      sel.value=plan.drillFuel;sel.onchange=()=>{plan.drillFuel=sel.value;planChanged()};row.append(sel)}
+        el('option',{value:'min'},`Minimum run · ${fmt(WD.F('drill.min'))}`),...[1,2,3,4,5].map(n=>el('option',{value:'x'+n},`${n}× full duration · ${fmt(WD.F('drill.max')*n)}`)));
+      sel.value=plan.drillFuel==='max'?'x1':plan.drillFuel||'min';sel.onchange=()=>{plan.drillFuel=sel.value;planChanged()};row.append(sel)}
     else{const key=line.id==='refuel'?'refuelStock':'repairStock';row.append(num(key,plan[key],50,'stock'),el('span',{class:'muted'},`${Haul.TYPES[line.type].toLowerCase()} stocked`))}
     row.append(el('span',{class:'n ptot'},`${fmt(line.total)} ${Haul.TYPES[line.type].toLowerCase()}`,line.estimate?el('span',{class:'est'},' est.'):null));
     pl.append(row)}
   if(!r.lines.length)pl.append(el('div',{class:'empty'},'No emplacements, stations or drill in the design, so no ammo, fuel or mechanical is planned.'));
-  const ex=el('div',{class:'prow extra'},el('span',{class:'pname'},'Extra on top'));
-  for(const t of['ammo','fuel','mech'])ex.append(el('label',{class:'xin',style:`--c:var(--${t})`},Haul.TYPES[t],num('extra.'+t,plan.extra[t]||0,50,'Extra '+t)));
-  pl.append(ex);
+  // extra on top, and the total per supply type, in four aligned columns
+  const sg=el('div',{class:'sgrid'},el('span'),...Haul.ORDER.map(t=>el('span',{class:'sg-h',style:`--c:var(--${t})`},Haul.TYPES[t])),
+    el('span',{class:'sg-l'},'Extra on top'),...Haul.ORDER.map(t=>{const ps=WD.F('palletSize'),b=el('button',{type:'button',class:'pal-add',style:`--c:var(--${t})`,
+        title:`Add one ${Haul.TYPES[t].toLowerCase()} pallet (${fmt(ps)} supplies)`,'aria-label':`Add one ${Haul.TYPES[t].toLowerCase()} pallet`,
+        onclick:()=>{plan.extra={...plan.extra,[t]:(+plan.extra[t]||0)+ps};planChanged()}});
+      b.innerHTML='<svg viewBox="0 0 16 12" aria-hidden="true"><rect x="1" y="1" width="14" height="6" rx="1"/><path d="M1 8.5h14M2.5 8.5v2.5M8 8.5v2.5M13.5 8.5v2.5"/></svg>';
+      return el('span',{class:'sg-in'},b,num('extra.'+t,plan.extra[t]||0,50,'Extra '+Haul.TYPES[t].toLowerCase()))}),
+    el('span',{class:'sg-l',title:'Everything planned right now: build supplies for the design (plus any reserve and extra), and the ammo, fuel and mechanical above, plus extra. The new FOB\'s starting build supplies are taken off later, under "To haul".'},'Total supplies'),
+    ...Haul.ORDER.map(t=>el('b',{class:'sg-v',style:`--c:var(--${t})`},fmt(r.need[t]))));
+  pl.append(sg);
   // options
   $('optStock').checked=plan.useFobStock;
-  for(const[id,k]of[['optFobPack','fobInPack'],['optFobPack2','fobInPack'],['optHamPack','hammerInPack'],['optHamPack2','hammerInPack']])$(id).checked=!!plan[k];$('optReserve').value=String(plan.reserve||0);
+  for(const[id,k]of[['optFobPack','fobInPack'],['optFobPack2','fobInPack'],['optHamPack','hammerInPack'],['optHamPack2','hammerInPack']])$(id).checked=!!plan[k];{const t=teamOf();for(const row of['oneway','trans'])for(const k of TEAM_KINDS)$(`team_${row}_${k}`).value=String(t[row][k]);$('teamWarn').hidden=teamSize(t)!==1}$('optReserve').value=String(plan.reserve||0);
   // meters
   const m=$('hMeters');m.replaceChildren();
   for(const t of Haul.ORDER){const sub=t==='build'&&r.stock?`${fmt(r.need.build)} needed − ${fmt(Math.min(r.stock,r.need.build))} in new FOB`:(r.need[t]?`${fmt(r.need[t])} planned`:'none');
@@ -2752,67 +3048,181 @@ function renderHaul(){
   const HELI_SPEED=10;   // a helicopter does a round trip about 10 times faster than a ground vehicle
   const isHeli=v=>v.track==='pilot';
   let cheapest=null;const lockedV=[],opts=[];
+  const S=WD.F('stack'),plu=(n,w)=>`${n} ${w}${n===1?'':'s'}`;
+  const team=teamOf(),teamN=teamSize(team),useTeam=teamN>=2;
+  // one trip as pills: backpack / trunk items on the first trip, then what lies on the bed
+  const tripLoad=(t,v,trunkCap,items)=>{const load=el('div',{class:'load'}),bed=el('div',{class:'load'}),pc={};
+    const inTrunk=trunkCap?items.filter(c=>!c[1]).map(c=>c[0]):[],inPack=items.filter(c=>!trunkCap||c[1]).map(c=>c[0]);
+    if(inPack.length)load.append(el('span',{class:'pill'},el('b',{},'Backpack:'),' '+inPack.join(', ')));
+    if(inTrunk.length)load.append(el('span',{class:'pill'},el('b',{},'Trunk:'),' '+inTrunk.join(', ')));
+    if(t.foot)load.append(el('span',{class:'pill'},el('b',{},'Backpack:'),' '+t.foot.map(([x,n])=>`${n} ${Haul.TYPES[x].toLowerCase()}`).join(' + ')+' stacks'));
+    if(t.pallets.length||t.crates.length)bed.append(el('span',{class:'bedl'},'Bed'));
+    t.pallets.forEach(x=>pc[x]=(pc[x]||0)+1);
+    for(const[x,n]of Object.entries(pc))bed.append(el('span',{class:'pill pal',style:`--c:var(--${x})`},el('b',{},(n>1?n+'× ':'')+Haul.TYPES[x]+' pallet')));
+    for(const cr of t.crates)bed.append(el('span',{class:'pill'},el('b',{},Haul.CNAME[cr.kind]+':'),' '+cr.fill.map(([x,n])=>`${n} ${Haul.TYPES[x].toLowerCase()}`).join(' + ')+' stacks'));
+    const free=el('div',{class:'free'});
+    for(const cr of t.crates)if(cr.free>0)free.append(el('span',{},`${cr.free} free slot${cr.free>1?'s':''} in ${Haul.CNAME[cr.kind].toLowerCase()} (${fmt(cr.free*S)} supplies)`));
+    if(v&&t.load){const fits=Haul.freeFits(t.load,v,levels);if(fits.length)free.append(el('span',{},'Bed room for '+fits.join(' or ')))}
+    if(trunkCap){const left=trunkCap-inTrunk.length;if(left>0)free.append(el('span',{},`${left} trunk slot${left>1?'s':''} free`))}
+    return el('div',{class:'col',style:'gap:4px'},load.children.length?load:null,bed.children.length?bed:null,free.children.length?free:null)};
+  // the same trip as one line of text, for the pack list
+  const tripText=(t,trunkCap,items)=>{const bits=[],pc={};
+    const inTrunk=trunkCap?items.filter(c=>!c[1]).map(c=>c[0]):[],inPack=items.filter(c=>!trunkCap||c[1]).map(c=>c[0]);
+    t.pallets.forEach(x=>pc[x]=(pc[x]||0)+1);for(const[x,n]of Object.entries(pc))bits.push(`${n}× ${Haul.TYPES[x]} pallet`);
+    for(const cr of t.crates)bits.push(`${Haul.CNAME[cr.kind]} (${cr.fill.map(([x,n])=>`${n} ${Haul.TYPES[x].toLowerCase()}`).join(' + ')} stacks)`);
+    if(t.foot)bits.push(`Backpack: ${t.foot.map(([x,n])=>`${n} ${Haul.TYPES[x].toLowerCase()}`).join(' + ')} stacks`);
+    if(inPack.length)bits.push('Backpack: '+inPack.join(', '));if(inTrunk.length)bits.push('Trunk: '+inTrunk.join(', '));
+    return bits.join(' · ')};
   // one plan, its trips in the order you act in game: backpack (gear vendor), trunk, then the bed (garage)
-  const planView=(o,big)=>{const{v,p,i,spawn,trunkCap}=o;
-    const head=el('div',{class:'plan-h'},el('span',{},el('b',{},p.trips+(p.trips===1?' trip':' trips')),' ',el('span',{class:'tag'+(i===0?' best':'')},p.tag)),
-      el('span',{class:'mono muted',style:'font-size:13px'},'~'+money(p.cost)+' supplies'+(spawn?' + '+money(spawn*p.trips)+' spawn':'')));
+  let selO=null,packText='';
+  const planView=(o,big)=>{const{v,p,i,spawn,trunkCap}=o;const on=o===selO;
+    const pick=big?null:el('button',{type:'button',class:'mini plan-sel'+(on?' on':''),'aria-pressed':on?'true':'false',disabled:on?'':null,
+      title:on?'This plan is selected: the card above and the cash estimate use it':'Use this plan: the card above and the cash estimate follow it',
+      onclick:()=>{haulPick.i=opts.indexOf(o);renderHaul()}},on?'Selected':'Select');
+    const head=el('div',{class:'plan-h'},el('span',{},el('b',{},plu(p.trips,'trip')),' ',el('span',{class:'tag'+(i===0?' best':'')},p.tag)),
+      el('span',{class:'plan-r'},el('span',{class:'mono muted',style:'font-size:13px'},'~'+money(p.cost)+' supplies'+(spawn?' + '+money(spawn*p.trips)+' spawn':'')+' · unpack ~'+mmss(p.unpack)),pick));
     const box=el('div',{class:'plan'+(big?' big':'')},big?null:head);
-    p.tripList.forEach((t,ti)=>{const load=el('div',{class:'load'}),bed=el('div',{class:'load'}),pc={};
-      const inTrunk=trunkCap?carry.filter(c=>!c[1]).map(c=>c[0]):[],inPack=carry.filter(c=>!trunkCap||c[1]).map(c=>c[0]);
-      if(ti===0&&inPack.length)load.append(el('span',{class:'pill'},el('b',{},'Backpack:'),' '+inPack.join(', ')));
-      if(ti===0&&inTrunk.length)load.append(el('span',{class:'pill'},el('b',{},'Trunk:'),' '+inTrunk.join(', ')));
-      if(t.pallets.length||t.crates.length)bed.append(el('span',{class:'bedl'},'Bed'));
-      t.pallets.forEach(x=>pc[x]=(pc[x]||0)+1);
-      for(const[x,n]of Object.entries(pc))bed.append(el('span',{class:'pill pal',style:`--c:var(--${x})`},el('b',{},(n>1?n+'× ':'')+Haul.TYPES[x]+' pallet')));
-      for(const cr of t.crates)bed.append(el('span',{class:'pill'},el('b',{},Haul.CNAME[cr.kind]+':'),' '+cr.fill.map(([x,n])=>`${n} ${Haul.TYPES[x].toLowerCase()}`).join(' + ')+' stacks'));
-      const free=el('div',{class:'free'});
-      for(const cr of t.crates)if(cr.free>0)free.append(el('span',{},`${cr.free} free slot${cr.free>1?'s':''} in ${Haul.CNAME[cr.kind].toLowerCase()} (${fmt(cr.free*WD.F('stack'))} supplies)`));
-      const fits=Haul.freeFits(t.load,v,levels);if(fits.length)free.append(el('span',{},'Bed room for '+fits.join(' or ')));
-      if(trunkCap){const left=trunkCap-(ti===0?inTrunk.length:0);if(left>0)free.append(el('span',{},`${left} trunk slot${left>1?'s':''} free`))}
-      box.append(el('div',{class:'trip'},el('span',{class:'tn'},'Trip '+(ti+1)),el('div',{class:'col',style:'gap:4px'},load.children.length?load:null,bed.children.length?bed:null,free.children.length?free:null)))});
-    const over=p.pallets.length*WD.F('palletSize')+p.crates.reduce((a,cr)=>a+(cr.cap-cr.free)*WD.F('stack'),0)-total;
+    p.tripList.forEach((t,ti)=>box.append(el('div',{class:'trip'},el('span',{class:'tn'},'Trip '+(ti+1)),tripLoad(t,v,trunkCap,ti===0?carry:[]))));
+    const over=p.pallets.length*WD.F('palletSize')+p.crates.reduce((a,cr)=>a+(cr.cap-cr.free)*S,0)-total;
     box.append(el('div',{class:'plan-f'},`${p.crates.length?'Crates are unloaded by hand into the FOB. ':''}${p.pallets.length?'Drop pallets inside the FOB square. ':''}${over>0?'Pallets bring '+fmt(over)+' more than planned.':''}`));
     return box};
+  const prioBox=el('input',{type:'checkbox',id:'optPalletPrio'});
+  prioBox.checked=plan.palletPrio!==false;prioBox.onchange=e=>{plan.palletPrio=e.target.checked;haulPick.i=0;planChanged()};
+  const prioLbl=el('label',{class:'chk noheli',title:'Pallets prio: plan with pallets wherever you can. Crates are used on one trip at most, and only when that saves a whole trip. Pallets cost less per supply and unload themselves in about 10 s; crates pack tighter but are unloaded by hand. Kodiak, Humvee and MH-6 have no pallet bed and still use crates.'},prioBox,' Pallets prio');
+  let teamRes=null;
   if(!total)root.append(el('div',{class:'card'},el('h3',{},ids.length?'No haul needed':'Nothing to pack'),el('div',{class:'muted'},ids.length?'The new FOB\'s starting stock covers this design. Carry the FOB kit in a backpack (it takes 2×3).':'Place pieces on the Design tab.')));
+  else if(useTeam){
+    teamRes=planTeam(r,team);
+    const T=teamRes,card=el('section',{class:'rec'});
+    card.append(el('div',{class:'rec-h'},el('span',{class:'rec-k'},`Team plan · ${teamN} players`),el('span',{class:'rec-opts'},prioLbl)),
+      el('div',{class:'rec-t'},el('b',{},plu(T.trips,'trip')),' · ',el('b',{title:'Time on the road until the last load is in, counted in ground round trips (a helicopter round trip is about a tenth of one)'},`all in after ~${T.span} ground trip${T.span===1?'':'s'}`),' · ',el('span',{class:'mono'},money(T.cost+T.vehCost))),
+      el('div',{class:'rec-u',title:`Estimate: a pallet unloads in ${WD.F('unpack.pallet')} s once dropped. The whole team (${teamN}) shares carrying crates into the FOB. Foot players carry their stacks straight in.`},'Time to unpack (~): ',el('b',{class:'mono'},mmss(T.unpack))),
+      el('div',{class:'rec-s'},`${money(T.cost)} supplies`+(T.vehCost?` + ${money(T.vehCost)} vehicles (bought once each)`:'')));
+    if(T.left>0)card.append(el('div',{class:'warn bad-list',style:'margin:6px 0'},`The team can't carry it all: ${fmt(T.left)} supplies are left over. Add transporters, or more one-way players.`));
+    const box=el('div',{class:'plan big'});
+    for(const c of T.carriers){if(!c.trips.length)continue;
+      box.append(el('div',{class:'round'},c.label));
+      c.trips.forEach((t,ti)=>box.append(el('div',{class:'trip'},el('span',{class:'tn'},'Trip '+(ti+1)),tripLoad(t,c.v,c.trunkCap,t.items||[]))))}
+    const idle=T.carriers.filter(c=>!c.trips.length);
+    if(idle.length)box.append(el('div',{class:'plan-f'},`Not needed: ${idle.map(c=>c.label).join(', ')}.`));
+    card.append(box);root.append(card);
+    packText=[`WARDOGS haul${designName?' · '+designName:''}`,...T.carriers.filter(c=>c.trips.length).flatMap(c=>[``,c.label,...c.trips.map((t,ti)=>`  Trip ${ti+1}: ${tripText(t,c.trunkCap,t.items||[])}`)])].join('\n');
+  }
   else{
     for(const v of Haul.VEH){
       if(!Haul.vehAvail(v,levels)){lockedV.push(`${v.name} needs ${v.track==='driver'?'Driver':'Pilot'} ${WD.F('v.'+v.id+'.lvl')}`);continue}
       if(plan.noHeli&&isHeli(v))continue;
       const spawn=WD.F('v.'+v.id+'.spawn')||0,trunkCap=WD.F('v.'+v.id+'.trunk');
-      Haul.packFor(v,r.haul,levels).forEach((p,i)=>{if(!cheapest||p.cost<cheapest.cost)cheapest=p;
+      Haul.packFor(v,r.haul,levels,{palletPrio:plan.palletPrio,first:r.first}).forEach((p,i)=>{if(!cheapest||p.cost<cheapest.cost)cheapest=p;
         opts.push({v,p,i,spawn,trunkCap,time:p.trips/(isHeli(v)?HELI_SPEED:1),cash:p.cost+spawn*p.trips})})}
-    // best first: least time on the road (helicopters ~10× faster), then the lowest cost
-    opts.sort((a,b)=>a.time-b.time||a.cash-b.cash);
+    // fewest trips (helicopters ~10× faster), then pallets first (quickest to unload), then cash
+    opts.sort((a,b)=>a.time-b.time||a.p.unpack-b.p.unpack||a.cash-b.cash);
     const sig=opts.map(o=>o.v.id+o.p.sig).join(',');if(sig!==haulPick.sig)haulPick={sig,i:0};
-    const ctl=el('label',{class:'chk noheli',title:'Leave out helicopters (Lakota, MH-6)'},el('input',{type:'checkbox',id:'optNoHeli'}),' No heli');
+    const heliBox=el('input',{type:'checkbox',id:'optNoHeli'});
+    heliBox.checked=!!plan.noHeli;heliBox.onchange=e=>{plan.noHeli=e.target.checked;haulPick.i=0;planChanged()};
+    const ctl=el('span',{class:'rec-opts'},prioLbl,el('label',{class:'chk noheli',title:'Leave out helicopters (Lakota, MH-6)'},heliBox,' No heli'));
     const card=el('section',{class:'rec'});
     if(!opts.length)card.append(el('div',{class:'rec-h'},el('h3',{},'No vehicle plan'),ctl),el('div',{class:'muted'},plan.noHeli?'No ground vehicle can carry this at your levels. Untick "No heli".':'No vehicle can carry this at your levels.'));
-    else{const k=Math.min(haulPick.i,opts.length-1),o=opts[k];
+    else{const k=Math.min(haulPick.i,opts.length-1),o=opts[k];selO=o;
       const nav=(d)=>el('button',{type:'button',class:'mini rec-nav','aria-label':d<0?'Previous option':'Next option',title:d<0?'Better option':'Next best option',
         disabled:(d<0?k===0:k===opts.length-1)?'':null,onclick:()=>{haulPick.i=k+d;renderHaul()}},d<0?'◀':'▶');
       card.append(el('div',{class:'rec-h'},el('span',{class:'rec-k'},k===0?'Recommended':`Option ${k+1}`),el('span',{class:'rec-n'},nav(-1),el('span',{class:'mono'},`${k+1} / ${opts.length}`),nav(1)),ctl),
-        el('div',{class:'rec-t'},el('b',{},o.v.name),' · ',el('b',{},`${o.p.trips} trip${o.p.trips>1?'s':''}`),' · ',el('span',{class:'mono'},money(o.cash))),
+        el('div',{class:'rec-t'},el('b',{},o.v.name),' · ',el('b',{},plu(o.p.trips,'trip')),' · ',el('span',{class:'mono'},money(o.cash))),
+        el('div',{class:'rec-u',title:`Estimate: a pallet unloads in ${WD.F('unpack.pallet')} s once dropped. Crates go by hand: crate → backpack → FOB and back, ${WD.F('unpack.runFull')} s with ${WD.F('unpack.slots')} stacks in the backpack, ${WD.F('unpack.run1')} s with one, over a 10 m run. Your distance and free slots change this.`},
+          'Time to unpack (~): ',el('b',{class:'mono'},mmss(o.p.unpack))),
         el('div',{class:'rec-s'},o.p.tag+(isHeli(o.v)?' · helicopter, about 10× faster per trip':'')+(o.spawn?` · ${money(o.p.cost)} supplies + ${money(o.spawn*o.p.trips)} spawn`:'')),
-        planView(o,true))}
+        planView(o,true));
+      packText=[`WARDOGS haul${designName?' · '+designName:''}`,'',`${isHeli(o.v)?'Pilot':'Driver'} · ${o.v.name}`,...o.p.tripList.map((t,ti)=>`  Trip ${ti+1}: ${tripText(t,o.trunkCap,ti===0?carry:[])}`)].join('\n')}
     root.append(card);
-    ctl.querySelector('input').checked=!!plan.noHeli;
-    ctl.querySelector('input').onchange=e=>{plan.noHeli=e.target.checked;haulPick.i=0;planChanged()};
     // every option, grouped by vehicle, collapsed
-    const all=el('details',{class:'others'},el('summary',{},`All options (${opts.length})`));
+    const all=el('details',{class:'others',open:haulAllOpen?'':null},el('summary',{},`All options (${opts.length})`));
+    all.addEventListener('toggle',()=>{haulAllOpen=all.open});
     for(const v of Haul.VEH){const mine=opts.filter(o=>o.v===v);if(!mine.length)continue;
       const box=el('div',{class:'veh'},el('div',{class:'veh-h'},el('h3',{},v.name),el('span',{class:'sub'},v.sub)));
       mine.sort((a,b)=>a.i-b.i).forEach(o=>box.append(planView(o,false)));all.append(box)}
     if(opts.length)root.append(all)}
-  if(lockedV.length)root.append(el('div',{class:'locked-veh'},'Locked at your levels: '+lockedV.join(' · ')));
+  if(lockedV.length&&!useTeam)root.append(el('div',{class:'locked-veh'},'Locked at your levels: '+lockedV.join(' · ')));
+  if(teamRes&&teamRes.locked.length)root.append(el('div',{class:'locked-veh'},'Locked at your levels, left out of the team: '+teamRes.locked.join(' · ')));
+  // pack list: plain text to paste to each driver (Discord or similar)
+  if(packText){const pre=el('pre',{class:'packtxt',id:'packText'},packText),btn=el('button',{type:'button',class:'mini'},'Copy');
+    btn.onclick=()=>{const done=()=>{btn.textContent='Copied';setTimeout(()=>{btn.textContent='Copy'},1500)};
+      const sel=()=>{const rg=document.createRange();rg.selectNodeContents(pre);const s=getSelection();s.removeAllRanges();s.addRange(rg);btn.textContent='Selected: press Ctrl+C'};
+      try{navigator.clipboard.writeText(packText).then(done,sel)}catch(e){sel()}};
+    const det=el('details',{class:'others packlist',open:packOpen?'':null},el('summary',{},'Pack list'),el('div',{class:'col',style:'gap:6px;padding:8px 14px 12px'},
+      el('div',{class:'pack-h'},el('span',{class:'muted',style:'font-size:13px'},'Plain text to paste to each driver, e.g. in Discord.'),btn),pre));
+    det.addEventListener('toggle',()=>{packOpen=det.open});root.append(det)}
   // cash
-  const cash=$('hCash');cash.replaceChildren();const rows=[['FOB kit',WD.F('fobPrice')]];
+  const cash=$('hCash');cash.replaceChildren();
+  if(total&&teamRes){   // per team member: what each one buys
+    let all=0;
+    for(const c of teamRes.carriers){if(!c.cash.length)continue;const sum=c.cash.reduce((a,x)=>a+x[1],0);all+=sum;
+      cash.append(el('span',{class:'who-h'},c.label),el('span',{class:'n who-h'},money(sum)));
+      for(const[k,v]of c.cash)cash.append(el('span',{class:'who-r'},k),el('span',{class:'n muted'},money(v)))}
+    if(r.cash){cash.append(el('span',{class:'who-h'},'Stingray shots (paid when fired)'),el('span',{class:'n who-h'},money(r.cash)));all+=r.cash}
+    cash.append(el('span',{class:'tot'},'Team total'),el('span',{class:'n tot'},money(all)));renderLevelNotes();return}
+  const rows=[['FOB kit',WD.F('fobPrice')]];
   if(r.maxTier===3)rows.push(['Large Hammer',WD.F('ham.l.price')]);
-  if(total&&cheapest)rows.push(['Supplies, cheapest pack plan',cheapest.cost]);
+  if(false){}
+  // follows the plan selected in "How to pack it"
+  else if(total&&selO){const o=selO,n=o.p.trips;rows.push([`Supplies (${o.v.name}, ${plu(n,'trip')})`,o.p.cost]);
+    if(o.spawn)rows.push([`${o.v.name}${n>1?' × '+n+' trips':''}`,o.spawn*n])}
+  else if(total&&cheapest)rows.push(['Supplies, cheapest pack plan',cheapest.cost]);
   if(r.cash)rows.push(['Stingray shots',r.cash]);
   for(const[k,v]of rows)cash.append(el('span',{},k),el('span',{class:'n'},money(v)));
-  cash.append(el('span',{class:'tot'},'Total before vehicles'),el('span',{class:'n tot'},money(rows.reduce((a,x)=>a+x[1],0))));
+  cash.append(el('span',{class:'tot'},(selO||teamRes)&&total?'Total':'Total before vehicles'),el('span',{class:'n tot'},money(rows.reduce((a,x)=>a+x[1],0))));
   renderLevelNotes();
 }
+/* ---------- team haul ----------
+   One way: one trip each (the vehicle is left at the FOB). Transporters: as many trips as it takes.
+   Whoever is free first takes the next load, most important first (required build, ammo, the first drill's fuel,
+   mechanical, the rest of the fuel, extra build). Time is counted in ground round trips; a helicopter trip is ~1/10. */
+function planTeam(r,team){const S=WD.F('stack'),F=WD.F,carriers=[],locked=[];
+  const ground=['ural','kodiak','humvee'].map(id=>Haul.VEH.find(v=>v.id===id)).find(v=>Haul.vehAvail(v,levels))||null;
+  const KIND={foot:{name:'On foot'},driver:{v:ground,name:ground?ground.name:'Driver'},lakota:{v:Haul.VEH.find(v=>v.id==='lakota')},mh6:{v:Haul.VEH.find(v=>v.id==='mh6')}};
+  for(const[row,oneway]of[['oneway',true],['trans',false]])for(const k of TEAM_KINDS){const n=team[row][k]||0;if(!n)continue;const v=KIND[k].v;
+    if(k!=='foot'&&(!v||!Haul.vehAvail(v,levels))){locked.push(`${n} ${k==='driver'?'driver':v.name}`);continue}
+    for(let i=1;i<=n;i++)carriers.push({k,v:k==='foot'?null:v,oneway,trunkCap:v&&k!=='foot'?F('v.'+v.id+'.trunk'):0,
+      dur:k==='foot'?1:(v.track==='pilot'?.1:1),free:0,trips:[],label:`${k==='foot'?'On foot':k==='driver'?'Driver':'Pilot'} ${i}${k==='foot'?'':' · '+v.name} · ${oneway?'one way':'transporter'}`})}
+  // what is left to bring, in stacks, and how much of it still counts as "first"
+  const rem={};for(const t of Haul.ORDER)rem[t]=r.haul[t]/S;const first={...r.first};
+  const RANK={build:[1,6],ammo:[2,2],fuel:[3,5],mech:[4,4]};
+  const footLoad=()=>{let cap=Math.max(1,F('foot.stacks'));const segs=[];
+    for(const t of Haul.ORDER){const f=t==='build'||t==='fuel'?Math.min(rem[t],first[t]||0):rem[t];if(f>0)segs.push([t,f,RANK[t][0]]);if(rem[t]-f>0)segs.push([t,rem[t]-f,RANK[t][1]])}
+    segs.sort((a,b)=>a[2]-b[2]);const out=[];
+    for(const[t,n]of segs){if(cap<=0)break;const k=Math.min(cap,n);const last=out[out.length-1];if(last&&last[0]===t)last[1]+=k;else out.push([t,k]);cap-=k}
+    return out};
+  let items=[['FOB kit',!!plan.fobInPack]];if(r.maxTier===3)items.push(['Large Hammer',plan.hammerInPack!==false]);
+  const left=()=>Haul.ORDER.reduce((a,t)=>a+rem[t],0);let guard=0;
+  while(left()>0&&guard++<200){
+    const ready=carriers.filter(c=>!(c.oneway&&c.trips.length));if(!ready.length)break;
+    ready.sort((a,b)=>a.free-b.free||(b.oneway-a.oneway)||(a.k==='foot')-(b.k==='foot'));const c=ready[0];
+    let trip;
+    if(c.k==='foot'){const f=footLoad();if(!f.length)break;trip={pallets:[],crates:[],foot:f}}
+    else{const haul={};for(const t of Haul.ORDER)haul[t]=rem[t]*S;
+      const best=Haul.packFor(c.v,haul,levels,{palletPrio:plan.palletPrio,first})[0];if(!best){c.oneway=true;c.trips.push({pallets:[],crates:[],skip:true});continue}
+      trip=best.tripList[0]}
+    // take it off what is left
+    const P=Math.round(F('palletSize')/S),got={};
+    for(const x of trip.pallets)got[x]=(got[x]||0)+P;for(const cr of trip.crates)for(const[x,n]of cr.fill)got[x]=(got[x]||0)+n;for(const[x,n]of trip.foot||[])got[x]=(got[x]||0)+n;
+    for(const[x,n]of Object.entries(got)){rem[x]=Math.max(0,rem[x]-n);if(first[x]!=null)first[x]=Math.max(0,first[x]-n)}
+    if(items.length&&c.k!=='foot'){trip.items=items;items=[]}
+    c.trips.push(trip);c.free+=c.dur}
+  for(const c of carriers)c.trips=c.trips.filter(t=>!t.skip);
+  if(items.length){const c=carriers.find(c=>c.trips.length);if(c)c.trips[0].items=items.map(([n])=>[n,true])}
+  const all=carriers.flatMap(c=>c.trips),pPrice=F('palletPrice'),L=F('c.large.price'),Sm=F('c.small.price'),pack=F('packPrice');
+  const cost=all.reduce((a,t)=>a+t.pallets.length*pPrice+t.crates.reduce((b,cr)=>b+(cr.kind==='large'?L:Sm)+cr.fill.reduce((x,f)=>x+f[1],0)*pack,0)+(t.foot||[]).reduce((b,f)=>b+f[1]*pack,0),0);
+  const tripCost=t=>t.pallets.length*pPrice+t.crates.reduce((b,cr)=>b+(cr.kind==='large'?L:Sm)+cr.fill.reduce((x,f)=>x+f[1],0)*pack,0)+(t.foot||[]).reduce((b,f)=>b+f[1]*pack,0);
+  // what each player pays: their vehicle, the supplies they load, and the FOB kit / hammer if they bring them
+  for(const c of carriers){c.cash=[];if(!c.trips.length)continue;
+    if(c.v){const sp=F('v.'+c.v.id+'.spawn')||0;if(sp)c.cash.push([c.v.name,sp])}
+    const sup=c.trips.reduce((a,t)=>a+tripCost(t),0);if(sup)c.cash.push([`Supplies (${c.trips.length} trip${c.trips.length>1?'s':''})`,sup]);
+    for(const t of c.trips)for(const[n]of t.items||[])c.cash.push([n,n==='FOB kit'?F('fobPrice'):F('ham.l.price')])}
+  const veh=new Map();for(const c of carriers)if(c.v&&c.trips.length){const k=c.v.name;const e=veh.get(k)||[k,0,0];e[1]++;e[2]+=F('v.'+c.v.id+'.spawn')||0;veh.set(k,e)}
+  const fake={tripList:all.filter(t=>!t.foot)},u=Haul.unpackTime(fake),hand=fake.unpackHand||0;
+  const span=Math.round(Math.max(0,...carriers.filter(c=>c.trips.length).map(c=>c.free))*10)/10;
+  return{carriers,locked,trips:all.length,cost,vehicles:[...veh.values()],vehCost:[...veh.values()].reduce((a,e)=>a+e[2],0),
+    unpack:(u-hand)+hand/Math.max(1,teamSize(team)),span,left:Math.round(left()*S)}}
+
 // inputs fire 'change' while losing focus; redraw on the next tick so the field isn't removed mid-blur
 const later=f=>setTimeout(f,0);
 function planChanged(){ls.set('wd_design_draft',designDoc());later(()=>{renderHaul();updateTabBadge();renderTrips()})}
@@ -2820,9 +3230,18 @@ $('optStock').onchange=e=>{plan.useFobStock=e.target.checked;planChanged()};
 for(const[id,k]of[['optFobPack','fobInPack'],['optFobPack2','fobInPack'],['optHamPack','hammerInPack'],['optHamPack2','hammerInPack']])
   $(id).onchange=e=>{plan[k]=e.target.checked;for(const[j,kk]of[['optFobPack','fobInPack'],['optFobPack2','fobInPack'],['optHamPack','hammerInPack'],['optHamPack2','hammerInPack']])$(j).checked=!!plan[kk];planChanged()};
 $('optReserve').onchange=e=>{plan.reserve=+e.target.value;planChanged()};
+
+{const g=$('teamGrid'),COL={foot:'Foot',driver:'Drivers',lakota:'Z20 Lakota',mh6:'MH-6'};
+  const ROWS=[['oneway','One way','One way: each makes one trip and leaves the vehicle at the FOB. On foot: one backpack load.'],
+    ['trans','Transporters','Transporters: as many trips as it takes, driving or flying back for the next load. On foot: walks back for more.']];
+  g.append(el('span'),...TEAM_KINDS.map(k=>el('span',{class:'tg-h',title:k==='driver'?'Drives the biggest ground vehicle your levels allow (Ural, else Kodiak or Humvee)':k==='foot'?'Carries supplies in the backpack':`Flies a ${COL[k]}`},COL[k])));
+  for(const[row,name,tip]of ROWS){g.append(el('span',{class:'tg-l',title:tip},name));
+    for(const k of TEAM_KINDS){const sel=el('select',{id:`team_${row}_${k}`,'aria-label':`${name}: ${COL[k]}`,title:tip});
+      for(let n=0;n<=9;n++)sel.append(el('option',{value:String(n)},String(n)));
+      sel.onchange=()=>{const t=teamOf();t[row][k]=+sel.value;plan.team=t;haulPick.i=0;planChanged()};g.append(sel)}}}
 $('planReset').onclick=()=>{plan={...Haul.PLAN_DEFAULT};planChanged()};
 /* Levels: empty = assume everything can be used. Saved to the user's account when logged in, else in this browser. */
-const LEVEL_LIMITS=[['driver','c.large.lvl','Cannot buy large crates'],['driver','v.ural.lvl','Cannot buy Ural'],['driver','v.humvee.lvl','Cannot buy Humvee'],
+const LEVEL_LIMITS=[['driver','c.large.lvl','Cannot buy large crates'],['driver','v.ural.lvl','Cannot buy Ural'],['driver','v.kodiak.lvl','Cannot buy Kodiak'],['driver','v.humvee.lvl','Cannot buy Humvee'],
   ['pilot','v.lakota.lvl','Cannot buy Lakota'],['pilot','v.mh6.lvl','Cannot buy MH-6'],
   ['support','ham.m.lvl','Cannot use the Medium Hammer'],['support','ham.l.lvl','Cannot use the Large Hammer']];
 const TRACK={support:'Support',driver:'Driver',pilot:'Pilot'};
@@ -2897,7 +3316,8 @@ function renderFacts(){
       `HESCO and Doors stacked on HESCO or Doors: up to H${F('stack.hesco')}. Anything built on a building: up to H${F('stack.total')}.`,
       `A Bunker can stand on the ground${F('stack.bunker')>0?' or on HESCO up to H'+F('stack.bunker'):''}. Recon Towers and Shelters must stand on the ground.`,
       `The FOB build area is a ${F('fob.area')} m square centred on the FOB. Sandbags, barbed wire, hedgehogs and recon tents may sit outside it.`,
-      `+1h free trick (free foundation): a piece snapped side to side to a piece standing on a small HESCO is built one level up at no cost, and it chains. Recon Towers and Shelters too; not barbed wire, recon tents, hedgehogs or sandbags. It stays when the helper is removed, and needs the same C4 as the piece on it.`,
+      `A FOB takes one Refuel Station and one Repair Station at most, never two of either.`,
+      `Elevation Stacking (free foundation): a piece snapped side to side to a piece standing on a small HESCO is built one level up at no cost, and it chains. Recon Towers and Shelters too; not barbed wire, recon tents, hedgehogs or sandbags. It stays when the Bumper block is removed, and needs the same C4 as the piece on it.`,
       `Protected in the threat check: emplacements, stations and the FOB.`]],
   ];
   for(const[h,lines]of RULES)R.append(el('div',{class:'rgrp'},el('h4',{},h),el('ul',{},...lines.map(l=>el('li',{},l)))));
@@ -2927,7 +3347,7 @@ let db=null;   // the claude.ai page database, when running there
 S.local=ls.get('wd_designs')||[];
 let statusTimer=0;
 function status(t){const e=$('saveStatus');e.textContent=t;clearTimeout(statusTimer);if(t)statusTimer=setTimeout(()=>{e.textContent=''},7000)}
-function load(d){snapshot();$('gapRule').checked=!!d.gapRule;pieces=rebuild(d.pieces||[],isLegacy(d));sel=new Set();updateSelBar();plan={...Haul.PLAN_DEFAULT,...(d.plan||{})};designName=d.name||'';$('dName').value=designName;changed();renderSaved();
+function load(d){snapshot();$('gapRule').checked=false;pieces=rebuild(d.pieces||[],isLegacy(d));sel=new Set();updateSelBar();plan={...Haul.PLAN_DEFAULT,...(d.plan||{})};designName=d.name||'';$('dName').value=designName;changed();renderSaved();
   const r=flaggedText();flashMsg(r?`Loaded "${designName||'design'}". ${r}.`:'',!!r)}
 const userName=()=>{const u=S.user;if(!u)return'';const n=u.displayName||(u.email||'').split('@')[0];return n.charAt(0).toUpperCase()+n.slice(1)};
 function parseDoc(r){try{return{...JSON.parse(r.data),name:r.name}}catch(e){return{name:r.name,pieces:[]}}}
@@ -3096,7 +3516,7 @@ async function startFirebase(){
 /* ---------- start-up ---------- */
 const draft=ls.get('wd_design_draft');
 const start=draft&&draft.pieces&&draft.pieces.filter(p=>p.t!=='fob').length?draft:{v:SAVE_V,pieces:[]};
-$('gapRule').checked=!!start.gapRule;pieces=rebuild(start.pieces,isLegacy(start));designName=start.name||'';plan={...Haul.PLAN_DEFAULT,...(start.plan||{})};
+$('gapRule').checked=false;pieces=rebuild(start.pieces,isLegacy(start));designName=start.name||'';plan={...Haul.PLAN_DEFAULT,...(start.plan||{})};
 $('dName').value=designName;
 renderPalette();renderLegend();renderThreat();draw();renderSide();renderSaved();updateTabBadge();
 {const r=flaggedText();if(r)flashMsg(r+'.',true)}
