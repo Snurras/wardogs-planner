@@ -2348,7 +2348,7 @@ applyRules();
    never changes the design. Any edit stops it. Silent. Camera follows.
    ===================================================================== */
 (function(){
-  const NAMES=['Barba','HE','Snurra','Upprord','Yaruto'];
+  const NAMES=['Barba','HE','Snurra','Upprord','Yaruto','Olle'];
   const BANDS=['#D0261C','#2F9E44','#1F6FD1'];            // arm band: red, green or blue
   const SPEED={walk:.3,diag:.4,crawl:1.1,ladder:1.15,enter:.45};
   const JUMP={pre:.2,post:.16};                         // stop + crouch before a jump, land + squash after it
@@ -2609,6 +2609,8 @@ applyRules();
   const SAY=2.8,LAST=SAY*2,FREEZE=.7,OUCH=1.2,VICTORY='All your base are belong to us';
   const ALARM_LINES=['Ahhhaaa','Who left the gate open?','There is a gap!'];
   function lastWords(victim,attacker){
+    if(victim==='Olle')return attacker==='Snurra'?'You are just like Darth Vader':'Din idiot';                  // always (his father did it)
+    if(attacker==='Olle')return victim==='Snurra'?'Betrayed by my own son':'Oh no, I thought you were my friend';   // always, whoever he kills
     const pool=[];
     if(attacker==='HE')pool.push('Danskjävel');
     if(victim==='Barba')pool.push('Kuken helvetes jävlar');
@@ -2690,7 +2692,7 @@ applyRules();
       if(panic&&T-D.alarm<SAY)bubble(talk||g,dp.x,dp.y,D.shout,T-D.alarm)}
     if(run.veh&&run.vpos&&!(run.segs[i]&&(run.segs[i].kind==='drive'||run.segs[i].kind==='slide')))vehicle(g,run.veh.type,run.vpos.x,run.vpos.y,run.vpos.hd);
     if(i>=run.segs.length){flag(g,run.end.x,run.end.y);soldier(g,run.end.x,run.end.y,run.pos.h||0,180,{...base,cheer:true,t:0});
-      if(!run.done){run.done=true;run.endT=T;finish();centreOn(run.end.x,run.end.y)}
+      if(!run.done){run.done=true;run.endT=T;finish()}
       if(T-run.endT<LAST)bubble(talk||g,run.end.x,run.end.y,VICTORY,T-run.endT,LAST);
       if(T-run.endT<LAST||D.deadT!=null&&T-D.deadT<LAST){cancelAnimationFrame(raf);raf=requestAnimationFrame(frame)}return}
     const sg=run.segs[i],cur=run.pos;
@@ -2746,7 +2748,8 @@ applyRules();
   function shakeWire(T){for(const[wp,t0]of run.shake){const ws=WIRE_EL.get(wp);if(!ws){run.shake.delete(wp);continue}
       const k=Math.max(0,1-(T-t0)/.35);if(!k||REDUCED){for(const w of ws)w.removeAttribute('transform');run.shake.delete(wp);continue}
       for(const w of ws)w.setAttribute('transform',`translate(${(Math.sin(T*70)*1.3*k).toFixed(2)},${(Math.cos(T*53)*.9*k).toFixed(2)})`)}}
-  function follow(p){if(run&&run.def&&run.def.alarm!=null&&!run.def.dead&&run.defPos)p={x:(p.x+run.defPos.x)/2,y:(p.y+run.defPos.y)/2};   // keep both in view during the fight
+  function follow(p){return;   // camera stays in Fit mode (no following)
+if(run&&run.def&&run.def.alarm!=null&&!run.def.dead&&run.defPos)p={x:(p.x+run.defPos.x)/2,y:(p.y+run.defPos.y)/2};   // keep both in view during the fight
     const tx=(M+p.x*C)*scale-vp.clientWidth/2,ty=(M+p.y*C)*scale-vp.clientHeight/2;
     vp.scrollLeft+=(tx-vp.scrollLeft)*.18;vp.scrollTop+=(ty-vp.scrollTop)*.18}
   function finish(){markPlaying(run.row,'done');
@@ -2756,7 +2759,7 @@ applyRules();
     b.setAttribute('aria-pressed',on?'true':'false');b.title=on&&state==='play'?'Stop':b.dataset.title}}
   function start(row){const p=plan(row);if(p.err){flashMsg(p.err,false);return}p.row=row;
     stop(true);
-    if(visibleCells()>26)setScale(vp.clientWidth/(20*C));
+    $('zoomFit').click();   // the whole design in view; the camera stays put while it plays
     p.shootAt=p.segs.findIndex(s=>s.kind==='shoot');const first=p.segs.find(s=>s.ax!=null);if(p.veh){const d=p.segs[0].path[0];p.veh.start=d}
     const name=NAMES[rnd(NAMES.length)],band=BANDS[rnd(BANDS.length)];
     const others=NAMES.filter(n=>n!==name),obands=BANDS.filter(b=>b!==band);
