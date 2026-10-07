@@ -16,6 +16,7 @@ Every message in a long chat re-sends the whole history (hundreds of screenshots
 | Logins, saving, comments, Fact sheet, Firebase rules | 01 + 06 | Opus |
 | Colours, icons, layout, a new mockup | 01 + 07 + the feature doc | Opus |
 | Fix a typo, change a number/fact, rename a label, quick question | 01 only | Sonnet (cheaper) |
+| Add to or sort the to-do list, Base Defender ideas | 01 + 09 (+10) | Sonnet |
 | Put staging on the test version / release test to everyone | 01 + 08 | Sonnet |
 
 ## Starter prompt (copy, fill in)
