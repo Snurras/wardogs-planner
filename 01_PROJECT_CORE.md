@@ -8,23 +8,24 @@
 ## Where things live
 | What | Where |
 |---|---|
-| Staging (test copy) | claude.ai artifact https://claude.ai/artifact/BeyFVpAnFDRbygmRGARv9Z (version 105 at release 5 Oct 2026, evening) |
-| Production | GitHub Pages https://snurras.github.io/wardogs-planner/ (repo `Snurras/wardogs-planner`, file `index.html`). **Snurra uploads by hand.** |
-| Docs | `docs/` in the same repo (these files) |
+| Staging (Claude's workbench) | claude.ai artifact https://claude.ai/artifact/BeyFVpAnFDRbygmRGARv9Z (version 105 at release 5 Oct 2026, evening) |
+| Test version | `test.html` in the repo → https://snurras.github.io/wardogs-planner/test.html. Same code as `index.html`; the file name switches on test mode (tester login + `test_*` data, doc 06) |
+| Production | GitHub Pages https://snurras.github.io/wardogs-planner/ (repo `Snurras/wardogs-planner`, file `index.html`) |
+| Docs | the `0x_*.md` files in the repo root (these files) |
 | Release notes | `RELEASE_<date>.md` in the repo; `PENDING_RELEASE.md` lists changes on staging that are not released yet |
 | Firebase | project `snurras-wardogs-base-planer` (see doc 06) |
 
 ## How to start work in a new chat (for Claude)
-1. Get the current code: read the staging artifact (Artifact tool, `read`), or clone the repo (`index.html` = last release; staging may be newer).
+1. Get the current code: read the staging artifact (Artifact tool, `read`), or clone the repo (`index.html` = last release, `test.html` = on test; staging may be newer).
 2. Work on a local copy named `wardogs-base-designer.html` and **only open the parts you need** (use the code map below + grep). Don't read the whole file.
 3. Test with Playwright (below), then publish to the **same staging artifact URL** (pass `url`).
 4. Add a line to `PENDING_RELEASE.md` for every user-visible change, and say whether Firebase rules change.
 
 ## Workflow rules
-- Changes go to **staging first**. Production only when Snurra says **"release"** (doc 08).
+- Changes go to **staging first**, then **test** when Snurra says “put it on test”, then production when he says **"release"** (doc 08).
 - Big visual changes: **mockup first** (an image or a small review page), implement after "go".
 - Snurra tests in the game and sends screenshots + measurements; trust those over assumptions.
-- Never commit/push unless asked. The admin UID never goes in the page (only in Firebase rules). Don't send the email address anywhere.
+- Never commit/push unless asked (“put it on test”, “release” and “update the docs” count as asking). The admin UID never goes in the page (only in Firebase rules). Don't send the email address anywhere.
 
 ## Code map (search for these headings; line numbers are approximate, v105)
 | Module (`<script id=…>`) | Starts ~line | Contains |
