@@ -2858,7 +2858,8 @@ function threatGrid(){setBounds();
   // Bremer wall face: an H3 edge on one side of the cell that can't be jumped; crossing it needs height or C4
   const edge=new Map();
   for(const p of pieces){if(p.t!=='bremer')continue;const[dx,dy]=turnDir([0,-1],R(p)),x=p.x+dx,y=p.y+dy;
-    if(!IB(x,y))continue;edge.set(ekey(idx(p.x,p.y),idx(x,y)),{h:p.z+FACE+(wired[idx(p.x,p.y)]?1:0),p})}   // wire on top: one higher
+    if(!IB(x,y))continue;const k=ekey(idx(p.x,p.y),idx(x,y)),h=p.z+FACE+(wired[idx(p.x,p.y)]?1:0),o=edge.get(k),fs=[...(o?o.fs:[]),{h,p}];   // wire on top: one higher
+    const top=fs.reduce((a,f)=>f.h>a.h?f:a);edge.set(k,{h:top.h,p:top.p,fs})}   // two faces on one line (back to back): the higher wall counts, and both must be blown to open it
   const gaps=bremerGaps();
   for(const gp of gaps){const k=ekey(idx(gp.a.x,gp.a.y),idx(gp.b.x,gp.b.y)),e=edge.get(k);
     edge.set(k,{h:gp.a.z+FACE,p:e?e.p:gp.a,p2:gp.b,p1:gp.a,gap:true})}   // too narrow to walk: same height rule as a wall face
@@ -2900,8 +2901,10 @@ function vehicleZone(G){
 const NN=N*N;
 const ekey=(a,b)=>a<b?a*N*N+b:b*N*N+a;
 // may an attacker standing at height hi cross from cell a to b? (Bremer wall faces block unless high enough, or blown)
-function crossOK(G,a,b,hi,fromVehicleCap,removed){const e=G.edge.get(ekey(a,b));if(!e)return true;
-  if(removed&&(removed.includes(e.p)||removed.includes(e.p1)||removed.includes(e.p2)))return true;return hi>=e.h-STEP||(fromVehicleCap>=e.h)}
+function crossOK(G,a,b,hi,fromVehicleCap,removed){const e=G.edge.get(ekey(a,b));if(!e)return true;let h=e.h;
+  if(removed){if(e.gap||!e.fs){if(removed.includes(e.p)||removed.includes(e.p1)||removed.includes(e.p2))return true}
+    else{const left=e.fs.filter(f=>!removed.includes(f.p));if(!left.length)return true;h=Math.max(...left.map(f=>f.h))}}   // a blown face leaves the other one standing
+  return hi>=h-STEP||(fromVehicleCap>=h)}
 const DIR8=[[1,0],[-1,0],[0,1],[0,-1],[1,1],[1,-1],[-1,1],[-1,-1]];
 // Jumps: any cell two blocks away (straight, diagonal or knight-like) landing up to one higher; straight three blocks landing no higher.
 function makeJumps(UP,LONG){const out=[],rng=v=>v===2?[1]:v===-2?[-1]:v===1?[0,1]:v===-1?[0,-1]:[0];
@@ -2949,7 +2952,7 @@ function climbRoute(G,cap,banned,collect,seeds){
   const fromHeight=(i,hi,n,vcap)=>{const x=cx_(i),y=cy_(i),onFoot=n===i&&G.brem[i]&&hi===G.brem[i].z+FOOT;
     for(const[dx,dy]of DIR8){const x1=x+dx,y1=y+dy;if(!inGrid(x1,y1))continue;const j=idx(x1,y1),diag=dx&&dy;
       if((H[j]<=hi+STEP||vcap&&H[j]<=vcap)&&(diag?diagOK(G,i,j,hi,hOf):crossOK(G,i,j,hi,vcap)))push(j,n);   // step up 1, drop any, or climb off a vehicle roof
-      const ft=faceTop(j);if(ft!=null&&(ft<=hi+STEP||vcap>=ft))push(2*NN+j,n)}                          // up onto a Bremer wall face
+      const ft=faceTop(j);if(ft!=null&&(ft<=hi+STEP||vcap>=ft)&&(diag?diagOK(G,i,j,hi,c=>c===j?ft:hOf(c)):crossOK(G,i,j,hi,vcap)))push(2*NN+j,n)}   // not through a higher wall face in between                          // up onto a Bremer wall face
     for(const J of JUMPS){const x2=x+J.dx,y2=y+J.dy;if(!inGrid(x2,y2))continue;
       if(!footingJumpOK(G,i,J,onFoot))continue;
       if(J.btw.some(([bx,by])=>H[idx(x+bx,y+by)]>hi))continue;
