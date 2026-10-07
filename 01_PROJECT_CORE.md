@@ -12,6 +12,7 @@
 | Test version | `test.html` in the repo → https://snurras.github.io/wardogs-planner/test.html. Same code as `index.html`; the file name switches on test mode (tester login + `test_*` data, doc 06) |
 | Production | GitHub Pages https://snurras.github.io/wardogs-planner/ (repo `Snurras/wardogs-planner`, file `index.html`) |
 | Docs | the `0x_*.md` files in the repo root (these files) |
+| To-do list | `09_TODO.md` (Fix · Polish · Add · Dream big); the Base Defender mini-game ideas are in `10_BASE_DEFENDER.md` |
 | Release notes | `RELEASE_<date>.md` in the repo; `PENDING_RELEASE.md` lists changes on staging that are not released yet |
 | Firebase | project `snurras-wardogs-base-planer` (see doc 06) |
 
