@@ -6,7 +6,6 @@ The Base Defender mini-game has its own doc: [10_BASE_DEFENDER.md](10_BASE_DEFEN
 ## Fix
 Things that are wrong or broken and hurt the player directly.
 
-- [ ] **CRITICAL – Shelter has no bottom floor in the drawings**: the shelter drawing is all wrong now.
 - [ ] **Side view**: ignore a single click on the grid, and close Side view when you press play on the threat check.
 
 ## Polish
