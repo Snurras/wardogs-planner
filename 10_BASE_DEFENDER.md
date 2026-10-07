@@ -21,9 +21,9 @@ A mini-game where you man your planned base with soldiers and defend it against 
 | Half cover | 50% |
 | Window or firing port | 10% |
 
-- Armour works like a second health bar: 100 armour + 100 health = 200 damage absorbed.
-- After being fully killed and then revived, a soldier comes back with 50% armour.
-- Barbed wire can be destroyed.
+- Armour works like a second health bar: 100 armour + 100 health = 200 damage absorbed. Damage is evenly distrubuted between armor and health. A soldier with  100 health and 100 armor, taking 20 damage will have 90 health and 90 armor.
+- After being fully killed and then revived, a soldier comes back with 50% armour. Same logic applies to medic, if a soldier is down to 50% life, 25%of armored is consumed, healing restores life but not armor.
+- Barbed wire can be destroyed by gunfire or explosives, it has 100 health.
 - Fields of fire matter: placement of windows and ports decides who can shoot where.
 
 ## 4. Defender units – inside the base
@@ -31,15 +31,16 @@ A mini-game where you man your planned base with soldiers and defend it against 
 | Unit | Role | Notes |
 |---|---|---|
 | Grunt | Cheap infantry | Can man positions and shoot |
-| Rifleman | Better infantry | Better aim, throws grenades; worse on mortars |
+| Base specialist | Can repair and are 10% more efficient in emplacements | Can man positions and with UZI, lacks range but efficient on short distance |
+| Rifleman | Better infantry | Better aim, throws grenades; worse on emplacements |
 | LMG | Suppression | Can only man windows/walls |
-| Medic | Support | Gives meds and revives; only fires at close range |
-| Sniper | Precision | Misses 75% vs. running targets, 25% vs. jumping, never vs. stationary |
+| Medic | Support | Gives meds and revives; only fires as base specialists |
+| Sniper | Precision | Misses when enemy is: 75% vs. running targets, 25% vs. jumping, never vs. stationary | Deals 100 damage, can deal headshot with double kill. If hitting, 20% vs running, 25% vs jumping and 50% vs standing still. 
 | Hawkeye | Sniper-scout near the base | Like recon, but only spots just before the attack; can also kill outside the base |
 
 ## 5. Defender units – outside the base
-- **Recon**: spots enemies before the attack. More recon = higher chance. Helicopters are very easy to spot, ground units harder. Example: "Enemy attack bird incoming" 10 s before spawn; each extra recon adds +20%, up to 15 s warning.
-- **Recon demo**: can destroy vehicles before they arrive, but can be killed (like outer specialists).
+- **Single Recon**: spots enemies before the attack. More recon = higher chance. Helicopters are very easy to spot, ground units harder. Example: "Enemy attack bird incoming" 10 s before spawn; each extra recon adds +20%, up to 15 s warning.
+- **Recon & demo**: can destroy vehicles before they arrive, but can be killed (like outer specialists).
 - **Outer specialists** (supply-line disruption): hit artillery, Urals, Humvees etc. before they become visible. Their chance of being killed rises with every successful strike.
 
 ## 6. Defender vehicles (all improve with recon)
@@ -54,28 +55,29 @@ A mini-game where you man your planned base with soldiers and defend it against 
 ## 7. Defensive equipment
 - **Mines**: placed against vehicles or infantry.
 - **Grenade launchers**: found in crates.
-- **Stingray** (anti-vehicle): requires recon. Flow: recon reports "Tank spotted" → you man the Stingray → fire within 15 s of the tank entering and it dies; otherwise it survives an extra number of seconds. Same for Humvees. Rocket launchers also work.
-- **Anti-helicopter**: 1 CIWS hit or 2 Talon shots downs a helicopter.
+- **Stingray** (anti-vehicle): Requires recon or that you take fire. Flow: recon reports "Tank spotted" → you man the Stingray → fire within 15 s of the tank entering and it dies; otherwise it survives an extra number of seconds. Same for Humvees. Rocket launchers also work.
+- **Anti-helicopter**: 1 CIWS will win vs Heli, Talon 25% on first, 75% on second and 100% on third. Can shoot earlier with recon, green will light up 5s before Heli appears. 
 - No own artillery exists.
 
 ## 8. Mortars
-Enemy mortar accuracy ramp (per shot): 1st random, 2nd 25% chance to hit a high-value target, then 50%, 75%, 100%.
+Enemy mortar accuracy ramp (per shot): 1st random within fob square, 2nd 25% chance to hit a the high-value target, then 50%, 75%, 100%. Shots always lands and can take out random soldiers within one grid and emplacements with direct hit. (civs take 3 hits center, outer counts as 0.5) Shoot prio: Mortar, CIWS, Stingray, Talon, gates, walls.
 
 Own mortar:
-- Uses the same ramp, but recon doubles the hit chance.
+- Uses the same ramp, but recon halfes the chance of miss.
 - 2 mortars don't increase hit chance; they give more attempts.
 - A firing mortar has x% chance to reduce attackers before they spawn. Low effect by design: mortars should only be manned during an attack.
-- Mortar duel: 1 vs 1, you win with recon support, otherwise you lose.
+- Balancing test for mortar duel: 1 vs 1 is 60/40 for enemy, with recon support its only 30/70.
 
 ## 9. Enemy threats
-- **Infantry types**: Sniper, LMG, Demo, Assault.
+- **Infantry types**: Sniper, LMG, Demo max 4c4 can use rockets?, Assault max 2c4. Juggernaut (high armor, slow, lmg)
 - **Helicopters**: also attack the base.
-- **APC**: keeps spawning new troops until destroyed, both inside and outside the base.
+- **APC**: keeps spawning new troops until destroyed, both for attackers and defenders.
 - **Tanks, Humvees, Urals**: countered as above.
 - **Artillery**: only killable by recon + support, or Stingray with recon + support:
   - Killing artillery while under fire: 60 s.
   - If recon + support are already in the field: 20 s, plus 50% chance to kill it before it attacks.
   - With Stingray: 20 s to counter; 10% per recon to detect before the first shot.
+  - With your own Havoc, 40s after first hit, 30 with recon.
 
 ## 10. Drill
 - An expensive option that can win the match faster, e.g. skip the last 40% of the attack.
@@ -86,9 +88,13 @@ Per level, plus total time across all bases.
 
 | Category | Rules |
 |---|---|
+Full campaign
 | Flawless | Fastest, no extra attempts, no deaths in the base |
 | No surrender | Fastest, no extra attempts, deaths allowed |
 | Any | Fastest, attempts not counted |
+Single scenarios 
+| Flawless Fastest, no deaths in the base |
+| Fastest, deaths allowed |
 
 ## 12. Open questions
 Design decisions still to make, plus notes that were ambiguous when translated.
@@ -99,11 +105,8 @@ Design decisions still to make, plus notes that were ambiguous when translated.
 - [ ] Completing a level gives more resources – can players save them for later?
 - [ ] Drill: does it only shorten the match, or also make the fight more intense?
 - [ ] Gepard: include it, and with what role?
-- [ ] Mortar "x%" reduction of attackers before spawn – set the value.
 - [ ] Stingray: how many extra seconds does a vehicle survive if you fire too late?
 
 ### Clarify from original notes
-- [ ] "3 attempts per level, otherwise back to the first" – back to level 1, or back to the first attempt/attack?
-- [ ] "Armor is reduced 50% as health" – does armour absorb 50% of incoming damage, or deplete 1:1 like health?
-- [ ] "1 recon takes foot, LMG takes 3" – does this mean recon kills 1 infantry and LMG kills 3, or how many hits they need vs. a helicopter?
-- [ ] Sniper miss chance vs. jumping (25%) is lower than vs. running (75%) – intended?
+- [ ] "3 attempts per level, otherwise back to the previously level.
+
