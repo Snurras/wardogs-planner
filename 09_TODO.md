@@ -30,7 +30,7 @@ New things for the planner.
 ### Build add-ons
 - [ ] **Special tricks**.
 - [ ] **Drop-down on buildables**: pick variants like Trim, half HESCO, etc.
-- [ ] **Modify places and removes HESCO in structures**.
+- [ ] **Let Modify place and remove HESCO in structures**.
 - [ ] **Straight line / free paint toggle**: easier building.
 - [ ] **Auto-turn Bremers** when the line changes direction.
 
