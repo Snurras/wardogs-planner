@@ -2867,7 +2867,7 @@ function threatGrid(){setBounds();
   // Floor 2: Recon Towers only, at base + ht.recon.window; NOT connected to floor 1 inside. Reached by the outside
   // ladder (an open opening, no C4) or through a blown window; left the same ways.
   const bld=new Array(N*N).fill(null),portIn=Array.from({length:N*N},()=>[]),portOut=Array.from({length:N*N},()=>[]);
-  const bld2=new Array(N*N).fill(null),portOut2=Array.from({length:N*N},()=>[]),ladderIn=Array.from({length:N*N},()=>[]),ladderFoot=new Array(N*N).fill(-1);
+  const bld2=new Array(N*N).fill(null),portOut2=Array.from({length:N*N},()=>[]),ladderIn=Array.from({length:N*N},()=>[]),ladderFoot=new Array(N*N).fill(-1),ladderC=new Array(N*N).fill(null);
   for(const p of pieces){if(!P[p.t].sym)continue;for(const c of pieceCells(p))bld[c]=p;
     for(const e of entrancesOf(p)){const ox=e.x+e.out[0],oy=e.y+e.out[1];if(!IB(ox,oy))continue;
       const inside=idx(e.x,e.y),outside=idx(ox,oy),c4=e.sealType?WD.c4(e.sealType):0;   // open = 0; door / HESCO seal = its C4
@@ -2881,7 +2881,9 @@ function threatGrid(){setBounds();
     const two=p.t==='recon_tower'||p.t==='recon_trim';
     if(two){for(const c of pieceCells(p))bld2[c]=p;
       for(const l of ladderSpots(p)){const fx=l.x+l.out[0],fy=l.y+l.out[1];if(!IB(fx,fy))continue;
-        const cell=idx(l.x,l.y),foot=idx(fx,fy);ladderIn[foot].push({to:cell,p});ladderFoot[cell]=foot}}
+        const cell=idx(l.x,l.y),foot=idx(fx,fy),ed=edge.get(ekey(cell,foot)),   // a Bremer at its foot, face toward the tower, blocks the ladder
+          cov=ed&&!ed.gap?ed.fs.filter(f=>f.h>p.z).map(f=>({p:f.p,b:col[idx(f.p.x,f.p.y)][0]})):[],lad={to:cell,p};if(cov.length)lad.cov=cov;
+        ladderIn[foot].push(lad);ladderFoot[cell]=foot;ladderC[cell]=lad}}
     if(p.t==='bunker'||two)for(const w of windowsOf(p)){const ox=w.x+w.out[0],oy=w.y+w.out[1];if(!IB(ox,oy))continue;
       const inside=idx(w.x,w.y),outside=idx(ox,oy),need=p.z+(two?WIN:0),c4=WD.F('c4.window'),info={t:'door',x:w.x,y:w.y,r:0,z:p.z,window:true,of:p,c4,need};   // window floor: bunker floor, or tower floor 2
       const ed=edge.get(ekey(inside,outside)),cov=ed&&!ed.gap?ed.fs.filter(f=>f.h>need).map(f=>({p:f.p,b:col[idx(f.p.x,f.p.y)][0]})):[],cv=cov.length?{cov}:{};   // a Bremer face across the window covers it too
@@ -2894,7 +2896,7 @@ function threatGrid(){setBounds();
     for(const e of entrancesOf(p))flr[idx(e.x,e.y)]=true;
     for(const e of centreOf(p)){const c=idx(e.x,e.y);flr[c]=true;
       if(e.sealType)cseal[c]={c4:WD.c4(e.sealType),seal:{t:e.sealType,x:e.x,y:e.y,r:0,z:p.z,seal:true,centre:true,of:p,c4:WD.c4(e.sealType)}}}}
-  return{H,col,ground,vehBlock,top,target,bld,portIn,portOut,bld2,portOut2,ladderIn,ladderFoot,edge,gaps,brem,wired,flr,cseal};
+  return{H,col,ground,vehBlock,top,target,bld,portIn,portOut,bld2,portOut2,ladderIn,ladderFoot,ladderC,edge,gaps,brem,wired,flr,cseal};
 }
 // cells a vehicle can drive to from outside the area
 function vehicleZone(G){
@@ -3011,7 +3013,7 @@ function c4Route(G,banned,fixed,shut,vmode){fixed=fixed||new Set();shut=shut||ne
     if(k>=K*NN+NN){const i=k-K*NN-NN,p=G.bld2[i],z=p.z+WIN;   // Recon Tower floor 2: walk it, leave by a window (C4) or down the ladder
       for(const[dx,dy]of DIRS){const x=cx_(i)+dx,y=cy_(i)+dy;if(!IB(x,y))continue;const j=idx(x,y);if(G.bld2[j]===p)relax(IN2(j),d,k)}
       if(!banned.has(p))for(const o of G.portOut2[i])opts[o.to].forEach((op,oj)=>{if(op.h<=o.need&&!covered(o,op.rm))relax(key(o.to,oj),d+c4of(op.rm,[])+o.c4,k,{...o.seal,out:true})});
-      const lf=G.ladderFoot[i];if(lf>=0)opts[lf].forEach((op,oj)=>{if(op.h<=z+STEP)relax(key(lf,oj),d+c4of(op.rm,[]),k,{ladder:true,down:true,of:p,x:cx_(i),y:cy_(i)})});
+      const lf=G.ladderFoot[i];if(lf>=0)opts[lf].forEach((op,oj)=>{if(op.h<=z+STEP&&!covered(G.ladderC[i],op.rm))relax(key(lf,oj),d+c4of(op.rm,[]),k,{ladder:true,down:true,of:p,x:cx_(i),y:cy_(i)})});
       continue}
     if(k>=K*NN){const i=k-K*NN,z=G.bld[i].z;            // floor 1: free to walk, leave by an entrance
       interiorMoves(G,i,(j,kind,zz,c4x,seal,po)=>{if(kind===0)relax(j>=NN?IN(j-NN):j,d,k);
@@ -3024,7 +3026,7 @@ function c4Route(G,banned,fixed,shut,vmode){fixed=fixed||new Set();shut=shut||ne
       if(covered(e,cur.rm))continue;const INx=e.fl===2?IN2:IN;
       if(hi===e.need)relax(INx(e.to),d+e.c4,k,e.seal);
       else if(hi===0&&veh[i]){const rf=roofs.find(r=>r.h===e.need);if(rf)relax(INx(e.to),d+e.c4+0.01,k,{...e.seal,from:rf.id})}}   // tiny extra: on-foot routes win ties
-    for(const l of G.ladderIn[i])if(!cur.rm.includes(l.p)&&hi<=l.p.z+WIN+STEP)relax(IN2(l.to),d,k,{ladder:true,of:l.p,x:cx_(l.to),y:cy_(l.to)});   // up the outside ladder to floor 2
+    for(const l of G.ladderIn[i])if(!cur.rm.includes(l.p)&&!covered(l,cur.rm)&&hi<=l.p.z+WIN+STEP)relax(IN2(l.to),d,k,{ladder:true,of:l.p,x:cx_(l.to),y:cy_(l.to)});   // up the outside ladder to floor 2
     if(G.target[i]){const states=[];for(let s=k;s!==-1;s=prev.get(s))states.unshift(s);
       const cellOf=s=>s>=K*NN?(s-K*NN)%NN:Math.floor(s/K);
       const path=states.map(cellOf),blown=[],ladders=[];let first=null;
@@ -3129,6 +3131,7 @@ function buildingWeakPoints(G){
       if(G.H[o]===0&&veh[o])for(const[n,rh]of roofs)if(rh===need)ways.push({foot:false,txt:`from a ${n} roof`});
       if(ways.length)items.push({kind:'window',side:SIDE_NAME(w.out),at:idx(w.x,w.y),c4:WD.F('c4.window'),need,ways,key:w.x+','+w.y})}
     if(two)for(const l of ladderSpots(p)){const fx=l.x+l.out[0],fy=l.y+l.out[1];if(!IB(fx,fy))continue;const f=idx(fx,fy),ways=[];
+      if(covered(G.ladderC[idx(l.x,l.y)]))continue;   // a Bremer face covers it
       if(onFoot(f)&&G.H[f]<=p.z+WIN+STEP)ways.push({foot:true,txt:'from '+standOn(f)});
       else if(G.H[f]===0&&veh[f])ways.push({foot:false,txt:'by vehicle to its foot'});
       if(ways.length)items.push({kind:'ladder',side:SIDE_NAME(l.out),at:idx(l.x,l.y),c4:0,ways})}
@@ -4287,7 +4290,7 @@ function renderFacts(){
       `A Bremer with its face across the wall line can be sneaked past on its footing. Turn the face along the line, facing the attackers.`,
       `Two neighbouring Bremers with faces on opposite sides leave a shooting gap: you can fire through, not walk through. Faces on the same side form a tight seal.`,
       `You can stand on top of a wall face from H${F('ht.bremer.face')-F('move.step')} or from a car, and jump on from there.`,
-      `A Bremer right outside an entrance or window, with its face toward the building, covers that opening: you can walk on its footing (if you can get onto it), but not through the wall into the building. Turned any other way, you walk in from the footing. Back-to-back faces on one line count as the higher wall.`,
+      `A Bremer right outside an entrance, window or Recon Tower ladder, with its face toward the building, covers that opening: you can walk on its footing (if you can get onto it), but not through the wall into the building. Turned any other way, you walk in from the footing. Back-to-back faces on one line count as the higher wall.`,
       `An entrance opening is as tall as a Door (H${F('ht.door')} above the building floor). You go in standing lower than its top: anything right outside that reaches the top of the opening (a block, a raised footing) closes it, even if you can climb onto it.`]],
     ['Buildings',[
       `Entrances (red arrows) lead to the ground floor. A Recon Tower or Shelter with two open entrances can be walked straight through.`,
