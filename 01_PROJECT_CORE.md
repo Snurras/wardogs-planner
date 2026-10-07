@@ -2,7 +2,7 @@
 
 ## What this is
 **Wardogs Base Planner**: a web app for the game WARDOGS. Plan a base on the HESCO grid, check how attackers get in, work out what to haul, and get a build order.
-- Owner: Snurra (gustav.kraft@gmail.com). Not a coder: everything is built by Claude. Talk in plain language, no code jargon.
+- Owner: Snurra. Not a coder: everything is built by Claude. Talk in plain language, no code jargon.
 - The whole app is **one HTML file** (~4,500 lines, ~700 KB): HTML + CSS + six `<script>` modules.
 
 ## Where things live
