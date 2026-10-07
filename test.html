@@ -2907,6 +2907,9 @@ function vehicleZone(G){
 const NN=N*N;
 const ekey=(a,b)=>a<b?a*N*N+b:b*N*N+a;
 // is an entrance still covered by a Bremer wall face right outside it? (rm = pieces already blown on this route)
+// An entrance opening is as tall as a Door (what seals it). You go through it standing below its top: not from on top of
+// a block (or anything else) right outside that reaches the top of the opening, and not up out of it onto one.
+const doorOK=(z,h)=>h<z+WD.F('ht.door');
 const covered=(o,rm)=>!!(o&&o.cov)&&o.cov.some(c=>!(rm&&(rm.includes(c.p)||rm.includes(c.b))));
 // may an attacker standing at height hi cross from cell a to b? (Bremer wall faces block unless high enough, or blown)
 function crossOK(G,a,b,hi,fromVehicleCap,removed){const e=G.edge.get(ekey(a,b));if(!e)return true;let h=e.h;
@@ -2972,9 +2975,9 @@ function climbRoute(G,cap,banned,collect,seeds){
     if(!collect&&n<NN&&G.target[n]){const path=[];for(let k=n;k>=0;k=prev[k])path.unshift(k);return path}
     if(n>=2*NN){const c=n-2*NN;fromHeight(c,faceTop(c),n,0);continue}                                  // standing on a Bremer face
     if(n>=NN){const i=n-NN;if(banned.has(i))continue;
-      interiorMoves(G,i,(j,kind,z,c4,seal,po)=>{if(kind===1){if(!c4&&!covered(po)&&H[j]<=z+STEP)push(j,n)}else if(kind===0)push(j,n)});continue}
+      interiorMoves(G,i,(j,kind,z,c4,seal,po)=>{if(kind===1){if(!c4&&!covered(po)&&H[j]<=z+STEP&&(po&&po.window||doorOK(z,H[j])))push(j,n)}else if(kind===0)push(j,n)});continue}
     const i=n,hi=H[i];
-    for(const e of G.portIn[i])if(!e.c4&&!covered(e)&&G.bld[e.to].z<=hi+STEP)push(NN+e.to,i);   // walk in through an open entrance (not one a Bremer face covers)
+    for(const e of G.portIn[i])if(!e.c4&&!covered(e)&&G.bld[e.to].z<=hi+STEP&&doorOK(G.bld[e.to].z,hi))push(NN+e.to,i);   // walk in through an open entrance (not one a Bremer face covers)
     fromHeight(i,hi,i,veh&&veh[i]?cap:0);
   }
   return collect?prev:null;
@@ -3013,10 +3016,10 @@ function c4Route(G,banned,fixed,shut,vmode){fixed=fixed||new Set();shut=shut||ne
     if(k>=K*NN){const i=k-K*NN,z=G.bld[i].z;            // floor 1: free to walk, leave by an entrance
       interiorMoves(G,i,(j,kind,zz,c4x,seal,po)=>{if(kind===0)relax(j>=NN?IN(j-NN):j,d,k);
         else if(kind===2){if(!banned.has(G.bld[i]))relax(IN(j-NN),d+c4x,k,seal)}   // blow a closed centre square
-        else if(kind===1){if(c4x&&banned.has(G.bld[i]))return;const lim=po&&po.window?po.need:z+STEP;opts[j].forEach((o,oj)=>{if(o.h<=lim&&!covered(po,o.rm))relax(key(j,oj),d+c4of(o.rm,[])+(c4x||0),k,c4x?(po&&po.window?{...seal,out:true}:seal):null)})}});continue}
+        else if(kind===1){if(c4x&&banned.has(G.bld[i]))return;const lim=po&&po.window?po.need:z+STEP;opts[j].forEach((o,oj)=>{if(o.h<=lim&&!covered(po,o.rm)&&(po&&po.window||doorOK(z,o.h)))relax(key(j,oj),d+c4of(o.rm,[])+(c4x||0),k,c4x?(po&&po.window?{...seal,out:true}:seal):null)})}});continue}
     const i=Math.floor(k/K),oi=k%K,cur=opts[i][oi],hi=cur.h;
     for(const e of G.portIn[i]){if(cur.rm.includes(G.bld[e.to])||(e.c4&&banned.has(G.bld[e.to]))||(!e.c4&&shut.has(G.bld[e.to])))continue;
-      if(!e.window){if(!covered(e,cur.rm)&&G.bld[e.to].z<=hi+STEP)relax(IN(e.to),d+e.c4,k,e.c4?e.seal:null);continue}   // in through an entrance (blow a door / seal if fitted)
+      if(!e.window){if(!covered(e,cur.rm)&&G.bld[e.to].z<=hi+STEP&&doorOK(G.bld[e.to].z,hi))relax(IN(e.to),d+e.c4,k,e.c4?e.seal:null);continue}   // in through an entrance (blow a door / seal if fitted)
       // window: no jumping up into it; stand level with its floor on the next cell (ground, a block, or a vehicle roof)
       if(covered(e,cur.rm))continue;const INx=e.fl===2?IN2:IN;
       if(hi===e.need)relax(INx(e.to),d+e.c4,k,e.seal);
@@ -4284,7 +4287,8 @@ function renderFacts(){
       `A Bremer with its face across the wall line can be sneaked past on its footing. Turn the face along the line, facing the attackers.`,
       `Two neighbouring Bremers with faces on opposite sides leave a shooting gap: you can fire through, not walk through. Faces on the same side form a tight seal.`,
       `You can stand on top of a wall face from H${F('ht.bremer.face')-F('move.step')} or from a car, and jump on from there.`,
-      `A Bremer right outside an entrance or window, with its face toward the building, covers that opening: you can walk on its footing (if you can get onto it), but not through the wall into the building. Turned any other way, you walk in from the footing. Back-to-back faces on one line count as the higher wall.`]],
+      `A Bremer right outside an entrance or window, with its face toward the building, covers that opening: you can walk on its footing (if you can get onto it), but not through the wall into the building. Turned any other way, you walk in from the footing. Back-to-back faces on one line count as the higher wall.`,
+      `An entrance opening is as tall as a Door (H${F('ht.door')} above the building floor). You go in standing lower than its top: anything right outside that reaches the top of the opening (a block, a raised footing) closes it, even if you can climb onto it.`]],
     ['Buildings',[
       `Entrances (red arrows) lead to the ground floor. A Recon Tower or Shelter with two open entrances can be walked straight through.`,
       `Seal a Recon Tower or Shelter entrance with a large HESCO or a Door; a Bunker entrance with a small HESCO only. Seals can be blown at their own C4.`,
