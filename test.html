@@ -467,6 +467,13 @@ a{color:var(--accent)}
 #testGate .tgb{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
 .testbadge{font-family:var(--f-head);font-size:12px;letter-spacing:.08em;background:var(--emp);color:#fff;border-radius:4px;padding:2px 7px;align-self:center}
 
+.st-place{padding:8px 10px;gap:4px}
+.st-pickrow{flex-wrap:nowrap}
+.st-pickrow .picksel{flex:1 1 auto;max-width:none;min-width:0}
+.st-ico{flex:none;height:30px;min-width:46px;padding:0 6px;border:2.2px solid var(--ink);border-radius:2px;background:var(--struct);color:var(--panel);font:700 10px var(--f-mono);letter-spacing:.02em}
+.st-ico[aria-pressed=true]{outline:3px solid var(--accent);outline-offset:1px}
+.st-ico:disabled{opacity:.4;cursor:default}
+#stLink{margin-bottom:0}
 /* ---------- Structure designer ---------- */
 :root{--wood:#9A6B3F;--wood-e:#5A3B20}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--wood:#B7864F;--wood-e:#E2C08F}}
@@ -574,6 +581,10 @@ a{color:var(--accent)}
         <label class="gbchk">Show Guide and Bumper blocks <input type="checkbox" id="showGB" checked></label>
       </div>
       <button type="button" class="stlink edit-only" id="stLink" title="Build structures block by block, layer by layer, as in the game"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" style="flex:none"><rect x="3" y="13" width="8" height="8" rx="1" fill="var(--entry)"/><rect x="13" y="13" width="8" height="8" rx="1" fill="var(--entry)" fill-opacity=".7"/><rect x="2" y="10.5" width="20" height="2.2" fill="var(--slab)"/><rect x="8" y="2.5" width="8" height="8" rx="1" fill="var(--entry)" fill-opacity=".85"/></svg><span>Structure designer<small>Build structures block by block</small></span><span class="go">→</span></button>
+      <div class="card edit-only st-place" id="stPlace">
+        <div class="st-row st-pickrow"><select id="stPick" class="picksel" aria-label="Your structures"></select><button type="button" class="st-ico" id="stPickBtn" aria-pressed="false" disabled title="Pick a structure, then click here and on the map to place it"></button></div>
+        <span class="status" id="stPickInfo">Pick one of your saved or published structures.</span>
+      </div>
       <div class="card edit-only" id="legendCard">
         <div class="twohead"><button type="button" class="tdet-h top" id="legendBtn" aria-expanded="false" aria-controls="legendBody"><span>Legend</span><span class="tdet-c">▼</span></button><button type="button" class="tdet-h top" id="cmBtn" aria-expanded="false" aria-controls="cmBody" hidden><span id="cmTitle">Comments</span><span class="tdet-c">▼</span></button></div>
         <div id="legendBody" class="col" style="gap:10px" hidden>
@@ -1180,6 +1191,7 @@ function place(np,list=pieces){
     if(z!==0)return{err:'A free foundation needs bare ground under the whole piece'};
     z=1}
   else if((t.groundOnly||np.t==='fob')&&z>0)return{err:`${t.n} must stand on the ground`};
+  if(t.custom&&!t.groundOnly&&z>(t.maxbase||0))return{err:`${t.n} can only stand on the ground${t.maxbase?' or up to H'+t.maxbase:''}`};
   if(np.t==='bunker'&&z>WD.F('stack.bunker'))return{err:`A Bunker can only stand on the ground${WD.F('stack.bunker')?' or up to H'+WD.F('stack.bunker'):''}`};
   const onBld=z>0&&standsOnBuilding(np,r,list);
   const lim=onBld?WD.F('stack.total'):(np.t.startsWith('hesco')||np.t==='door')?WD.F('stack.hesco'):WD.F('stack.total');
@@ -1203,8 +1215,8 @@ applyHeights();
    Building openings attackers and defenders walk through (the red arrows).
    Each one can be sealed: recon tower / shelter with a large HESCO (H2) or a Door; bunker with a small HESCO (H1) only.
    p.closed = entrance numbers sealed with HESCO, p.doors = entrance numbers fitted with a Door. */
-const SEAL_WITH=t=>t==='bunker'?'hesco_s':'hesco_l';
-const DOOR_OK=t=>t!=='bunker';
+const SEAL_WITH=t=>t==='bunker'||(P[t]&&P[t].seal==='small')?'hesco_s':'hesco_l';
+const DOOR_OK=t=>t!=='bunker'&&!(P[t]&&P[t].seal==='small');
 function sealOf(p,k){if((p.doors||[]).includes(k))return'door';if((p.closed||[]).includes(k))return SEAL_WITH(p.t);return null}
 function toWorld(p,lx,ly){const t=P[p.t];let ox,oy;
   switch(R(p)){case 1:ox=t.d-1-ly;oy=lx;break;case 2:ox=t.w-1-lx;oy=t.d-1-ly;break;case 3:ox=ly;oy=t.w-1-lx;break;default:ox=lx;oy=ly}
@@ -2589,7 +2601,7 @@ const SHORT_NAME={ifs:'Shelter',hesco_s:'HESCO Small',hesco_l:'HESCO Large'};   
 function renderPalette(){
   const root=$('palette');root.replaceChildren();
   CATS.forEach((cat,ci)=>{root.append(el('h4',{},cat,...(ci?[]:[el('span',{class:'phl',title:'Footprint in blocks, and height where it can be stood on'},'Space'),el('span',{class:'phl c',title:'Build supplies'},'$')])));
-    for(const[id,t]of Object.entries(P)){if(t.cat!==cat||TRIMMED.has(id))continue;
+    for(const[id,t]of Object.entries(P)){if(t.cat!==cat||TRIMMED.has(id)||t.custom)continue;
       const tid=TRIM_OF[id],cur=tid&&tool===tid?tid:id,ct=P[cur];
       const hs=ct.support?(ct.hm?` · H${ct.hm(0,0)}/${ct.h}`:' · H'+ct.h):'';
       const cost=WD.build(cur);
@@ -2599,7 +2611,7 @@ function renderPalette(){
       let trim=null;
       if(tid){trim=el('button',{type:'button',class:'trim'+(tool===tid?' on':''),'aria-pressed':tool===tid?'true':'false','aria-label':`Trimmed version: ${P[tid].n}`,title:`Trimmed version: ${P[tid].note||'centre removed, flat roof'}`},'trim');
         trim.addEventListener('click',e=>{e.stopPropagation();setTool(tool===tid?id:tid)})}
-      row.append(el('span',{class:'sw'}),name,trim||el('span'),el('span',{class:'sz'},`${ct.w}×${ct.d}${hs}`),el('b',{class:'pcost'},String(cost)));root.append(row)}})
+      row.append(el('span',{class:'sw'}),name,trim||el('span'),el('span',{class:'sz'},`${ct.w}×${ct.d}${hs}`),el('b',{class:'pcost'},String(cost)));root.append(row)}});window.renderPick?.()
 }
 
 /* ---------- build order + BOM ---------- */
@@ -2941,6 +2953,7 @@ const INF_PASS=new Set(['barbed','hedgehog','recon_tent','loudspeaker','radio'])
 const CAPS=[{id:'foot',n:'On foot',cap:0,col:'climb'},{id:'car',n:'With a car',cap:3,col:'entry'},{id:'ural',n:'With a Ural Defender',cap:4,col:'ladder'}];
 // rule numbers from the Fact sheet (refreshed by applyRules)
 let STEP=1,FOOT=1,FACE=3,WIN=2,JUMPS=[];
+const WZ=p=>P[p.t].winZ??WIN;   // floor 2 height: Recon Tower from the Fact sheet, custom structures from their blueprint
 function applyRules(){STEP=WD.F('move.step');FOOT=WD.F('ht.bremer.footing');FACE=WD.F('ht.bremer.face');WIN=WD.F('ht.recon.window');
   CAPS[1].cap=WD.F('climb.car');CAPS[2].cap=WD.F('climb.ural');CAPS[1].n=`With a car (up to H${CAPS[1].cap})`;CAPS[2].n=`With a Ural Defender (up to H${CAPS[2].cap})`;
   JUMPS=makeJumps(WD.F('move.jumpUp'),WD.F('move.longGap'))}
@@ -2990,14 +3003,14 @@ function threatGrid(){setBounds();
       const ed=edge.get(ekey(inside,outside)),cov=ed&&!ed.gap?ed.fs.filter(f=>f.h>p.z).map(f=>({p:f.p,b:col[idx(f.p.x,f.p.y)][0]})):[];
       const port={c4,seal};if(cov.length)port.cov=cov;
       portOut[inside].push({to:outside,...port});portIn[outside].push({to:inside,...port})}
-    const two=p.t==='recon_tower'||p.t==='recon_trim';
+    const two=p.t==='recon_tower'||p.t==='recon_trim'||!!P[p.t].two;
     if(two){for(const c of pieceCells(p))bld2[c]=p;
       for(const l of ladderSpots(p)){const fx=l.x+l.out[0],fy=l.y+l.out[1];if(!IB(fx,fy))continue;
         const cell=idx(l.x,l.y),foot=idx(fx,fy),ed=edge.get(ekey(cell,foot)),   // a Bremer at its foot, face toward the tower, blocks the ladder
           cov=ed&&!ed.gap?ed.fs.filter(f=>f.h>p.z).map(f=>({p:f.p,b:col[idx(f.p.x,f.p.y)][0]})):[],lad={to:cell,p};if(cov.length)lad.cov=cov;
         ladderIn[foot].push(lad);ladderFoot[cell]=foot;ladderC[cell]=lad}}
-    if(p.t==='bunker'||two)for(const w of windowsOf(p)){const ox=w.x+w.out[0],oy=w.y+w.out[1];if(!IB(ox,oy))continue;
-      const inside=idx(w.x,w.y),outside=idx(ox,oy),need=p.z+(two?WIN:0),c4=WD.F('c4.window'),info={t:'door',x:w.x,y:w.y,r:0,z:p.z,window:true,of:p,c4,need};   // window floor: bunker floor, or tower floor 2
+    if(p.t==='bunker'||two||P[p.t].custom)for(const w of windowsOf(p)){const ox=w.x+w.out[0],oy=w.y+w.out[1];if(!IB(ox,oy))continue;
+      const inside=idx(w.x,w.y),outside=idx(ox,oy),need=p.z+(two?WZ(p):0),c4=WD.F('c4.window'),info={t:'door',x:w.x,y:w.y,r:0,z:p.z,window:true,of:p,c4,need};   // window floor: bunker floor, or tower floor 2
       const ed=edge.get(ekey(inside,outside)),cov=ed&&!ed.gap?ed.fs.filter(f=>f.h>need).map(f=>({p:f.p,b:col[idx(f.p.x,f.p.y)][0]})):[],cv=cov.length?{cov}:{};   // a Bremer face across the window covers it too
       portIn[outside].push({to:inside,c4,seal:info,window:true,need,fl:two?2:1,...cv});(two?portOut2:portOut)[inside].push({to:outside,c4,seal:info,window:true,need,...cv})}}
   // Recon Tower / Shelter floor 1: only the entrance squares and the open centre are floor; the rest is wall under the roof.
@@ -3122,7 +3135,7 @@ function c4Route(G,banned,fixed,shut,vmode){fixed=fixed||new Set();shut=shut||ne
   const c4of=(rm,already)=>rm.reduce((a,p)=>a+(already.includes(p)?0:(WD.c4(p.t))),0);
   for(let i=0;i<N*N;i++)if(onEdge(i))opts[i].forEach((o,oi)=>{if(o.h<=STEP)relax(key(i,oi),c4of(o.rm,[]),-1)});
   while(heap.length){const[d,k]=pop();if(d>(dist.get(k)??Infinity))continue;
-    if(k>=K*NN+NN){const i=k-K*NN-NN,p=G.bld2[i],z=p.z+WIN;   // Recon Tower floor 2: walk it, leave by a window (C4) or down the ladder
+    if(k>=K*NN+NN){const i=k-K*NN-NN,p=G.bld2[i],z=p.z+WZ(p);   // Recon Tower floor 2: walk it, leave by a window (C4) or down the ladder
       for(const[dx,dy]of DIRS){const x=cx_(i)+dx,y=cy_(i)+dy;if(!IB(x,y))continue;const j=idx(x,y);if(G.bld2[j]===p)relax(IN2(j),d,k)}
       if(!banned.has(p))for(const o of G.portOut2[i])opts[o.to].forEach((op,oj)=>{if(op.h<=o.need&&!covered(o,op.rm))relax(key(o.to,oj),d+c4of(op.rm,[])+o.c4,k,{...o.seal,out:true})});
       const lf=G.ladderFoot[i];if(lf>=0)opts[lf].forEach((op,oj)=>{if(op.h<=z+STEP&&!covered(G.ladderC[i],op.rm))relax(key(lf,oj),d+c4of(op.rm,[]),k,{ladder:true,down:true,of:p,x:cx_(i),y:cy_(i)})});
@@ -3138,14 +3151,14 @@ function c4Route(G,banned,fixed,shut,vmode){fixed=fixed||new Set();shut=shut||ne
       if(covered(e,cur.rm))continue;const INx=e.fl===2?IN2:IN;
       if(hi===e.need)relax(INx(e.to),d+e.c4,k,e.seal);
       else if(hi===0&&veh[i]){const rf=roofs.find(r=>r.h===e.need);if(rf)relax(INx(e.to),d+e.c4+0.01,k,{...e.seal,from:rf.id})}}   // tiny extra: on-foot routes win ties
-    for(const l of G.ladderIn[i])if(!cur.rm.includes(l.p)&&!covered(l,cur.rm)&&hi<=l.p.z+WIN+STEP)relax(IN2(l.to),d,k,{ladder:true,of:l.p,x:cx_(l.to),y:cy_(l.to)});   // up the outside ladder to floor 2
+    for(const l of G.ladderIn[i])if(!cur.rm.includes(l.p)&&!covered(l,cur.rm)&&hi<=l.p.z+WZ(l.p)+STEP)relax(IN2(l.to),d,k,{ladder:true,of:l.p,x:cx_(l.to),y:cy_(l.to)});   // up the outside ladder to floor 2
     if(G.target[i]){const states=[];for(let s=k;s!==-1;s=prev.get(s))states.unshift(s);
       const cellOf=s=>s>=K*NN?(s-K*NN)%NN:Math.floor(s/K);
       const path=states.map(cellOf),blown=[],ladders=[];let first=null;
       for(const s of states){const sl=meta.get(s);if(sl&&(sl.ladder||sl.vehicle)){if(sl.ladder)ladders.push(sl)}else if(sl){if(first==null)first=cellOf(s);if(!blown.includes(sl))blown.push(sl)}
         if(s>=K*NN)continue;const o=opts[Math.floor(s/K)][s%K];if(o.rm.length&&first==null)first=Math.floor(s/K);for(const p of o.rm)if(!blown.includes(p))blown.push(p)}
       const steps=states.map(s=>{const info=meta.get(s);                 // per step: cell, standing height, floor, what is blown (for the attack animation)
-        if(s>=K*NN+NN){const c=s-K*NN-NN;return{c,h:G.bld2[c].z+WIN,fl:2,info}}
+        if(s>=K*NN+NN){const c=s-K*NN-NN;return{c,h:G.bld2[c].z+WZ(G.bld2[c]),fl:2,info}}
         if(s>=K*NN){const c=s-K*NN;return{c,h:G.bld[c].z,fl:1,info}}
         const c=Math.floor(s/K),o=opts[c][s%K];return{c,h:o.h,fl:0,rm:o.rm,info}});
       return{c4:Math.round(d),path,blown,first,ladders,steps}}
@@ -3235,16 +3248,16 @@ function buildingWeakPoints(G){
   const roofs=[['car',WD.F('climb.car.roof')],['Ural',WD.F('climb.ural.roof')]];
   const standOn=i=>G.H[i]===0?'the ground':`the ${P[G.top[i].t].n} at ${ref(i)} (H${G.H[i]})`;
   const out=[];
-  for(const p of pieces){const two=p.t==='recon_tower'||p.t==='recon_trim';if(p.t!=='bunker'&&!two)continue;
+  for(const p of pieces){const two=p.t==='recon_tower'||p.t==='recon_trim'||!!P[p.t].two;if(p.t!=='bunker'&&!two&&!P[p.t].custom)continue;
     const items=[];
-    for(const w of windowsOf(p)){const ox=w.x+w.out[0],oy=w.y+w.out[1];if(!IB(ox,oy))continue;const o=idx(ox,oy),need=p.z+(two?WIN:0),ways=[];
+    for(const w of windowsOf(p)){const ox=w.x+w.out[0],oy=w.y+w.out[1];if(!IB(ox,oy))continue;const o=idx(ox,oy),need=p.z+(two?WZ(p):0),ways=[];
       if(G.portIn[o].some(e=>e.window&&e.to===idx(w.x,w.y)&&covered(e)))continue;   // a Bremer face covers it
       if(onFoot(o)&&G.H[o]===need)ways.push({foot:true,txt:'from '+standOn(o)});
       if(G.H[o]===0&&veh[o])for(const[n,rh]of roofs)if(rh===need)ways.push({foot:false,txt:`from a ${n} roof`});
       if(ways.length)items.push({kind:'window',side:SIDE_NAME(w.out),at:idx(w.x,w.y),c4:WD.F('c4.window'),need,ways,key:w.x+','+w.y})}
     if(two)for(const l of ladderSpots(p)){const fx=l.x+l.out[0],fy=l.y+l.out[1];if(!IB(fx,fy))continue;const f=idx(fx,fy),ways=[];
       if(covered(G.ladderC[idx(l.x,l.y)]))continue;   // a Bremer face covers it
-      if(onFoot(f)&&G.H[f]<=p.z+WIN+STEP)ways.push({foot:true,txt:'from '+standOn(f)});
+      if(onFoot(f)&&G.H[f]<=p.z+WZ(p)+STEP)ways.push({foot:true,txt:'from '+standOn(f)});
       else if(G.H[f]===0&&veh[f])ways.push({foot:false,txt:'by vehicle to its foot'});
       if(ways.length)items.push({kind:'ladder',side:SIDE_NAME(l.out),at:idx(l.x,l.y),c4:0,ways})}
     if(items.length)out.push({p,two,items})}
@@ -3978,6 +3991,45 @@ if(run&&run.def&&run.def.alarm!=null&&!run.def.dead&&run.defPos)p={x:(p.x+run.de
 })();
 </script>
 
+<script id="wd-custom">
+/* ---------- Custom structures: a blueprint from the Structure designer becomes a piece type on the base map ----------
+   Type id 'cs_…'. Footprint, heights, entrances (gaps in the ground ring), windows and ladder come from the blueprint;
+   cost, build time and hammer from its properties. Saved designs carry the blueprints they use (design.customs). */
+const CUSTOM_DATA={};
+const customId=key=>'cs_'+String(key).replace(/[^A-Za-z0-9]/g,'').slice(0,40);
+const CB={hesco_s:1,hesco_l:2,sandbags:1,door:2,window:1};   // block heights
+function registerCustom(id,d){if(!d||!Array.isArray(d.blocks))return null;
+  const bl=d.blocks.map(([t,x,y,z,r,tr])=>({t,x,y,z,r:r||0,tr:!!tr}));
+  const cells=b=>(b.t==='sandbags'||b.t==='window')?(b.r%2?[[b.x,b.y],[b.x,b.y+1]]:[[b.x,b.y],[b.x+1,b.y]]):[[b.x,b.y]];
+  const solid=bl.filter(b=>CB[b.t]),slab=bl.filter(b=>b.t==='floor'||b.t==='roof');
+  const all=[...solid.flatMap(cells),...slab.map(b=>[b.x,b.y])];if(!all.length)return null;
+  const x0=Math.min(...all.map(c=>c[0])),y0=Math.min(...all.map(c=>c[1])),w=Math.max(...all.map(c=>c[0]))-x0+1,dd=Math.max(...all.map(c=>c[1]))-y0+1;
+  const top=new Array(w*dd).fill(0);
+  for(const b of solid)for(const[x,y]of cells(b)){const i=(y-y0)*w+(x-x0);top[i]=Math.max(top[i],b.z+CB[b.t])}
+  for(const b of slab){const i=(b.y-y0)*w+(b.x-x0);top[i]=Math.max(top[i],b.z)}
+  const H=Math.max(1,...top);
+  const floor=new Set(slab.filter(b=>b.t==='floor').map(b=>(b.x-x0)+','+(b.y-y0)));
+  const ground=new Set(solid.filter(b=>b.z===0).flatMap(cells).map(([x,y])=>(x-x0)+','+(y-y0)));
+  const sideOf=(lx,ly)=>ly===0?'N':ly===dd-1?'S':lx===0?'W':lx===w-1?'E':null;
+  const idxOn=(s,lx,ly)=>s==='N'||s==='S'?lx:ly;
+  const arrow=[];for(const k of floor){const[lx,ly]=k.split(',').map(Number);if(ground.has(k))continue;const s=sideOf(lx,ly);if(s)arrow.push([s,idxOn(s,lx,ly)])}
+  const win={};let winZ=null;const SIDES='NESW';
+  for(const b of bl.filter(b=>b.t==='window'))for(const[x,y]of cells(b)){const lx=x-x0,ly=y-y0,s=SIDES[b.r%4];
+    if(sideOf(lx,ly)!==s&&!((s==='N'&&ly===0)||(s==='S'&&ly===dd-1)||(s==='W'&&lx===0)||(s==='E'&&lx===w-1)))continue;
+    (win[s]=win[s]||[]).push(idxOn(s,lx,ly));
+    const fl=Math.max(0,...slab.filter(q=>q.x===x&&q.y===y&&q.z<=b.z).map(q=>q.z));if(winZ===null)winZ=fl}
+  const ladder=bl.filter(b=>b.t==='ladder').map(b=>[b.x-x0,b.y-y0]).filter(([lx,ly])=>sideOf(lx,ly));
+  const wall=d.ctype&&d.ctype!=='any'?d.ctype:'hesco_l';
+  const t={n:d.name||'Custom structure',w,d:dd,h:H,c:'struct',cat:'Structures',ph:3,ab:String(d.short||'CS').toUpperCase().slice(0,10),support:1,custom:1,
+    seal:d.seal,maxbase:d.maxbase|0,hm:(lx,ly)=>top[ly*w+lx]||0,sym:{arrow,win,ladder},winZ:winZ||0,two:(winZ||0)>0,note:'From the Structure designer'};
+  if(d.ground)t.groundOnly=1;
+  P[id]=t;CUSTOM_DATA[id]=d;
+  const D=WD.DEF;D['b.'+id]=d.supplies|0;D['t.'+id]=d.build|0;D['h.'+id]=Math.min(3,Math.max(1,d.tier|0||3));D['c4.'+id]=WD.c4(wall);
+  return id}
+function registerCustoms(m){if(m&&typeof m==='object')for(const id in m)if(/^cs_[A-Za-z0-9]+$/.test(id))registerCustom(id,m[id])}
+function customsUsed(){const o={};for(const p of pieces)if(CUSTOM_DATA[p.t])o[p.t]=CUSTOM_DATA[p.t];return o}
+</script>
+
 <script id="wd-app">
 /* =====================================================================
    APP — tabs, saving, the Supplies & haul view, the Fact sheet, start-up.
@@ -4061,7 +4113,7 @@ function renderProc(){if(!$('procS_design'))return;const real=pieces.filter(p=>p
   if(real.length){const n=buildSteps().steps.length,b=buildTime();$('procS_build').textContent=`${n} steps · ~${mmss(b.sec/(+$('builders').value||1))}`}
   else $('procS_build').textContent='The order to build in'}
 window.renderProc=renderProc;
-const designDoc=()=>({name:designName,pieces:pieces.map(({bad,...p})=>p),plan,v:SAVE_V,gapRule:$('gapRule').checked,onlyFob:$('onlyFob').checked});
+const designDoc=()=>({name:designName,pieces:pieces.map(({bad,...p})=>p),customs:customsUsed(),plan,v:SAVE_V,gapRule:$('gapRule').checked,onlyFob:$('onlyFob').checked});
 window.onDesignChanged=()=>{ls.set('wd_design_draft',designDoc());if(tab==='haul')renderHaul();updateTabBadge()};
 function updateTabBadge(){}
 const TEAM_KINDS=['foot','driver','lakota','mh6'];
@@ -4451,7 +4503,7 @@ let db=null;   // the claude.ai page database, when running there
 S.local=ls.get('wd_designs')||[];
 let statusTimer=0;
 function status(t){const e=$('saveStatus');e.textContent=t;clearTimeout(statusTimer);if(t)statusTimer=setTimeout(()=>{e.textContent=''},7000)}
-function load(d){snapshot();$('gapRule').checked=false;$('onlyFob').checked=!!d.onlyFob;pieces=rebuild(d.pieces||[],isLegacy(d));sel=new Set();updateSelBar();plan={...Haul.PLAN_DEFAULT,...(d.plan||{})};designName=d.name||'';$('dName').value=designName;changed();renderSaved();
+function load(d){registerCustoms(d.customs);snapshot();$('gapRule').checked=false;$('onlyFob').checked=!!d.onlyFob;pieces=rebuild(d.pieces||[],isLegacy(d));sel=new Set();updateSelBar();plan={...Haul.PLAN_DEFAULT,...(d.plan||{})};designName=d.name||'';$('dName').value=designName;changed();renderSaved();
   const r=flaggedText();flashMsg(r?`Loaded "${designName||'design'}". ${r}.`:'',!!r)}
 const userName=()=>{const u=S.user;if(!u)return'';const n=u.displayName||(u.email||'').split('@')[0];return n.charAt(0).toUpperCase()+n.slice(1)};
 function parseDoc(r){try{return{...JSON.parse(r.data),name:r.name}}catch(e){return{name:r.name,pieces:[]}}}
@@ -4635,7 +4687,7 @@ $('tgOut').onclick=()=>{if(S.fb)S.fb.signOut(S.fb.auth)};
 /* ---------- start-up ---------- */
 const draft=ls.get('wd_design_draft');
 const start=draft&&draft.pieces&&draft.pieces.filter(p=>p.t!=='fob').length?draft:{v:SAVE_V,pieces:[]};
-$('gapRule').checked=false;$('onlyFob').checked=!!start.onlyFob;pieces=rebuild(start.pieces,isLegacy(start));designName=start.name||'';plan={...Haul.PLAN_DEFAULT,...(start.plan||{})};
+registerCustoms(start.customs);$('gapRule').checked=false;$('onlyFob').checked=!!start.onlyFob;pieces=rebuild(start.pieces,isLegacy(start));designName=start.name||'';plan={...Haul.PLAN_DEFAULT,...(start.plan||{})};
 $('dName').value=designName;
 renderPalette();renderLegend();renderThreat();draw();renderSide();renderSaved();updateTabBadge();
 {const r=flaggedText();if(r)flashMsg(r+'.',true)}
@@ -4988,7 +5040,7 @@ function renderSavedSt(){const sel=$('stOpen'),list=entriesSt(),groups={};sel.re
   const cur=list.find(e=>e.key===ST.cur),x=$('stDel');x.hidden=!(cur&&cur.canDelete);x.textContent=cur&&ST.pendDel===cur.key?'Delete?':'Delete';
   x.onclick=()=>{if(!cur)return;if(ST.pendDel===cur.key)delSt(cur);else{ST.pendDel=cur.key;renderSavedSt()}};
   const v=$('stVis'),p=v.querySelector('[value=published]');v.hidden=S.mode==='local';p.hidden=p.disabled=!canPublish();if(!canPublish())v.value='personal'}
-window.structSaved=renderSavedSt;
+window.structSaved=()=>{renderSavedSt();renderPick()};
 const say=t=>{$('stSaveMsg').textContent=t};
 $('stOpen').onchange=e=>{ST.pendDel=null;ST.pendSave=null;const en=entriesSt().find(x=>x.key===e.target.value);if(!en){renderSavedSt();return}
   snap();try{ST.s=fromData(en.ex?EX[en.ex]():JSON.parse(en.data))}catch(x){say('Could not open it: the data is damaged.');return}
@@ -4998,7 +5050,7 @@ async function delSt(en){ST.pendDel=null;
     else if(S.mode==='firebase'){const F=S.fb;await F.deleteDoc(F.doc(F.db,COL(),en.id))}
     else if(S.mode==='claude'&&db)await db.collection('structures').doc(en.id).delete();
     if(ST.cur===en.key)ST.cur=null;say(`Deleted "${en.name}".`)}
-  catch(e){say('Could not delete: '+errText(e))}renderSavedSt()}
+  catch(e){say('Could not delete: '+errText(e))}renderSavedSt();renderPick()}
 $('stSave').onclick=async()=>{const name=(ST.s.name||'').trim();if(!name){say('Give the structure a name in Properties first.');return}
   if(!ST.s.blocks.length){say('Nothing built yet.');return}
   if(S.mode==='firebase'&&!S.user){openLogin('Log in to save structures.');return}
@@ -5011,18 +5063,32 @@ $('stSave').onclick=async()=>{const name=(ST.s.name||'').trim();if(!name){say('G
     else if(S.mode==='claude'&&db){const id=same?same.id:'s'+Date.now().toString(36);await db.collection('structures').doc(id).set({name,visibility:vis,data,updated:now});ST.cur='c'+id}
     else{const id=same?same.id:'s'+Date.now().toString(36);ST.local=ST.local.filter(d=>d.id!==id);ST.local.push({id,name,data,updated:now});ls.set('wd_structures',ST.local);ST.cur='l'+id}
     say(`Saved "${name}"${vis==='published'?' · Published for everyone':S.mode==='local'?' in this browser':' · My structures'}.`)}
-  catch(e){say('Could not save: '+errText(e))}renderSavedSt()};
+  catch(e){say('Could not save: '+errText(e))}renderSavedSt();renderPick()};
+
+// ---------- place a saved or published structure on the base map (card under the Structure designer link) ----------
+function renderPick(){const sel=$('stPick'),btn=$('stPickBtn'),info=$('stPickInfo');if(!sel)return;
+  const list=entriesSt().filter(e=>!e.ex),prev=sel.value;sel.replaceChildren(el('option',{value:''},list.length?'Structure…':'No structures saved yet'));
+  for(const g of['Published','My structures','In this browser']){const L=list.filter(e=>e.group===g);if(!L.length)continue;const og=el('optgroup',{label:g});
+    for(const e of L.sort((a,b)=>a.name.localeCompare(b.name)))og.append(el('option',{value:e.key},e.name+(g==='Published'&&e.ownerName&&!e.mine?' · '+e.ownerName:'')));sel.append(og)}
+  if(list.some(e=>e.key===prev))sel.value=prev;
+  const en=list.find(e=>e.key===sel.value);let id=null;
+  if(en){try{id=registerCustom(customId(en.key),JSON.parse(en.data))}catch(e){id=null}}
+  btn.disabled=!id;btn.textContent=id?P[id].ab:'—';btn.setAttribute('aria-pressed',id&&tool===id?'true':'false');btn.dataset.id=id||'';
+  info.textContent=id?`${P[id].n} · ${P[id].w}×${P[id].d} · H${P[id].h} · ${WD.build(id)} supplies`:list.length?'Pick a structure, then click its icon to place it.':'Save one in the Structure designer first.'}
+window.renderPick=renderPick;
+$('stPick').onchange=()=>{renderPick();const id=$('stPickBtn').dataset.id;if(id)setTool(id)};
+$('stPickBtn').onclick=()=>{const id=$('stPickBtn').dataset.id;if(id)setTool(id)};
 // live lists: published (anyone) and my own (logged in)
 window.structListen=()=>{ST.unsub.forEach(f=>f());ST.unsub=[];ST.remote=[];const F=S.fb;if(!F)return;const col=F.collection(F.db,COL()),parts={};
-  const merge=()=>{const m=new Map();for(const k in parts)for(const r of parts[k])m.set(r.id,r);ST.remote=[...m.values()];renderSavedSt()};
+  const merge=()=>{const m=new Map();for(const k in parts)for(const r of parts[k])m.set(r.id,r);ST.remote=[...m.values()];renderSavedSt();renderPick()};
   const watch=(k,q)=>ST.unsub.push(F.onSnapshot(q,sn=>{parts[k]=sn.docs.map(d=>({id:d.id,...d.data()}));merge()},()=>{parts[k]=[];merge()}));
   watch('pub',F.query(col,F.where('visibility','==','published')));
   if(S.user)watch('mine',F.query(col,F.where('owner','==',S.user.uid)))};
 if(IN_CLAUDE)(async()=>{let d=null;try{d=await window.claude.use('db')}catch(e){}if(!d)return;
-  d.collection('structures').onSnapshot(sn=>{ST.remote=sn.docs.map(x=>({id:x.id,...x.data()}));renderSavedSt()},()=>{})})();
+  d.collection('structures').onSnapshot(sn=>{ST.remote=sn.docs.map(x=>({id:x.id,...x.data()}));renderSavedSt();renderPick()},()=>{})})();
 else if(S.fb)window.structListen();
 
-ST.s=fromData(EX.recon());ST.cur='xrecon';
+ST.s=fromData(EX.recon());ST.cur='xrecon';renderPick();
 })();
 </script>
 </body>

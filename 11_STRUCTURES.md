@@ -181,5 +181,12 @@ match /test_structures/{id} {   // same, testers only
 ```
 If the rules already have an `isAdmin()` function, keep the existing one and skip that line.
 
+### Placing them on the base map (staging v111, on test 10 Oct 2026)
+- Card under the Structure designer link (`#stPlace`): drop-down of Published + My structures, and an icon button with the short name → `setTool('cs_…')`, place like any building.
+- `<script id="wd-custom">` (before `wd-app`): `registerCustom(id, blueprint)` builds a normal piece type in `P` from the blueprint: footprint, height map (`hm`), entrances = floor squares on the edge with no ground block, windows (side from the window's edge, `winZ` = the floor under it; windows above ground make it two-floor like the Recon), ladder, `seal`, ground only / `maxbase`; cost, build time, hammer and wall C4 go into `WD.DEF` (`b.` `t.` `h.` `c4.` + id). Not shown in the normal palette.
+- Threat check: `two` also true for custom two-floor structures, floor 2 height via `WZ(p)`; windows of any custom structure count.
+- Saved designs carry the blueprints they use (`design.customs`), registered again on load and from the draft, so a shared design opens for others.
+- Known gaps: Side view draws them as plain HESCO blocks; no trim on the map yet; Bremer "covers an opening" only knows the built-in buildings; the old built-in Bunker / Recon / Shelter are still separate pieces.
+
 ### Next
-- Published structures become pieces on the base map (step 2–3 of section 9).
+- Make the old built-in structures use blueprints too (step 1–2 of section 9), then Side view from the blocks.
