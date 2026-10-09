@@ -466,6 +466,37 @@ a{color:var(--accent)}
 #testGate code{font-family:var(--f-mono);background:var(--hi);padding:2px 5px;border-radius:4px;word-break:break-all;user-select:all}
 #testGate .tgb{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
 .testbadge{font-family:var(--f-head);font-size:12px;letter-spacing:.08em;background:var(--emp);color:#fff;border-radius:4px;padding:2px 7px;align-self:center}
+
+/* ---------- Structure designer ---------- */
+:root{--wood:#9A6B3F;--wood-e:#5A3B20}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--wood:#B7864F;--wood-e:#E2C08F}}
+:root[data-theme="dark"]{--wood:#B7864F;--wood-e:#E2C08F}
+.stlink{display:flex;align-items:center;gap:8px;width:100%;background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:7px 10px;font:600 14px var(--f-head);letter-spacing:.04em;color:var(--ink);text-align:left}
+.stlink:hover{border-color:var(--accent)}
+.stlink .go{margin-left:auto;color:var(--accent);font-family:var(--f-mono)}
+.stlink small{display:block;font:400 12px var(--f-body);color:var(--muted);letter-spacing:0}
+.st-title{font:600 15px var(--f-head);letter-spacing:.06em;text-transform:uppercase}
+.st-row{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.st-wide{max-width:none;width:100%}
+.st-note{margin:0;font-size:12px}
+.st-layers{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;padding:2px 2px 8px}
+.st-lbl{font:600 11px var(--f-head);text-transform:uppercase;letter-spacing:.12em;color:var(--muted)}
+.st-layers .seg button{font:600 12px var(--f-mono);letter-spacing:0;text-transform:none;padding:4px 8px}
+.st-layers .seg button i{font-style:normal;opacity:.6;font-size:10px;margin-left:2px}
+.st-mapwrap{border:1px solid var(--line);border-radius:4px;background:var(--bg);display:flex;justify-content:center}
+#stMap{display:block;width:100%;max-width:min(100%,74vh);aspect-ratio:1;touch-action:none;user-select:none}
+#tab-structs.testing #stMap{cursor:crosshair}
+#stIso{width:100%;display:block;max-height:420px}
+.st-kv{display:grid;grid-template-columns:auto minmax(0,1fr);gap:3px 12px;margin:0;font-size:13px}
+.st-kv dt{color:var(--muted)}.st-kv dd{margin:0;font-family:var(--f-mono);font-size:12.5px;font-variant-numeric:tabular-nums;min-width:0;overflow-wrap:anywhere}
+.st-banner{border:1px solid;border-radius:4px;padding:5px 9px;font-weight:600;font-size:14px}
+.st-banner.ok{color:var(--ok)}.st-banner.bad{color:var(--bad)}
+.st-form{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px 10px}
+.st-form label{display:flex;flex-direction:column;gap:2px;font-size:12px;color:var(--muted);min-width:0}
+.st-form label.chk{flex-direction:row;align-items:center;gap:6px;font-size:13px;color:var(--ink)}
+.st-form .full{grid-column:1/-1}
+.st-form input:not([type=checkbox]),.st-form select{background:var(--bg);border:1px solid var(--line);border-radius:3px;padding:4px 6px;width:100%;min-width:0}
+#stJson{width:100%;min-height:90px;background:var(--bg);border:1px solid var(--line);border-radius:3px;font:11px var(--f-mono);padding:6px;color:var(--ink);box-sizing:border-box}
 </style>
 
 <div id="testGate" hidden><div class="tg">
@@ -542,6 +573,7 @@ a{color:var(--accent)}
           <span>A Bumper Block was added to get free elevation</span></div>
         <label class="gbchk">Show Guide and Bumper blocks <input type="checkbox" id="showGB" checked></label>
       </div>
+      <button type="button" class="stlink edit-only" id="stLink" title="Build structures block by block, layer by layer, as in the game"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" style="flex:none"><rect x="3" y="13" width="8" height="8" rx="1" fill="var(--entry)"/><rect x="13" y="13" width="8" height="8" rx="1" fill="var(--entry)" fill-opacity=".7"/><rect x="2" y="10.5" width="20" height="2.2" fill="var(--slab)"/><rect x="8" y="2.5" width="8" height="8" rx="1" fill="var(--entry)" fill-opacity=".85"/></svg><span>Structure designer<small>Build structures block by block</small></span><span class="go">→</span></button>
       <div class="card edit-only" id="legendCard">
         <div class="twohead"><button type="button" class="tdet-h top" id="legendBtn" aria-expanded="false" aria-controls="legendBody"><span>Legend</span><span class="tdet-c">▼</span></button><button type="button" class="tdet-h top" id="cmBtn" aria-expanded="false" aria-controls="cmBody" hidden><span id="cmTitle">Comments</span><span class="tdet-c">▼</span></button></div>
         <div id="legendBody" class="col" style="gap:10px" hidden>
@@ -606,6 +638,86 @@ a{color:var(--accent)}
         <div class="build-only ordbar" id="ordBar"></div>
         <button type="button" class="tdet-h top edit-only" id="orderBtn" aria-expanded="false" aria-controls="steps"><span>Build order</span><span class="tdet-c">SHOW ▼</span></button>
         <ol class="stepl" id="steps" hidden></ol>
+      </div>
+    </section>
+  </div>
+  </section>
+
+  <section class="tab" id="tab-structs" hidden>
+  <div class="bar toolbar" id="stBar">
+    <button class="btn ghost" type="button" id="stBack" title="Back to the base map"><span class="ti"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" style="flex:none"><circle cx="12" cy="12" r="10" fill="#5B6452"/><path d="M13 7l-5 5 5 5M8 12h9" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Map</button>
+    <span class="vsep"></span>
+    <b class="st-title">Structure designer</b>
+    <span class="vsep"></span>
+    <button class="btn ghost" type="button" id="stUndo" title="Undo the last change (Ctrl+Z)"></button>
+    <button class="btn ghost" type="button" id="stRot" title="Turn the block to place (R). Sandbags and windows: which edge they sit on. Ladder: which side."></button>
+    <button class="btn ghost tool" type="button" id="stErase" aria-pressed="false" title="Erase what is on this layer where you click (E)"></button>
+    <button class="btn ghost tool" type="button" id="stTrim" aria-pressed="false" title="Mark trim parts: the blocks the hammer removes when the structure is trimmed (T)"><span class="ti"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" style="flex:none"><circle cx="12" cy="12" r="10" fill="#4D5C27"/><circle cx="8" cy="15" r="2.6" fill="none" stroke="#fff" stroke-width="1.8"/><circle cx="16" cy="15" r="2.6" fill="none" stroke="#fff" stroke-width="1.8"/><path d="M9.8 13.2L16 5M14.2 13.2L8 5" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg></span>Trim parts (T)</button>
+    <button class="btn ghost tool" type="button" id="stTest" aria-pressed="false" title="Test C4: click blocks to blow them and see when the structure collapses"><span class="ti"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" style="flex:none"><path d="M12 1l2.6 5.2 5.6-2.2-2.2 5.6L23 12l-5 2.4 2.2 5.6-5.6-2.2L12 23l-2.6-5.2-5.6 2.2 2.2-5.6L1 12l5-2.4L3.8 4l5.6 2.2z" fill="#1F251B"/><path d="M12 4.5l1.8 3.6 3.9-1.5-1.5 3.9L19.5 12l-3.3 1.6 1.5 3.9-3.9-1.5L12 19.5l-1.8-3.5-3.9 1.5 1.5-3.9L4.5 12l3.3-1.6-1.5-3.9 3.9 1.5z" fill="#D0261C"/><circle cx="12" cy="12" r="3.6" fill="#F2C230"/></svg></span>Test C4</button>
+    <span class="vsep"></span>
+    <button class="btn ghost" type="button" id="stClear" title="Start an empty structure"></button>
+  </div>
+  <div class="grid3" id="stGrid">
+    <section class="col leftcol">
+      <div class="pal" id="stPal"></div>
+      <div class="card" id="stSaveCard">
+        <h3>Structures</h3>
+        <select id="stOpen" class="picksel st-wide" aria-label="Open a structure"></select>
+        <div class="st-row">
+          <select id="stVis" class="picksel" aria-label="Who can see it" title="Personal: only you, under My structures. Published: everyone sees it under Published (admin only)."><option value="personal">Personal</option><option value="published">Published</option></select>
+          <button class="btn" type="button" id="stSave">Save</button>
+          <button class="btn ghost" type="button" id="stDel" hidden>Delete</button>
+        </div>
+        <span class="status" id="stSaveMsg" role="status"></span>
+        <p class="status st-note">Saved under the name in Properties. Published structures are set by the admin and will become pieces in the planner; your own are for trying things out.</p>
+      </div>
+    </section>
+
+    <section class="col">
+      <div class="board">
+        <div class="st-layers"><span class="st-lbl">Layer</span><div class="seg" id="stLayers" role="group" aria-label="Layer"></div><span class="status" id="stTestInfo"></span></div>
+        <div class="st-mapwrap"><svg id="stMap" role="img" aria-label="Structure layer map, 10 by 10 squares"></svg></div>
+        <div class="maprow"><div class="msg" id="stMsg"></div></div>
+      </div>
+      <div class="card">
+        <h3>Check</h3>
+        <div id="stStatus"></div>
+        <dl class="st-kv" id="stChecks"></dl>
+      </div>
+    </section>
+
+    <section class="col rightcol">
+      <div class="card">
+        <div class="st-row" style="justify-content:space-between"><h3>3D view</h3>
+          <span class="st-row"><label class="chk" title="Hide everything above the layer you are on"><input type="checkbox" id="stCut"> Cut above layer</label>
+          <button class="mini" type="button" id="stTurnL" aria-label="Turn the view left">⟲</button><button class="mini" type="button" id="stTurnR" aria-label="Turn the view right">⟳</button></span></div>
+        <svg id="stIso" viewBox="-280 -230 560 420" role="img" aria-label="3D view of the structure"></svg>
+        <span class="status">Below the layer you are on is greyed out.</span>
+      </div>
+      <div class="card">
+        <h3>Properties</h3>
+        <div class="st-form">
+          <label class="full">Name<input id="stp_name" maxlength="40"></label>
+          <label>Short name<input id="stp_short" maxlength="12"></label>
+          <label>Hammer<select id="stp_tier"><option value="1">Small</option><option value="2">Medium</option><option value="3">Large</option></select></label>
+          <label>Build supplies<input id="stp_supplies" type="number" min="0"></label>
+          <label>Build time (s)<input id="stp_build" type="number" min="0"></label>
+          <label>Trim time (s, 0 = none)<input id="stp_trim" type="number" min="0"></label>
+          <label>Seal entrances with<select id="stp_seal"><option value="large_door">Large HESCO or Door</option><option value="small">Small HESCO only</option><option value="any">Any block</option></select></label>
+          <label class="chk full"><input type="checkbox" id="stp_ground"> Ground only</label>
+          <label>Else on HESCO up to H<input id="stp_maxbase" type="number" min="0" max="10"></label>
+          <span></span>
+          <label>Collapses below<input id="stp_cmin" type="number" min="0"></label>
+          <label>… ground floor blocks of<select id="stp_ctype"><option value="hesco_l">HESCO Large</option><option value="hesco_s">HESCO Small</option><option value="sandbags">Sandbags</option><option value="any">Any normal block</option></select></label>
+        </div>
+      </div>
+      <div class="card">
+        <button type="button" class="tdet-h top" id="stJsonBtn" aria-expanded="false" aria-controls="stJsonBody"><span>Blueprint data</span><span class="tdet-c">▼</span></button>
+        <div id="stJsonBody" class="col" style="gap:6px" hidden>
+          <span class="status">Copy this to send a structure to Claude, or paste one here and press Load.</span>
+          <div class="st-row"><button class="mini" type="button" id="stCopy">Copy</button><button class="mini" type="button" id="stLoad">Load</button><span class="status" id="stJsonMsg"></span></div>
+          <textarea id="stJson" spellcheck="false" aria-label="Blueprint data"></textarea>
+        </div>
       </div>
     </section>
   </div>
@@ -3930,7 +4042,7 @@ window.tipAfterPlace=np=>{
   else if(np.z>0&&tool!=='brush'){const k=np.t+'@'+np.z,n=(stackCount.get(k)||0)+1;stackCount.set(k,n);if(n>=3)later(()=>showTip('brush'))}};
 window.tipAfterStroke=()=>later(()=>{if(/GETS IN/i.test($('threat').textContent))showTip('play')});
 function showTab(t){tab=t;for(const b of document.querySelectorAll('#tabs button, #proc .st'))b.classList.toggle('on',b.dataset.tab===t);
-  const sec=t==='build'?'design':t;for(const id of['design','haul','facts','about'])$('tab-'+id).hidden=id!==sec;
+  const sec=t==='build'?'design':t;for(const id of['design','haul','facts','about','structs'])$('tab-'+id).hidden=id!==sec;if(t==='structs')window.renderStructs?.();
   if(t!=='build'&&ordEdit)endOrderEdit(false);
   $('tab-design').classList.toggle('buildmode',t==='build');
   $('steps').hidden=t==='build'?false:$('orderBtn').getAttribute('aria-expanded')!=='true';   // Build always shows the order
@@ -3938,6 +4050,7 @@ function showTab(t){tab=t;for(const b of document.querySelectorAll('#tabs button
   if(t==='haul')renderHaul();if(t==='facts')renderFacts();
   closeTip();later(()=>requestAnimationFrame(()=>{if(t==='build')showTip('order');if(t==='haul'&&document.querySelector('#hPlans .rec')){if(!showTip('packlist'))showTip('team')}}))}
 for(const b of document.querySelectorAll('#tabs button, #proc .st'))b.onclick=()=>showTab(b.dataset.tab);
+$('stLink').onclick=()=>{showTab('structs');scrollTo(0,0)};
 // the live line under each step: where you are in Design → Haul → Build
 let haulSummary='';
 function renderProc(){if(!$('procS_design'))return;const real=pieces.filter(p=>p.t!=='fob');
@@ -4369,7 +4482,7 @@ function renderSaved(){
   pb.hidden=!canPromo;if(canPromo){const to=cur.vis==='shared'?'template':'shared';pb.textContent=to==='template'?'Make template':'Make shared';
     pb.title=`${to==='template'?'List it under Templates for everyone':'Move it back to Shared'}. ${cur.ownerName||'The maker'} stays credited as the maker.`;
     pb.onclick=()=>setVis(cur,to)}
-  syncComments();
+  syncComments();window.structSaved?.();
   const v=$('dVis'),t=v.querySelector('[value=template]');v.hidden=S.mode!=='firebase';t.hidden=t.disabled=!S.admin;if(!S.admin&&v.value==='template')v.value='personal';
   renderAcct()}
 function renderAcct(){const b=$('acctBtn');b.hidden=S.mode!=='firebase';
@@ -4504,7 +4617,7 @@ async function startFirebase(){
   else{const real=()=>F.getDoc(F.doc(fdb,'facts','main')).then(sn=>{WD.load(sn.exists()?(sn.data().values||{}):{});factsApplied()},()=>{});
     let unT=null;real();F.onAuthStateChanged(auth,u=>{if(unT){unT();unT=null}if(!u)return;
       unT=F.onSnapshot(F.doc(fdb,'test_facts','main'),sn=>{if(sn.exists()){WD.load(sn.data().values||{});factsApplied()}else real()},()=>{})})}
-  F.onAuthStateChanged(auth,u=>{S.user=u;S.admin=false;S.pendOut=false;listen();renderSaved();renderFacts();renderLevelNotes();if(u)loadLevels(u);
+  F.onAuthStateChanged(auth,u=>{S.user=u;S.admin=false;S.pendOut=false;listen();window.structListen?.();renderSaved();renderFacts();renderLevelNotes();if(u)loadLevels(u);
     if(u)F.getDoc(F.doc(fdb,'admins',u.uid)).then(()=>{if(S.user===u){S.admin=true;renderSaved();renderFacts()}},()=>{});
     if(TEST_MODE)testGate(u)})}
 /* ---------- test version gate ---------- */
@@ -4536,5 +4649,381 @@ if(TEST_MODE){document.title='TEST · '+document.title;$('testGate').hidden=fals
   if(IN_CLAUDE||S.mode!=='firebase')$('testGate').hidden=true}
 </script>
 
+
+<script id="wd-structs">
+/* =====================================================================
+   STRUCTURE DESIGNER — build a structure layer by layer from normal blocks (HESCO, sandbags, door)
+   and special parts (floor, roof, window, ladder), as in the game. Own 10×10 area, no FOB.
+   Plan: doc 11. Saved in 'structures' (test: 'test_structures'): personal, or published by the admin.
+   Not yet used by the planner's map: published structures become pieces there in a later step.
+   ===================================================================== */
+(()=>{
+const SN=10,SC=40,SM=26,MAXL=8;
+const DIRN=['N','E','S','W'],DV=[[0,-1],[1,0],[0,1],[-1,0]];
+const ref=(x,y)=>COLS(x)+(y+1);
+/* Block catalogue. edge: the piece sits on one edge of its squares, this deep (part of a square). */
+const T={
+  hesco_s:{n:'HESCO Small',kind:'solid',h:1,w:1,normal:1,look:'hesco'},
+  hesco_l:{n:'HESCO Large',kind:'solid',h:2,w:1,normal:1,look:'hesco'},
+  sandbags:{n:'Sandbags',kind:'solid',h:1,w:2,normal:1,edge:.5,look:'bags'},
+  door:{n:'Door',kind:'solid',h:2,w:1,normal:1,look:'door'},
+  floor:{n:'Floor',kind:'slab',special:1,note:'Ground floor, H0 only'},
+  roof:{n:'Roof / middle floor',kind:'slab',special:1,note:'Walkable; open space under it'},
+  window:{n:'Window',kind:'solid',h:1,w:2,special:1,edge:.2,look:'window',note:'Wooden frame on the edge, no glass. A 1h opening: crawl only'},
+  ladder:{n:'Ladder',kind:'ladder',special:1,note:'On the outside of a square, up to this layer'},
+};
+const ORDER=['hesco_s','hesco_l','sandbags','door','floor','roof','window','ladder'];
+const c4Of=t=>T[t].normal?WD.c4(t):0;
+const H=b=>T[b.t].h||0;
+
+// ---------- state ----------
+const ST={s:blank(),tool:'hesco_l',rot:0,layer:0,view:0,undo:[],testing:false,blown:new Set(),c4:0,hover:null,id:1,
+  cur:null,remote:[],local:ls.get('wd_structures')||[],unsub:[],pendDel:null,pendSave:null};
+function blank(){return{name:'New structure',short:'NEW',tier:3,supplies:0,build:0,trim:0,seal:'large_door',ground:true,maxbase:0,cmin:6,ctype:'hesco_l',blocks:[]}}
+const cellsOf=b=>T[b.t].w===2?(b.r%2?[[b.x,b.y],[b.x,b.y+1]]:[[b.x,b.y],[b.x+1,b.y]]):[[b.x,b.y]];
+const live=()=>ST.s.blocks.filter(b=>!ST.blown.has(b.id));
+const inB=(x,y)=>x>=0&&y>=0&&x<SN&&y<SN;
+function solidsAt(x,y,list=live()){return list.filter(b=>T[b.t].kind==='solid'&&cellsOf(b).some(([cx,cy])=>cx===x&&cy===y))}
+function slabAt(x,y,z,list=live()){return list.find(b=>T[b.t].kind==='slab'&&b.x===x&&b.y===y&&b.z===z)}
+function supported(x,y,z){if(z===0)return true;if(slabAt(x,y,z))return true;return solidsAt(x,y).some(b=>b.z+H(b)===z)}
+function check(t,x,y,r,z){const k=T[t].kind;
+  if(!inB(x,y))return'Outside the area';
+  if(k==='slab'){
+    if(t==='floor'&&z!==0)return'Floor goes on the ground (H0). Use Roof for higher floors';
+    if(t==='roof'&&z===0)return'A roof needs a layer above the ground';
+    if(slabAt(x,y,z))return'There is already a floor or roof here';
+    if(solidsAt(x,y).some(b=>b.z<z&&z<b.z+H(b)))return'A block runs through this level';
+    return null}
+  if(k==='ladder'){
+    if(z<1)return'A ladder leads up to a floor: pick layer H1 or higher';
+    if(ST.s.blocks.some(b=>b.t==='ladder'&&b.x===x&&b.y===y&&b.r===r))return'There is already a ladder on this side';
+    return null}
+  const b={t,x,y,r,z},h=T[t].h;
+  for(const[cx,cy]of cellsOf(b)){
+    if(!inB(cx,cy))return'Outside the area';
+    if(solidsAt(cx,cy).some(o=>o.z<z+h&&z<o.z+H(o)))return'Space taken at '+ref(cx,cy);
+    if(live().some(q=>T[q.t].kind==='slab'&&q.x===cx&&q.y===cy&&q.z>z&&q.z<z+h))return'A floor or roof is in the way at '+ref(cx,cy);
+    if(!supported(cx,cy,z))return'Nothing to stand on at '+ref(cx,cy)+' H'+z}
+  return null}
+function snap(){ST.undo.push(JSON.stringify(ST.s.blocks));if(ST.undo.length>200)ST.undo.shift()}
+const msg=(t,bad)=>{const m=$('stMsg');m.textContent=t||'';m.classList.toggle('bad',!!bad)};
+function place(x,y){const t=ST.tool,err=check(t,x,y,ST.rot,ST.layer);if(err){msg(err,true);return false}
+  ST.s.blocks.push({id:ST.id++,t,x,y,z:ST.layer,r:T[t].w===2||t==='ladder'||t==='door'?ST.rot:0});return true}
+function pickAt(x,y,z){const L=live();
+  const st=solidsAt(x,y).filter(b=>b.z===z);if(st.length)return st.sort((a,b)=>(T[a.t].look==='window')-(T[b.t].look==='window'))[0];
+  const th=solidsAt(x,y).filter(b=>b.z<z&&z<b.z+H(b));if(th.length)return th[0];
+  return slabAt(x,y,z)||L.find(b=>b.t==='ladder'&&b.x===x&&b.y===y&&b.z===z)||null}
+function erase(x,y){const b=pickAt(x,y,ST.layer);if(!b)return false;ST.s.blocks=ST.s.blocks.filter(o=>o!==b);return true}
+function toggleTrim(x,y){const b=pickAt(x,y,ST.layer);if(!b||!T[b.t].normal){msg('Trim parts are normal blocks (HESCO, sandbags, door)',true);return false}b.trim=!b.trim;return true}
+function blow(x,y){const b=pickAt(x,y,ST.layer);if(!b)return;
+  if(!T[b.t].normal){msg(`${T[b.t].n} has no C4 of its own: it goes when the structure collapses`,true);return}
+  ST.blown.add(b.id);ST.c4+=c4Of(b.t);msg(`Blew ${T[b.t].n} at ${ref(b.x,b.y)} H${b.z} (${c4Of(b.t)} C4)`);renderAll()}
+
+// ---------- what the structure is ----------
+function footprint(){const f=new Set();for(const b of ST.s.blocks)if(b.t==='floor')f.add(b.x+','+b.y);return f}
+function entrances(){const f=footprint(),out=[];
+  for(const k of f){const[x,y]=k.split(',').map(Number);
+    const side=DV.findIndex(([dx,dy])=>!f.has((x+dx)+','+(y+dy)));if(side<0)continue;
+    if(solidsAt(x,y).some(b=>b.z===0))continue;
+    out.push({x,y,dir:side,hole:solidsAt(x,y,ST.s.blocks).some(b=>b.z===0)})}
+  return out}
+function collapse(){const s=ST.s,m=b=>b.z===0&&(s.ctype==='any'?T[b.t].normal:b.t===s.ctype);
+  const total=s.blocks.filter(m).length,left=live().filter(m).length;return{total,left,down:total>0&&left<s.cmin}}
+const topH=()=>ST.s.blocks.reduce((m,b)=>Math.max(m,b.z+H(b)),0);
+// where an edge piece sits inside its squares (fractions of a square), in the map's frame
+function edgeRect(b){const t=T[b.t],cs=cellsOf(b),x0=Math.min(...cs.map(c=>c[0])),y0=Math.min(...cs.map(c=>c[1]));
+  if(t.w!==2)return{x:x0,y:y0,w:1,d:1};const W=b.r%2?1:2,D=b.r%2?2:1;if(!t.edge)return{x:x0,y:y0,w:W,d:D};const e=t.edge;
+  switch(b.r%4){case 0:return{x:x0,y:y0,w:2,d:e};case 2:return{x:x0,y:y0+1-e,w:2,d:e};case 1:return{x:x0+1-e,y:y0,w:e,d:2};default:return{x:x0,y:y0,w:e,d:2}}}
+
+// ---------- layer map ----------
+const map=$('stMap');map.setAttribute('viewBox',`0 0 ${SM+SN*SC+6} ${SM+SN*SC+6}`);
+function drawLadder2d(g,b,op,col){const[dx,dy]=DV[b.r],cx=(b.x+.5+dx*.5)*SC,cy=(b.y+.5+dy*.5)*SC,len=SC*.7,px=-dy,py=dx,st=col||'var(--ladder)',gg=s('g',{opacity:op});g.append(gg);
+  for(const o of[-1,1])gg.append(s('line',{x1:cx-px*len/2+dx*o*5,y1:cy-py*len/2+dy*o*5,x2:cx+px*len/2+dx*o*5,y2:cy+py*len/2+dy*o*5,stroke:st,'stroke-width':2.5}));
+  for(let i=-2;i<=2;i++)gg.append(s('line',{x1:cx+px*i*6-dx*5,y1:cy+py*i*6-dy*5,x2:cx+px*i*6+dx*5,y2:cy+py*i*6+dy*5,stroke:st,'stroke-width':2}))}
+function drawBlock2d(g,b,thru,ghost){const t=T[b.t],e=edgeRect(b),x=e.x*SC,y=e.y*SC,w=e.w*SC,d=e.d*SC;
+  if(t.look==='hesco'){const top=b.z+H(b),inset=1.5+Math.min(b.z,3)*1.5;
+    g.append(s('rect',{x:x+inset,y:y+inset,width:w-inset*2,height:d-inset*2,rx:2,fill:'var(--entry)','fill-opacity':ghost?.35:Math.min(.95,.6+top*.06),stroke:b.z?'var(--ink)':'var(--entry)','stroke-width':b.z?1.6:1}))}
+  else if(t.look==='bags'){const long=b.r%2?d:w,deep=b.r%2?w:d,gg=s('g',{transform:`translate(${x+w/2},${y+d/2}) rotate(${b.r%2?90:0}) translate(${-long/2},${-deep/2})`,opacity:ghost?.5:1});
+    gg.append(s('rect',{x:0,y:0,width:long,height:deep,fill:'var(--sand)','fill-opacity':.25}));const ig=s('g',{transform:`translate(0,${-deep/2})`});drawIcon(ig,'sandbags',long,deep*2);gg.append(ig);g.append(gg)}
+  else if(t.look==='window'){const gg=s('g',{opacity:ghost?.5:1});g.append(gg);
+    gg.append(s('rect',{x:x+1,y:y+1,width:w-2,height:d-2,fill:'none',stroke:'var(--wood)','stroke-width':2.4}));
+    for(const k of[0,.5,1]){const px=b.r%2?x+w/2:x+1+k*(w-2),py=b.r%2?y+1+k*(d-2):y+d/2;gg.append(s('rect',{x:px-3,y:py-3,width:6,height:6,fill:'var(--wood)',stroke:'var(--wood-e)','stroke-width':.8}))}}
+  else if(t.look==='door'){const gg=s('g',{transform:`translate(${x+w/2},${y+d/2}) rotate(${b.r*90}) translate(${-w/2},${-d/2})`,opacity:ghost?.5:1});drawIcon(gg,'door',w,d);g.append(gg)}
+  if(thru)g.append(s('rect',{x:x+2,y:y+2,width:w-4,height:d-4,fill:'url(#stHatch)'}));
+  if(b.trim){const f=s('g',{transform:`translate(${x+w-8},${y+8})`});f.append(s('circle',{r:5.5,fill:'var(--accent)',stroke:'var(--ink)','stroke-width':.6}));f.append(s('text',{y:2.6,'text-anchor':'middle','font-size':7.5,'font-weight':700,fill:'var(--accent-ink)','font-family':'var(--f-mono)'},'T'));g.append(f)}}
+function renderMap(){map.replaceChildren();const L=ST.layer,lv=live();
+  const defs=s('defs');map.append(defs);
+  const hp=s('pattern',{id:'stHatch',width:6,height:6,patternUnits:'userSpaceOnUse',patternTransform:'rotate(45)'});hp.append(s('rect',{width:2,height:6,fill:'var(--ink)',opacity:.3}));defs.append(hp);
+  const dp=s('pattern',{id:'stDots',width:8,height:8,patternUnits:'userSpaceOnUse'});dp.append(s('circle',{cx:4,cy:4,r:1.1,fill:'var(--ink)',opacity:.35}));defs.append(dp);
+  const g=s('g',{transform:`translate(${SM},${SM})`});map.append(g);
+  g.append(s('rect',{x:0,y:0,width:SN*SC,height:SN*SC,fill:'var(--bg)'}));
+  for(let i=0;i<=SN;i++){g.append(s('line',{x1:i*SC,y1:0,x2:i*SC,y2:SN*SC,stroke:'var(--grid)','stroke-width':.8}));g.append(s('line',{x1:0,y1:i*SC,x2:SN*SC,y2:i*SC,stroke:'var(--grid)','stroke-width':.8}))}
+  for(let i=0;i<SN;i++){map.append(s('text',{x:SM+i*SC+SC/2,y:SM-8,'text-anchor':'middle','font-size':10,fill:'var(--muted)','font-family':'IBM Plex Mono, monospace'},COLS(i)));
+    map.append(s('text',{x:SM-6,y:SM+i*SC+SC/2+3,'text-anchor':'end','font-size':10,fill:'var(--muted)','font-family':'IBM Plex Mono, monospace'},i+1))}
+  // below this layer: what you would stand on, faded, with its height
+  for(let x=0;x<SN;x++)for(let y=0;y<SN;y++){let best=null,bh=-1;
+    for(const b of solidsAt(x,y,lv))if(b.z+H(b)<=L&&b.z+H(b)>bh){bh=b.z+H(b);best=b}
+    for(const b of lv)if(T[b.t].kind==='slab'&&b.x===x&&b.y===y&&b.z<L&&b.z>=bh){bh=b.z;best=b}
+    if(best){const col=best.t==='floor'?'var(--concrete)':best.t==='roof'?'var(--slab)':T[best.t].look==='hesco'?'var(--entry)':T[best.t].look==='window'?'var(--wood)':'var(--sand)';
+      g.append(s('rect',{x:x*SC+1,y:y*SC+1,width:SC-2,height:SC-2,fill:col,opacity:.22}));
+      g.append(s('text',{x:x*SC+SC-4,y:y*SC+SC-4,'text-anchor':'end','font-size':8,fill:'var(--muted)','font-family':'IBM Plex Mono, monospace'},'H'+bh))}}
+  for(const b of lv)if(T[b.t].kind==='slab'&&b.z===L){
+    g.append(s('rect',{x:b.x*SC+1,y:b.y*SC+1,width:SC-2,height:SC-2,fill:b.t==='floor'?'var(--concrete)':'var(--slab)',opacity:b.t==='floor'?.7:.5}));
+    g.append(s('rect',{x:b.x*SC+1,y:b.y*SC+1,width:SC-2,height:SC-2,fill:'url(#stDots)'}))}
+  for(const b of lv){if(T[b.t].kind!=='solid')continue;const thru=b.z<L&&L<b.z+H(b);if(thru||b.z===L)drawBlock2d(g,b,thru)}
+  for(const b of ST.s.blocks)if(ST.blown.has(b.id)&&b.z<=L&&L<b.z+Math.max(1,H(b)))for(const[cx,cy]of cellsOf(b))
+    g.append(s('path',{d:`M${cx*SC+8} ${cy*SC+8}L${cx*SC+SC-8} ${cy*SC+SC-8}M${cx*SC+SC-8} ${cy*SC+8}L${cx*SC+8} ${cy*SC+SC-8}`,stroke:'var(--bad)','stroke-width':3,'stroke-linecap':'round'}));
+  for(const b of ST.s.blocks)if(b.t==='ladder'&&b.z>=L)drawLadder2d(g,b,b.z===L?1:.35);
+  if(L===0)for(const e of entrances()){const[dx,dy]=DV[e.dir],cx=e.x*SC+SC/2,cy=e.y*SC+SC/2,ox=cx+dx*SC*.55,oy=cy+dy*SC*.55,ix=cx-dx*SC*.1,iy=cy-dy*SC*.1,px=-dy,py=dx,col=e.hole?'var(--gap)':'var(--door)';
+    g.append(s('line',{x1:ox,y1:oy,x2:ix,y2:iy,stroke:col,'stroke-width':3}));
+    g.append(s('path',{d:`M${ix-dx*7+px*6} ${iy-dy*7+py*6}L${ix} ${iy}L${ix-dx*7-px*6} ${iy-dy*7-py*6}`,fill:'none',stroke:col,'stroke-width':3,'stroke-linejoin':'round'}))}
+  const hv=ST.hover;
+  if(hv&&!ST.testing&&T[ST.tool]){const t=ST.tool,b={t,x:hv[0],y:hv[1],r:ST.rot,z:L},err=check(t,b.x,b.y,ST.rot,L);
+    if(t==='ladder')drawLadder2d(g,b,.6,err?'var(--bad)':null);
+    else if(T[t].kind==='slab')g.append(s('rect',{x:b.x*SC+2,y:b.y*SC+2,width:SC-4,height:SC-4,fill:err?'var(--bad)':t==='floor'?'var(--concrete)':'var(--slab)',opacity:.45}));
+    else{drawBlock2d(g,b,false,true);if(err)for(const[cx,cy]of cellsOf(b))if(inB(cx,cy))g.append(s('rect',{x:cx*SC+2,y:cy*SC+2,width:SC-4,height:SC-4,fill:'var(--bad)',opacity:.3}))}
+    for(const[cx,cy]of t==='ladder'||T[t].kind==='slab'?[[b.x,b.y]]:cellsOf(b))if(inB(cx,cy))g.append(s('rect',{x:cx*SC+1,y:cy*SC+1,width:SC-2,height:SC-2,fill:'none',stroke:err?'var(--bad)':'var(--accent)','stroke-width':1.6,'stroke-dasharray':'4 3'}))}
+  else if(hv)g.append(s('rect',{x:hv[0]*SC+1,y:hv[1]*SC+1,width:SC-2,height:SC-2,fill:'none',stroke:ST.testing?'var(--bad)':'var(--accent)','stroke-width':2}))}
+
+// ---------- 3D view (isometric). Everything under the current layer sits under a grey veil. ----------
+const A=24,B=12,HZ=24;
+function rotP(px,py){switch(ST.view){case 1:return[SN-py,px];case 2:return[SN-px,SN-py];case 3:return[py,SN-px];default:return[px,py]}}
+const Pj=(u,w,z)=>[(u-w)*A,(u+w)*B-z*HZ];
+const pts=a=>a.map(p=>p.join(',')).join(' ');
+const FILL={hesco:['var(--entry)','var(--ink)'],bags:['var(--sand)','var(--sand-edge)'],door:['var(--door-g)','var(--door-edge)'],window:['var(--wood)','var(--wood-e)'],floor:['var(--concrete)','var(--concrete-edge)'],roof:['var(--slab)','var(--slab)']};
+function boxesOf(b){const t=T[b.t],out=[];
+  if(t.kind==='slab'){out.push({x:b.x,y:b.y,w:1,d:1,z0:b.z,z1:b.z+.12,c:FILL[b.t],b});return out}
+  if(t.look==='window'){const e=edgeRect(b),along=b.r%2?'y':'x',L=2,p=.14,h=H(b);   // frame: three posts, a sill and a top beam
+    for(const k of[0,.5,1]){const o=k*(L-p);out.push(along==='x'?{x:e.x+o,y:e.y,w:p,d:e.d,z0:b.z,z1:b.z+h,c:FILL.window,b}:{x:e.x,y:e.y+o,w:e.w,d:p,z0:b.z,z1:b.z+h,c:FILL.window,b})}
+    out.push({...e,z0:b.z+h-.14,z1:b.z+h,c:FILL.window,b},{...e,z0:b.z,z1:b.z+.08,c:FILL.window,b});return out}
+  const e=edgeRect(b);
+  if(e.w>1||e.d>1){for(let i=0;i<Math.max(e.w,e.d);i++)out.push(e.w>e.d?{x:e.x+i,y:e.y,w:1,d:e.d,z0:b.z,z1:b.z+H(b),c:FILL[t.look],b}:{x:e.x,y:e.y+i,w:e.w,d:1,z0:b.z,z1:b.z+H(b),c:FILL[t.look],b})}
+  else out.push({...e,z0:b.z,z1:b.z+H(b),c:FILL[t.look],b});return out}
+function viewBox(bx){const c=[rotP(bx.x,bx.y),rotP(bx.x+bx.w,bx.y),rotP(bx.x,bx.y+bx.d),rotP(bx.x+bx.w,bx.y+bx.d)];
+  const u0=Math.min(...c.map(p=>p[0])),w0=Math.min(...c.map(p=>p[1])),u1=Math.max(...c.map(p=>p[0])),w1=Math.max(...c.map(p=>p[1]));return{...bx,u0,w0,u1,w1}}
+function drawBox(g,bx){const{u0,w0,u1,w1,z0,z1}=bx,[f,e]=bx.c;
+  const top=[Pj(u0,w0,z1),Pj(u1,w0,z1),Pj(u1,w1,z1),Pj(u0,w1,z1)],left=[Pj(u0,w1,z1),Pj(u1,w1,z1),Pj(u1,w1,z0),Pj(u0,w1,z0)],right=[Pj(u1,w0,z1),Pj(u1,w1,z1),Pj(u1,w1,z0),Pj(u1,w0,z0)];
+  for(const[face,dk]of[[left,.18],[right,.32],[top,0]]){g.append(s('polygon',{points:pts(face),fill:f,stroke:e,'stroke-width':.7,'stroke-linejoin':'round','stroke-opacity':.6}));
+    if(dk)g.append(s('polygon',{points:pts(face),fill:'#000',opacity:dk}))}
+  if(bx.b.t==='hesco_s'||bx.b.t==='hesco_l'){const[a,b2,c,d]=left;for(const k of[.33,.66]){const p1=[a[0]+(b2[0]-a[0])*k,a[1]+(b2[1]-a[1])*k],p2=[d[0]+(c[0]-d[0])*k,d[1]+(c[1]-d[1])*k];g.append(s('line',{x1:p1[0],y1:p1[1],x2:p2[0],y2:p2[1],stroke:'var(--ink)','stroke-width':.4,opacity:.35}))}}
+  if(bx.b.trim&&z1===bx.b.z+H(bx.b)){const c=Pj((u0+u1)/2,(w0+w1)/2,z1);g.append(s('circle',{cx:c[0],cy:c[1],r:3.5,fill:'var(--accent)'}))}}
+function drawLadder3d(g,b,z0,z1){const[dx,dy]=DV[b.r],ex=b.x+.5+dx*.62,ey=b.y+.5+dy*.62,px=-dy*.25,py=dx*.25;
+  const rails=[[ex-px,ey-py],[ex+px,ey+py]].map(([x,y])=>rotP(x,y));
+  for(const[u,w]of rails){const a=Pj(u,w,z0),c=Pj(u,w,Math.min(z1,b.z+.4));g.append(s('line',{x1:a[0],y1:a[1],x2:c[0],y2:c[1],stroke:'var(--ladder)','stroke-width':2.2}))}
+  for(let z=.3;z<=b.z;z+=.3)if(z>=z0&&z<=z1){const a=Pj(...rails[0],z),c=Pj(...rails[1],z);g.append(s('line',{x1:a[0],y1:a[1],x2:c[0],y2:c[1],stroke:'var(--ladder)','stroke-width':1.4}))}}
+function renderIso(){const svg=$('stIso');svg.replaceChildren();const col=collapse(),cut=$('stCut').checked,L=ST.layer;
+  const gnd=[Pj(...rotP(0,0),0),Pj(...rotP(SN,0),0),Pj(...rotP(SN,SN),0),Pj(...rotP(0,SN),0)];
+  const root=s('g',{opacity:col.down?.35:1});svg.append(root);
+  root.append(s('polygon',{points:pts(gnd),fill:'var(--grid)',stroke:'var(--line)'}));
+  for(let i=1;i<SN;i++){const a=Pj(...rotP(i,0),0),b=Pj(...rotP(i,SN),0),c=Pj(...rotP(0,i),0),d=Pj(...rotP(SN,i),0);
+    root.append(s('line',{x1:a[0],y1:a[1],x2:b[0],y2:b[1],stroke:'var(--bg)',opacity:.6}));root.append(s('line',{x1:c[0],y1:c[1],x2:d[0],y2:d[1],stroke:'var(--bg)',opacity:.6}))}
+  const below=[],above=[];
+  for(const b of live()){if(T[b.t].kind==='ladder')continue;
+    for(const bx0 of boxesOf(b)){const bx=viewBox(bx0);
+      if(bx.z1<=L+1e-6)below.push(bx);else if(bx.z0>=L-1e-6)above.push(bx);
+      else{below.push({...bx,z1:L});above.push({...bx,z0:L})}}}   // a block through the layer: split at it
+  const order=(p,q)=>(Math.floor(p.u0+1e-6)+Math.floor(p.w0+1e-6))-(Math.floor(q.u0+1e-6)+Math.floor(q.w0+1e-6))||p.z0-q.z0||(p.u0+p.w0)-(q.u0+q.w0);
+  const lads=live().filter(b=>b.t==='ladder');
+  below.sort(order).forEach(bx=>drawBox(root,bx));for(const b of lads)drawLadder3d(root,b,0,L);
+  // the veil: everything under the current layer greyed out
+  if(L>0){const lv=[Pj(...rotP(0,0),L),Pj(...rotP(SN,0),L),Pj(...rotP(SN,SN),L),Pj(...rotP(0,SN),L)];
+    root.append(s('polygon',{points:pts(lv),fill:'var(--panel)',opacity:.62}));
+    root.append(s('polygon',{points:pts(lv),fill:'none',stroke:'var(--accent)','stroke-width':1.2,'stroke-dasharray':'5 4'}))}
+  if(!cut){above.sort(order).forEach(bx=>drawBox(root,bx));for(const b of lads)if(b.z>L)drawLadder3d(root,b,L,b.z+.4)}
+  const lt=Pj(...rotP(0,SN),L);root.append(s('text',{x:lt[0]-6,y:lt[1],'text-anchor':'end',fill:'var(--accent)','font-size':11,'font-family':'IBM Plex Mono, monospace'},'H'+L));
+  const nn=rotP(SN/2,-1.2),np=Pj(nn[0],nn[1],0);root.append(s('text',{x:np[0],y:np[1],'text-anchor':'middle',fill:'var(--muted)','font-size':12,'font-weight':600,'font-family':'var(--f-head)'},'N'));
+  try{const bb=root.getBBox(),pad=24,w=Math.max(bb.width,220)+pad*2,h=Math.max(bb.height,160)+pad*2;if(bb.width>0)svg.setAttribute('viewBox',`${bb.x+bb.width/2-w/2} ${bb.y+bb.height/2-h/2} ${w} ${h}`)}catch(e){}
+  if(col.down){const vb=svg.viewBox.baseVal;svg.append(s('text',{x:vb.x+vb.width/2,y:vb.y+24,'text-anchor':'middle',fill:'var(--bad)','font-size':20,'font-weight':700,'letter-spacing':2,'font-family':'var(--f-head)'},'COLLAPSED'))}}
+
+// ---------- palette, layers, checks, properties ----------
+function swatch(t){const sv=s('svg',{viewBox:'0 0 14 14',width:14,height:14});
+  const R=(a)=>sv.append(s('rect',a));
+  if(t==='floor')R({x:1,y:5,width:12,height:4,rx:1,fill:'var(--concrete)',stroke:'var(--concrete-edge)'});
+  else if(t==='roof')R({x:1,y:5,width:12,height:4,rx:1,fill:'var(--slab)'});
+  else if(t==='window'){R({x:1.5,y:1.5,width:11,height:11,fill:'none',stroke:'var(--wood)','stroke-width':2});sv.append(s('line',{x1:7,y1:1.5,x2:7,y2:12.5,stroke:'var(--wood)','stroke-width':1.6}))}
+  else if(t==='ladder'){for(const x of[4,10])sv.append(s('line',{x1:x,y1:1,x2:x,y2:13,stroke:'var(--ladder)','stroke-width':1.8}));for(const y of[4,7,10])sv.append(s('line',{x1:4,y1:y,x2:10,y2:y,stroke:'var(--ladder)','stroke-width':1.4}))}
+  else if(t==='sandbags')R({x:1,y:4,width:12,height:6,rx:2.5,fill:'var(--sand)',stroke:'var(--sand-edge)'});
+  else if(t==='door')R({x:1,y:1,width:12,height:12,rx:2,fill:'var(--door-g)'});
+  else R({x:1,y:1,width:12,height:12,rx:2,fill:'var(--entry)','fill-opacity':t==='hesco_s'?.6:.85});
+  return sv}
+function renderPal(){const root=$('stPal');root.replaceChildren();
+  const grp=(name,ids,first)=>{root.append(el('h4',{},name,...(first?[el('span',{class:'phl',title:'Footprint and height'},'Space'),el('span',{class:'phl c',title:'Build supplies'},'$')]:[])));
+    for(const id of ids){const t=T[id],on=ST.tool===id&&!ST.testing;
+      const size=t.kind==='slab'?'1×1 · thin':t.kind==='ladder'?'edge':`${t.w}×1 · H${t.h}`+(t.edge?` · ${Math.round(t.edge*100)}%`:'');
+      const row=el('div',{class:'pc'+(on?' on':''),title:t.n+(t.note?': '+t.note:'')+(t.normal?` · C4 ${c4Of(id)}`:' · no C4 of its own')});
+      row.addEventListener('click',()=>{ST.tool=id;if(ST.testing)endTest();renderAll()});
+      const sw=el('span',{class:'sw',style:'background:none;display:grid;place-items:center'});sw.append(swatch(id));
+      row.append(sw,el('button',{type:'button',class:'pcn','aria-pressed':on?'true':'false'},t.n),el('span'),el('span',{class:'sz'},size),el('b',{class:'pcost'},t.normal?String(WD.build(id)):'—'));root.append(row)}};
+  grp('Normal blocks',ORDER.filter(t=>T[t].normal),true);grp('Special parts',ORDER.filter(t=>T[t].special));
+  const n=T[ST.tool];root.append(el('div',{class:'status',style:'padding:6px 10px 4px;font-size:12px'},n&&n.note?n.note:'R turns · drag to paint · [ ] change layer'))}
+function renderLayers(){const seg=$('stLayers');seg.replaceChildren();
+  for(let z=0;z<=MAXL;z++){const n=ST.s.blocks.filter(b=>b.z===z).length,bt=el('button',{type:'button',class:z===ST.layer?'on':'','aria-pressed':z===ST.layer?'true':'false',title:z?'Height '+z:'Ground'},'H'+z);
+    if(n)bt.append(el('i',{},String(n)));bt.onclick=()=>{ST.layer=z;renderAll()};seg.append(bt)}
+  $('stTestInfo').textContent=ST.testing?`C4 test · ${ST.c4} C4 used · click blocks to blow them`:''}
+function renderChecks(){const col=collapse(),ents=entrances(),s0=ST.s,cnt={};for(const b of s0.blocks)cnt[b.t]=(cnt[b.t]||0)+1;
+  const ct=s0.ctype==='any'?'normal blocks':T[s0.ctype].n,st=$('stStatus');
+  st.replaceChildren(!s0.blocks.length?el('div',{class:'st-banner ok'},'Empty. Start with Floor on the ground, or open an example.')
+    :col.total===0?el('div',{class:'st-banner bad'},`The collapse rule finds no ${ct} on the ground floor.`)
+    :el('div',{class:'st-banner '+(col.down?'bad':'ok')},col.down?`Collapsed: ${col.left} of ${col.total} ${ct} left, fewer than ${s0.cmin}. Floor, roof, windows and ladder go with it.`:`Standing: ${col.left} of ${col.total} ${ct} on the ground floor (falls below ${s0.cmin}).`));
+  const fp=footprint(),xs=[...fp].map(k=>+k.split(',')[0]),ys=[...fp].map(k=>+k.split(',')[1]);
+  const roofs=[...new Set(s0.blocks.filter(b=>b.t==='roof').map(b=>b.z))].sort((a,b)=>a-b);
+  const list=f=>ORDER.filter(t=>f(T[t])&&cnt[t]).map(t=>`${cnt[t]} ${T[t].n}`).join(' · ')||'none';
+  const seal={large_door:'Large HESCO or Door',small:'Small HESCO only',any:'any block'}[s0.seal];
+  const trims=s0.blocks.filter(b=>b.trim).length;
+  const rows=[['Size',fp.size?`${Math.max(...xs)-Math.min(...xs)+1} × ${Math.max(...ys)-Math.min(...ys)+1}`:'no floor yet'],['Highest point','H'+topH()],
+    ['Floors',fp.size?['ground H0',...roofs.map(z=>'H'+z)].join(' · '):'—'],
+    ['Entrances',ents.filter(e=>!e.hole).length?ents.filter(e=>!e.hole).map(e=>`${ref(e.x,e.y)} ${DIRN[e.dir]}`).join(' · ')+` (seal: ${seal})`:'none'],
+    ...(ents.some(e=>e.hole)?[['Blown holes',ents.filter(e=>e.hole).map(e=>ref(e.x,e.y)).join(' · ')]]:[]),
+    ['Windows',cnt.window?`${cnt.window} (H1 opening: crawl only)`:'none'],
+    ['Ladders',ST.s.blocks.filter(b=>b.t==='ladder').map(b=>`${ref(b.x,b.y)} ${DIRN[b.r]} to H${b.z}`).join(' · ')||'none'],
+    ['Normal blocks',list(t=>t.normal)],['Special parts',list(t=>t.special)],
+    ['Trim parts',trims?`${trims} (≈ ${trims*WD.F('t.remove')} s at ${WD.F('t.remove')} s each; set: ${s0.trim} s)`:'none'],
+    ['C4 for all normal blocks',String(s0.blocks.filter(b=>T[b.t].normal).reduce((a,b)=>a+c4Of(b.t),0))]];
+  const dl=$('stChecks');dl.replaceChildren();for(const[k,v]of rows)dl.append(el('dt',{},k),el('dd',{},v))}
+const PROPS={stp_name:'name',stp_short:'short',stp_tier:'tier',stp_supplies:'supplies',stp_build:'build',stp_trim:'trim',stp_seal:'seal',stp_maxbase:'maxbase',stp_cmin:'cmin',stp_ctype:'ctype'};
+const NUMP=new Set(['tier','supplies','build','trim','maxbase','cmin']);
+function renderProps(){for(const id in PROPS)if(document.activeElement!==$(id))$(id).value=ST.s[PROPS[id]];$('stp_ground').checked=!!ST.s.ground;$('stp_maxbase').disabled=!!ST.s.ground}
+for(const id in PROPS)$(id).addEventListener('input',()=>{const k=PROPS[id],v=$(id).value;ST.s[k]=NUMP.has(k)?+v||0:v;renderAll()});
+$('stp_ground').addEventListener('change',()=>{ST.s.ground=$('stp_ground').checked;renderAll()});
+function renderTools(){$('stErase').setAttribute('aria-pressed',ST.tool==='erase'&&!ST.testing);$('stTrim').setAttribute('aria-pressed',ST.tool==='trim'&&!ST.testing);
+  $('stTest').setAttribute('aria-pressed',ST.testing);$('tab-structs').classList.toggle('testing',ST.testing)}
+function renderAll(){renderTools();renderPal();renderLayers();renderMap();renderIso();renderChecks();renderProps();renderJson()}
+window.renderStructs=()=>{renderAll();renderSavedSt()};
+
+// ---------- toolbar: the planner's own buttons and icons ----------
+$('stUndo').innerHTML=$('undoBtn').innerHTML;$('stRot').innerHTML=$('rotBtn').innerHTML;$('stErase').innerHTML=$('eraseBtn').innerHTML;$('stClear').innerHTML=$('clearBtn').innerHTML;
+const turn=()=>{ST.rot=(ST.rot+1)%4;msg(ST.tool==='ladder'?'Ladder on the '+DIRN[ST.rot]+' side':T[ST.tool]&&T[ST.tool].edge?'On the '+DIRN[ST.rot]+' edge':'Turned');renderMap()};
+const undo=()=>{if(ST.undo.length){ST.s.blocks=JSON.parse(ST.undo.pop());renderAll()}};
+$('stUndo').onclick=undo;$('stRot').onclick=turn;
+$('stErase').onclick=()=>{if(ST.testing)endTest();ST.tool=ST.tool==='erase'?'hesco_l':'erase';renderAll()};
+$('stTrim').onclick=()=>{if(ST.testing)endTest();ST.tool=ST.tool==='trim'?'hesco_l':'trim';renderAll()};
+$('stTest').onclick=()=>ST.testing?endTest():startTest();
+$('stClear').onclick=()=>{const b=$('stClear');if(b.dataset.sure){delete b.dataset.sure;snap();ST.s={...blank()};ST.cur=null;ST.layer=0;endTest();msg('Started an empty structure.');renderSavedSt()}
+  else{b.dataset.sure=1;msg('Press Clear again to start an empty structure.');setTimeout(()=>{delete b.dataset.sure},3000)}};
+$('stBack').onclick=()=>showTab('design');
+$('stTurnL').onclick=()=>{ST.view=(ST.view+3)%4;renderIso()};$('stTurnR').onclick=()=>{ST.view=(ST.view+1)%4;renderIso()};$('stCut').onchange=renderIso;
+function startTest(){ST.testing=true;ST.blown=new Set();ST.c4=0;msg('Click a block on this layer to blow it. Change layer to reach higher blocks.');renderAll()}
+function endTest(){ST.testing=false;ST.blown=new Set();ST.c4=0;renderAll()}
+$('stJsonBtn').onclick=()=>{const b=$('stJsonBtn'),o=b.getAttribute('aria-expanded')!=='true';b.setAttribute('aria-expanded',o);$('stJsonBody').hidden=!o;b.querySelector('.tdet-c').textContent=o?'▲':'▼'};
+
+// ---------- pointer ----------
+let painting=false,last=null,changed=false;
+function cellFrom(ev){const pt=map.createSVGPoint();pt.x=ev.clientX;pt.y=ev.clientY;const p=pt.matrixTransform(map.getScreenCTM().inverse());
+  const x=Math.floor((p.x-SM)/SC),y=Math.floor((p.y-SM)/SC);return inB(x,y)?[x,y]:null}
+function act(c,first){if(!c)return;const k=c.join(',');if(k===last)return;last=k;
+  if(ST.testing){if(first)blow(...c);return}
+  let ok=ST.tool==='erase'?erase(...c):ST.tool==='trim'?(first?toggleTrim(...c):false):place(...c);
+  if(ok){changed=true;if(ST.tool!=='trim')msg('');renderAll()}}
+map.addEventListener('pointerdown',ev=>{const c=cellFrom(ev);if(!c)return;map.setPointerCapture(ev.pointerId);painting=true;last=null;changed=false;
+  if(!ST.testing)snap();if(ev.button===2&&!ST.testing){const t=ST.tool;ST.tool='erase';act(c,true);ST.tool=t}else act(c,true)});
+map.addEventListener('contextmenu',e=>e.preventDefault());
+map.addEventListener('pointermove',ev=>{const c=cellFrom(ev),k=c&&c.join(','),hk=ST.hover&&ST.hover.join(',');
+  if(k!==hk){ST.hover=c;if(c&&!painting){const b=pickAt(c[0],c[1],ST.layer);
+    msg(`${ref(...c)} · H${ST.layer}`+(b?` · ${T[b.t].n}${T[b.t].normal?` (C4 ${c4Of(b.t)})`:' (special, no C4)'}${b.trim?' · trim part':''}`:''))}renderMap()}
+  if(painting&&c&&!ST.testing)act(c,false)});
+map.addEventListener('pointerup',()=>{painting=false;if(!changed&&!ST.testing)ST.undo.pop()});
+map.addEventListener('pointerleave',()=>{ST.hover=null;if(!painting)renderMap()});
+// keys while the designer is open: handled here, kept away from the base map
+addEventListener('keydown',e=>{if(tab!=='structs')return;const a=document.activeElement;if(a&&/INPUT|TEXTAREA|SELECT/.test(a.tagName))return;
+  const k=e.key.toLowerCase();let done=true;
+  if((e.ctrlKey||e.metaKey)&&k==='z')undo();
+  else if(e.ctrlKey||e.metaKey||e.altKey)done=false;
+  else if(k==='r')turn();else if(k==='e')$('stErase').click();else if(k==='t')$('stTrim').click();
+  else if(k===']'){ST.layer=Math.min(MAXL,ST.layer+1);renderAll()}else if(k==='['){ST.layer=Math.max(0,ST.layer-1);renderAll()}
+  else if(k==='escape'){if(ST.testing)endTest();else{ST.tool='hesco_l';renderAll()}}
+  else if(k.length===1||k==='delete'||k==='backspace')done=true;else done=false;
+  if(done){e.preventDefault();e.stopImmediatePropagation()}},true);
+
+// ---------- blueprint data ----------
+function toData(){const bl=ST.s.blocks,ox=bl.length?Math.min(...bl.flatMap(b=>cellsOf(b).map(c=>c[0]))):0,oy=bl.length?Math.min(...bl.flatMap(b=>cellsOf(b).map(c=>c[1]))):0;
+  const{blocks,...props}=ST.s;return{v:1,...props,blocks:blocks.map(b=>{const o=[b.t,b.x-ox,b.y-oy,b.z];if(b.r||b.trim)o.push(b.r||0);if(b.trim)o.push(1);return o})}}
+function fromData(d){const b=blank();for(const k in b)if(k!=='blocks'&&d[k]!==undefined)b[k]=d[k];
+  const bl=(d.blocks||[]).filter(q=>T[q[0]]).map(([t,x,y,z,r,tr])=>({id:ST.id++,t,x,y,z,r:r||0,trim:!!tr}));
+  if(bl.length){const xs=bl.flatMap(q=>cellsOf(q).map(c=>c[0])),ys=bl.flatMap(q=>cellsOf(q).map(c=>c[1])),dx=Math.floor((SN-Math.max(...xs)-1)/2),dy=Math.floor((SN-Math.max(...ys)-1)/2);for(const q of bl){q.x+=dx;q.y+=dy}}
+  b.blocks=bl;return b}
+function renderJson(){if(document.activeElement!==$('stJson'))$('stJson').value=JSON.stringify(toData())}
+$('stCopy').onclick=()=>{const t=$('stJson').value;navigator.clipboard.writeText(t).then(()=>$('stJsonMsg').textContent='Copied',()=>{$('stJson').select();$('stJsonMsg').textContent='Selected: press Ctrl+C'})};
+$('stLoad').onclick=()=>{try{const d=JSON.parse($('stJson').value);snap();ST.s=fromData(d);ST.cur=null;ST.layer=0;endTest();$('stJsonMsg').textContent='Loaded';renderSavedSt()}catch(e){$('stJsonMsg').textContent='That text is not blueprint data'}};
+
+// ---------- examples (doc 11; parts marked ? there still need checking in game) ----------
+const ring=(w,d)=>{const o=[];for(let x=0;x<w;x++)for(let y=0;y<d;y++)if(!x||!y||x===w-1||y===d-1)o.push([x,y]);return o};
+const all=(w,d)=>{const o=[];for(let x=0;x<w;x++)for(let y=0;y<d;y++)o.push([x,y]);return o};
+const has=(l,x,y)=>l.some(([a,b])=>a===x&&b===y);
+const EX={
+  recon:()=>{const B=[];for(const[x,y]of all(4,4))B.push(['floor',x,y,0]);
+    for(const[x,y]of ring(4,4))if(!has([[0,2],[3,1]],x,y))B.push(['hesco_l',x,y,0]);
+    for(const[x,y]of all(4,4))B.push(['roof',x,y,2]);
+    for(const[x,y]of[[0,0],[3,0],[0,3],[3,3],[2,3]])B.push(['hesco_l',x,y,2]);
+    B.push(['sandbags',1,0,2,0],['sandbags',0,1,2,3],['sandbags',3,1,2,1],['window',1,0,3,0],['window',0,1,3,3],['window',3,1,3,1]);
+    for(const[x,y]of all(4,4))B.push(['roof',x,y,4]);
+    for(const[x,y]of[[1,1],[2,1],[1,2],[2,2]])B.push(['hesco_s',x,y,4,0,1]);
+    B.push(['ladder',1,3,2,2]);
+    return{name:'Recon Tower',short:'RECON',tier:WD.F('h.recon_tower'),supplies:WD.build('recon_tower'),build:WD.F('t.recon_tower'),trim:WD.F('t.trim.recon_tower'),seal:'large_door',ground:true,maxbase:0,cmin:6,ctype:'hesco_l',blocks:B}},
+  shelter:()=>{const B=[];for(const[x,y]of all(5,5))B.push(['floor',x,y,0]);
+    for(const[x,y]of ring(5,5))if(!has([[2,0],[0,2],[4,2],[2,4]],x,y))B.push(['hesco_l',x,y,0]);
+    for(const[x,y]of all(5,5))B.push(['roof',x,y,2]);
+    for(let x=1;x<4;x++)for(let y=1;y<4;y++)B.push(['hesco_s',x,y,2,0,1]);
+    return{name:'Indirect Fire Shelter',short:'SHELTER',tier:WD.F('h.ifs'),supplies:WD.build('ifs'),build:WD.F('t.ifs'),trim:WD.F('t.trim.ifs'),seal:'large_door',ground:true,maxbase:0,cmin:6,ctype:'hesco_l',blocks:B}},
+  bunker:()=>{const B=[];for(const[x,y]of all(4,4))B.push(['floor',x,y,0]);
+    B.push(['sandbags',0,0,0,0],['sandbags',2,0,0,0],['sandbags',0,1,0,3],['sandbags',3,1,0,1],['sandbags',0,3,0,2],['hesco_s',3,3,0]);
+    B.push(['window',0,0,1,0],['window',2,0,1,0],['window',0,1,1,3],['window',3,1,1,1],['window',0,3,1,2]);
+    for(const[x,y]of all(4,4))B.push(['roof',x,y,2]);
+    return{name:'Bunker (guess)',short:'BUNKER',tier:WD.F('h.bunker'),supplies:WD.build('bunker'),build:WD.F('t.bunker'),trim:0,seal:'small',ground:false,maxbase:WD.F('stack.bunker'),cmin:3,ctype:'sandbags',blocks:B}}};
+const EX_NAME={recon:'Recon Tower',shelter:'Indirect Fire Shelter',bunker:'Bunker (guess: sandbags)'};
+
+// ---------- saving: Published (admin, everyone sees) and My structures (personal) ----------
+const COL=()=>TEST_MODE?'test_structures':'structures';
+function entriesSt(){const out=Object.keys(EX).map(k=>({key:'x'+k,group:'Examples',name:EX_NAME[k],ex:k}));const uid=S.user&&S.user.uid;
+  if(S.mode==='firebase')for(const r of ST.remote){const mine=r.owner===uid;
+    out.push({key:'f'+r.id,id:r.id,group:r.visibility==='published'?'Published':'My structures',name:r.name,vis:r.visibility,ownerName:r.ownerName,mine,canDelete:!!uid&&((mine&&r.visibility!=='published')||S.admin),data:r.data})}
+  if(S.mode==='claude')for(const r of ST.remote)out.push({key:'c'+r.id,id:r.id,group:r.visibility==='published'?'Published':'My structures',name:r.name,vis:r.visibility,mine:true,canDelete:true,data:r.data});
+  for(const r of ST.local)out.push({key:'l'+r.id,id:r.id,group:S.mode==='local'?'My structures':'In this browser',name:r.name,mine:true,local:true,canDelete:true,data:r.data});
+  return out}
+const canPublish=()=>S.admin||S.mode==='claude';
+function renderSavedSt(){const sel=$('stOpen'),list=entriesSt(),groups={};sel.replaceChildren(el('option',{value:''},'Open…'));
+  for(const e of list)(groups[e.group]=groups[e.group]||[]).push(e);
+  for(const g of['Examples','Published','My structures','In this browser']){const L=groups[g];if(!L)continue;const og=el('optgroup',{label:g});
+    for(const e of L.sort((a,b)=>a.ex||b.ex?0:a.name.localeCompare(b.name))){const o=el('option',{value:e.key},e.name+(g==='Published'&&e.ownerName&&!e.mine?' · '+e.ownerName:''));if(ST.cur===e.key)o.selected=true;og.append(o)}
+    sel.append(og)}
+  const cur=list.find(e=>e.key===ST.cur),x=$('stDel');x.hidden=!(cur&&cur.canDelete);x.textContent=cur&&ST.pendDel===cur.key?'Delete?':'Delete';
+  x.onclick=()=>{if(!cur)return;if(ST.pendDel===cur.key)delSt(cur);else{ST.pendDel=cur.key;renderSavedSt()}};
+  const v=$('stVis'),p=v.querySelector('[value=published]');v.hidden=S.mode==='local';p.hidden=p.disabled=!canPublish();if(!canPublish())v.value='personal'}
+window.structSaved=renderSavedSt;
+const say=t=>{$('stSaveMsg').textContent=t};
+$('stOpen').onchange=e=>{ST.pendDel=null;ST.pendSave=null;const en=entriesSt().find(x=>x.key===e.target.value);if(!en){renderSavedSt();return}
+  snap();try{ST.s=fromData(en.ex?EX[en.ex]():JSON.parse(en.data))}catch(x){say('Could not open it: the data is damaged.');return}
+  ST.cur=en.key;ST.layer=0;if(en.vis)$('stVis').value=en.vis;endTest();renderSavedSt();say(`Opened "${en.name}".`)};
+async function delSt(en){ST.pendDel=null;
+  try{if(en.local){ST.local=ST.local.filter(d=>d.id!==en.id);ls.set('wd_structures',ST.local)}
+    else if(S.mode==='firebase'){const F=S.fb;await F.deleteDoc(F.doc(F.db,COL(),en.id))}
+    else if(S.mode==='claude'&&db)await db.collection('structures').doc(en.id).delete();
+    if(ST.cur===en.key)ST.cur=null;say(`Deleted "${en.name}".`)}
+  catch(e){say('Could not delete: '+errText(e))}renderSavedSt()}
+$('stSave').onclick=async()=>{const name=(ST.s.name||'').trim();if(!name){say('Give the structure a name in Properties first.');return}
+  if(!ST.s.blocks.length){say('Nothing built yet.');return}
+  if(S.mode==='firebase'&&!S.user){openLogin('Log in to save structures.');return}
+  const vis=S.mode==='local'?'personal':$('stVis').value==='published'&&canPublish()?'published':'personal',ask=name.toLowerCase()+'|'+vis;
+  const same=entriesSt().find(e=>!e.ex&&e.mine&&e.name.toLowerCase()===name.toLowerCase()&&(e.vis||'personal')===vis);
+  if(same&&ST.cur!==same.key&&ST.pendSave!==ask){ST.pendSave=ask;say(`You already have "${same.name}". Press Save again to replace it.`);return}
+  ST.pendSave=null;const data=JSON.stringify(toData()),now=new Date().toISOString();
+  try{if(S.mode==='firebase'){const F=S.fb,id=same?same.id:F.doc(F.collection(F.db,COL())).id;
+      await F.setDoc(F.doc(F.db,COL(),id),{owner:S.user.uid,ownerName:userName(),visibility:vis,name,data,updated:now});ST.cur='f'+id}
+    else if(S.mode==='claude'&&db){const id=same?same.id:'s'+Date.now().toString(36);await db.collection('structures').doc(id).set({name,visibility:vis,data,updated:now});ST.cur='c'+id}
+    else{const id=same?same.id:'s'+Date.now().toString(36);ST.local=ST.local.filter(d=>d.id!==id);ST.local.push({id,name,data,updated:now});ls.set('wd_structures',ST.local);ST.cur='l'+id}
+    say(`Saved "${name}"${vis==='published'?' · Published for everyone':S.mode==='local'?' in this browser':' · My structures'}.`)}
+  catch(e){say('Could not save: '+errText(e))}renderSavedSt()};
+// live lists: published (anyone) and my own (logged in)
+window.structListen=()=>{ST.unsub.forEach(f=>f());ST.unsub=[];ST.remote=[];const F=S.fb;if(!F)return;const col=F.collection(F.db,COL()),parts={};
+  const merge=()=>{const m=new Map();for(const k in parts)for(const r of parts[k])m.set(r.id,r);ST.remote=[...m.values()];renderSavedSt()};
+  const watch=(k,q)=>ST.unsub.push(F.onSnapshot(q,sn=>{parts[k]=sn.docs.map(d=>({id:d.id,...d.data()}));merge()},()=>{parts[k]=[];merge()}));
+  watch('pub',F.query(col,F.where('visibility','==','published')));
+  if(S.user)watch('mine',F.query(col,F.where('owner','==',S.user.uid)))};
+if(IN_CLAUDE)(async()=>{let d=null;try{d=await window.claude.use('db')}catch(e){}if(!d)return;
+  d.collection('structures').onSnapshot(sn=>{ST.remote=sn.docs.map(x=>({id:x.id,...x.data()}));renderSavedSt()},()=>{})})();
+else if(S.fb)window.structListen();
+
+ST.s=fromData(EX.recon());ST.cur='xrecon';
+})();
+</script>
 </body>
 </html>
