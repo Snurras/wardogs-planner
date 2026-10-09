@@ -11,7 +11,7 @@ Every message in a long chat re-sends the whole history (hundreds of screenshots
 |---|---|---|
 | Change a tool, piece, stacking rule, entrances, Wall Optimization, templates | 01 + 02 | Opus |
 | Change how attackers get in, C4, movement, the attack animation or its jokes | 01 + 03 | Opus |
-| Structures as blocks (Bunker, Recon, Shelter, new structures from game updates) | 01 + 11 (+03 threat, +04 side view) | Opus |
+| Structures as blocks, Structure Builder, modify a structure (Bunker, Recon, Shelter, new buildings) | 01 + 11 (+03 threat, +04 side view) | Opus |
 | Protection rules, hover picture, Side view, how pieces look from the side | 01 + 04 (+07 for look) | Opus |
 | Haul, vehicles, packing, team, pack list, build times, build order | 01 + 05 | Opus |
 | Logins, saving, comments, Fact sheet, Firebase rules | 01 + 06 | Opus |
