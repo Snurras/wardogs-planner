@@ -1,6 +1,6 @@
 # 11 · Structures built from blocks + Structure Builder (plan)
 Use for: rebuilding Bunker, Recon Tower and Indirect Fire Shelter as real blocks; the Structure Builder (admin); modifying structures in a design; new structures from game updates.
-**Status: plan only, nothing built yet (updated 9 Oct 2026).** Read with 01 (+ 03 for the threat check, + 04 for Side view).
+**Status (9 Oct 2026): Structure designer is on staging (v110) as its own section; the base map still uses the old structures.** Read with 01 (+ 03 for the threat check, + 04 for Side view).
 
 **How to read this doc:** everything ending in **?** is an assumption. Snurra checks it in the game and deletes the ? (true) or corrects it. Section 10 has the questions that can't be guessed.
 
@@ -147,3 +147,39 @@ Answer as a short text list + 1–2 photos. Correct any **?** above at the same 
 9. **Rebuild:** can a blown HESCO in a structure be rebuilt as a normal HESCO, and does the structure count as whole again?
 10. **Shelter:** any windows or firing slits?
 11. **New buildings:** name + size + 1–2 photos of each new one is enough to try the Structure Builder on.
+
+## 11. Structure designer (on staging, 9 Oct 2026)
+- Opened from the **Structure designer** link under the piece list (above Legend). Own section `#tab-structs` (`showTab('structs')`), module `<script id="wd-structs">` at the end of the file. "Map" goes back.
+- Toolbar reuses the planner's Undo, Rotate, Erase and Clear buttons (icons copied at start-up) + Trim parts (T) + Test C4. Palette rows look like the planner's (Space, $). Keys R, E, T, [ ], Ctrl+Z, Esc are caught while the section is open.
+- Blocks: HESCO Small / Large, Sandbags (2×1, on one edge, 50 % deep), Door; special: Floor (H0), Roof / middle floor (thin, walkable, open space under), Window (2×1 wooden frame on the edge, 20 % deep, H1, no glass: a 1h opening = crawl only), Ladder (outside edge of a square, up to its layer). R picks the edge / side.
+- Corrections from Snurra 9 Oct: windows are a wooden frame 2 wide, no glass, on the edge; sandbags on the edge, half as thick as HESCO.
+- Map: the layer you are on full colour, what is below faded with its height, blocks from below hatched, floor/roof dotted, entrances found automatically (gap in the ground ring). 3D view: isometric, turnable, everything under the current layer under a grey veil; "Cut above layer".
+- Check panel: size, highest point, floors, entrances, windows, ladders, block counts, trim parts vs trim time, C4 for all normal blocks, collapse status.
+- Saving (`ST`, `entriesSt`): **Examples** (built in), **Published** (admin; everyone sees), **My structures** (personal). Firebase `structures` / `test_structures` docs `{owner, ownerName, visibility:'personal'|'published', name, data (JSON), updated}`; in claude.ai the page database `structures`; without either, this browser (`wd_structures`). Blueprint data: copy/paste JSON `{v:1, name, short, tier, supplies, build, trim, seal, ground, maxbase, cmin, ctype, blocks:[[type,x,y,z,(r),(trim)]]}`.
+
+### Firebase rules to add (Firestore, Rules tab)
+```
+function isAdmin() { return request.auth != null && exists(/databases/$(database)/documents/admins/$(request.auth.uid)); }
+function structOk(d) {
+  return d.keys().hasOnly(['owner','ownerName','visibility','name','data','updated'])
+    && d.owner == request.auth.uid && d.name is string && d.name.size() <= 40
+    && d.data is string && d.data.size() < 200000
+    && (d.visibility == 'personal' || (d.visibility == 'published' && isAdmin()));
+}
+match /structures/{id} {
+  allow read: if resource.data.visibility == 'published' || (request.auth != null && resource.data.owner == request.auth.uid);
+  allow create: if request.auth != null && structOk(request.resource.data);
+  allow update: if request.auth != null && structOk(request.resource.data) && (resource.data.owner == request.auth.uid || isAdmin());
+  allow delete: if request.auth != null && ((resource.data.owner == request.auth.uid && resource.data.visibility != 'published') || isAdmin());
+}
+match /test_structures/{id} {   // same, testers only
+  allow read: if request.auth != null && exists(/databases/$(database)/documents/testers/$(request.auth.uid))
+    && (resource.data.visibility == 'published' || resource.data.owner == request.auth.uid);
+  allow create, update: if request.auth != null && exists(/databases/$(database)/documents/testers/$(request.auth.uid)) && structOk(request.resource.data);
+  allow delete: if request.auth != null && ((resource.data.owner == request.auth.uid && resource.data.visibility != 'published') || isAdmin());
+}
+```
+If the rules already have an `isAdmin()` function, keep the existing one and skip that line.
+
+### Next
+- Published structures become pieces on the base map (step 2–3 of section 9).
