@@ -18,7 +18,7 @@ Select (V) · Brush (B) · Undo · Rotate (R) · Erase (E) · Modify an entrance
 | Bunker | 4×4 | roof H2, one floor, 4 corner HESCO, sandbags + 6 windows, entrance S x1 |
 | Recon Tower | 4×4 | edges H4, centre 2×2 H5, floor 2 at H2, outside ladder |
 | Indirect Fire Shelter | 5×5 | edges H2, centre 3×3 H3 |
-| Trimmed Recon / Shelter | same | flat H4 / H2 (centre removed, extra trim time) |
+| Trimmed Recon / Shelter | same | flat H4 / H2 (centre removed, extra trim time); no longer in the piece list, only in older designs |
 | Loudspeaker 2×2 H3 · Builder's Radio 2×1 H1 | | |
 | HESCO Small 1×1 H1 · Large 1×1 H2 · HESCO Wall 4×1 H2 | | |
 | Bremer Wall 1×1 | face H3 (can't be jumped), footing H1 walkable | |

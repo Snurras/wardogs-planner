@@ -26,3 +26,4 @@ Rules: **change needed** for the Structure designer: new collections `structures
 - New: **Save .txt** and **Import .txt** in the Open menu (under "File on this device"). Save puts the open design in a text file on your device; Import opens one. Import only reads files up to 512 KB, only as a design, and leaves out anything a design can't hold. Nothing is sent online until you press Save.
 - Safety: structures that come with a design (from a file or from someone else's shared design) are checked block by block, and their names are shown as plain text only.
 - **Structure designer** moved to the header, before Fact sheet and About, with the same look. The link under the piece list is gone; picking a structure to place stays there.
+- The **trim** button next to Recon Tower and Shelter in the piece list is gone. Designs that already have a trimmed one still open and work as before.
