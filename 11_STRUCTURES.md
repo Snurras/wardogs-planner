@@ -83,7 +83,7 @@ y4  H  H  E  H  H             y4  r  r  r  r  r
 ```
 - No windows?
 - **Trimmed Shelter = remove the 9 Small HESCO** (9 × 7 s ≈ the 60 s trim time).
-- **Game test 10 Oct:** Snurra's layout shows 4 rows (A–D), 5 columns, 12 Large HESCO, gaps only at A3 and D3. Is the Shelter really 5×4 with 2 entrances, or 5×5 with a middle row that has an entrance on each side (no HESCO, left out of the drawing)?
+- **Confirmed in game 10 Oct:** layout as drawn above (5×5, 12 Large HESCO, 4 entrances). In Snurra's Shelter tests the middle row (y2, no HESCO) was left out, so his rows A, B, C, D = y0, y1, y3, y4.
 - **Roof falls when 6 of the 12 ground HESCO are gone** (6 or fewer left), whichever ones. Corners don't matter (all 4 gone + D4: roof still up). Only the ground HESCO stay.
 
 ### Bunker 4×4 · roof H2 (confirmed in game 10 Oct 2026)
