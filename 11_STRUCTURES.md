@@ -1,6 +1,6 @@
 # 11 · Structures built from blocks + Structure Builder (plan)
 Use for: rebuilding Bunker, Recon Tower and Indirect Fire Shelter as real blocks; the Structure Builder (admin); modifying structures in a design; new structures from game updates.
-**Status (9 Oct 2026): Structure designer is on staging (v110) as its own section; the base map still uses the old structures.** Read with 01 (+ 03 for the threat check, + 04 for Side view).
+**Status (10 Oct 2026): Structure designer on staging (v110); the base map still uses the old structures. Recon Tower collapse rules confirmed in game (section 6.1).** Read with 01 (+ 03 for the threat check, + 04 for Side view).
 
 **How to read this doc:** everything ending in **?** is an assumption. Snurra checks it in the game and deletes the ? (true) or corrects it. Section 10 has the questions that can't be guessed.
 
@@ -14,7 +14,7 @@ Today each structure is one big piece with special rules: height maps, "raised"/
 - A few **special parts** that can't be built on their own: **floor, roof (also the middle floor), window, ladder**. They have **no C4 of their own**: they are destroyed only when the whole structure collapses.
 - **Sandbags under the windows** are normal Sandbags (2×1, H1). Sandbags get **1 C4** (to add to the Fact sheet; today they have 1 there already?).
 - **Entrances are just a missing block** in the wall. Sealing an entrance = putting a block in the gap.
-- **Collapse:** a structure falls when too few HESCO are left on the ground floor, e.g. **fewer than 6** (check per structure in game). When it falls, everything that belongs to it goes (floor, roof, windows, ladder, sandbags?) and anything built on top of it falls too?
+- **Collapse:** not one rule but two, per floor/roof (tested on the Recon Tower 10 Oct 2026, see section 6): a **floor falls when too few ground HESCO are left**, a **roof falls when too few of its supports are left**. Ground HESCO never fall from a collapse.
 - **Build time and cost** belong to the structure as a whole (set in the Structure Builder), not to its blocks.
 
 ## 3. The idea
@@ -44,7 +44,7 @@ Build order, as in the game:
 1. **Floor** on all 16 squares.
 2. **10 Large HESCO** (H0–H2) round the outer ring; the 2 gaps are the entrances (W y2, E y1).
 3. **Middle floor / roof** at H2 on all 16 squares?
-4. **Floor 2 walls** (H2–H4?): 4 Large HESCO in the corners + 1 next to the ladder opening (S x2?).
+4. **Floor 2 walls**: 4 special Large HESCO (1.65 high) in the corners + 1 Small HESCO next to the ladder opening (S x2).
 5. **Sandbags** between the corners: N x1–x2, W y1–y2, E y1–y2 (3 Sandbags, 2×1 each).
 6. **Windows** on top of the sandbags (6 squares).
 7. **Roof** at H4 on all 16 squares.
@@ -56,10 +56,12 @@ Ground floor (H0–H2)          Floor 2 (H2–H4)               Roof (H4–H5)
 y0  H  H  H  H                y0  H  W  W  H                y0  r  r  r  r
 y1  H  .  .  E                y1  W  .  .  W                y1  r  s  s  r
 y2  E  .  .  H                y2  W  .  .  W                y2  r  s  s  r
-y3  H  H  H  H                y3  H  L  H? H                y3  r  r  r  r
-H = Large HESCO   E = entrance (gap)   . = room   W = sandbags + window
+y3  H  H  H  H                y3  H  L  h  H                y3  r  r  r  r
+H = Large HESCO   h = Small HESCO   E = entrance (gap)   . = room   W = sandbags + window
 L = ladder opening   r = roof   s = Small HESCO on the roof
 ```
+- **Confirmed in game (10 Oct):** ground floor ring as drawn, entrances at W y2 and E y1 (10 ground HESCO). Floor 2 corners are **special Large HESCO, 1.65 high** (+ the 0.35 roof slab = 2); they carry the roof and **can't be built by players from the middle floor**. The block at **S x2 is a Small HESCO** with a small gap under the roof: it does **not** carry the roof.
+- Snurra's test labels: rows **A–D = y0–y3**, columns **1–4 = x0–x3** (A1 = NW corner, ladder under D2).
 - Floor 1 and floor 2 are not connected inside (no stairs)?
 - Floor 2 room is only the centre 2×2? (The ring is walls, windows and the ladder square.)
 - **Trimmed Recon = remove the 4 Small HESCO on the roof** (4 × 7 s ≈ the 30 s trim time). No separate piece any more.
@@ -103,10 +105,42 @@ y3  W  W  E  W        W = sandbags + window, E = entrance (seal with Small HESCO
 Loudspeaker, Builder's Radio, Bremer, Door, Gate, stations, emplacements?
 
 ## 6. Collapse
-- Per structure: **"collapses when fewer than N blocks of type X are left on the ground floor"**. Recon / Shelter: fewer than 6 Large HESCO? Bunker: ?
-- When it collapses: all its parts go (floor, roof, windows, ladder, sandbags, HESCO on the roof?), and anything resting on it falls (simple gravity: a block with nothing under it falls).
-- Before that, blowing one HESCO just leaves a hole, like a HESCO wall. Does the roof above a blown HESCO stay up? (assumed yes, until collapse)
-- The threat check uses this: "blow 7 HESCO = the whole Recon Tower is gone" can be a cheaper route than going through it. The attack animation shows it falling.
+### 6.1 Recon Tower: confirmed in game (Snurra, hammer tests 3–10, 10 Oct 2026)
+Labels as in section 5: A–D = rows y0–y3, 1–4 = columns x0–x3. Ground HESCO (10): A1 A2 A3 A4 · B1 · C4 · D1 D2 D3 D4. Pillars = the floor 2 blocks on A1, A4, D1, D4 (corners, carry the roof) and D3 (Small HESCO, does not touch the roof).
+1. **Remove a ground HESCO under a pillar** → that pillar and its square of middle floor fall. Under a sandbags/window square (A2, A3, B1, C4, D2) → nothing falls.
+2. **Roof falls when 2 of the 4 corner pillars are gone.** The roof's 4 Small HESCO and the windows go with it. Floor 2 and the sandbags stay. D3 doesn't count.
+3. **Floor 2 falls when 5 or fewer ground HESCO are left** (of 10). Middle floor, sandbags and ladder go. Pillars still standing and all ground HESCO stay. Windows keep hanging from the roof if it is still up.
+4. Roof and floor 2 are **independent**: either can fall first. The order of removals doesn't matter, only which blocks are gone.
+5. **Ground HESCO never fall** from a collapse.
+6. **C4 is different:** the blast also destroys the next HESCO (tests 1–2: C4 on D3 took D4 too). How far the blast reaches is not measured yet.
+
+Useful trick (test 7): with A2, A3, D2, D3, C4, D4 + one more gone, the roof still stands on A1, A4, D1: an open, roofed space (e.g. a mortar under the roof).
+
+### 6.2 What this means for the planner
+- A structure needs **two kinds of rule**, set in the Structure Builder:
+  - **Floor rule:** "this floor falls when the ground HESCO drop to N" (Recon floor 2: N = 5).
+  - **Roof rule:** "this roof falls when its supports drop to N", with the supporting blocks marked (Recon roof: the 4 corner pillars, N = 2).
+- A block falls when the block it stands on is gone (pillar on a ground HESCO). What falls with a floor or roof (sandbags, ladder, windows, roof HESCO) is part of the rule.
+- The threat check can use it: blowing 2 corners clears the Recon roof; 5 ground HESCO clear floor 2. The attack animation shows it falling.
+
+### 6.3 Tests still to run (hammer only)
+Before each structure: draw its ground floor like the Recon (block name per square, `00` for a gap) and say what sits on top. Note after **every** removal what fell.
+
+**Indirect Fire Shelter** (12 Large HESCO, 4 gaps, roof at H2 with 9 Small HESCO on top)
+- **S1 corners first:** remove the NW corner, then the SE corner, then the other two. Does the roof (or part of it) fall at 2 corners, like the Recon?
+- **S2 sides first** (new Shelter): remove the 8 side HESCO one by one, going round, before any corner. When does the roof fall, and does it fall all at once or square by square?
+- **S3 one side:** remove all 3 HESCO on the north side (NW, N, NE). Does only that edge of the roof fall?
+
+**Bunker** (first check: is the ring HESCO, or sandbags + windows? How many C4 does the game show for one ring square?)
+- **B1 corners first:** remove 2 corners, then the other 2. When does the roof fall?
+- **B2 sides first** (new Bunker): remove the side blocks one by one before any corner. Count left when the roof falls.
+
+**Filled gaps and rebuilt HESCO** (Recon; these decide whether players can make a structure stronger)
+- **F1 filled entrance counts?** Fill the entrance C1 with a Large HESCO. Then remove A2, A3, B1, C4, D2. Prediction if it counts: 6 left, floor 2 stands. Then remove D3: floor 2 falls.
+- **F2 HESCO in the room counts?** New Recon: put a Large HESCO in the room at B2 (under the middle floor). Same removals as F1. Does it hold floor 2 up?
+- **F3 rebuilt corner:** remove D4 (its pillar falls), build a new Large HESCO at D4. The pillar can't be rebuilt, so the prediction is: removing A1 next drops the roof (2 corners gone). Does the rebuilt D4 count for the floor 2 rule?
+
+Still open: how far a C4 blast reaches (one block, or a radius?).
 
 ## 7. Structure Builder (admin)
 - A new design tool, only visible to the admin. Works like the normal map but on a small grid for one structure.
@@ -136,9 +170,9 @@ Code today (v105, see 01 code map): piece catalogue `P` (`bunker`, `ifs`, `recon
 
 ## 10. Questions for the game
 Answer as a short text list + 1–2 photos. Correct any **?** above at the same time.
-1. **Collapse:** how many ground-floor HESCO must go before the Recon Tower falls? The Shelter? The Bunker (what makes it fall)?
-2. **After collapse:** does anything stay (sandbags, HESCO on the roof, the floor)? Do pieces built on top fall?
-3. **Before collapse:** after blowing one ground HESCO, does the roof above it stay? Can you walk in through the hole?
+1. **Collapse:** ~~Recon Tower~~ answered (section 6.1). Shelter and Bunker: run the tests in 6.3.
+2. **After collapse:** ~~Recon~~ answered: ground HESCO stay, sandbags stay when only the roof falls. Do pieces a player built on top fall?
+3. **Before collapse:** ~~Recon~~ answered (section 6.1). Can you walk in through the hole? (D2 removed: no, the ladder blocks it.)
 4. **Recon floor 2:** Large HESCO (H2–H4) in the corners? The extra one at S x2? Floor 2 room only the centre 2×2?
 5. **Windows:** height H1 on top of H1 sandbags? Blow the sandbags (1 C4) and crawl in, or blow the window?
 6. **Bunker ring:** sandbags + windows, or HESCO? 1 or 4 C4 to get in?
