@@ -4,7 +4,7 @@ Use for: toolbar tools, placing/stacking pieces, entrances, Wall Optimization, G
 ## Toolbar (one row, fits down to ~1180 px)
 Select (V) · Brush (B) · Undo · Rotate (R) · Erase (E) · Modify an entrance (M) · Wall Optimization · Side view (S) | Clear (IED icon) · Elevation Stacking (checkbox).
 - Coloured icons with text kept. Zoom (− size + Fit) and Grid labels sit **below** the map on the right.
-- Process bar above: **1 · Design it → 2 · Haul it → 3 · Build it** (arrow steps with live summaries). Fact sheet / About by the title.
+- Process bar above: **1 · Design it → 2 · Haul it → 3 · Build it** (arrow steps with live summaries). Structure designer / Fact sheet / About by the title.
 - R priority: hovering an emplacement → turns the protection picture; Modify an entrance → turns a centre door; Brush → turns brush; Select → turns selection/paste; else turns the piece to place.
 
 ## Pieces (palette groups: Emplacements, Stations, Structures, Walls & entry, Field; “Space” and “$” columns)
