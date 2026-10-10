@@ -494,6 +494,14 @@ a{color:var(--accent)}
 #stMap{display:block;width:100%;max-width:min(100%,74vh);aspect-ratio:1;touch-action:none;user-select:none}
 #tab-structs.testing #stMap{cursor:crosshair}
 #stIso{width:100%;display:block;max-height:420px}
+.st-isowrap{position:relative}
+.st-isowrap #stIsoCtl{justify-content:flex-end;margin-bottom:4px}
+.st-max{position:absolute;right:6px;bottom:6px;z-index:1}
+.st-mapwrap{position:relative}
+.board .st-isowrap #stIso{max-height:74vh}
+.board .st-isowrap{min-height:300px}
+.st-lay{position:absolute;transform:translateY(-50%);line-height:1.2}
+.st-lay:disabled{opacity:.35;cursor:default}
 .st-kv{display:grid;grid-template-columns:auto minmax(0,1fr);gap:3px 12px;margin:0;font-size:13px}
 .st-kv dt{color:var(--muted)}.st-kv dd{margin:0;font-family:var(--f-mono);font-size:12.5px;font-variant-numeric:tabular-nums;min-width:0;overflow-wrap:anywhere}
 .st-banner{border:1px solid;border-radius:4px;padding:5px 9px;font-weight:600;font-size:14px}
@@ -699,11 +707,11 @@ a{color:var(--accent)}
 
     <section class="col rightcol">
       <div class="card">
-        <div class="st-row" style="justify-content:space-between"><h3>3D view</h3>
-          <span class="st-row"><label class="chk" title="Hide everything above the layer you are on"><input type="checkbox" id="stCut"> Cut above layer</label>
+        <div class="st-row" style="justify-content:space-between"><h3 id="stIsoTitle">3D view</h3>
+          <span class="st-row" id="stIsoCtl"><label class="chk" title="Hide everything above the layer you are on"><input type="checkbox" id="stCut"> Hide above layer</label>
           <button class="mini" type="button" id="stTurnL" aria-label="Turn the view left">⟲</button><button class="mini" type="button" id="stTurnR" aria-label="Turn the view right">⟳</button></span></div>
-        <svg id="stIso" viewBox="-280 -230 560 420" role="img" aria-label="3D view of the structure"></svg>
-        <span class="status">Below the layer you are on is greyed out.</span>
+        <div class="st-isowrap"><svg id="stIso" viewBox="-280 -230 560 420" role="img" aria-label="3D view of the structure"></svg><button class="mini st-lay" type="button" id="stLayUp" aria-label="Layer up" title="Layer up ( ] )">▲</button><button class="mini st-lay" type="button" id="stLayDn" aria-label="Layer down" title="Layer down ( [ )">▼</button><button class="mini st-max" type="button" id="stMax" title="Show the 3D view in the big window">⤢ Maximize</button></div>
+        <span class="status" id="stIsoNote">Below the layer you are on is greyed out.</span>
       </div>
       <div class="card">
         <h3>Properties</h3>
@@ -4882,9 +4890,18 @@ function renderIso(){const svg=$('stIso');svg.replaceChildren();const col=collap
     root.append(s('polygon',{points:pts(lv),fill:'var(--panel)',opacity:.62}));
     root.append(s('polygon',{points:pts(lv),fill:'none',stroke:'var(--accent)','stroke-width':1.2,'stroke-dasharray':'5 4'}))}
   if(!cut){above.sort(order).forEach(bx=>drawBox(root,bx));for(const b of lads)if(b.z>L)drawLadder3d(root,b,L,b.z+.4)}
-  const lt=Pj(...rotP(0,SN),L);root.append(s('text',{x:lt[0]-6,y:lt[1],'text-anchor':'end',fill:'var(--accent)','font-size':11,'font-family':'IBM Plex Mono, monospace'},'H'+L));
-  const nn=rotP(SN/2,-1.2),np=Pj(nn[0],nn[1],0);root.append(s('text',{x:np[0],y:np[1],'text-anchor':'middle',fill:'var(--muted)','font-size':12,'font-weight':600,'font-family':'var(--f-head)'},'N'));
-  try{const bb=root.getBBox(),pad=24,w=Math.max(bb.width,220)+pad*2,h=Math.max(bb.height,160)+pad*2;if(bb.width>0)svg.setAttribute('viewBox',`${bb.x+bb.width/2-w/2} ${bb.y+bb.height/2-h/2} ${w} ${h}`)}catch(e){}
+  // fit the view, leaving room for the compass letters and, on the right, the layer label and arrows
+  const cs=[[0,0],[SN,0],[SN,SN],[0,SN]].map(([x,y])=>Pj(...rotP(x,y),L)),rc=cs.reduce((a,b)=>b[0]>a[0]?b:a);
+  try{const bb=root.getBBox(),pl=36,pr=96,pv=34,w=Math.max(bb.width,220)+pl+pr,hh=Math.max(bb.height,160)+pv*2;
+    if(bb.width>0)svg.setAttribute('viewBox',`${bb.x-pl} ${bb.y+bb.height/2-hh/2} ${w} ${hh}`)}catch(e){}
+  const vb=svg.viewBox.baseVal,k=(svg.clientWidth||300)/vb.width;   // screen px per unit: text keeps its size on screen
+  for(const[ch,x,y]of[['N',SN/2,-.9],['E',SN+.9,SN/2],['S',SN/2,SN+.9],['W',-.9,SN/2]]){const q=Pj(...rotP(x,y),0);
+    root.append(s('text',{x:q[0],y:q[1]+5/k,'text-anchor':'middle',fill:'var(--muted)','font-size':16/k,'font-weight':700,'font-family':'var(--f-head)'},ch))}
+  root.append(s('text',{x:rc[0]+8/k,y:rc[1]+5/k,fill:'var(--accent)','font-size':14/k,'font-weight':600,'font-family':'IBM Plex Mono, monospace'},'H'+L));
+  {const up=$('stLayUp'),dn=$('stLayDn'),m=svg.getScreenCTM(),wr=svg.parentNode.getBoundingClientRect();
+    if(m&&svg.clientWidth){const px=m.a*rc[0]+m.c*rc[1]+m.e-wr.left,py=m.b*rc[0]+m.d*rc[1]+m.f-wr.top,left=Math.min(px+44,svg.clientWidth-34)+'px';
+      up.style.left=dn.style.left=left;up.style.top=(py-17)+'px';dn.style.top=(py+17)+'px'}
+    up.disabled=L>=MAXL;dn.disabled=L<=0}
   if(col.down){const vb=svg.viewBox.baseVal;svg.append(s('text',{x:vb.x+vb.width/2,y:vb.y+24,'text-anchor':'middle',fill:'var(--bad)','font-size':20,'font-weight':700,'letter-spacing':2,'font-family':'var(--f-head)'},'COLLAPSED'))}}
 
 // ---------- palette, layers, checks, properties ----------
@@ -4953,6 +4970,13 @@ $('stTest').onclick=()=>ST.testing?endTest():startTest();
 $('stClear').onclick=()=>{const b=$('stClear');if(b.dataset.sure){delete b.dataset.sure;snap();ST.s={...blank()};ST.cur=null;ST.layer=0;endTest();msg('Started an empty structure.');renderSavedSt()}
   else{b.dataset.sure=1;msg('Press Clear again to start an empty structure.');setTimeout(()=>{delete b.dataset.sure},3000)}};
 $('stBack').onclick=()=>showTab('design');
+// Maximize: the 3D view and the layer map swap places (big window ↔ small card)
+{const mapW=document.querySelector('#tab-structs .st-mapwrap'),isoW=document.querySelector('#tab-structs .st-isowrap');isoW.prepend($('stIsoCtl'));
+  const A={p:mapW.parentNode,n:mapW.nextSibling},Bs={p:isoW.parentNode,n:isoW.nextSibling};
+  $('stMax').onclick=()=>{ST.big=!ST.big;const[a,b]=ST.big?[isoW,mapW]:[mapW,isoW];A.p.insertBefore(a,A.n);Bs.p.insertBefore(b,Bs.n);
+    $('stMax').textContent=ST.big?'⤡ Windowed':'⤢ Maximize';$('stMax').title=ST.big?'Put the 3D view back in the small window':'Show the 3D view in the big window';
+    $('stIsoTitle').textContent=ST.big?'Layer map':'3D view';$('stIsoNote').hidden=ST.big;renderAll()}}
+$('stLayUp').onclick=()=>{ST.layer=Math.min(MAXL,ST.layer+1);renderAll()};$('stLayDn').onclick=()=>{ST.layer=Math.max(0,ST.layer-1);renderAll()};
 $('stTurnL').onclick=()=>{ST.view=(ST.view+3)%4;renderIso()};$('stTurnR').onclick=()=>{ST.view=(ST.view+1)%4;renderIso()};$('stCut').onchange=renderIso;
 function startTest(){ST.testing=true;ST.blown=new Set();ST.c4=0;msg('Click a block on this layer to blow it. Change layer to reach higher blocks.');renderAll()}
 function endTest(){ST.testing=false;ST.blown=new Set();ST.c4=0;renderAll()}
