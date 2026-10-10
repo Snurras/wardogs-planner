@@ -222,5 +222,9 @@ If the rules already have an `isAdmin()` function, keep the existing one and ski
 - Designer: Test collapse with Hammer / C4 (3×3 blast at the block's level, charge on the outside face).
 - Known gaps: Side view and protection pictures don't show changes yet; no build time for removals; the threat check doesn't plan collapses or the 3×3 blast itself.
 
+### Threat check on blocks (staging v123, 10 Oct 2026)
+- Step 1 of section 9 done: the threat check reads every structure as its blocks (doc 03). Whole-structure C4 facts removed.
+- Still open: collapse is not planned by the threat check (blowing a ground block leaves the roof up); 3×3 blast not used.
+
 ### Next
-- Make the old built-in structures use blueprints too (step 1–2 of section 9), then Side view from the blocks.
+- Side view and heights from the blocks; remove the old height maps / `raised` / `trimmed` (step 2).

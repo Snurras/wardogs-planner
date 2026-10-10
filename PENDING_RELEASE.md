@@ -15,6 +15,9 @@
 - **Bunker** now as in the game: 4 corner HESCO, sandbags with windows on 6 squares, a Small HESCO, and the entrance at the south side's second square (was the third). It has 6 windows instead of 15.
 - Recon Tower: when its roof is gone but floor 2 stands, floor 2 is an open floor. The threat check walks it like any other height and lets attackers climb the ladder up to it.
 - The square in front of a structure's ladder must stay free, as in the game. Nothing can be built there, and a structure can't be placed with its ladder against a piece.
+- Threat check: **structures are now read block by block**, like the rest of the design. Every block is climbed and blown on its own; roofs stay up over a blown block, so a hole is a way in. Space under a roof as tall as a Door is a room you walk in; a block put in a room (with Modify) fills it. A Shelter or Recon with its centre filled is no longer walked straight through, and a Bunker is entered by its window instead of "blowing the whole Bunker".
+- Fix: a hole you closed with Modify stayed closed only until the design was reopened. It now stays closed.
+- Fact sheet: the C4 numbers for a whole Bunker, Recon Tower and Shelter are gone (each block's own C4 counts). The Buildings rules describe the block model.
 
 Rules: **change needed** for the Structure designer: new collections `structures` and `test_structures` (rules in doc 11, section 11). Until then saving structures online is refused; the rest works.
 
