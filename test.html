@@ -249,8 +249,6 @@ dialog#loginDlg::backdrop{background:rgba(20,25,15,.45)}
 .grid3.fit .vpwrap{flex:1 1 auto;min-height:0;display:flex;flex-direction:column}
 .grid3.fit .vp{height:auto;flex:1 1 auto;min-height:300px}
 .pcn{background:none;border:0;padding:0;text-align:left;font:inherit;color:inherit;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
-.pc .trim{border:1px solid var(--line);background:var(--bg);border-radius:9px;padding:0 4px;font:600 11px var(--f-mono);color:var(--muted);line-height:18px}
-.pc .trim.on{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
 .tdet-h.top{border-top:0;padding-top:0}
 #legendCard{padding:8px 12px}
 #legendCard{display:flex;flex-direction:column;flex:none}
@@ -2868,16 +2866,13 @@ function renderPalette(){
     const pub=cat==='Structures'?(window.publishedStructs?.()||[]):[];
     const rows=pub.length?pub.map(id=>[id,P[id]]):Object.entries(P).filter(([id,t])=>(t.pal||t.cat)===cat&&!TRIMMED.has(id)&&!t.custom);
     for(const[id,t]of rows){
-      const tid=TRIM_OF[id],cur=tid&&tool===tid?tid:id,ct=P[cur];
+      const tid=null,cur=id,ct=P[cur];   // no trimmed versions in the palette any more (old designs with them still open)
       const hs=ct.support?(ct.hm?` · H${ct.hm(0,0)}/${ct.h}`:' · H'+ct.h):'';
       const cost=WD.build(cur);
       const row=el('div',{class:'pc'+(tool===id||tool===tid?' on':''),style:`--c:var(--${t.c})`,title:`${ct.n}: ${ct.w}×${ct.d} blocks${ct.support?', H'+(ct.hm?ct.hm(0,0)+'–'+ct.h:ct.h)+' high':''}, ${cost} build supplies`+(tid?`\nTrim: ${P[tid].n} (${P[tid].note||'flat roof'})`:'')});
       row.addEventListener('click',()=>setTool(tool===tid?tid:id));
       const name=el('button',{type:'button',class:'pcn','aria-pressed':tool===id||tool===tid?'true':'false'},SHORT_NAME[id]||t.n,t.q?el('span',{class:'q',title:t.q==='?'?'Size not confirmed yet: check it in game':'Size rounded to the grid'},t.q):null);
-      let trim=null;
-      if(tid){trim=el('button',{type:'button',class:'trim'+(tool===tid?' on':''),'aria-pressed':tool===tid?'true':'false','aria-label':`Trimmed version: ${P[tid].n}`,title:`Trimmed version: ${P[tid].note||'centre removed, flat roof'}`},'trim');
-        trim.addEventListener('click',e=>{e.stopPropagation();setTool(tool===tid?id:tid)})}
-      row.append(el('span',{class:'sw'}),name,trim||el('span'),el('span',{class:'sz'},`${ct.w}×${ct.d}${hs}`),el('b',{class:'pcost'},String(cost)));root.append(row)}});window.renderPick?.()
+      row.append(el('span',{class:'sw'}),name,el('span'),el('span',{class:'sz'},`${ct.w}×${ct.d}${hs}`),el('b',{class:'pcost'},String(cost)));root.append(row)}});window.renderPick?.()
 }
 
 /* ---------- build order + BOM ---------- */
