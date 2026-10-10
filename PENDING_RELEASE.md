@@ -9,6 +9,6 @@
 
 - New: **Structure designer** (link under the piece list, above Legend). Build a structure block by block, layer by layer, on its own 10×10 area: HESCO, sandbags, door, plus floor, roof, window and ladder. Properties (cost, build and trim time, seal, collapse rule), a 3D view, a C4 / collapse test, and examples of the Recon Tower, Shelter and Bunker. Save your own under My structures; the admin can publish them. Not used on the base map yet.
 - New: **place your own structures on the map**. Under the Structure designer link, pick one of your saved or published structures and click its icon, then click the map, like any other building. Entrances, windows, ladder, height, cost and build time come from the structure. Saved designs keep the structures they use, so they open for everyone. Side view shows them as plain HESCO blocks for now.
-- Structure designer 3D view: ▲ ▼ arrows at the layer corner move the layer up and down (the map follows), N / E / S / W on the sides, "Hide above layer" (was "Cut above layer").
+- Structure designer 3D view: ▲ ▼ arrows at the layer corner move the layer up and down (the map follows), N / E / S / W on the sides, "Hide above layer" (was "Cut above layer"). **Maximize** (bottom right) swaps the 3D view and the layer map; **Windowed** swaps them back.
 
 Rules: **change needed** for the Structure designer: new collections `structures` and `test_structures` (rules in doc 11, section 11). Until then saving structures online is refused; the rest works.
