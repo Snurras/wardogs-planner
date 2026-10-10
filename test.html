@@ -1457,7 +1457,11 @@ function drawPiece(p,{ghost=false,num=null,covered=false}={}){
     g.append(s('path',{d:`M${c*.99},${c*.205} a${c*.04},${c*.04} 0 0 0 0,${c*.08}`,fill:'var(--bg)',stroke:'var(--concrete-edge)','stroke-width':.7}));
   }
   if(t.sym){
-    if(t.raised){const[x,y,iw,id]=t.raised;
+    if(t.raised&&t.rcells){const[x,y,iw,id]=t.raised;   // Modify took some raised blocks off: raised squares filled, missing ones dashed
+      for(const[cx,cy,up]of t.rcells)g.append(up?s('rect',{x:cx*C,y:cy*C,width:C,height:C,fill:'var(--ink)','fill-opacity':.28,stroke:'var(--ink)','stroke-width':1.2})
+        :s('rect',{x:cx*C+3,y:cy*C+3,width:C-6,height:C-6,fill:'none',stroke:'var(--ink)','stroke-width':1.4,'stroke-dasharray':'4 3',opacity:.8}));
+      g.append(s('rect',{x:x*C,y:y*C,width:iw*C,height:id*C,fill:'none',stroke:'var(--ink)','stroke-width':2}))}
+    else if(t.raised){const[x,y,iw,id]=t.raised;
       g.append(s('rect',{x:x*C,y:y*C,width:iw*C,height:id*C,fill:'var(--ink)','fill-opacity':.28,stroke:'var(--ink)','stroke-width':2}));
       for(let i=1;i<iw;i++)g.append(s('line',{x1:(x+i)*C,y1:y*C,x2:(x+i)*C,y2:(y+id)*C,stroke:'var(--ink)','stroke-width':1.2}));
       for(let i=1;i<id;i++)g.append(s('line',{x1:x*C,y1:(y+i)*C,x2:(x+iw)*C,y2:(y+i)*C,stroke:'var(--ink)','stroke-width':1.2}));}
@@ -4381,7 +4385,9 @@ function structGeo(p){const base=P[p.t],d=bpOf(p.t);if(!base||!d||!p.mod)return 
   const g=Object.assign(Object.create(base),{h:Math.max(1,...top),hm:(lx,ly)=>top[ly*w+lx]||0,
     sym:{...S0,arrow:[...(S0.arrow||[]),...holes],win,ladder},two,deck:deck&&!two,mod:1,st});
   if(base.raised){const[cx,cy,iw,id]=base.raised;let c=0,r=0;for(let y=0;y<dd;y++)for(let x=0;x<w;x++){const v=top[y*w+x];if(x>=cx&&x<cx+iw&&y>=cy&&y<cy+id)c=Math.max(c,v);else r=Math.max(r,v)}
-    if(c<=r){g.raised=undefined;g.trimmed=base.raised}}   // the raised centre fell: drawn like a trimmed one
+    if(c<=r){g.raised=undefined;g.trimmed=base.raised}   // the raised centre fell: drawn like a trimmed one
+    else{const cells=[];for(let y=cy;y<cy+id;y++)for(let x=cx;x<cx+iw;x++)cells.push([x,y,top[y*w+x]>r]);   // part of the centre taken off: show each square
+      if(cells.some(q=>!q[2]))g.rcells=cells}}
   if(GEO_CACHE.size>200)GEO_CACHE.clear();GEO_CACHE.set(key,g);return g}
 window.structGeo=structGeo;
 /* A structure on the map as the blocks that stand now, in world squares (used by the threat check).
