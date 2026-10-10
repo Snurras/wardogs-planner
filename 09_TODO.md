@@ -7,6 +7,12 @@ The Base Defender mini-game has its own doc: [10_BASE_DEFENDER.md](10_BASE_DEFEN
 Things that are wrong or broken and hurt the player directly.
 
 - [ ] **Side view**: ignore a single click on the grid, and close Side view when you press play on the threat check.
+- [ ] **Modify structure** Now that structures are built by blocks I want to change this tool. If pressed it should let me remove and place hescos etc straight into the structure. Add Layer 1,2 or 3 to handle multiple floors. So if I click layer 1, I can add remove on bottom floor, layer 2, on middle floor and on layer 3 on roof (eg removing the center 2X2). Displayed number of layers should align with modifiable layers in structure.
+
+
+Rule for how structures handles placement with ladders. As mentioned erlier a ladder can block a hesco or bremer from being built in the squeare. This is ignored when placing structure. You can place them directly adjacent and block the ladder. You can also have an existing wall/hesco and place a building so its ladder ends up inside the existing wall/hesco. 
+
+
 
 ## Polish
 Things that work but could be better: looks, ease of use, small annoyances.
