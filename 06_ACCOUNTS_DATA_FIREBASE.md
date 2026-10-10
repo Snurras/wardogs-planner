@@ -30,3 +30,9 @@ Small bubbles pointing at easy-to-miss tools, one at a time, at most once per vi
 
 ## Comments
 Design comments + four feedback boards on About. Some comment tests (b46) are flaky.
+
+## Design as text (10 Oct 2026)
+- **Copy as text** (top bar) copies `designDoc()` as JSON. **Save .txt** / **Import .txt…** in the Open menu ("File on this device"): local file only, nothing is uploaded.
+- Import: max 512 KB (`TXT_MAX`), must be a JSON object with `pieces`; `designFromText` keeps only known piece types on the map, cleans plan keys against `Haul.PLAN_DEFAULT`, names to plain text.
+- Every blueprint that comes with a design (file, shared design, saved structure) goes through `cleanBlueprint` in `registerCustom`: known block types only, x/y 0–15, z 0–12, ≤ 2000 blocks, ≤ 40 structures, plain-text names.
+

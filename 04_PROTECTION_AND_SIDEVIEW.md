@@ -24,12 +24,17 @@ Use for: Direct ground fire protection rules, the emplacement hover picture, the
 - No coloured bars or dashed squares on the map (removed on request).
 
 ## Side view tool (S)
-- Drag a rectangle → view covers the map with ✕. Everything in the area drawn back to front with a slight camera angle **from the upper right** (back rows move up-left; front, top and left faces visible). Ground shows numbered rows (1 = front).
+- Drag a rectangle → view covers the map with ✕. **3D look** (default since 10 Oct 2026, staging v119): the Structure designer's high camera, turned slightly so you look mostly along the view direction; pieces drawn back to front, cut at the edge of the marked area. Ground shows the grid and numbered rows (1 = front).
 - R walks round clockwise: look N (W left, E right) → E → S → W; Shift+R back. Compass + text show the direction.
+- **Layer ▼ ▲** (or [ ]): everything under that height under a grey veil; blocks crossing the layer are cut at it. **Hide above**: hides what is over the layer. A new area starts at H0.
+- **3D** button: back to the old flat side view (remembered in this browser, `wd_sv3d`).
 - Clicking Side view (or S) again → back to the map with the area kept as a dashed outline; again → same view. Esc = back to map. ✕, a new area, or another tool clears it. Zoom − / Fit / +.
-- Emplacements show weapon, soldier and their angle/range lines (flat, in their own row).
+- Structures (built-in, your own, Modify changes) are drawn from their blueprint blocks: corner HESCO 1.65, roof slab resting on it, windows as wooden frames, ladders, camo net on the top roof.
+- Emplacements: weapon + soldier are the old 2D drawings standing upright, aimed at the worse of the left/right sides. Protection in the **real direction for all four sides**: faint blue fan per side; a limited side gets a dashed ground line out to the checked distance (red poor / orange limited) and its blocked angle (CIWS, Talon) or mortar range standing up in that direction. Stingray: one dashed 80° line.
+- Field pieces in 3D: Sandbags (bags on both visible faces), Barbed wire (posts, strands, coil rings), Hedgehog (three beams), Recon tent (camo net on four poles).
+- Code: `sv3dSvg(a,view,L,{cut})` (projection `YAW` 22°, `EL` 30°, `KZ`), `svRender3d`, `sv3dOn`, `svLayer`; the old picture is `svRender` below it. Prototype + review page: private artifact "Side View 3D Mockup".
 
-## How pieces are drawn (3D boxes in each piece's own layout: `svPieceBoxes`, `svBoxes`, `svFrame`, `svDetail`)
+## How pieces are drawn (3D boxes in each piece's own layout: `svPieceBoxes`, `svBoxes`, `svFrame`, `svDetail`; the 3D look uses the same boxes)
 - Bunker: 2h HESCO walls; entrance 1.4h with HESCO above; windows 1–1.3h on the middle two squares (not on the entrance side); thin roof (no extra height); camo net.
 - Recon Tower: ground ring 2h with entrances (1.4h assumed), bunker-style floor 2 with windows and the opening at the ladder, yellow ladder outside, 2×2 small HESCOs on top (gone when trimmed).
 - Shelter: 2h ring, 2h entrances, thin roof, 3×3 small HESCOs on top (gone when trimmed).

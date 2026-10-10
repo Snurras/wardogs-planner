@@ -132,7 +132,7 @@ button{cursor:pointer}
 .svhead .svt{font:700 15px var(--f-head);letter-spacing:.08em;text-transform:uppercase}
 .svhead #svDir{flex:1 1 160px;min-width:0;font-size:12px;line-height:1.25}
 .svhead .svctl{display:inline-flex;gap:6px;margin-left:auto;flex:none}
-.svhead #svCompass{display:inline-flex}.svsp{flex:1}.svx{font-weight:800}
+.svhead #svCompass{display:inline-flex}.svlay{display:inline-flex;align-items:center;gap:6px;font-size:12px}.svlay #svLayN{font:600 13px 'IBM Plex Mono',monospace;min-width:26px;text-align:center}.svlay .svcut{display:inline-flex;gap:4px;align-items:center}#svLook[aria-pressed="true"]{background:var(--accent);color:var(--bg);border-color:var(--accent)}.svsp{flex:1}.svx{font-weight:800}
 .svbody{flex:1;min-height:0;overflow:auto;display:flex;background:var(--bg)}
 .modbody{flex:1;min-height:0;overflow:auto;display:flex;flex-wrap:wrap;gap:14px;padding:12px;background:var(--bg)}
 .modleft{display:flex;flex-direction:column;gap:8px;flex:0 1 auto}.modright{display:flex;flex-direction:column;gap:8px;flex:1 1 240px;min-width:220px;font-size:13px}
@@ -538,6 +538,7 @@ a{color:var(--accent)}
     <select id="openSel" class="picksel" aria-label="Open a template or saved design"></select>
     <button class="btn ghost" type="button" id="promoBtn" hidden>Make template</button>
     <button class="btn ghost" type="button" id="delBtn" hidden>Delete</button>
+    <input type="file" id="importTxt" accept=".txt,.json,text/plain,application/json" hidden>
     <button class="btn ghost" type="button" id="copyDesignBtn" title="Copy the open design as text, to paste into a chat with Claude">Copy as text</button>
     <form id="saveForm" style="display:flex;gap:6px;align-items:center">
       <input type="text" id="dName" placeholder="Design name" maxlength="60" autocomplete="off" aria-label="Design name">
@@ -637,7 +638,7 @@ a{color:var(--accent)}
           <div class="modright"><div id="modAsk"></div><div id="modRules"></div><dl class="kv" id="modList"></dl>
             <p class="status">A block you put back stands again but holds nothing up: in the game a rebuilt HESCO doesn't count, so the structure is as weak as before. Corner HESCO, floors, roofs, windows and ladders can't be put back.</p>
             <button class="mini" type="button" id="modReset">Undo all changes to this structure</button></div></div></div>
-        <div class="svpanel" id="svPanel" hidden role="dialog" aria-label="Side view"><div class="svhead"><b class="svt">Side view</b><span id="svCompass"></span><span class="status" id="svDir"></span><button class="mini" type="button" id="svRotate">Press R to rotate view</button><span class="svctl"><button class="mini" type="button" id="svZoomOut" aria-label="Zoom out">−</button><button class="mini" type="button" id="svFitBtn">Fit</button><button class="mini" type="button" id="svZoomIn" aria-label="Zoom in">+</button><button class="mini svx" type="button" id="svClose" aria-label="Close side view">✕</button></span></div><div class="svbody" id="svBody"><svg id="svSvg" role="img" aria-label="Side view of the marked area"></svg></div></div></div>
+        <div class="svpanel" id="svPanel" hidden role="dialog" aria-label="Side view"><div class="svhead"><b class="svt">Side view</b><span id="svCompass"></span><span class="status" id="svDir"></span><button class="mini" type="button" id="svRotate">Press R to rotate view</button><span class="svlay" id="svLay" hidden><span class="svlt">Layer</span><button class="mini" type="button" id="svLayDn" aria-label="Layer down" title="Layer down ( [ )">▼</button><b id="svLayN">H0</b><button class="mini" type="button" id="svLayUp" aria-label="Layer up" title="Layer up ( ] )">▲</button><label class="svcut"><input type="checkbox" id="svCut"> Hide above</label></span><span class="svctl"><button class="mini" type="button" id="svLook" aria-pressed="true" title="3D look on; press for the old flat side view">3D</button><button class="mini" type="button" id="svZoomOut" aria-label="Zoom out">−</button><button class="mini" type="button" id="svFitBtn">Fit</button><button class="mini" type="button" id="svZoomIn" aria-label="Zoom in">+</button><button class="mini svx" type="button" id="svClose" aria-label="Close side view">✕</button></span></div><div class="svbody" id="svBody"><svg id="svSvg" role="img" aria-label="Side view of the marked area"></svg></div></div></div>
         <div class="maprow"><div class="msg" id="msg"></div><div class="mapctl" aria-label="Map view"><button class="mini" type="button" id="zoomOut" aria-label="Zoom out">−</button><span class="mono status" id="zoomLbl">25×25</span><button class="mini" type="button" id="zoomIn" aria-label="Zoom in">+</button><button class="mini" type="button" id="zoomFit" title="Zoom to show the whole design">Fit</button><label class="chk"><input type="checkbox" id="gridLbl"> Grid labels</label></div></div>
       </div>
     </section>
@@ -2242,12 +2243,181 @@ function svEmplacement(p,x,len,base,G,A,view){const w=DGF_W[p.t],res=dgfMap(p),s
   let wp='';if(w!=='talon')wp+=svgSoldier(w==='ciws'?cx-1.72*G:w==='sting'?cx-1.32*G:cx-(e-.35)*G,base,G,1);wp+=svgWeapon(w,cx,base,py,G,aim);
   o.push(worseL?`<g transform="translate(${2*cx},0) scale(-1,1)">${wp}</g>`:wp);
   return o.join('')}
+// Side view in the Structure designer's 3D look (the default; the old flat look stays behind the 3D button). Draws area a = {x,y,w,d} looking view ('N','E','S','W').
+// L = layer: everything below H L sits under a grey veil. Returns an SVG string.
+(function(){
+const SN=Math.PI/180, YAW=22*SN, EL=30*SN, KZ=.82;            // slight turn to the right (as today), high angle (as the designer)
+const HC=['#B08F5C','#C9A970','#937548','#5E4826'],               // HESCO: front, top, side, edge
+      CORN=['#A88654','#C2A169','#8C6E44','#5E4826'],
+      ROOF=['#5E574A','#6E6656','#4E483D','#2A241B'],FLOOR=['#B9BCB6','#C6C8C2','#A3A6A0','#8B8E88'],
+      WOOD=['#7A6A55','#8E7D66','#6B5D4A','#4A4034'],SAND=SVC.sand,DOOR=SVC.door;
+const BC={hesco_s:HC,hesco_l:HC,corner:CORN,sandbags:SAND,door:DOOR,window:WOOD,floor:FLOOR,roof:ROOF};
+function rotUW(view,a,x,y){switch(view){            // world point → (u: left→right, w: back→front) for the view
+  case'E':return[y-a.y,a.x+a.w-x];case'S':return[a.x+a.w-x,a.y+a.d-y];case'W':return[a.y+a.d-y,x-a.x];default:return[x-a.x,y-a.y]}}
+function viewSize(view,a){return view==='E'||view==='W'?[a.d,a.w]:[a.w,a.d]}
+// box in world coordinates → its corners in view space
+function toView(view,a,bx){const c=[[bx.x0,bx.y0],[bx.x1,bx.y0],[bx.x0,bx.y1],[bx.x1,bx.y1]].map(([x,y])=>({x,y,v:rotUW(view,a,x,y)}));
+  return{u0:Math.min(...c.map(q=>q.v[0])),u1:Math.max(...c.map(q=>q.v[0])),w0:Math.min(...c.map(q=>q.v[1])),w1:Math.max(...c.map(q=>q.v[1])),c}}
+window.sv3dSvg=function(a,view,L=0,opt={}){
+  const G=opt.G||46,[NU,NW]=viewSize(view,a),cs=Math.cos(YAW),sn=Math.sin(YAW),se=Math.sin(EL),ce=Math.cos(EL)*KZ;
+  const Px=(u,w)=>(u*cs+w*sn)*G, Dv=(u,w)=>(-u*sn+w*cs), Py=(u,w,z)=>Dv(u,w)*se*G-z*ce*G;
+  const P3=(u,w,z)=>[Px(u,w),Py(u,w,z)],pt=p=>p.map(v=>v.toFixed(1)).join(','),poly=a2=>a2.map(pt).join(' ');
+  const items=[];   // {k: depth key (bigger = nearer), z, svg}
+  const inA=(x,y)=>x>=a.x&&y>=a.y&&x<a.x+a.w&&y<a.y+a.d;
+  // one box: world rect x0..x1, y0..y1, z0..z1 (z1b: sloped top towards y1 in its own layout handled by caller via 'hz')
+  function box(bx){if(!bx.frame){const x0=Math.max(bx.x0,a.x),x1=Math.min(bx.x1,a.x+a.w),y0=Math.max(bx.y0,a.y),y1=Math.min(bx.y1,a.y+a.d);if(x1-x0<1e-6||y1-y0<1e-6)return;if(x0!==bx.x0||x1!==bx.x1||y0!==bx.y0||y1!==bx.y1){if(bx.hz)return;bx={...bx,x0,x1,y0,y1}}}
+    else if(!inA((bx.x0+bx.x1)/2,(bx.y0+bx.y1)/2))return;
+    if(L>0&&!bx.frame&&!bx.hz&&bx.zk==null&&bx.z0<L-1e-6&&bx.z1>L+1e-6){box({...bx,z1:L,net:0});box({...bx,z0:L});return}const{u0,u1,w0,w1,c}=toView(view,a,bx),z0=bx.z0,h=(u,w)=>{if(!bx.hz)return bx.z1;const q=c.find(q=>Math.abs(q.v[0]-u)<1e-6&&Math.abs(q.v[1]-w)<1e-6);return bx.hz(q.x,q.y)};
+    const[f,t,sd,e]=bx.c||SVC.grey,o=[],vis=bx.veil;
+    const FL=[u0,w1],FR=[u1,w1],BL=[u0,w0],BR=[u1,w0];
+    const face=(pts,fill,dk)=>{o.push(`<polygon points="${poly(pts)}" fill="${fill}" stroke="${e}" stroke-width=".7" stroke-linejoin="round"/>`);if(dk)o.push(`<polygon points="${poly(pts)}" fill="#000" opacity="${dk}"/>`)};
+    if(bx.frame){o.push(frame(u0,u1,w0,w1,z0,bx.z1,bx));items.push({k:Dv((u0+u1)/2,(w0+w1)/2),z:z0,svg:o.join('')});return}
+    // left face (normal −u) and front face (normal +w) are the ones you see; then the top
+    face([P3(...BL,z0),P3(...FL,z0),P3(...FL,h(...FL)),P3(...BL,h(...BL))],bx.sideFill||sd,0);
+    face([P3(...FL,z0),P3(...FR,z0),P3(...FR,h(...FR)),P3(...FL,h(...FL))],bx.frontFill||f,0);
+    face([P3(...BL,h(...BL)),P3(...FL,h(...FL)),P3(...FR,h(...FR)),P3(...BR,h(...BR))],bx.topFill||t,0);
+    if(bx.mesh){for(const k of[.33,.67]){const z1=h(...FL);const A1=P3(u0+(u1-u0)*k,w1,z0),A2=P3(u0+(u1-u0)*k,w1,z1);o.push(`<path d="M${pt(A1)}L${pt(A2)}" stroke="${e}" stroke-width=".45" opacity=".35"/>`);
+      const B1=P3(u0,w0+(w1-w0)*k,z0),B2=P3(u0,w0+(w1-w0)*k,z1);o.push(`<path d="M${pt(B1)}L${pt(B2)}" stroke="${e}" stroke-width=".45" opacity=".35"/>`)}
+      for(let z=z0+.5;z<bx.z1-.05;z+=.5){o.push(`<path d="M${pt(P3(u0,w1,z))}L${pt(P3(u1,w1,z))}M${pt(P3(u0,w0,z))}L${pt(P3(u0,w1,z))}" stroke="${e}" stroke-width=".35" opacity=".22"/>`)}}
+    if(bx.net){o.push(`<polygon points="${poly([P3(...BL,h(...BL)+.02),P3(...FL,h(...FL)+.02),P3(...FR,h(...FR)+.02),P3(...BR,h(...BR)+.02)])}" fill="url(#svNet)" opacity=".6"/>`)}
+    if(bx.det&&bx.det!=='frame'){o.push(onFace(bx.det,P3(u0,w1,h(...FL)),P3(u1,w1,h(...FR)),P3(u0,w1,z0),bx.raw));
+      if(bx.det2)o.push(onFace(bx.det,P3(u0,w0,h(...BL)),P3(u0,w1,h(...FL)),P3(u0,w0,z0),bx.raw))}
+    items.push({k:Dv((u0+u1)/2,(w0+w1)/2)+(bx.kBias||0),z:bx.zk??z0,svg:o.join('')})}
+  // a 2D detail laid on a face: TL, TR, BL are the face's corners on screen
+  function onFace(det,TL,TR,BL,raw){const wp=Math.hypot(TR[0]-TL[0],TR[1]-TL[1]),hp=Math.hypot(BL[0]-TL[0],BL[1]-TL[1]);if(wp<2||hp<1)return'';
+    const m=[(TR[0]-TL[0])/wp,(TR[1]-TL[1])/wp,(BL[0]-TL[0])/hp,(BL[1]-TL[1])/hp,TL[0],TL[1]].map(v=>v.toFixed(4)).join(',');
+    return`<g transform="matrix(${m})">${svDetail(det,0,0,wp,hp,G*ce,raw||{},true)}</g>`}
+  function frame(u0,u1,w0,w1,z0,z1,bx){const col=bx.col||'#A9AEB0',t=Math.max(1,(bx.post||.05)*G),o=[],post=(u,w)=>`<path d="M${pt(P3(u,w,z0))}L${pt(P3(u,w,z1))}" stroke="${col}" stroke-width="${t}"/>`;
+    const n=Math.max(1,Math.round((z1-z0)/(bx.step||1))),hh=(z1-z0)/n;let q='';
+    const br=(p1,p2)=>{for(let k=0;k<n;k++){const za=z0+k*hh,zb=za+hh;q+=`M${pt(P3(...p1,za))}L${pt(P3(...p2,zb))}M${pt(P3(...p2,za))}L${pt(P3(...p1,zb))}M${pt(P3(...p1,zb))}L${pt(P3(...p2,zb))}`}};
+    br([u0,w0],[u1,w0]);br([u0,w0],[u0,w1]);br([u1,w0],[u1,w1]);br([u0,w1],[u1,w1]);
+    o.push(post(u1,w0),post(u0,w0),`<path d="${q}" stroke="${col}" stroke-width="1" fill="none" opacity=".85"/>`,post(u1,w1),post(u0,w1));return o.join('')}
+  // billboard: an old 2D drawing standing upright at a point (cx,cy world, z), facing you
+  function card(wx,wy,z,svgFn,k){if(!inA(wx,wy))return;const[u,w]=rotUW(view,a,wx,wy),x=Px(u,w),y=Py(u,w,z);items.push({k:Dv(u,w)+(k||0),z:z+.01,svg:svgFn(x,y,G*ce)})}
+  const B=(x0,x1,y0,y1,z0,z1,c,more)=>({x0,x1,y0,y1,z0,z1,c,...more});
+  // a box in a piece's own layout → world rect
+  const local=(p,b)=>{const q=[[b.x0,b.y0],[b.x1,b.y1]].map(([lx,ly])=>svLocalToWorld(p,lx,ly));return{x0:Math.min(q[0][0],q[1][0]),x1:Math.max(q[0][0],q[1][0]),y0:Math.min(q[0][1],q[1][1]),y1:Math.max(q[0][1],q[1][1])}};
+  // big low boxes are cut into squares so they sort right against their neighbours
+  const push=bx=>{const W=bx.x1-bx.x0,D=bx.y1-bx.y0;if(!bx.frame&&!bx.det&&!bx.hz&&(W>1.01||D>1.01)){
+      for(let x=bx.x0;x<bx.x1-1e-6;x=Math.floor(x+1+1e-6))for(let y=bx.y0;y<bx.y1-1e-6;y=Math.floor(y+1+1e-6))box({...bx,x0:x,x1:Math.min(bx.x1,Math.floor(x+1+1e-6)),y0:y,y1:Math.min(bx.y1,Math.floor(y+1+1e-6))});return}
+    box(bx)};
+  const A=svAxis(view);
+  const list=pieces.filter(p=>hit(rectOf(p),a));
+  for(const p of list){const t=P[p.t],r=rectOf(p),z=p.z||0;
+    if(p.fnd)for(let x=r.x;x<r.x+r.w;x++)for(let y=r.y;y<r.y+r.d;y++)push(B(x,x+1,y,y+1,z-1,z,HC,{mesh:1}));
+    const bp=window.bpOf&&bpOf(p.t);
+    if(bp){const st=pieceState(p),R0=R(p);let roofTop=null;
+      for(const b of bpBlocks(bp)){if(st&&!st.present(b.i))continue;if(b.t==='ladder'){ladder(p,b);continue}
+        const er=bEdge(b),w=local(p,{x0:er.x,x1:er.x+er.w,y0:er.y,y1:er.y+er.d}),zz=z+b.z;
+        if(b.t==='floor'){push({...w,z0:zz,z1:zz+.05,c:FLOOR});continue}
+        if(b.t==='roof'){push({...w,z0:zz-.3,z1:zz+.04,zk:zz,c:ROOF,net:(p.t==='bunker'||/recon/.test(p.t)||/^cs_/.test(p.t))&&isTopRoof(bp,b)});continue}
+        if(b.t==='window'){winFrame(w,zz,b,R0);continue}
+        const h=b.t==='corner'?1.65:CB[b.t]||1;push({...w,z0:zz,z1:zz+h,c:BC[b.t]||HC,mesh:/hesco|corner/.test(b.t)})}
+      continue}
+    if(/^hesco/.test(p.t)){for(let x=r.x;x<r.x+r.w;x++)for(let y=r.y;y<r.y+r.d;y++)push(B(x,x+1,y,y+1,z,z+t.h,HC,{mesh:1}));continue}
+    if(t.c==='emp'){push({x0:r.x,x1:r.x+r.w,y0:r.y,y1:r.y+r.d,z0:z,z1:z+.04,c:['#9AA08C','#A9AF9A','#8A907C','#7B8471']});
+      emp3d(p,r,z);continue}
+    const bxs=svPieceBoxes(p);
+    if(bxs){for(const b of bxs){const w=local(p,b);const o={...w,z0:z+b.z0,z1:z+b.z1,c:b.c,det:b.det,raw:b,frame:b.det==='frame',post:b.post,step:b.step,col:b.col,frontFill:b.frontFill,topFill:b.topFill};
+        if(b.z1b!=null){const zf=z+b.z1,zb=z+b.z1b;o.hz=(wx,wy)=>{const[lx,ly]=w2l(p,wx,wy);return Math.abs(ly-b.y0)<.01?zf:zb}}
+        if(b.det==='flag'){const q=local(p,b);card(q.x1,(q.y0+q.y1)/2,z+b.z1,(x,y,g)=>`<path d="M${x} ${y} q${.25*g} ${.05*g} ${.55*g} 0 v${.9*g} q${-.3*g} ${.08*g} ${-.55*g} 0 Z" fill="#2E3F82" stroke="#1A2550"/>`,.5);continue}
+        push(o)}continue}
+    if(p.t==='sandbags'){const w=local(p,{x0:.03,x1:1.97,y0:.22,y1:.78});box({...w,z0:z,z1:z+dgfSB(),c:SAND,det:'bags',det2:1,raw:{}});continue}
+    if(!inA(r.x+r.w/2-.01,r.y+r.d/2-.01)&&/barbed|hedgehog|recon_tent/.test(p.t))continue;
+    if(p.t==='barbed'){wire(p,z);continue}
+    if(p.t==='hedgehog'){hedgehog(p,z);continue}
+    if(p.t==='recon_tent'){tent(p,z);continue}
+    const len=A.len(p);card(r.x+r.w/2,r.y+r.d/2,z,(x,y,g)=>svWhole(p,x-len*g/2,len,y,g,A),0)}
+  // 3D helpers for the field pieces (points in the piece's own layout)
+  function L3(p,lx,ly,z){const[wx,wy]=svLocalToWorld(p,lx,ly),[u,w]=rotUW(view,a,wx,wy),q=P3(u,w,z);q.k=Dv(u,w);return q}
+  function seg(p,A1,B1,z0,col,wd){const a1=L3(p,A1[0],A1[1],z0+A1[2]),b1=L3(p,B1[0],B1[1],z0+B1[2]);
+    return`<path d="M${pt(a1)}L${pt(b1)}" stroke="${col}" stroke-width="${wd}" stroke-linecap="round"/>`}
+  function wire(p,z){const t=P[p.t],len=t.w,o=[];   // two posts, five strands, a coil of rings between
+    for(const lx of[.1,len-.1])box({...local(p,{x0:lx-.05,x1:lx+.05,y0:.45,y1:.55}),z0:z,z1:z+1.05,c:SVC.galv});
+    for(let k=0;k<6;k++)o.push(seg(p,[.1,.5,.12+k*.17],[len-.1,.5,.12+k*.17],z,'#A9AEB0',.8));
+    for(let lx=.2;lx<len-.15;lx+=.11){let d='';for(let s=0;s<=16;s++){const an=s/16*2*Math.PI,q=L3(p,lx,.5+.44*Math.cos(an),z+.52+.44*Math.sin(an));d+=(s?'L':'M')+pt(q)}
+      o.push(`<path d="${d}" fill="none" stroke="#8E959A" stroke-width=".8"/>`)}
+    const c=L3(p,len/2,.5,z);items.push({k:c.k,z:z+.01,svg:o.join('')})}
+  function hedgehog(p,z){const C=[1,1],o=[],bm=Math.max(3,.13*G*ce);
+    const beams=[[[.35,.35,0],[1.65,1.65,.95]],[[1.65,.35,0],[.35,1.65,.95]],[[.2,1,.05],[1.8,1,.85]]];
+    const order=beams.map(b=>({b,k:(L3(p,...b[0].slice(0,2),0).k+L3(p,...b[1].slice(0,2),0).k)/2})).sort((x,y)=>x.k-y.k);
+    for(const{b}of order)o.push(seg(p,b[0],b[1],z,'#3F4447',bm),seg(p,b[0],b[1],z,'#2A2E30',.8));
+    items.push({k:L3(p,1,1,z).k,z:z+.01,svg:o.join('')})}
+  function tent(p,z){const t=P[p.t];   // camo net on four poles
+    for(const[lx,ly]of[[.15,.15],[t.w-.15,.15],[.15,t.d-.15],[t.w-.15,t.d-.15]])box({...local(p,{x0:lx-.03,x1:lx+.03,y0:ly-.03,y1:ly+.03}),z0:z,z1:z+.7,c:SVC.dark});
+    const w=local(p,{x0:.05,x1:t.w-.05,y0:.05,y1:t.d-.05});
+    box({...w,z0:z+.3,z1:z+.75,c:['url(#svNetG)','url(#svNetG)','url(#svNetG)','#2F3620'],kBias:.3})}
+  function emp3d(p,r,z){const w=DGF_W[p.t],res=dgfMap(p),sp=dgfSpec(w),F=WD.F,mx=F('dgf.mortar.max'),Hp=w==='sting'?1:sp.Hp,lo=sp.lo,cx=r.x+r.w/2,cy=r.y+r.d/2,FR=1.7,rd=d=>d*SN;const clip=(x0,y0,x1,y1)=>{let t1=1;const dx=x1-x0,dy=y1-y0;if(dx>0)t1=Math.min(t1,(a.x+a.w-x0)/dx);if(dx<0)t1=Math.min(t1,(a.x-x0)/dx);if(dy>0)t1=Math.min(t1,(a.y+a.d-y0)/dy);if(dy<0)t1=Math.min(t1,(a.y-y0)/dy);return[x0+dx*Math.max(0,t1),y0+dy*Math.max(0,t1)]};
+    const W3=(x,y,zz)=>{const[u,w2]=rotUW(view,a,x,y);return P3(u,w2,zz)},Dk=(x,y)=>{const[u,w2]=rotUW(view,a,x,y);return Dv(u,w2)};
+    const CLS={free:'#3F8A3A',part:'#C98A1C',lim:'#C98A1C',poor:'#B3261E'};
+    const fs=Math.max(11,.36*G),txt=(q,s,col)=>`<text x="${q[0].toFixed(1)}" y="${q[1].toFixed(1)}" text-anchor="middle" font-size="${fs}" font-weight="800" fill="${col}" stroke="var(--bg)" stroke-width="3" paint-order="stroke">${s}</text>`;
+    if(w!=='sting')[[0,-1],[1,0],[0,1],[-1,0]].forEach(([dx,dy],i)=>{const sd=res.sides[i],o=[],half=dx?r.w/2:r.d/2;
+      // ground: from the edge out to where the check stops, coloured by how this side does
+      const col=w==='mortar'?(sd.range>=mx?CLS.free:sd.range>=650?CLS.lim:CLS.poor):CLS[sd.cls||'free'];
+      const g0=[cx+dx*half,cy+dy*half],reach=Math.min(sp.reach||5,6),g1=[cx+dx*(half+reach),cy+dy*(half+reach)];
+      const limited=w==='mortar'?sd.range<mx:sd.cls&&sd.cls!=='free',g2=clip(...g0,...g1);
+      if(limited&&Math.hypot(g2[0]-g0[0],g2[1]-g0[1])>.2)o.push(`<path d="M${pt(W3(...g0,z+.02))}L${pt(W3(...g2,z+.02))}" stroke="${col}" stroke-width="2.4" stroke-dasharray="6 4" opacity=".8"/>`);
+      const pv=[cx,cy,z+Hp],at=(ang,R2)=>W3(pv[0]+dx*R2*Math.cos(rd(ang)),pv[1]+dy*R2*Math.cos(rd(ang)),pv[2]+R2*Math.sin(rd(ang)));
+      const fan=(a1,a2,fill,R2=FR)=>{const ps=[W3(pv[0],pv[1],pv[2])];for(let s=0;s<=14;s++)ps.push(at(a1+(a2-a1)*s/14,R2));return`<polygon points="${poly(ps)}" fill="${fill}"/>`};
+      if(w==='ciws'||w==='talon'){o.push(fan(lo,90,'rgba(63,127,166,.12)'));
+        if(sd.cls!=='free'&&sd.worst){const t2=sd.worst.a;o.push(fan(lo,t2,'rgba(179,38,30,.33)'),`<path d="M${pt(W3(...pv))}L${pt(at(t2,FR+.25))}" stroke="#B3261E" stroke-width="1.6" stroke-dasharray="5 3"/>`,txt(at(t2,FR+.55),Math.round(t2)+'°','#B3261E'))}
+}
+      if(w==='mortar'){const rg=sd.range,an=rg>=mx?lo:lo+(mx-rg)/F('dgf.mortar.perDeg');
+        o.push(`<path d="M${pt(W3(...pv))}L${pt(at(an,FR))}" stroke="${col}" stroke-width="2.4"/>`,txt(at(an,FR+.45),rg>=mx?mx+' m':'max '+rg+' m',col))}
+      items.push({k:Dk(cx+dx*1.2,cy+dy*1.2),z:z+.02,svg:o.join('')})});
+    else{const pv=W3(cx,cy,z+1),q=W3(cx,cy-Math.cos(rd(lo))*2.4,z+1+Math.sin(rd(lo))*2.4);items.push({k:Dk(cx,cy)+.02,z:z+.02,svg:`<path d="M${pt(pv)}L${pt(q)}" stroke="#3F7FA6" stroke-width="1.8" stroke-dasharray="5 3"/>`})}
+    // weapon and soldier: today's drawing, standing up, aimed at the side that does worst
+    const L0=res.sides[A.L],R0=res.sides[A.R],worseL=dgfCmp(dgfSideScore(res,L0),dgfSideScore(res,R0))>0,fsd=worseL?L0:R0;let aim=lo;
+    if((w==='ciws'||w==='talon')&&fsd.cls!=='free'&&fsd.worst)aim=Math.max(lo,fsd.worst.a);if(w==='mortar')aim=fsd.range>=mx?lo:lo+(mx-fsd.range)/F('dgf.mortar.perDeg');
+    card(cx,cy,z,(x,y,g)=>{const e=w==='sting'?1.5:sp.e;let wp='';if(w!=='talon')wp+=svgSoldier(w==='ciws'?x-1.72*g:w==='sting'?x-1.32*g:x-(e-.35)*g,y,g,1);
+      wp+=svgWeapon(w,x,y,y-Hp*g,g,aim);return worseL?`<g transform="translate(${2*x},0) scale(-1,1)">${wp}</g>`:wp},.01)}
+  function isTopRoof(bp,b){return!bpBlocks(bp).some(o=>o.t==='roof'&&o.z>b.z)}
+  function w2l(p,wx,wy){const t=P[p.t];switch(R(p)){case 1:return[wy-p.y,p.x+t.d-wx];case 2:return[p.x+t.w-wx,p.y+t.d-wy];case 3:return[p.y+t.w-wy,wx-p.x];default:return[wx-p.x,wy-p.y]}}
+  function bEdge(b){const two=b.t==='sandbags'||b.t==='window',e=b.t==='sandbags'?.5:b.t==='window'?.2:0;
+    const cs=two?(b.r%2?[[b.x,b.y],[b.x,b.y+1]]:[[b.x,b.y],[b.x+1,b.y]]):[[b.x,b.y]],x0=Math.min(...cs.map(c=>c[0])),y0=Math.min(...cs.map(c=>c[1]));
+    if(!two)return{x:x0,y:y0,w:1,d:1};switch(b.r%4){case 0:return{x:x0,y:y0,w:2,d:e};case 2:return{x:x0,y:y0+1-e,w:2,d:e};case 1:return{x:x0+1-e,y:y0,w:e,d:2};default:return{x:x0,y:y0,w:e,d:2}}}
+  function winFrame(w,zz,b){const along=(w.x1-w.x0)>(w.y1-w.y0),Lg=along?w.x1-w.x0:w.y1-w.y0,p2=.12;
+    for(const k of[0,.5,1]){const o=k*(Lg-p2);push(along?{x0:w.x0+o,x1:w.x0+o+p2,y0:w.y0,y1:w.y1,z0:zz,z1:zz+1,c:WOOD}:{x0:w.x0,x1:w.x1,y0:w.y0+o,y1:w.y0+o+p2,z0:zz,z1:zz+1,c:WOOD})}
+    push({...w,z0:zz+.88,z1:zz+1,c:WOOD,kBias:.001});push({...w,z0:zz,z1:zz+.08,c:WOOD})}
+  function ladder(p,b){const[dx,dy]=[[0,-1],[1,0],[0,1],[-1,0]][(b.r+R(p))%4],q=local(p,{x0:b.x+.5,x1:b.x+.5,y0:b.y+.5,y1:b.y+.5}),ex=q.x0+dx*.62,ey=q.y0+dy*.62,px=-dy*.25,py=dx*.25,z0=p.z||0,z1=z0+b.z+.4;
+    const rails=[[ex-px,ey-py],[ex+px,ey+py]].map(([x,y])=>rotUW(view,a,x,y));let s='';
+    for(const[u,w]of rails)s+=`<path d="M${pt(P3(u,w,z0))}L${pt(P3(u,w,z1))}" stroke="#E2B93B" stroke-width="2.2"/>`;
+    for(let zz=z0+.3;zz<=z0+b.z;zz+=.3)s+=`<path d="M${pt(P3(...rails[0],zz))}L${pt(P3(...rails[1],zz))}" stroke="#E2B93B" stroke-width="1.4"/>`;
+    const[u,w]=rotUW(view,a,ex,ey);items.push({k:Dv(u,w)+.02,z:z0,svg:s})}
+  // ground: the marked area, its grid and the compass letters
+  const o=[svNetDefs()],gnd=[P3(0,0,0),P3(NU,0,0),P3(NU,NW,0),P3(0,NW,0)];
+  o.push(`<polygon points="${poly(gnd)}" fill="var(--footing)" opacity=".5" stroke="var(--muted)" stroke-width=".8"/>`);
+  for(let i=1;i<NU;i++)o.push(`<path d="M${pt(P3(i,0,0))}L${pt(P3(i,NW,0))}" stroke="var(--muted)" stroke-width=".4" opacity=".35"/>`);
+  for(let i=1;i<NW;i++)o.push(`<path d="M${pt(P3(0,i,0))}L${pt(P3(NU,i,0))}" stroke="var(--muted)" stroke-width=".4" opacity=".35"/>`);
+  const nm=A.names,lab=(t,u,w)=>{const[x,y]=P3(u,w,0);return`<text x="${x}" y="${y+6}" text-anchor="middle" font-size="18" font-weight="800" fill="var(--muted)">${t}</text>`};
+  o.push(lab(nm[0],-.9,NW/2),lab(nm[1],NU+.9,NW/2),lab(nm[2],NU/2,-.9),lab(nm[3],NU/2,NW+.9));
+  for(let d=0;d<NW;d++){const[x,y]=P3(NU+.3,NW-d-.5,0);o.push(`<text x="${x.toFixed(1)}" y="${(y+4).toFixed(1)}" font-size="11" fill="var(--muted)">${d+1}</text>`)}   // row numbers, 1 = front
+  items.sort((p,q)=>p.k-q.k||p.z-q.z);
+  // veil: what is under the current layer goes grey; above it as normal (or hidden)
+  const below=items.filter(i=>i.z<L-1e-6),above=items.filter(i=>i.z>=L-1e-6);
+  for(const it of below)o.push(it.svg);
+  if(L>0){const lv=[P3(0,0,L),P3(NU,0,L),P3(NU,NW,L),P3(0,NW,L)];o.push(`<polygon points="${poly(lv)}" fill="var(--panel)" opacity=".62"/><polygon points="${poly(lv)}" fill="none" stroke="var(--accent)" stroke-width="1.4" stroke-dasharray="6 4"/>`)}
+  if(!opt.cut)for(const it of above)o.push(it.svg);
+  if(L>0){const[x,y]=P3(NU,NW,L);o.push(`<text x="${x+12}" y="${y+6}" font-size="16" font-weight="700" fill="var(--accent)" font-family="IBM Plex Mono,monospace">H${L}</text>`)}
+  return o.join('')};
+})();
+// 3D look: layer (veil under it), hide above, switch remembered in this browser
+let sv3dOn=ls.get('wd_sv3d')!==false,svLayer=0;
+function svRender3d(){const a=svArea,view=svViewDir,A=svAxis(view);
+  let top=2;for(const p of pieces.filter(p=>hit(rectOf(p),a)))top=Math.max(top,topOf(p));const maxL=Math.ceil(top);svLayer=Math.max(0,Math.min(svLayer,maxL));
+  const sv=$('svSvg');sv.removeAttribute('viewBox');sv.innerHTML=sv3dSvg(a,view,svLayer,{cut:$('svCut').checked});
+  let bb={x:0,y:0,width:400,height:300};try{const b=sv.getBBox();if(b.width>0)bb=b}catch(e){}
+  const m=24,W=bb.width+2*m,H=bb.height+2*m;sv.setAttribute('viewBox',`${bb.x-m} ${bb.y-m} ${W} ${H}`);sv.dataset.w=W;sv.dataset.h=H;
+  $('svDir').textContent=`Looking ${SV_LOOK[view]} · ${SV_NAME[A.names[0]]} on the left, ${SV_NAME[A.names[1]]} on the right · row 1 is the front`;
+  $('svCompass').innerHTML=svCompass(view);$('svLay').hidden=false;$('svLayN').textContent='H'+svLayer;$('svLayDn').disabled=svLayer<=0;$('svLayUp').disabled=svLayer>=maxL;
+  svApplyZoom()}
+const svLayerBy=d=>{svLayer=Math.max(0,svLayer+d);svRender()};
 // the whole picture: everything in the marked area, drawn back to front with a slight camera angle from the upper right.
 // Each row further back moves up and to the left; blocks show their front, top and left faces. Front faces are to scale.
 const SV_OX=.32,SV_OY=.24;
 const SV_TOP={brem:['#DDD5C0','#8E8571'],hesco:['#B8975C','#8A6A35'],roof:['#6B6352','#2A241B'],conc:['#A9AEB2','#7B7E79'],steel:['#8E959A','#3F4447'],door:['#7E8F4E','#2F3620']};
 const SV_SIDE={brem:['#BCB39E','#8E8571'],hesco:['#A5864E','#8A6A35'],roof:['#5E574A','#2A241B'],conc:['#8E959A','#7B7E79'],steel:['#6E7477','#3F4447'],door:['#4E5A2F','#2F3620']};
-function svRender(){const a=svArea;if(!a)return;const view=svViewDir,A=svAxis(view),G=40,ox=SV_OX*G,oy=SV_OY*G;
+function svRender(){const a=svArea;if(!a)return;$('svLook').setAttribute('aria-pressed',sv3dOn);$('svLook').title=sv3dOn?'3D look on; press for the old flat side view':'Old flat side view; press for the 3D look';if(sv3dOn){svRender3d();return}$('svLay').hidden=true;const view=svViewDir,A=svAxis(view),G=40,ox=SV_OX*G,oy=SV_OY*G;
   const[nu,nd]=A.NU(a);
   const UD=(x,y)=>A.UD(a,x,y);               // across (left→right) and depth (0 = front row)
   const inA=(x,y)=>x>=a.x&&y>=a.y&&x<a.x+a.w&&y<a.y+a.d;
@@ -2299,7 +2469,7 @@ function svCompass(view){const L=SV_VIEWS[view].names,t=(x,y,s,b)=>`<text x="${x
   return`<svg viewBox="0 0 70 52" width="70" height="52" aria-hidden="true"><circle cx="35" cy="24" r="14" fill="var(--panel)" stroke="var(--muted)" stroke-width="1.2"/><path d="M27 24 H43" stroke="var(--muted)"/><path d="M35 30 l-3.5 6 h7 Z" fill="var(--accent)"/>${t(10,24,L[0],1)}${t(60,24,L[1],1)}${t(35,15,L[2],0)}${t(35,48,L[3],0)}</svg>`}
 function svFit(){const sv=$('svSvg'),b=$('svBody');svZoom=Math.min((b.clientWidth-8)/sv.dataset.w,(b.clientHeight-8)/sv.dataset.h);svApplyZoom()}
 function svApplyZoom(){const sv=$('svSvg');sv.setAttribute('width',Math.round(sv.dataset.w*svZoom));sv.setAttribute('height',Math.round(sv.dataset.h*svZoom))}
-function svOpen(a,keep){if(!keep)svViewDir='N';svArea=a;$('svPanel').hidden=false;svRender();svFit()}
+function svOpen(a,keep){if(!keep){svViewDir='N';svLayer=0}svArea=a;$('svPanel').hidden=false;svRender();svFit()}
 // Side view button / S: open the tool; with a view open, hide it and keep the dashed marker; press again to bring the same view back
 function svToggle(){if(tool!=='side'){setTool('side');return}
   if(svIsOpen()){$('svPanel').hidden=true;draw();return}
@@ -2312,6 +2482,8 @@ $('svZoomIn').onclick=()=>{svZoom*=1.25;svApplyZoom()};$('svZoomOut').onclick=()
 // R walks round the area clockwise: look north → east → south → west (Shift+R the other way)
 const svTurn=back=>{const o='NESW',i=o.indexOf(svViewDir);svViewDir=o[(i+(back?3:1))%4];svRender();svFit()};
 $('svRotate').onclick=e=>svTurn(e.shiftKey);
+$('svLook').onclick=()=>{sv3dOn=!sv3dOn;ls.set('wd_sv3d',sv3dOn);svRender();svFit()};
+$('svLayUp').onclick=()=>svLayerBy(1);$('svLayDn').onclick=()=>svLayerBy(-1);$('svCut').onchange=()=>svRender();
 $('sideBtn').onclick=()=>svToggle();
 
 /* ---------- Fact sheet pictures (drawn from the same numbers and maths as the map) ---------- */
@@ -2540,7 +2712,7 @@ document.addEventListener('keydown',e=>{const tg=e.target;if((tg.tagName==='INPU
   if(mod&&(e.key==='c'||e.key==='C')&&inSel&&sel.size){e.preventDefault();copySel();return}
   if(mod&&(e.key==='v'||e.key==='V')){e.preventDefault();startPaste();return}
   if(mod)return;
-  if(svIsOpen()){if(e.key==='r'||e.key==='R'){svTurn(e.shiftKey);return}if(e.key==='Escape'){$('svPanel').hidden=true;draw();return}if(e.key==='s'||e.key==='S'){svToggle();return}if(e.key==='+'||e.key==='='){$('svZoomIn').click();return}if(e.key==='-'){$('svZoomOut').click();return}return}
+  if(svIsOpen()){if(e.key==='r'||e.key==='R'){svTurn(e.shiftKey);return}if(e.key==='Escape'){$('svPanel').hidden=true;draw();return}if(e.key==='s'||e.key==='S'){svToggle();return}if(e.key==='+'||e.key==='='){$('svZoomIn').click();return}if(e.key==='-'){$('svZoomOut').click();return}if(sv3dOn&&(e.key===']'||e.key==='[')){svLayerBy(e.key===']'?1:-1);return}return}
   if((e.key==='r'||e.key==='R')&&dgfHoverEmp()){dgfView=dgfView==='NS'?'WE':'NS';draw();return}   // turn the protection picture, not a piece
   if((e.key==='r'||e.key==='R')&&tool==='seal'){turnCentreDoor();return}
   if(e.key==='r'||e.key==='R'){if(tool==='brush'){if(brush){turnBrush();draw()}}else if(inSel&&pasting){turnClip();draw()}else if(inSel&&sel.size)turnSel();else turn()}
@@ -4139,7 +4311,23 @@ function structGeo(p){const base=P[p.t],d=bpOf(p.t);if(!base||!d||!p.mod)return 
     if(c<=r){g.raised=undefined;g.trimmed=base.raised}}   // the raised centre fell: drawn like a trimmed one
   if(GEO_CACHE.size>200)GEO_CACHE.clear();GEO_CACHE.set(key,g);return g}
 window.structGeo=structGeo;
-function registerCustom(id,d){if(!d||!Array.isArray(d.blocks))return null;
+// Blueprints come from files and from other people's designs: keep only known blocks and settings, small whole numbers
+// and plain names, so a bad or hostile blueprint can't hang the page or put markup on it.
+const BP_TYPES=new Set(['floor','roof','hesco_s','hesco_l','corner','sandbags','door','window','ladder']);
+const plainText=(s,n)=>typeof s==='string'?s.replace(/[<>&"'`\u0000-\u001f]/g,'').trim().slice(0,n):'';
+const intIn=(v,lo,hi,def)=>Number.isInteger(v)&&v>=lo&&v<=hi?v:def;
+function cleanBlueprint(d){if(!d||typeof d!=='object'||!Array.isArray(d.blocks)||d.blocks.length>2000)return null;
+  const blocks=[];for(const b of d.blocks){if(!Array.isArray(b)||!BP_TYPES.has(b[0]))continue;
+    const x=intIn(b[1],0,15,null),y=intIn(b[2],0,15,null),z=intIn(b[3],0,12,null);if(x==null||y==null||z==null)continue;
+    const q=[b[0],x,y,z];const r=intIn(b[4],0,3,0),tr=b[5]===1||b[5]===true;if(r||tr)q.push(r);if(tr)q.push(1);blocks.push(q)}
+  if(!blocks.length)return null;
+  const out={v:1,name:plainText(d.name,40)||'Custom structure',short:plainText(d.short,10)||'CS',tier:intIn(d.tier,1,3,3),supplies:intIn(d.supplies,0,100000,0),
+    build:intIn(d.build,0,100000,0),trim:intIn(d.trim,0,100000,0),seal:['large_door','small','any'].includes(d.seal)?d.seal:'large_door',ground:!!d.ground,
+    maxbase:intIn(d.maxbase,0,12,0),ctype:['hesco_l','hesco_s','sandbags','any'].includes(d.ctype)?d.ctype:'hesco_l',blocks};
+  if(d.cmin!=null)out.cmin=intIn(d.cmin,0,2000,0);
+  if(d.fall&&typeof d.fall==='object'){const f={};for(const[k,v]of Object.entries(d.fall))if(/^\d{1,2}$/.test(k)&&Number.isInteger(v)&&v>=1&&v<=2000)f[k]=v;out.fall=f}
+  return out}
+function registerCustom(id,d){d=cleanBlueprint(d);if(!d)return null;
   const bl=d.blocks.map(([t,x,y,z,r,tr])=>({t,x,y,z,r:r||0,tr:!!tr}));
   const cells=b=>(b.t==='sandbags'||b.t==='window')?(b.r%2?[[b.x,b.y],[b.x,b.y+1]]:[[b.x,b.y],[b.x+1,b.y]]):[[b.x,b.y]];
   const solid=bl.filter(b=>CB[b.t]),slab=bl.filter(b=>b.t==='floor'||b.t==='roof');
@@ -4167,7 +4355,7 @@ function registerCustom(id,d){if(!d||!Array.isArray(d.blocks))return null;
   P[id]=t;CUSTOM_DATA[id]=d;
   const D=WD.DEF;D['b.'+id]=d.supplies|0;D['t.'+id]=d.build|0;D['h.'+id]=Math.min(3,Math.max(1,d.tier|0||3));D['c4.'+id]=WD.c4(wall);
   return id}
-function registerCustoms(m){if(m&&typeof m==='object')for(const id in m)if(/^cs_[A-Za-z0-9]+$/.test(id))registerCustom(id,m[id])}
+function registerCustoms(m){if(m&&typeof m==='object'&&!Array.isArray(m))for(const id of Object.keys(m).slice(0,40))if(/^cs_[A-Za-z0-9]{1,40}$/.test(id))registerCustom(id,m[id])}
 function customsUsed(){const o={};for(const p of pieces)if(CUSTOM_DATA[p.t])o[p.t]=CUSTOM_DATA[p.t];return o}
 </script>
 
@@ -4281,7 +4469,7 @@ let tab='design';
    One on screen at a time, each at most once per visit, only right after you do the thing it is about.
    "Never show this tip" is kept per tip: on your account when logged in (users/{uid}.tipsOff), else in this browser. */
 const TIPS={
-  entrances:{sel:'#sealToolBtn',side:'b',title:'Entrances',text:a=>`Your <b>${a?P[a.t].n:'building'}</b> has open entrances. Use <b>Modify an entrance (M)</b> to close one with HESCO or a Door, or open it again.`},
+  entrances:{sel:'#sealToolBtn',side:'b',title:'Entrances',text:a=>`Your <b>${a?plainText(P[a.t].n,40):'building'}</b> has open entrances. Use <b>Modify an entrance (M)</b> to close one with HESCO or a Door, or open it again.`},
   bremer:{sel:'#rotBtn',side:'b',title:'Bremer face',text:()=>`A Bremer’s wall face can’t be jumped, but its footing can be walked on. Press <b>R</b> before placing to turn the face outward.`},
   brush:{sel:'#brushBtn',side:'b',title:'Brush',text:()=>`Building the same stack again? Pick it up with <b>Brush (B)</b> and paint copies with one click or drag.`},
   play:{sel:'#threat .tplay:not([disabled])',side:'l',title:'Watch the attack',text:()=>`Your base can be got into. Press <b>▶</b> to watch how, and tick <b>Show weak points on the map</b> to see where.`},
@@ -4337,9 +4525,35 @@ function renderProc(){if(!$('procS_design'))return;const real=pieces.filter(p=>p
   else $('procS_build').textContent='The order to build in'}
 window.renderProc=renderProc;
 const designDoc=()=>({name:designName,pieces:pieces.map(({bad,...p})=>p),customs:customsUsed(),plan,v:SAVE_V,gapRule:$('gapRule').checked,onlyFob:$('onlyFob').checked});
+// Save .txt / Import .txt: a design as a text file on the user's own device. Nothing is sent anywhere.
+// Import reads at most 512 KB, only as text, parses it as data (never runs it) and keeps only what a design can hold.
+const TXT_MAX=512*1024;
+function saveTxt(){const t=JSON.stringify(designDoc(),null,1),fn=(plainText(designName,60).replace(/[^\w\- ]+/g,'').trim()||'wardogs-design')+'.txt';
+  try{const url=URL.createObjectURL(new Blob([t],{type:'text/plain'})),a=el('a',{href:url,download:fn});document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),4000);
+    status(`Saved “${fn}” to your downloads.`)}catch(e){}
+  if(window.top!==window.self){const ta=$('copyDesignTa');ta.value=t;$('copyDesignDlg').showModal();ta.focus();ta.select()}}   // inside claude.ai the download may be blocked: copy box too
+function designFromText(txt){let d;const s=String(txt).replace(/^\uFEFF/,'').trim();
+  if(!s.startsWith('{'))return{err:'That file is not a saved design (it should start with {).'};
+  try{d=JSON.parse(s)}catch(e){return{err:'That file is not a saved design (the text is damaged or not a design).'}}
+  if(!d||typeof d!=='object'||Array.isArray(d)||!Array.isArray(d.pieces))return{err:'That file is not a saved design (no pieces in it).'};
+  if(d.pieces.length>N*N)return{err:`That design has ${d.pieces.length} pieces, more than the map can hold.`};
+  const customs={};if(d.customs&&typeof d.customs==='object'&&!Array.isArray(d.customs))for(const id of Object.keys(d.customs).slice(0,40)){if(!/^cs_[A-Za-z0-9]{1,40}$/.test(id))continue;const c=cleanBlueprint(d.customs[id]);if(c)customs[id]=c}
+  const known=t=>typeof t==='string'&&(P[t]&&!P[t].custom||customs[t]);let dropped=0;
+  const pieces=[];for(const p of d.pieces){if(!p||typeof p!=='object'||!known(p.t)||!Number.isInteger(p.x)||!Number.isInteger(p.y)||p.x<0||p.y<0||p.x>=N||p.y>=N){dropped++;continue}
+    const q={t:p.t,x:p.x,y:p.y,r:intIn(p.r,0,3,0),z:intIn(p.z,0,40,0)};
+    for(const k of['fnd','closed','doors','doorR','mod','l'])if(p[k]!=null)q[k]=p[k];   // checked again, field by field, when the design is built
+    pieces.push(q)}
+  const plan={};if(d.plan&&typeof d.plan==='object')for(const[k,v]of Object.entries(Haul.PLAN_DEFAULT)){const x=d.plan[k];if(x!=null&&typeof x===typeof v&&(typeof v!=='object'||!Array.isArray(x)))plan[k]=x}
+  return{d:{name:plainText(d.name,60)||'Imported design',pieces,customs,plan,...(Number.isInteger(d.v)&&d.v>=1&&d.v<=9?{v:d.v}:{}),gapRule:!!d.gapRule,onlyFob:!!d.onlyFob},dropped}}
+$('importTxt').addEventListener('change',async e=>{const f=e.target.files&&e.target.files[0],st=$('saveStatus');if(!f)return;
+  if(f.size>TXT_MAX){status(`That file is too big for a design (${Math.round(f.size/1024)} KB; the limit is 512 KB). Nothing was changed.`);return}
+  let txt;try{txt=await f.text()}catch(err){status('Could not read that file. Nothing was changed.');return}
+  const r=designFromText(txt);if(r.err){status(r.err+' Nothing was changed.');return}
+  S.cur=null;load(r.d);renderSaved();
+  status(`Imported “${r.d.name}”${r.dropped?` (${r.dropped} unknown piece${r.dropped>1?'s':''} left out)`:''}. Undo brings back your previous design. Save it to keep it.`)});
 // Copy as text: the open design (same data as a save) for pasting into a chat; falls back to a box to copy from by hand
 $('copyDesignBtn').addEventListener('click',()=>{const t=JSON.stringify(designDoc()),st=$('saveStatus'),box=()=>{const ta=$('copyDesignTa');ta.value=t;$('copyDesignDlg').showModal();ta.focus();ta.select()};
-  try{navigator.clipboard.writeText(t).then(()=>{st.textContent=`Copied “${designName||'this design'}” as text. Paste it in the chat.`},box)}catch(e){box()}});
+  try{navigator.clipboard.writeText(t).then(()=>{status(`Copied “${designName||'this design'}” as text. Paste it in the chat.`)},box)}catch(e){box()}});
 window.onDesignChanged=()=>{ls.set('wd_design_draft',designDoc());if(tab==='haul')renderHaul();updateTabBadge()};
 function updateTabBadge(){}
 const TEAM_KINDS=['foot','driver','lakota','mh6'];
@@ -4746,6 +4960,7 @@ function entries(){
 function renderSaved(){
   const sel=$('openSel'),list=entries(),groups={};sel.replaceChildren(el('option',{value:''},'Open…'));
   for(const e of list)(groups[e.group]=groups[e.group]||[]).push(e);
+  sel.append(el('optgroup',{label:'File on this device'},el('option',{value:'__savetxt'},'Save .txt'),el('option',{value:'__importtxt'},'Import .txt…')));
   for(const g of['Templates','My designs','Shared by others','Saved with the page','In this browser']){const L=groups[g];if(!L)continue;const og=el('optgroup',{label:g});
     for(const e of L.sort((a,b)=>(b.builtin?1:0)-(a.builtin?1:0)||a.name.localeCompare(b.name))){
       const label=e.name+((g==='Shared by others'||(g==='Templates'&&!e.builtin))&&e.ownerName?' · '+e.ownerName:'')+(g==='My designs'&&e.vis==='shared'?' · shared':'');
@@ -4766,7 +4981,10 @@ function renderSaved(){
 function renderAcct(){const b=$('acctBtn');b.hidden=S.mode!=='firebase';
   if(!S.user){b.textContent='Log in';b.title='Log in or create an account to save designs online'}
   else{b.textContent=S.pendOut?'Log out?':(S.admin?'★ ':'')+userName();b.title=S.pendOut?'Click again to log out':`Logged in${S.admin?' as admin':''}. Click to log out.`}}
-$('openSel').onchange=e=>{S.pendDel=null;S.pendSave=null;const en=entries().find(x=>x.key===e.target.value);if(!en){renderSaved();return}
+$('openSel').onchange=e=>{S.pendDel=null;S.pendSave=null;
+  if(e.target.value==='__savetxt'){renderSaved();saveTxt();return}
+  if(e.target.value==='__importtxt'){renderSaved();$('importTxt').value='';$('importTxt').click();return}
+  const en=entries().find(x=>x.key===e.target.value);if(!en){renderSaved();return}
   S.cur=en.key;if(S.mode==='firebase')$('dVis').value=en.mine&&en.vis?en.vis:'personal';load(en.doc)};
 async function setVis(en,to){const F=S.fb;
   try{await F.updateDoc(F.doc(F.db,FC('designs'),en.id),{visibility:to});status(to==='template'?`"${en.name}" is now a template (by ${en.ownerName||'its maker'}).`:`"${en.name}" is shared again.`)}
