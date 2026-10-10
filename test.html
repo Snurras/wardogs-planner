@@ -134,6 +134,12 @@ button{cursor:pointer}
 .svhead .svctl{display:inline-flex;gap:6px;margin-left:auto;flex:none}
 .svhead #svCompass{display:inline-flex}.svsp{flex:1}.svx{font-weight:800}
 .svbody{flex:1;min-height:0;overflow:auto;display:flex;background:var(--bg)}
+.modbody{flex:1;min-height:0;overflow:auto;display:flex;flex-wrap:wrap;gap:14px;padding:12px;background:var(--bg)}
+.modleft{display:flex;flex-direction:column;gap:8px;flex:0 1 auto}.modright{display:flex;flex-direction:column;gap:8px;flex:1 1 240px;min-width:220px;font-size:13px}
+#modSvg{display:block;max-width:100%;height:auto}#modSvg .blk{cursor:pointer}#modSvg .blk:hover rect.b{stroke:var(--accent);stroke-width:2.5}
+.modask{border:2px solid var(--bad);border-radius:4px;padding:8px 10px;background:var(--panel)}.modask b{color:var(--bad)}.modask .row{display:flex;gap:8px;margin-top:8px}
+.modright dl{display:grid;grid-template-columns:auto 1fr;gap:2px 10px;margin:0}.modright dt{font-weight:700}.modright dd{margin:0}
+.modrule{padding:4px 8px;border-left:4px solid var(--ok,#3b7a3b);background:var(--panel)}.modrule.down{border-color:var(--bad)}
 .svbody svg{margin:auto;display:block;flex:none}
 .maprow{display:flex;align-items:flex-start;gap:10px}.maprow .msg{flex:1;min-width:0}
 .mapctl{flex:none;display:flex;align-items:center;gap:5px;font-size:13px;padding-top:4px}
@@ -616,10 +622,16 @@ a{color:var(--accent)}
       <div class="board">
         <div class="selbar" id="selBar" hidden><b id="selCount"></b>
           <button class="mini" type="button" id="selTurn">Turn 90° (R)</button><button class="mini" type="button" id="selCopy">Copy (Ctrl+C)</button>
-          <button class="mini" type="button" id="selPaste">Paste (Ctrl+V)</button><button class="mini" type="button" id="selDel">Delete</button><button class="mini" type="button" id="selBrush">Use as brush (B)</button>
+          <button class="mini" type="button" id="selPaste">Paste (Ctrl+V)</button><button class="mini" type="button" id="selDel">Delete</button><button class="mini" type="button" id="selBrush">Use as brush (B)</button><button class="mini" type="button" id="selMod" hidden title="Remove blocks from this structure with the hammer, or put them back">Modify structure</button>
           <span class="status">Drag or use arrow keys to move · Shift+arrows moves 4 · Esc clears</span></div>
         <div class="vpwrap"><div class="emptyhint" id="emptyHint" hidden><b>Start here</b>Pick a piece on the left, then click the map.<br>R turns it · E erases · drag to place a row.</div><span class="ref" id="refCol" hidden></span><span class="ref row" id="refRow" hidden></span>
         <div class="vp" id="vp"><svg id="svg" role="img" aria-label="Base layout grid"></svg></div>
+        <div class="svpanel" id="modPanel" hidden role="dialog" aria-label="Modify structure"><div class="svhead"><b class="svt">Modify structure</b><span class="status" id="modWhat"></span><span class="svctl"><button class="mini svx" type="button" id="modClose" aria-label="Close">✕</button></span></div>
+          <div class="modbody"><div class="modleft"><div class="seg" id="modLayers" role="group" aria-label="Layer"></div><svg id="modSvg" role="img" aria-label="Blocks on this layer"></svg>
+            <p class="status" style="margin:0">Click a block to take it off with the hammer. Click a removed block to put it back.</p></div>
+          <div class="modright"><div id="modAsk"></div><div id="modRules"></div><dl class="kv" id="modList"></dl>
+            <p class="status">A block you put back stands again but holds nothing up: in the game a rebuilt HESCO doesn't count, so the structure is as weak as before. Corner HESCO, floors, roofs, windows and ladders can't be put back.</p>
+            <button class="mini" type="button" id="modReset">Undo all changes to this structure</button></div></div></div>
         <div class="svpanel" id="svPanel" hidden role="dialog" aria-label="Side view"><div class="svhead"><b class="svt">Side view</b><span id="svCompass"></span><span class="status" id="svDir"></span><button class="mini" type="button" id="svRotate">Press R to rotate view</button><span class="svctl"><button class="mini" type="button" id="svZoomOut" aria-label="Zoom out">−</button><button class="mini" type="button" id="svFitBtn">Fit</button><button class="mini" type="button" id="svZoomIn" aria-label="Zoom in">+</button><button class="mini svx" type="button" id="svClose" aria-label="Close side view">✕</button></span></div><div class="svbody" id="svBody"><svg id="svSvg" role="img" aria-label="Side view of the marked area"></svg></div></div></div>
         <div class="maprow"><div class="msg" id="msg"></div><div class="mapctl" aria-label="Map view"><button class="mini" type="button" id="zoomOut" aria-label="Zoom out">−</button><span class="mono status" id="zoomLbl">25×25</span><button class="mini" type="button" id="zoomIn" aria-label="Zoom in">+</button><button class="mini" type="button" id="zoomFit" title="Zoom to show the whole design">Fit</button><label class="chk"><input type="checkbox" id="gridLbl"> Grid labels</label></div></div>
       </div>
@@ -672,7 +684,7 @@ a{color:var(--accent)}
     <button class="btn ghost" type="button" id="stRot" title="Turn the block to place (R). Sandbags and windows: which edge they sit on. Ladder: which side."></button>
     <button class="btn ghost tool" type="button" id="stErase" aria-pressed="false" title="Erase what is on this layer where you click (E)"></button>
     <button class="btn ghost tool" type="button" id="stTrim" aria-pressed="false" title="Mark trim parts: the blocks the hammer removes when the structure is trimmed (T)"><span class="ti"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" style="flex:none"><circle cx="12" cy="12" r="10" fill="#4D5C27"/><circle cx="8" cy="15" r="2.6" fill="none" stroke="#fff" stroke-width="1.8"/><circle cx="16" cy="15" r="2.6" fill="none" stroke="#fff" stroke-width="1.8"/><path d="M9.8 13.2L16 5M14.2 13.2L8 5" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg></span>Trim parts (T)</button>
-    <button class="btn ghost tool" type="button" id="stTest" aria-pressed="false" title="Test C4: click blocks to blow them and see when the structure collapses"><span class="ti"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" style="flex:none"><path d="M12 1l2.6 5.2 5.6-2.2-2.2 5.6L23 12l-5 2.4 2.2 5.6-5.6-2.2L12 23l-2.6-5.2-5.6 2.2 2.2-5.6L1 12l5-2.4L3.8 4l5.6 2.2z" fill="#1F251B"/><path d="M12 4.5l1.8 3.6 3.9-1.5-1.5 3.9L19.5 12l-3.3 1.6 1.5 3.9-3.9-1.5L12 19.5l-1.8-3.5-3.9 1.5 1.5-3.9L4.5 12l3.3-1.6-1.5-3.9 3.9 1.5z" fill="#D0261C"/><circle cx="12" cy="12" r="3.6" fill="#F2C230"/></svg></span>Test C4</button>
+    <button class="btn ghost tool" type="button" id="stTest" aria-pressed="false" title="Test: remove blocks with the hammer or blow them with C4 and see what falls"><span class="ti"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" style="flex:none"><path d="M12 1l2.6 5.2 5.6-2.2-2.2 5.6L23 12l-5 2.4 2.2 5.6-5.6-2.2L12 23l-2.6-5.2-5.6 2.2 2.2-5.6L1 12l5-2.4L3.8 4l5.6 2.2z" fill="#1F251B"/><path d="M12 4.5l1.8 3.6 3.9-1.5-1.5 3.9L19.5 12l-3.3 1.6 1.5 3.9-3.9-1.5L12 19.5l-1.8-3.5-3.9 1.5 1.5-3.9L4.5 12l3.3-1.6-1.5-3.9 3.9 1.5z" fill="#D0261C"/><circle cx="12" cy="12" r="3.6" fill="#F2C230"/></svg></span>Test collapse</button>
     <span class="vsep"></span>
     <button class="btn ghost" type="button" id="stClear" title="Start an empty structure"></button>
   </div>
@@ -726,8 +738,8 @@ a{color:var(--accent)}
           <label class="chk full"><input type="checkbox" id="stp_ground"> Ground only</label>
           <label>Else on HESCO up to H<input id="stp_maxbase" type="number" min="0" max="10"></label>
           <span></span>
-          <label>Collapses below<input id="stp_cmin" type="number" min="0"></label>
-          <label>… ground floor blocks of<select id="stp_ctype"><option value="hesco_l">HESCO Large</option><option value="hesco_s">HESCO Small</option><option value="sandbags">Sandbags</option><option value="any">Any normal block</option></select></label>
+          <label class="full">Floors on the ground ring fall when this many of its ground blocks are gone. Count<select id="stp_ctype"><option value="hesco_l">HESCO Large</option><option value="hesco_s">HESCO Small</option><option value="sandbags">Sandbags</option><option value="any">Any HESCO or Door</option></select></label>
+          <div class="full col" id="stp_rules" style="gap:4px"></div>
         </div>
       </div>
       <div class="card">
@@ -1108,7 +1120,7 @@ const P={
   door:{n:'Door',w:1,d:1,h:2,c:'wall',icon:'door',cat:'Walls & entry',ph:2,ab:'D',support:1},
   gate:{n:'Gate',w:4,d:1,h:3,c:'wall',icon:'gate',cat:'Walls & entry',ph:2,ab:'G'},   // H3: barbed wire on top
   bunker:{n:'Bunker',w:4,d:4,h:2,c:'struct',cat:'Structures',ph:3,ab:'BUNKER',support:1,
-    sym:{door:[['S',2]],win:{N:[0,1,2,3],W:[0,1,2,3],E:[0,1,2,3],S:[0,1,3]}}},
+    sym:{door:[['S',1]],win:{N:[1,2],W:[1,2],E:[1,2]}}},   // as tested in game 10 Oct 2026: corners, sandbags + windows, Small HESCO at S x2, entrance S x1
   ifs:{n:'Indirect Fire Shelter',groundOnly:1,w:5,d:5,h:3,c:'struct',cat:'Structures',ph:3,ab:'SHELTER',support:1,
     hm:(lx,ly)=>inner(1,1,3,3)(lx,ly)?3:2,raised:[1,1,3,3],sym:{arrow:[['N',2],['S',2],['W',2],['E',2]]}},
   recon_tower:{n:'Recon Tower',groundOnly:1,w:4,d:4,h:5,c:'struct',cat:'Structures',ph:3,ab:'RECON',support:1,
@@ -1143,6 +1155,7 @@ function el(tag,a={},...kids){const e=document.createElement(tag);for(const[k,v]
 
 /* ---------- geometry: r = quarter turns clockwise (0–3) ---------- */
 const R=p=>((p.r||0)%4+4)%4;
+const TT=p=>p.mod&&window.structGeo?structGeo(p):P[p.t];   // a modified structure: its type as it stands now (removed and fallen blocks left out)
 const dims=p=>{const t=P[p.t];return R(p)%2?{w:t.d,d:t.w}:{w:t.w,d:t.d}};
 const rectOf=p=>{const{w,d}=dims(p);return{x:p.x,y:p.y,w,d}};
 const hit=(a,b)=>a.x<b.x+b.w&&b.x<a.x+a.w&&a.y<b.y+b.d&&b.y<a.y+a.d;
@@ -1150,8 +1163,8 @@ const grow=(r,g)=>({x:r.x-g,y:r.y-g,w:r.w+2*g,d:r.d+2*g});
 function toLocal(p,cx,cy){const t=P[p.t],ox=cx-p.x,oy=cy-p.y;
   switch(R(p)){case 1:return[oy,t.d-1-ox];case 2:return[t.w-1-ox,t.d-1-oy];case 3:return[t.w-1-oy,ox];default:return[ox,oy]}}
 const localH=(t,lx,ly)=>t.hm?t.hm(lx,ly):t.h;
-const cellTop=(p,cx,cy)=>{const[lx,ly]=toLocal(p,cx,cy);return p.z+localH(P[p.t],lx,ly)};
-const topOf=p=>p.z+P[p.t].h;                 // highest point of a piece
+const cellTop=(p,cx,cy)=>{const[lx,ly]=toLocal(p,cx,cy);return p.z+localH(TT(p),lx,ly)};
+const topOf=p=>p.z+TT(p).h;                 // highest point of a piece
 const vert=(a,b)=>a.z<topOf(b)&&b.z<topOf(a);
 function topAt(cx,cy,list=pieces){let best=null,bh=-1;for(const p of list)if(hit(rectOf(p),{x:cx,y:cy,w:1,d:1})){const h=cellTop(p,cx,cy);if(h>bh){bh=h;best=p}}return best}
 
@@ -1187,6 +1200,10 @@ function place(np,list=pieces){
   if(r.x<0||r.y<0||r.x+r.w>N||r.y+r.d>N)return{err:'Off the map'};
   if(needsFob(np.t)&&!inside(r,areaRect(fobOf(list))))return{err:'Outside the FOB build area'};
   if(ONE_PER_FOB.has(np.t)&&list.some(q=>q.t===np.t&&q!==np))return{err:`Only one ${t.n} per FOB`};
+  // the square in front of a structure's ladder is taken by the ladder: nothing can be built there (game rule)
+  const feet=q=>ladderSpots(q).map(l=>({x:l.x+l.out[0],y:l.y+l.out[1]}));
+  for(const q of list){if(q===np||!P[q.t].sym)continue;if(feet(q).some(f=>hit(r,{...f,w:1,d:1})))return{err:`The ladder of the ${P[q.t].n} needs the square in front of it free`};
+    if(t.sym&&feet(np).some(f=>hit(rectOf(q),{...f,w:1,d:1})))return{err:`This ${t.n}'s ladder needs the square in front of it free: the ${P[q.t].n} is in the way`}}
   let z=null;
   for(let x=r.x;x<r.x+r.w;x++)for(let y=r.y;y<r.y+r.d;y++){
     const u=topAt(x,y,list);
@@ -1231,7 +1248,7 @@ function toWorld(p,lx,ly){const t=P[p.t];let ox,oy;
   return[p.x+ox,p.y+oy]}
 function turnDir([dx,dy],r){for(let k=0;k<r;k++)[dx,dy]=[-dy,dx];return[dx,dy]}
 const OUT={S:[0,1],N:[0,-1],W:[-1,0],E:[1,0]};
-function entrancesOf(p){const t=P[p.t];if(!t.sym)return[];const list=[...(t.sym.door||[]),...(t.sym.arrow||[])];
+function entrancesOf(p){const t=TT(p);if(!t.sym)return[];const list=[...(t.sym.door||[]),...(t.sym.arrow||[])];
   return list.map(([side,i],k)=>{const[lx,ly]=side==='S'?[i,t.d-1]:side==='N'?[i,0]:side==='W'?[0,i]:[t.w-1,i];
     const[x,y]=toWorld(p,lx,ly);const st=sealOf(p,k);return{k,x,y,out:turnDir(OUT[side],R(p)),seal:st||SEAL_WITH(p.t),sealType:st,closed:!!st}})}
 // Recon Tower / Shelter (full or trimmed): the centre of the bottom floor is open space. Each centre square can be closed like an entrance,
@@ -1247,13 +1264,13 @@ function cycleSeal(p,k){const c=new Set(p.closed||[]),d=new Set(p.doors||[]);if(
   if(d.has(k))d.delete(k);else if(c.has(k)){c.delete(k);if(DOOR_OK(p.t))d.add(k)}else c.add(k);
   p.closed=[...c].sort();p.doors=[...d].sort();if(!p.closed.length)delete p.closed;if(!p.doors.length)delete p.doors}
 function nextSealText(p,e){if(e.sealType==='door')return'Open';if(e.sealType)return DOOR_OK(p.t)?`Swap to a Door (${WD.build('door')} supplies)`:'Open';return`Seal with a ${P[SEAL_WITH(p.t)].n} (${WD.build(SEAL_WITH(p.t))} supplies)`}
-function windowsOf(p){const t=P[p.t];if(!t.sym||!t.sym.win)return[];const out=[];
+function windowsOf(p){const t=TT(p);if(!t.sym||!t.sym.win)return[];const out=[];
   for(const[side,cells]of Object.entries(t.sym.win))for(const i of cells){const[lx,ly]=side==='S'?[i,t.d-1]:side==='N'?[i,0]:side==='W'?[0,i]:[t.w-1,i];
     const[x,y]=toWorld(p,lx,ly);out.push({x,y,out:turnDir(OUT[side],R(p))})}
   return out}
-function laddersOf(p){const t=P[p.t];return(t.sym&&t.sym.ladder||[]).map(([lx,ly])=>toWorld(p,lx,ly))}
+function laddersOf(p){const t=TT(p);return(t.sym&&t.sym.ladder||[]).map(([lx,ly])=>toWorld(p,lx,ly))}
 // Recon Tower ladder: on the outer wall, climbed from the cell just outside it, straight up to floor 2 (open, no C4)
-function ladderSpots(p){const t=P[p.t];return(t.sym&&t.sym.ladder||[]).map(([lx,ly])=>{const side=ly===t.d-1?'S':ly===0?'N':lx===0?'W':'E';
+function ladderSpots(p){const t=TT(p);return(t.sym&&t.sym.ladder||[]).map(([lx,ly])=>{const side=ly===t.d-1?'S':ly===0?'N':lx===0?'W':'E';
   const[x,y]=toWorld(p,lx,ly);return{x,y,out:turnDir(OUT[side],R(p))}})}
 function entranceAt(cx,cy){for(const p of[...pieces].sort((a,b)=>b.z-a.z))for(const e of openingsOf(p))if(e.x===cx&&e.y===cy)return{p,e};return null}
 // Shooting gap: two neighbouring Bremers whose wall faces sit on opposite sides of the line joining them
@@ -1270,7 +1287,7 @@ function bremerGaps(){const out=[],at=new Map();for(const p of pieces)if(p.t==='
 function pieceCounts(){const c={};for(const p of pieces){c[p.t]=(c[p.t]||0)+1;for(const e of openingsOf(p))if(e.sealType)c[e.sealType]=(c[e.sealType]||0)+1}return c}
 const SIDES=['south','west','north','east']; // where a south-side feature ends up after r quarter turns
 function orientText(p){const t=P[p.t];if(p.t==='bunker')return'entrance '+SIDES[R(p)]+' side';if(p.t==='recon_tower'||p.t==='recon_trim'||p.t==='loudspeaker')return'ladder '+SIDES[R(p)]+' side';if(p.t==='bremer')return'footing '+SIDES[R(p)]+' side';return''}
-function heightText(p){const t=P[p.t];
+function heightText(p){const t=TT(p);
   if(t.hm)return`H${p.z+t.hm(0,0)}/${topOf(p)}`;
   return hName(topOf(p))}
 function label(p){const t=P[p.t];
@@ -1401,7 +1418,7 @@ const GLYPHS={   // white pictograms; the cut-outs use the block colour
 };
 function drawIcon(g,kind,w,d){ICONS[kind]&&ICONS[kind](g,w,d)}
 function drawPiece(p,{ghost=false,num=null,covered=false}={}){
-  const t=P[p.t],r=rectOf(p),w=t.w*C,d=t.d*C,rr=R(p);
+  const t=TT(p),r=rectOf(p),w=t.w*C,d=t.d*C,rr=R(p);
   const outer=s('g');
   let ox=0,oy=0,sy=1;
   if(p.t==='barbed'&&p.z>0){const u=pieces.find(q=>q.t==='bremer'&&q.x===r.x&&q.y===r.y&&q.z+P.bremer.h===p.z);
@@ -1460,6 +1477,11 @@ function drawPiece(p,{ghost=false,num=null,covered=false}={}){
       for(const fx of[.3,.7])g.append(s('line',{x1:x+fx*C,y1:y+3,x2:x+fx*C,y2:y+C-3,stroke:'var(--ladder)','stroke-width':2}));
       for(const fy of[.28,.5,.72])g.append(s('line',{x1:x+.3*C,y1:y+fy*C,x2:x+.7*C,y2:y+fy*C,stroke:'var(--ladder)','stroke-width':1.6}));}
   }
+  if(t.mod&&!ghost){   // a modified structure (Modify structure): dashed red outline; removed ground blocks get a red cross
+    g.append(s('rect',{x:.5,y:.5,width:w-1,height:d-1,fill:'none',stroke:'var(--bad)','stroke-width':1.6,'stroke-dasharray':'5 3'}));
+    const d0=bpOf(p.t),bl=bpBlocks(d0),fl=bl.filter(b=>b.t==='floor'),x0=Math.min(...fl.map(b=>b.x)),y0=Math.min(...fl.map(b=>b.y));
+    for(const b of bl)if(b.z===0&&CB[b.t]&&b.t!=='window'&&!t.st.present(b.i))for(const[cx,cy]of bpCells(b)){const X=(cx-x0)*C,Y=(cy-y0)*C;
+      g.append(s('path',{d:`M${X+C*.25} ${Y+C*.25}L${X+C*.75} ${Y+C*.75}M${X+C*.75} ${Y+C*.25}L${X+C*.25} ${Y+C*.75}`,stroke:'var(--bad)','stroke-width':2,'stroke-linecap':'round'}))}}
   outer.append(g);
   // text stays upright
   const cx=(r.x+r.w/2)*C,cy=(r.y+r.d/2)*C;
@@ -2371,7 +2393,7 @@ function withStacked(set){const out=new Set(set);let grew=true;
     for(const p of out)if(q.z>p.z&&hit(rectOf(q),rectOf(p))){out.add(q);grew=true;break}}}
   return out}
 function bbox(list){let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;for(const p of list){const r=rectOf(p);x0=Math.min(x0,r.x);y0=Math.min(y0,r.y);x1=Math.max(x1,r.x+r.w);y1=Math.max(y1,r.y+r.d)}return{x:x0,y:y0,w:x1-x0,d:y1-y0}}
-const copyPiece=p=>{const q={t:p.t,x:p.x,y:p.y,r:p.r||0,z:p.z};if(p.fnd)q.fnd={...p.fnd};if(p.closed)q.closed=[...p.closed];if(p.doors)q.doors=[...p.doors];if(p.doorR)q.doorR={...p.doorR};return q};
+const copyPiece=p=>{const q={t:p.t,x:p.x,y:p.y,r:p.r||0,z:p.z};if(p.fnd)q.fnd={...p.fnd};if(p.closed)q.closed=[...p.closed];if(p.doors)q.doors=[...p.doors];if(p.doorR)q.doorR={...p.doorR};if(p.mod)q.mod=JSON.parse(JSON.stringify(p.mod));return q};
 // try to put `moved` (new positions) on top of `rest`; returns {list, placed} or {err}
 function settle(rest,moved){
   const out=[...rest],placed=[],saved=stroke;stroke=new Set();
@@ -2379,7 +2401,7 @@ function settle(rest,moved){
     const order=[...moved].sort((a,b)=>(a.t==='fob'?-1:b.t==='fob'?1:0)||a.z-b.z);
     for(const m of order){const np={t:m.t,x:m.x,y:m.y,r:m.r||0};if(m.fnd)np.fnd={...m.fnd};const res=place(np,out);
       if(res.err)return{err:`${P[m.t].n} at ${COLS(m.x)}${m.y+1}: ${res.err}`};
-      const q={...np,z:res.z};if(m._o!=null)Object.defineProperty(q,'_o',{value:m._o,enumerable:false});if(m.closed)q.closed=[...m.closed];if(m.doors)q.doors=[...m.doors];if(m.doorR)q.doorR={...m.doorR};out.push(q);placed.push(q)}
+      const q={...np,z:res.z};if(m._o!=null)Object.defineProperty(q,'_o',{value:m._o,enumerable:false});if(m.closed)q.closed=[...m.closed];if(m.doors)q.doors=[...m.doors];if(m.doorR)q.doorR={...m.doorR};if(m.mod)q.mod=JSON.parse(JSON.stringify(m.mod));out.push(q);placed.push(q)}
     const a=areaRect(fobOf(out)),outside=out.filter(p=>needsFob(p.t)&&!inside(rectOf(p),a));
     if(outside.length)return{err:`The FOB area would leave out ${outside.length} piece${outside.length>1?'s':''} (e.g. ${P[outside[0].t].n} at ${where(outside[0])})`};
     return{list:out,placed};
@@ -2405,7 +2427,8 @@ function startPaste(){if(!clip){flashMsg('Copy something first',true);return}set
 function turnClip(){const b=bbox(clip.map(p=>({...p})));clip=clip.map(p=>turnCW(p,{...b,x:0,y:0}))}
 function pasteAt(c){if(!clip||!c)return null;return settle(pieces,clip.map(p=>({...p,x:p.x+c.cx,y:p.y+c.cy})))}
 function updateSelBar(){const bar=$('selBar');if(!bar)return;const on=tool==='select'&&(sel.size||pasting);bar.hidden=!on;
-  $('selCount').textContent=pasting?`Pasting ${clip.length} piece${clip.length>1?'s':''}`:`${sel.size} selected`;}
+  $('selCount').textContent=pasting?`Pasting ${clip.length} piece${clip.length>1?'s':''}`:`${sel.size} selected`;
+  const one=sel.size===1&&!pasting?[...sel][0]:null;$('selMod').hidden=!(one&&window.bpOf&&bpOf(one.t))}
 function selDown(e,c){
   if(pasting){const res=pasteAt(c);if(res&&commit(res,'Pasted'))pasting=false;return}
   const t=c&&topAt(c.cx,c.cy);
@@ -2853,7 +2876,7 @@ function renderTime(){const box=$('timeCard');if(!box)return;const real=pieces.f
   const{sec,missing}=buildTime(),t=sec/n;
   $('timeTot').textContent=mmss(t);$('timeSub').textContent=`min:sec · ${n} builder${n>1?'s':''}`+(n>1?` (${mmss(sec)} for one)`:'');
   $('timeNote').textContent=missing.length?`Not timed yet, counted as 0: ${missing.join(', ')}. Add them on the Fact sheet.`:''}
-function changed(){layoutRev++;ordEdit=null;window.stopAttack?.();recheck();threatStale=false;renderThreat();draw();renderSide();window.onDesignChanged?.()}
+function changed(){layoutRev++;ordEdit=null;window.stopAttack?.();recheck();threatStale=false;renderThreat();draw();renderSide();window.onDesignChanged?.();window.renderModify?.()}
 let threatStale=false;
 // while dragging out a wall: redraw only; the threat check runs once when the mouse is released
 function changedDuringStroke(){layoutRev++;threatStale=true;draw();renderSide()}
@@ -2918,6 +2941,8 @@ function rebuild(list,legacy){
   for(const p of sorted){const np={t:p.t,x:p.x,y:p.y,r:((p.r|0)%4+4)%4};if(p.fnd&&Number.isInteger(p.fnd.dx)&&Number.isInteger(p.fnd.dy))np.fnd={dx:p.fnd.dx,dy:p.fnd.dy};
     if(!P[np.t]){rep.unknown.push(p.t);continue}
     const q={...np};ord.set(q,list.indexOf(p));
+    if(p.mod&&typeof p.mod==='object'&&window.bpOf&&bpOf(np.t)){const nb=(bpOf(np.t).blocks||[]).length,ok=a=>[...new Set((Array.isArray(a)?a:[]).filter(i=>Number.isInteger(i)&&i>=0&&i<nb))].sort((a,b)=>a-b);
+      const rm=ok(p.mod.rm),back=ok(p.mod.back).filter(i=>rm.includes(i));if(rm.length)q.mod=back.length?{rm,back}:{rm}}   // structure changes (Modify structure)
     // entrance seals: only entrances that exist; bunkers take HESCO, never a door
     const n=entrancesOf({...np,z:0}).length,nc=centreOf({...np,z:0}).length,okK=k=>Number.isInteger(k)&&(k>=0&&k<n||k>=CENTRE_K&&k<CENTRE_K+nc);
     let closed=(p.closed||[]).filter(okK),doors=(p.doors||[]).filter(okK);
@@ -2961,7 +2986,8 @@ const INF_PASS=new Set(['barbed','hedgehog','recon_tent','loudspeaker','radio'])
 const CAPS=[{id:'foot',n:'On foot',cap:0,col:'climb'},{id:'car',n:'With a car',cap:3,col:'entry'},{id:'ural',n:'With a Ural Defender',cap:4,col:'ladder'}];
 // rule numbers from the Fact sheet (refreshed by applyRules)
 let STEP=1,FOOT=1,FACE=3,WIN=2,JUMPS=[];
-const WZ=p=>P[p.t].winZ??WIN;   // floor 2 height: Recon Tower from the Fact sheet, custom structures from their blueprint
+const WZ=p=>P[p.t].winZ??WIN;
+const twoOf=p=>{const tt=TT(p);return tt.mod?!!tt.two:(p.t==='recon_tower'||p.t==='recon_trim'||!!tt.two)};   // has a floor 2 (a modified structure: only while it stands)   // floor 2 height: Recon Tower from the Fact sheet, custom structures from their blueprint
 function applyRules(){STEP=WD.F('move.step');FOOT=WD.F('ht.bremer.footing');FACE=WD.F('ht.bremer.face');WIN=WD.F('ht.recon.window');
   CAPS[1].cap=WD.F('climb.car');CAPS[2].cap=WD.F('climb.ural');CAPS[1].n=`With a car (up to H${CAPS[1].cap})`;CAPS[2].n=`With a Ural Defender (up to H${CAPS[2].cap})`;
   JUMPS=makeJumps(WD.F('move.jumpUp'),WD.F('move.longGap'))}
@@ -3000,7 +3026,7 @@ function threatGrid(){setBounds();
   // Floor 2: Recon Towers only, at base + ht.recon.window; NOT connected to floor 1 inside. Reached by the outside
   // ladder (an open opening, no C4) or through a blown window; left the same ways.
   const bld=new Array(N*N).fill(null),portIn=Array.from({length:N*N},()=>[]),portOut=Array.from({length:N*N},()=>[]);
-  const bld2=new Array(N*N).fill(null),portOut2=Array.from({length:N*N},()=>[]),ladderIn=Array.from({length:N*N},()=>[]),ladderFoot=new Array(N*N).fill(-1),ladderC=new Array(N*N).fill(null);
+  const bld2=new Array(N*N).fill(null),portOut2=Array.from({length:N*N},()=>[]),ladderIn=Array.from({length:N*N},()=>[]),ladderFoot=new Array(N*N).fill(-1),ladderC=new Array(N*N).fill(null),openLad=Array.from({length:N*N},()=>[]);
   for(const p of pieces){if(!P[p.t].sym)continue;for(const c of pieceCells(p))bld[c]=p;
     for(const e of entrancesOf(p)){const ox=e.x+e.out[0],oy=e.y+e.out[1];if(!IB(ox,oy))continue;
       const inside=idx(e.x,e.y),outside=idx(ox,oy),c4=e.sealType?WD.c4(e.sealType):0;   // open = 0; door / HESCO seal = its C4
@@ -3011,7 +3037,10 @@ function threatGrid(){setBounds();
       const ed=edge.get(ekey(inside,outside)),cov=ed&&!ed.gap?ed.fs.filter(f=>f.h>p.z).map(f=>({p:f.p,b:col[idx(f.p.x,f.p.y)][0]})):[];
       const port={c4,seal};if(cov.length)port.cov=cov;
       portOut[inside].push({to:outside,...port});portIn[outside].push({to:inside,...port})}
-    const two=p.t==='recon_tower'||p.t==='recon_trim'||!!P[p.t].two;
+    const two=twoOf(p);
+    if(!two&&TT(p).deck)for(const l of ladderSpots(p)){const fx=l.x+l.out[0],fy=l.y+l.out[1];if(!IB(fx,fy))continue;   // ladder up to an open deck (floor 2 without its roof)
+      const cell=idx(l.x,l.y),foot=idx(fx,fy),ed=edge.get(ekey(cell,foot)),cov=ed&&!ed.gap?ed.fs.filter(f=>f.h>p.z).map(f=>({p:f.p,b:col[idx(f.p.x,f.p.y)][0]})):[],lad={to:cell,p,open:true};if(cov.length)lad.cov=cov;
+      openLad[foot].push(lad)}
     if(two){for(const c of pieceCells(p))bld2[c]=p;
       for(const l of ladderSpots(p)){const fx=l.x+l.out[0],fy=l.y+l.out[1];if(!IB(fx,fy))continue;
         const cell=idx(l.x,l.y),foot=idx(fx,fy),ed=edge.get(ekey(cell,foot)),   // a Bremer at its foot, face toward the tower, blocks the ladder
@@ -3029,7 +3058,7 @@ function threatGrid(){setBounds();
     for(const e of entrancesOf(p))flr[idx(e.x,e.y)]=true;
     for(const e of centreOf(p)){const c=idx(e.x,e.y);flr[c]=true;
       if(e.sealType)cseal[c]={c4:WD.c4(e.sealType),seal:{t:e.sealType,x:e.x,y:e.y,r:0,z:p.z,seal:true,centre:true,of:p,c4:WD.c4(e.sealType)}}}}
-  return{H,col,ground,vehBlock,top,target,bld,portIn,portOut,bld2,portOut2,ladderIn,ladderFoot,ladderC,edge,gaps,brem,wired,flr,cseal};
+  return{H,col,ground,vehBlock,top,target,bld,portIn,portOut,bld2,portOut2,ladderIn,ladderFoot,ladderC,openLad,edge,gaps,brem,wired,flr,cseal};
 }
 // cells a vehicle can drive to from outside the area
 function vehicleZone(G){
@@ -3113,6 +3142,7 @@ function climbRoute(G,cap,banned,collect,seeds){
       interiorMoves(G,i,(j,kind,z,c4,seal,po)=>{if(kind===1){if(!c4&&!covered(po)&&H[j]<=z+STEP&&(po&&po.window||doorOK(z,H[j])))push(j,n)}else if(kind===0)push(j,n)});continue}
     const i=n,hi=H[i];
     for(const e of G.portIn[i])if(!e.c4&&!covered(e)&&G.bld[e.to].z<=hi+STEP&&doorOK(G.bld[e.to].z,hi))push(NN+e.to,i);   // walk in through an open entrance (not one a Bremer face covers)
+    for(const l of G.openLad[i])if(!covered(l)&&!banned.has(l.to))push(l.to,i);   // up a ladder onto an open deck
     fromHeight(i,hi,i,veh&&veh[i]?cap:0);
   }
   return collect?prev:null;
@@ -3160,6 +3190,7 @@ function c4Route(G,banned,fixed,shut,vmode){fixed=fixed||new Set();shut=shut||ne
       if(hi===e.need)relax(INx(e.to),d+e.c4,k,e.seal);
       else if(hi===0&&veh[i]){const rf=roofs.find(r=>r.h===e.need);if(rf)relax(INx(e.to),d+e.c4+0.01,k,{...e.seal,from:rf.id})}}   // tiny extra: on-foot routes win ties
     for(const l of G.ladderIn[i])if(!cur.rm.includes(l.p)&&!covered(l,cur.rm)&&hi<=l.p.z+WZ(l.p)+STEP)relax(IN2(l.to),d,k,{ladder:true,of:l.p,x:cx_(l.to),y:cy_(l.to)});   // up the outside ladder to floor 2
+    for(const l of G.openLad[i])if(!cur.rm.includes(l.p)&&!covered(l,cur.rm)&&!fixed.has(l.to)&&!banned.has(l.p))relax(key(l.to,0),d,k,{ladder:true,of:l.p,x:cx_(l.to),y:cy_(l.to)});   // up a ladder onto an open deck
     if(G.target[i]){const states=[];for(let s=k;s!==-1;s=prev.get(s))states.unshift(s);
       const cellOf=s=>s>=K*NN?(s-K*NN)%NN:Math.floor(s/K);
       const path=states.map(cellOf),blown=[],ladders=[];let first=null;
@@ -3213,7 +3244,8 @@ function analyse(){
       let crest=entry;for(const i of r)if(G.H[i]>G.H[crest])crest=i;
       const ei=r.indexOf(entry),stepUp=ei+1<r.length&&G.H[r[ei+1]]>G.H[entry];   // footing used to climb higher, rather than walked through
       // the raised part of the route, step by step (Bremer wall tops are separate nodes)
-      const steps=[];for(const v of raw){const c=v%NN;let name,h;
+      const steps=[];let pv=-1;for(const v of raw){const c=v%NN,from=pv;pv=v;let name,h;
+        if(v<NN&&from>=0&&from<NN&&G.openLad[from].some(l=>l.to===c)){const p=G.openLad[from].find(l=>l.to===c).p;steps.push({name:`${P[p.t].n} ladder, up to its open top`,h:G.H[c],at:c});continue}
         if(v>=2*NN){name='Bremer wall top';h=G.brem[c].z+FACE}else if(v>=NN)continue;else{h=G.H[c];if(!h&&!G.brem[c])continue;name=G.brem[c]&&h===G.brem[c].z+FOOT?'Bremer footing':P[G.top[c].t].n+(P[G.top[c].t].sym?' roof':'')}
         const last=steps[steps.length-1];if(last&&last.name===name&&last.h===h)continue;steps.push({name,h,at:c})}
       climbs.push({path:r,raw,entry,piece:G.top[entry],crest,crestPiece:G.top[crest],stepUp,steps});
@@ -3256,7 +3288,7 @@ function buildingWeakPoints(G){
   const roofs=[['car',WD.F('climb.car.roof')],['Ural',WD.F('climb.ural.roof')]];
   const standOn=i=>G.H[i]===0?'the ground':`the ${P[G.top[i].t].n} at ${ref(i)} (H${G.H[i]})`;
   const out=[];
-  for(const p of pieces){const two=p.t==='recon_tower'||p.t==='recon_trim'||!!P[p.t].two;if(p.t!=='bunker'&&!two&&!P[p.t].custom)continue;
+  for(const p of pieces){const two=twoOf(p);if(p.t!=='bunker'&&!two&&!P[p.t].custom)continue;
     const items=[];
     for(const w of windowsOf(p)){const ox=w.x+w.out[0],oy=w.y+w.out[1];if(!IB(ox,oy))continue;const o=idx(ox,oy),need=p.z+(two?WZ(p):0),ways=[];
       if(G.portIn[o].some(e=>e.window&&e.to===idx(w.x,w.y)&&covered(e)))continue;   // a Bremer face covers it
@@ -4005,7 +4037,103 @@ if(run&&run.def&&run.def.alarm!=null&&!run.def.dead&&run.defPos)p={x:(p.x+run.de
    cost, build time and hammer from its properties. Saved designs carry the blueprints they use (design.customs). */
 const CUSTOM_DATA={};
 const customId=key=>'cs_'+String(key).replace(/[^A-Za-z0-9]/g,'').slice(0,40);
-const CB={hesco_s:1,hesco_l:2,sandbags:1,door:2,window:1};   // block heights
+const CB={hesco_s:1,hesco_l:2,sandbags:1,door:2,window:1,corner:2};   // block heights (corner: 1.65 + the 0.35 roof slab on it)
+
+/* ---------- Collapse (doc 11 §6, tested in game 10 Oct 2026) ----------
+   Blocks are indexed by their place in the blueprint list. A structure's state = which blocks the player removed (rm,
+   with the hammer or C4) and which of those were built back (back). Built-back blocks stand, but never count as support.
+   Rules, per floor or roof slab (level z > 0):
+   · corner rule: the slab rests on Corner HESCO (special, 1.65 high, players can't build them). It falls when `fall` of them are gone (default 2).
+   · count rule: otherwise the slab rests on the ground ring. It falls when `fall` of the original ground blocks of the
+     counted type are gone (default: half of them). Recon floor 2: 5 of 10; Shelter roof: 6 of 12.
+   A falling slab takes everything resting on that level (sandbags, Small HESCO, ladder up to it) except corners;
+   windows hang from the roof above them and only go with it. A HESCO or corner that stood on a block that is gone falls,
+   with its square of the slab under it. Ground blocks never fall. */
+const BT=t=>({hesco_s:'HESCO Small',hesco_l:'HESCO Large',sandbags:'Sandbags',door:'Door',window:'Window',corner:'Corner HESCO',floor:'Floor',roof:'Roof / middle floor',ladder:'Ladder'}[t]||t);
+const HEAVY=new Set(['hesco_s','hesco_l','corner','door']);
+const bpCells=b=>(b.t==='sandbags'||b.t==='window')?(b.r%2?[[b.x,b.y],[b.x,b.y+1]]:[[b.x,b.y],[b.x+1,b.y]]):[[b.x,b.y]];
+function bpBlocks(d){return(d&&Array.isArray(d.blocks)?d.blocks:[]).map(([t,x,y,z,r,tr],i)=>({i,t,x,y,z,r:r||0,tr:!!tr}))}
+function bpRules(d,bl=bpBlocks(d)){const out=[],ctype=d.ctype&&d.ctype!=='any'?d.ctype:'hesco_l',F=d.fall||{};
+  const levels=[...new Set(bl.filter(b=>b.t==='roof').map(b=>b.z))].sort((a,b)=>a-b);
+  for(const z of levels){const corners=bl.filter(b=>b.t==='corner'&&b.z+CB.corner===z);
+    if(corners.length){const ids=corners.map(b=>b.i);out.push({z,kind:'corners',ids,total:ids.length,fall:Math.max(1,Math.min(ids.length,F[z]|0||Math.min(2,ids.length)))})}
+    else{const ids=bl.filter(b=>b.z===0&&(d.ctype==='any'?HEAVY.has(b.t):b.t===ctype)).map(b=>b.i);if(!ids.length)continue;
+      out.push({z,kind:'count',ids,total:ids.length,fall:Math.max(1,Math.min(ids.length,F[z]|0||Math.ceil(ids.length/2)))})}}
+  return out}
+// what stands and what has fallen. rm, back: Sets (or arrays) of block indices.
+function bpState(d,rm,back,bl=bpBlocks(d),rules=bpRules(d,bl)){rm=new Set(rm||[]);back=new Set([...(back||[])].filter(i=>rm.has(i)));
+  const fallen=new Set(),why=new Map(),absent=i=>(rm.has(i)&&!back.has(i))||fallen.has(i);
+  const fall=(b,reason)=>{if(!fallen.has(b.i)&&!absent(b.i)){fallen.add(b.i);why.set(b.i,reason);return true}return false};
+  const under=b=>bl.filter(o=>CB[o.t]&&o.t!=='window'&&o.z+CB[o.t]===b.z&&bpCells(o).some(([x,y])=>x===b.x&&y===b.y));
+  const status=rules.map(r=>({...r,gone:0,down:false}));let changed=true;
+  while(changed){changed=false;
+    for(const b of bl){if(!HEAVY.has(b.t)||b.z===0||absent(b.i))continue;const u=under(b);   // stood on a block that is gone
+      if(u.length&&u.every(o=>absent(o.i)||rm.has(o.i))){if(fall(b,'stood on a block that is gone'))changed=true;
+        const sl=bl.find(o=>o.t==='roof'&&o.z===b.z&&o.x===b.x&&o.y===b.y);if(sl&&fall(sl,'under a block that fell'))changed=true}}
+    for(const r of status){r.gone=r.ids.filter(i=>rm.has(i)||fallen.has(i)).length;if(r.down||r.gone<r.fall)continue;r.down=true;changed=true;
+      const lbl=r.kind==='corners'?`roof at H${r.z}`:`floor at H${r.z}`;
+      for(const b of bl){const on=(b.t==='roof'&&b.z===r.z)||(b.t==='ladder'&&b.z===r.z)||(b.t==='window'&&b.z+CB.window===r.z)||(b.z===r.z&&CB[b.t]&&b.t!=='corner'&&b.t!=='window');
+        if(on)fall(b,'the '+lbl+' fell')}}}
+  return{rm,back,fallen,why,rules:status,present:i=>!absent(i)}}
+// state of a placed piece (p.mod = {rm:[…], back:[…]}); null if it has no blueprint
+function pieceState(p){const d=bpOf(p.t);if(!d)return null;const m=p.mod||{},rm=new Set(m.rm||[]);
+  if(TRIM_BASE[p.t])for(const b of bpBlocks(d))if(b.tr)rm.add(b.i);   // trimmed: the trim blocks are gone (taken off with the hammer, nothing falls)
+  return bpState(d,rm,m.back)}
+// Blueprints of the built-in structures (as tested in game 10 Oct 2026). Local squares match the old pieces.
+const TRIM_BASE={recon_trim:'recon_tower',ifs_trim:'ifs'};
+const BP_CACHE={};
+const BUILTIN_BP={
+  recon_tower:()=>{const B=[],all=[];for(let y=0;y<4;y++)for(let x=0;x<4;x++)all.push([x,y]);const ring=all.filter(([x,y])=>!x||!y||x===3||y===3);
+    for(const[x,y]of all)B.push(['floor',x,y,0]);
+    for(const[x,y]of ring)if(!(x===0&&y===2)&&!(x===3&&y===1))B.push(['hesco_l',x,y,0]);
+    for(const[x,y]of all)B.push(['roof',x,y,2]);
+    for(const[x,y]of[[0,0],[3,0],[0,3],[3,3]])B.push(['corner',x,y,2]);
+    B.push(['hesco_s',2,3,2],['sandbags',1,0,2,0],['sandbags',0,1,2,3],['sandbags',3,1,2,1],['window',1,0,3,0],['window',0,1,3,3],['window',3,1,3,1]);
+    for(const[x,y]of all)B.push(['roof',x,y,4]);
+    for(const[x,y]of[[1,1],[2,1],[1,2],[2,2]])B.push(['hesco_s',x,y,4,0,1]);
+    B.push(['ladder',1,3,2,2]);
+    return{name:'Recon Tower',short:'RECON',tier:WD.F('h.recon_tower'),supplies:WD.build('recon_tower'),build:WD.F('t.recon_tower'),trim:WD.F('t.trim.recon_tower'),seal:'large_door',ground:true,maxbase:0,ctype:'hesco_l',blocks:B}},
+  ifs:()=>{const B=[],all=[];for(let y=0;y<5;y++)for(let x=0;x<5;x++)all.push([x,y]);const ring=all.filter(([x,y])=>!x||!y||x===4||y===4);
+    for(const[x,y]of all)B.push(['floor',x,y,0]);
+    for(const[x,y]of ring)if(!((x===2&&(y===0||y===4))||(y===2&&(x===0||x===4))))B.push(['hesco_l',x,y,0]);
+    for(const[x,y]of all)B.push(['roof',x,y,2]);
+    for(let y=1;y<4;y++)for(let x=1;x<4;x++)B.push(['hesco_s',x,y,2,0,1]);
+    return{name:'Indirect Fire Shelter',short:'SHELTER',tier:WD.F('h.ifs'),supplies:WD.build('ifs'),build:WD.F('t.ifs'),trim:WD.F('t.trim.ifs'),seal:'large_door',ground:true,maxbase:0,ctype:'hesco_l',blocks:B}},
+  bunker:()=>{const B=[],all=[];for(let y=0;y<4;y++)for(let x=0;x<4;x++)all.push([x,y]);
+    for(const[x,y]of all)B.push(['floor',x,y,0]);
+    for(const[x,y]of[[0,0],[3,0],[0,3],[3,3]])B.push(['corner',x,y,0]);
+    B.push(['sandbags',1,0,0,0],['sandbags',0,1,0,3],['sandbags',3,1,0,1],['hesco_s',2,3,0],['window',1,0,1,0],['window',0,1,1,3],['window',3,1,1,1]);
+    for(const[x,y]of all)B.push(['roof',x,y,2]);
+    return{name:'Bunker',short:'BUNKER',tier:WD.F('h.bunker'),supplies:WD.build('bunker'),build:WD.F('t.bunker'),trim:0,seal:'small',ground:false,maxbase:WD.F('stack.bunker'),ctype:'hesco_l',blocks:B}}};
+function bpOf(t){if(CUSTOM_DATA[t])return CUSTOM_DATA[t];const b=TRIM_BASE[t]||t;if(!BUILTIN_BP[b])return null;return BP_CACHE[b]||(BP_CACHE[b]=BUILTIN_BP[b]())}
+// The piece as it stands now: heights, holes (as extra entrances), windows, ladder and floor 2 from the blocks still standing.
+// Only for pieces that were modified; unmodified pieces use their type as before.
+const GEO_CACHE=new Map();
+function structGeo(p){const base=P[p.t],d=bpOf(p.t);if(!base||!d||!p.mod)return base;
+  const key=p.t+'|'+JSON.stringify(p.mod);if(GEO_CACHE.has(key))return GEO_CACHE.get(key);
+  const st=pieceState(p),bl=bpBlocks(d).filter(b=>st.present(b.i));
+  const fl=bpBlocks(d).filter(b=>b.t==='floor'),x0=Math.min(...fl.map(b=>b.x)),y0=Math.min(...fl.map(b=>b.y)),w=base.w,dd=base.d;
+  const top=new Array(w*dd).fill(0);
+  for(const b of bl){const h=CB[b.t];if(h)for(const[x,y]of bpCells(b)){const i=(y-y0)*w+(x-x0);if(i>=0&&i<top.length)top[i]=Math.max(top[i],b.z+h)}
+    if(b.t==='roof'||b.t==='floor'){const i=(b.y-y0)*w+(b.x-x0);top[i]=Math.max(top[i],b.z)}}
+  const sideOf=(lx,ly)=>ly===0?'N':ly===dd-1?'S':lx===0?'W':lx===w-1?'E':null,idxOn=(s,lx,ly)=>s==='N'||s==='S'?lx:ly,SIDES='NESW';
+  const S0=base.sym||{},orig=[...(S0.door||[]),...(S0.arrow||[])].map(([s,i])=>s+i);
+  const wasGround=new Set(bpBlocks(d).filter(b=>CB[b.t]&&b.t!=='window'&&b.z===0).flatMap(bpCells).map(([x,y])=>(x-x0)+','+(y-y0)));
+  const nowGround=new Set(bl.filter(b=>CB[b.t]&&b.t!=='window'&&b.z===0).flatMap(bpCells).map(([x,y])=>(x-x0)+','+(y-y0)));
+  const holes=[];for(const k of wasGround){if(nowGround.has(k))continue;const[lx,ly]=k.split(',').map(Number),s=sideOf(lx,ly);if(s&&!orig.includes(s+idxOn(s,lx,ly)))holes.push([s,idxOn(s,lx,ly)])}
+  const win={};let winZ=null;
+  for(const b of bl.filter(b=>b.t==='window'))for(const[x,y]of bpCells(b)){const lx=x-x0,ly=y-y0,s=SIDES[b.r%4];(win[s]=win[s]||[]).push(idxOn(s,lx,ly));
+    const f=Math.max(0,...bl.filter(q=>(q.t==='roof'||q.t==='floor')&&q.x===x&&q.y===y&&q.z<=b.z).map(q=>q.z));if(winZ===null)winZ=f}
+  const ladder=bl.filter(b=>b.t==='ladder').map(b=>[b.x-x0,b.y-y0]);
+  const mid=bpBlocks(d).find(b=>b.t==='ladder');   // floor 2 = the level the ladder (or a window floor) leads to
+  const z2=mid?mid.z:(winZ||0),deck=z2>0&&bl.some(b=>b.t==='roof'&&b.z===z2),two=deck&&bl.some(b=>b.t==='roof'&&b.z>z2);   // floor 2 under a roof; without a roof it is an open deck
+  if(z2>0&&!(deck&&bl.some(b=>b.t==='roof'&&b.z>z2)))for(const k in win)delete win[k];   // floor 2 or its roof gone: no windows to crawl through
+  const g=Object.assign(Object.create(base),{h:Math.max(1,...top),hm:(lx,ly)=>top[ly*w+lx]||0,
+    sym:{...S0,arrow:[...(S0.arrow||[]),...holes],win,ladder},two,deck:deck&&!two,mod:1,st});
+  if(base.raised){const[cx,cy,iw,id]=base.raised;let c=0,r=0;for(let y=0;y<dd;y++)for(let x=0;x<w;x++){const v=top[y*w+x];if(x>=cx&&x<cx+iw&&y>=cy&&y<cy+id)c=Math.max(c,v);else r=Math.max(r,v)}
+    if(c<=r){g.raised=undefined;g.trimmed=base.raised}}   // the raised centre fell: drawn like a trimmed one
+  if(GEO_CACHE.size>200)GEO_CACHE.clear();GEO_CACHE.set(key,g);return g}
+window.structGeo=structGeo;
 function registerCustom(id,d){if(!d||!Array.isArray(d.blocks))return null;
   const bl=d.blocks.map(([t,x,y,z,r,tr])=>({t,x,y,z,r:r||0,tr:!!tr}));
   const cells=b=>(b.t==='sandbags'||b.t==='window')?(b.r%2?[[b.x,b.y],[b.x,b.y+1]]:[[b.x,b.y],[b.x+1,b.y]]):[[b.x,b.y]];
@@ -4029,13 +4157,95 @@ function registerCustom(id,d){if(!d||!Array.isArray(d.blocks))return null;
   const ladder=bl.filter(b=>b.t==='ladder').map(b=>[b.x-x0,b.y-y0]).filter(([lx,ly])=>sideOf(lx,ly));
   const wall=d.ctype&&d.ctype!=='any'?d.ctype:'hesco_l';
   const t={n:d.name||'Custom structure',w,d:dd,h:H,c:'struct',cat:'Structures',ph:3,ab:String(d.short||'CS').toUpperCase().slice(0,10),support:1,custom:1,
-    seal:d.seal,maxbase:d.maxbase|0,hm:(lx,ly)=>top[ly*w+lx]||0,sym:{arrow,win,ladder},winZ:winZ||0,two:(winZ||0)>0,note:'From the Structure designer'};
+    seal:d.seal,maxbase:d.maxbase|0,hm:(lx,ly)=>top[ly*w+lx]||0,sym:{arrow,win,ladder},winZ:winZ||0,two:(winZ||0)>0,deck:!((winZ||0)>0)&&ladder.length>0,note:'From the Structure designer'};   // deck: a ladder up to an open roof, no floor 2 inside
   if(d.ground)t.groundOnly=1;
   P[id]=t;CUSTOM_DATA[id]=d;
   const D=WD.DEF;D['b.'+id]=d.supplies|0;D['t.'+id]=d.build|0;D['h.'+id]=Math.min(3,Math.max(1,d.tier|0||3));D['c4.'+id]=WD.c4(wall);
   return id}
 function registerCustoms(m){if(m&&typeof m==='object')for(const id in m)if(/^cs_[A-Za-z0-9]+$/.test(id))registerCustom(id,m[id])}
 function customsUsed(){const o={};for(const p of pieces)if(CUSTOM_DATA[p.t])o[p.t]=CUSTOM_DATA[p.t];return o}
+</script>
+
+<script id="wd-modify">
+/* ---------- Modify structure: take blocks off a placed structure with the hammer, or put them back ----------
+   Saved on the piece as p.mod={rm:[…],back:[…]} (blueprint block numbers, wd-custom). The collapse rules decide what
+   falls; before anything beyond the block itself falls, the player is warned (in the game it can't be undone).
+   A block put back stands again but never counts as support (as in the game). */
+(()=>{
+const MC=52,MM=24,LOOK={hesco_l:['HL','var(--entry)'],hesco_s:['HS','var(--entry)'],corner:['CO','var(--entry)'],door:['D','var(--wall)'],sandbags:['SB','#C9A86A'],window:['W','var(--win)'],ladder:['L','var(--ladder)']};
+const MS={p:null,z:0,ask:null};
+const CAN_RM=t=>t==='hesco_l'||t==='hesco_s'||t==='door'||t==='sandbags'||t==='corner';
+const CAN_BACK=t=>t==='hesco_l'||t==='hesco_s'||t==='door'||t==='sandbags';
+function info(p){const d=bpOf(p.t),bl=bpBlocks(d),fl=bl.filter(b=>b.t==='floor');
+  return{d,bl,x0:Math.min(...fl.map(b=>b.x)),y0:Math.min(...fl.map(b=>b.y)),st:pieceState(p)}}
+// square of a blueprint cell on the panel grid, turned like the piece on the map
+function at(p,I,x,y){const[wx,wy]=toWorld(p,x-I.x0,y-I.y0);return[wx-p.x,wy-p.y]}
+const userRm=p=>new Set((p.mod&&p.mod.rm)||[]),userBack=p=>new Set((p.mod&&p.mod.back)||[]);
+function setMod(p,rm,back){back=[...back].filter(i=>rm.has(i));snapshot();
+  if(rm.size)p.mod=back.length?{rm:[...rm].sort((a,b)=>a-b),back:back.sort((a,b)=>a-b)}:{rm:[...rm].sort((a,b)=>a-b)};else delete p.mod;
+  changed();render()}
+const name=b=>BT(b.t);
+function groupText(list,I){const n={},top=Math.max(0,...((I||{}).bl||list).filter(b=>b.t==='roof').map(b=>b.z));
+  for(const b of list){const k=b.t==='roof'?(b.z<top?'floor H'+b.z:'roof H'+b.z):name(b);n[k]=(n[k]||0)+1}
+  const pl=(k,v)=>k.startsWith('floor H')||k.startsWith('roof H')?`${v} square${v>1?'s':''} of ${k.split(' ')[0]} at ${k.split(' ')[1]}`:`${v} ${k}${v>1&&/(Window|Ladder|Door)$/.test(k)?'s':''}`;
+  return Object.entries(n).map(([k,v])=>pl(k,v)).join(', ')}
+function act(i){const p=MS.p;if(!p)return;const I=info(p),b=I.bl[i],rm=userRm(p),back=userBack(p),trim=TRIM_BASE[p.t]&&b.tr;
+  if(trim){flashMsg('Already taken off: this is the trimmed version',true);return}
+  if(!I.st.present(i)){   // removed by the player: put it back (if it can be)
+    if(!rm.has(i)){flashMsg(`The ${name(b)} fell when the structure gave way: it can't be put back`,true);return}
+    if(!CAN_BACK(b.t)){flashMsg(`${name(b)} is a structure part: players can't build it again`,true);return}
+    const st=bpState(I.d,[...rm],[...back,i],I.bl);
+    if(b.z>0&&!I.bl.some(o=>CB[o.t]&&o.t!=='window'&&o.z+CB[o.t]===b.z&&bpCells(o).some(([x,y])=>bpCells(b).some(([u,v])=>u===x&&v===y))&&st.present(o.i))
+      &&!I.bl.some(o=>o.t==='roof'&&o.z===b.z&&st.present(o.i)&&bpCells(b).some(([x,y])=>x===o.x&&y===o.y))){flashMsg('Nothing left to stand it on',true);return}
+    back.add(i);MS.ask=null;setMod(p,rm,back);flashMsg(`Put back the ${name(b)}. It stands, but doesn't hold anything up any more`);return}
+  if(!CAN_RM(b.t)){flashMsg(`${name(b)} has no C4 and no hammer removal of its own: it goes when what holds it falls`,true);return}
+  if(back.has(i)){back.delete(i);MS.ask=null;setMod(p,rm,back);flashMsg(`Removed the ${name(b)} again`);return}
+  const after=bpState(I.d,[...rm,i],[...back],I.bl),extra=[...after.fallen].filter(k=>!I.st.fallen.has(k)).map(k=>I.bl[k]);
+  if(extra.length&&!(MS.ask&&MS.ask.i===i)){MS.ask={i,extra,rules:after.rules.filter(r=>r.down&&!I.st.rules.find(q=>q.z===r.z).down)};render();return}
+  rm.add(i);MS.ask=null;setMod(p,rm,back);flashMsg(`Removed the ${name(b)}${extra.length?': '+groupText(extra,I)+' fell':''}`,!!extra.length)}
+function levels(I){return[...new Set(I.bl.filter(b=>b.t!=='floor'&&b.t!=='ladder').map(b=>b.z))].sort((a,b)=>a-b)}
+function render(){const p=MS.p;if(!p||$('modPanel').hidden)return;if(!pieces.includes(p)){close();return}
+  const I=info(p),st=I.st,rm=userRm(p),back=userBack(p),{w,d}=dims(p);
+  $('modWhat').textContent=`${P[p.t].n} at ${where(p)}`;
+  const Ls=levels(I);if(!Ls.includes(MS.z))MS.z=Ls[0]||0;const seg=$('modLayers');seg.replaceChildren();
+  for(const z of Ls){const bt=el('button',{type:'button',class:z===MS.z?'on':'','aria-pressed':z===MS.z?'true':'false'},z?'H'+z:'Ground');bt.onclick=()=>{MS.z=z;MS.ask=null;render()};seg.append(bt)}
+  const svg=$('modSvg');svg.replaceChildren();svg.setAttribute('viewBox',`0 0 ${MM+w*MC+4} ${MM+d*MC+4}`);svg.setAttribute('width',MM+w*MC+4);
+  const g=s('g',{transform:`translate(${MM},${MM})`});svg.append(g);
+  for(let x=0;x<w;x++)g.append(s('text',{x:x*MC+MC/2,y:-7,'text-anchor':'middle','font-size':11,fill:'var(--muted)','font-family':'IBM Plex Mono, monospace'},COLS(p.x+x)));
+  for(let y=0;y<d;y++)g.append(s('text',{x:-6,y:y*MC+MC/2+4,'text-anchor':'end','font-size':11,fill:'var(--muted)','font-family':'IBM Plex Mono, monospace'},String(p.y+y+1)));
+  for(let x=0;x<w;x++)for(let y=0;y<d;y++)g.append(s('rect',{x:x*MC,y:y*MC,width:MC,height:MC,fill:'var(--grid)',stroke:'var(--line)'}));
+  const z=MS.z;
+  for(const b of I.bl)if(b.t==='roof'&&b.z===z||b.t==='floor'&&z===0){const[x,y]=at(p,I,b.x,b.y),ok=st.present(b.i);
+    g.append(s('rect',{x:x*MC+2,y:y*MC+2,width:MC-4,height:MC-4,fill:ok?'var(--slab)':'none',opacity:ok?.45:1,stroke:ok?'none':'var(--bad)','stroke-dasharray':'3 3'}))}
+  for(const b of I.bl){if(!LOOK[b.t]||b.z!==z)continue;const ok=st.present(b.i),mine=rm.has(b.i)&&!back.has(b.i),bk=back.has(b.i),trim=TRIM_BASE[p.t]&&b.tr,[lb,col]=LOOK[b.t];
+    for(const[cx,cy]of bpCells(b)){const[x,y]=at(p,I,cx,cy),gg=s('g',{class:'blk'});gg.addEventListener('click',()=>act(b.i));
+      const tt=s('title');tt.textContent=`${name(b)} at ${COLS(p.x+x)}${p.y+y+1} H${b.z}: `+(trim?'taken off (trimmed)':ok?(bk?'put back (holds nothing up)':CAN_RM(b.t)?'click to remove':'structure part'):mine?'removed · click to put back':'fell');gg.append(tt);
+      gg.append(s('rect',{class:'b',x:x*MC+5,y:y*MC+5,width:MC-10,height:MC-10,rx:3,fill:ok?col:'var(--panel)','fill-opacity':ok?.9:.4,stroke:ok?'var(--ink)':'var(--bad)','stroke-width':ok?1.2:1.5,'stroke-dasharray':ok?'none':'4 3'}));
+      if(b.t==='corner'&&ok)gg.append(s('path',{d:`M${x*MC+5} ${y*MC+5}h${MC*.4}L${x*MC+5} ${y*MC+5+MC*.4}z`,fill:'var(--ink)',opacity:.7}));
+      gg.append(s('text',{x:x*MC+MC/2,y:y*MC+MC/2+4,'text-anchor':'middle','font-size':12,'font-weight':700,fill:ok?'var(--panel)':'var(--bad)',stroke:ok?'var(--ink)':'none','stroke-width':2.2,'paint-order':'stroke','font-family':'IBM Plex Mono, monospace'},trim?'–':ok?(bk?lb+'↺':lb):mine?'✕':'fell'));
+      g.append(gg)}}
+  // what would fall: ask first
+  const ask=$('modAsk');ask.replaceChildren();
+  if(MS.ask){const b=I.bl[MS.ask.i],yes=el('button',{type:'button',class:'btn'},'Remove it'),no=el('button',{type:'button',class:'btn ghost'},'Cancel');
+    yes.onclick=()=>act(MS.ask.i);no.onclick=()=>{MS.ask=null;render()};
+    ask.append(el('div',{class:'modask',role:'alert'},el('b',{},'This destroys more than the block.'),
+      el('div',{},`Taking off the ${name(b)} brings down ${MS.ask.rules.length?MS.ask.rules.map(r=>(r.kind==='corners'?'the roof':'the floor')+' at H'+r.z).join(' and ')+': ':''}${groupText(MS.ask.extra,I)}.`),
+      el('div',{},'In the game this can\'t be undone: fallen parts can\'t be rebuilt.'),el('div',{class:'row'},yes,no)))}
+  const ru=$('modRules');ru.replaceChildren();
+  for(const r of st.rules)ru.append(el('div',{class:'modrule'+(r.down?' down':'')},r.down?`Fallen: ${r.kind==='corners'?'roof':'floor'} at H${r.z}`:
+    r.kind==='corners'?`Roof at H${r.z}: ${r.gone} of ${r.total} corners gone. Falls when ${r.fall} are gone.`:`Floor at H${r.z}: ${r.gone} of ${r.total} ground HESCO gone. Falls when ${r.fall} are gone.`));
+  const dl=$('modList');dl.replaceChildren();
+  const mineL=[...rm].filter(i=>!back.has(i)).map(i=>I.bl[i]),backL=[...back].map(i=>I.bl[i]),fellL=[...st.fallen].map(i=>I.bl[i]);
+  for(const[k,v]of[['Removed',mineL.length?groupText(mineL,I):'nothing'],['Put back',backL.length?groupText(backL,I):'nothing'],['Fallen',fellL.length?groupText(fellL,I):'nothing']])dl.append(el('dt',{},k),el('dd',{},v));
+  $('modReset').hidden=!p.mod}
+function open(p){MS.p=p;MS.z=0;MS.ask=null;$('modPanel').hidden=false;render()}
+function close(){MS.p=null;MS.ask=null;$('modPanel').hidden=true}
+$('selMod').onclick=()=>{const p=[...sel][0];if(p&&bpOf(p.t))open(p)};
+$('modClose').onclick=close;
+$('modReset').onclick=()=>{const p=MS.p;if(!p||!p.mod)return;snapshot();delete p.mod;MS.ask=null;changed();render();flashMsg('The structure is whole again (in the planner)')};
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('modPanel').hidden){if(MS.ask){MS.ask=null;render()}else close();e.stopPropagation()}},true);
+window.renderModify=render;window.openModify=open;
+})();
 </script>
 
 <script id="wd-app">
@@ -4725,6 +4935,7 @@ const ref=(x,y)=>COLS(x)+(y+1);
 const T={
   hesco_s:{n:'HESCO Small',kind:'solid',h:1,w:1,normal:1,look:'hesco'},
   hesco_l:{n:'HESCO Large',kind:'solid',h:2,w:1,normal:1,look:'hesco'},
+  corner:{n:'Corner HESCO',kind:'solid',h:2,w:1,special:1,corner:1,look:'hesco',note:'Structure only: 1.65 high, a roof on top makes 2. Carries the roof; players can\'t build it'},
   sandbags:{n:'Sandbags',kind:'solid',h:1,w:2,normal:1,edge:.5,look:'bags'},
   door:{n:'Door',kind:'solid',h:2,w:1,normal:1,look:'door'},
   floor:{n:'Floor',kind:'slab',special:1,note:'Ground floor, H0 only'},
@@ -4732,16 +4943,17 @@ const T={
   window:{n:'Window',kind:'solid',h:1,w:2,special:1,edge:.2,look:'window',note:'Wooden frame on the edge, no glass. A 1h opening: crawl only'},
   ladder:{n:'Ladder',kind:'ladder',special:1,note:'On the outside of a square, up to this layer'},
 };
-const ORDER=['hesco_s','hesco_l','sandbags','door','floor','roof','window','ladder'];
-const c4Of=t=>T[t].normal?WD.c4(t):0;
+const ORDER=['hesco_s','hesco_l','sandbags','door','corner','floor','roof','window','ladder'];
+const c4Of=t=>T[t].normal?WD.c4(t):T[t].corner?WD.c4('hesco_l'):0;
+const canBlow=t=>!!(T[t].normal||T[t].corner);
 const H=b=>T[b.t].h||0;
 
 // ---------- state ----------
-const ST={s:blank(),tool:'hesco_l',rot:0,layer:0,view:0,undo:[],testing:false,blown:new Set(),c4:0,hover:null,id:1,
+const ST={s:blank(),tool:'hesco_l',rot:0,layer:0,view:0,undo:[],testing:false,tmode:'hammer',blown:new Set(),c4:0,hover:null,id:1,
   cur:null,remote:[],local:ls.get('wd_structures')||[],unsub:[],pendDel:null,pendSave:null};
-function blank(){return{name:'New structure',short:'NEW',tier:3,supplies:0,build:0,trim:0,seal:'large_door',ground:true,maxbase:0,cmin:6,ctype:'hesco_l',blocks:[]}}
+function blank(){return{name:'New structure',short:'NEW',tier:3,supplies:0,build:0,trim:0,seal:'large_door',ground:true,maxbase:0,ctype:'hesco_l',fall:{},blocks:[]}}
 const cellsOf=b=>T[b.t].w===2?(b.r%2?[[b.x,b.y],[b.x,b.y+1]]:[[b.x,b.y],[b.x+1,b.y]]):[[b.x,b.y]];
-const live=()=>ST.s.blocks.filter(b=>!ST.blown.has(b.id));
+const live=()=>{const f=collapse().fallenIds;return ST.s.blocks.filter(b=>!ST.blown.has(b.id)&&!f.has(b.id))};
 const inB=(x,y)=>x>=0&&y>=0&&x<SN&&y<SN;
 function solidsAt(x,y,list=live()){return list.filter(b=>T[b.t].kind==='solid'&&cellsOf(b).some(([cx,cy])=>cx===x&&cy===y))}
 function slabAt(x,y,z,list=live()){return list.find(b=>T[b.t].kind==='slab'&&b.x===x&&b.y===y&&b.z===z)}
@@ -4776,8 +4988,15 @@ function pickAt(x,y,z){const L=live();
 function erase(x,y){const b=pickAt(x,y,ST.layer);if(!b)return false;ST.s.blocks=ST.s.blocks.filter(o=>o!==b);return true}
 function toggleTrim(x,y){const b=pickAt(x,y,ST.layer);if(!b||!T[b.t].normal){msg('Trim parts are normal blocks (HESCO, sandbags, door)',true);return false}b.trim=!b.trim;return true}
 function blow(x,y){const b=pickAt(x,y,ST.layer);if(!b)return;
-  if(!T[b.t].normal){msg(`${T[b.t].n} has no C4 of its own: it goes when the structure collapses`,true);return}
-  ST.blown.add(b.id);ST.c4+=c4Of(b.t);msg(`Blew ${T[b.t].n} at ${ref(b.x,b.y)} H${b.z} (${c4Of(b.t)} C4)`);renderAll()}
+  if(!canBlow(b.t)){msg(`${T[b.t].n} can't be removed on its own: it goes when what holds it up falls`,true);return}
+  const before=collapse(),hit=[b];
+  if(ST.tmode==='c4'){   // the charge sits on the block's face, in the square in front of it; the blast takes every block in the 3×3 around that square
+    const fp=footprint(),out=DV.findIndex(([dx,dy])=>!fp.has((b.x+dx)+','+(b.y+dy))),[dx,dy]=DV[out<0?ST.rot:out],cx=b.x+dx,cy=b.y+dy;
+    for(const o of live())if(o!==b&&canBlow(o.t)&&o.z<=b.z&&b.z<o.z+H(o)&&cellsOf(o).some(([ox,oy])=>Math.abs(ox-cx)<=1&&Math.abs(oy-cy)<=1))hit.push(o);
+    ST.c4+=c4Of(b.t)}
+  for(const o of hit)ST.blown.add(o.id);
+  const after=collapse(),fell=[...after.fallenIds].filter(i=>!before.fallenIds.has(i)).length,down=after.rules.filter(r=>r.down&&!before.rules.find(q=>q.z===r.z).down);
+  msg(`${ST.tmode==='c4'?`C4 (${c4Of(b.t)}) on ${T[b.t].n} at ${ref(b.x,b.y)}: ${hit.length} block${hit.length>1?'s':''} gone`:`Removed ${T[b.t].n} at ${ref(b.x,b.y)} H${b.z}`}${fell?` · ${fell} part${fell>1?'s':''} fell`:''}${down.length?' · '+down.map(r=>(r.kind==='corners'?'roof':'floor')+' at H'+r.z+' fell').join(', '):''}`,!!fell);renderAll()}
 
 // ---------- what the structure is ----------
 function footprint(){const f=new Set();for(const b of ST.s.blocks)if(b.t==='floor')f.add(b.x+','+b.y);return f}
@@ -4787,8 +5006,12 @@ function entrances(){const f=footprint(),out=[];
     if(solidsAt(x,y).some(b=>b.z===0))continue;
     out.push({x,y,dir:side,hole:solidsAt(x,y,ST.s.blocks).some(b=>b.z===0)})}
   return out}
-function collapse(){const s=ST.s,m=b=>b.z===0&&(s.ctype==='any'?T[b.t].normal:b.t===s.ctype);
-  const total=s.blocks.filter(m).length,left=live().filter(m).length;return{total,left,down:total>0&&left<s.cmin}}
+// collapse rules and what has fallen (shared engine in wd-custom: bpRules / bpState)
+let COLC=null;
+function collapse(){const key=JSON.stringify([ST.s.blocks.map(b=>[b.id,b.t,b.x,b.y,b.z,b.r]),ST.s.fall,ST.s.ctype,[...ST.blown]]);if(COLC&&COLC.key===key)return COLC;
+  const d={blocks:ST.s.blocks.map(b=>[b.t,b.x,b.y,b.z,b.r]),fall:ST.s.fall,ctype:ST.s.ctype},rm=[];ST.s.blocks.forEach((b,i)=>{if(ST.blown.has(b.id))rm.push(i)});
+  const st=bpState(d,rm),fallenIds=new Set([...st.fallen].map(i=>ST.s.blocks[i].id));
+  return COLC={key,rules:st.rules,fallenIds,down:st.rules.some(r=>r.down)}}
 const topH=()=>ST.s.blocks.reduce((m,b)=>Math.max(m,b.z+H(b)),0);
 // where an edge piece sits inside its squares (fractions of a square), in the map's frame
 function edgeRect(b){const t=T[b.t],cs=cellsOf(b),x0=Math.min(...cs.map(c=>c[0])),y0=Math.min(...cs.map(c=>c[1]));
@@ -4802,7 +5025,8 @@ function drawLadder2d(g,b,op,col){const[dx,dy]=DV[b.r],cx=(b.x+.5+dx*.5)*SC,cy=(
   for(let i=-2;i<=2;i++)gg.append(s('line',{x1:cx+px*i*6-dx*5,y1:cy+py*i*6-dy*5,x2:cx+px*i*6+dx*5,y2:cy+py*i*6+dy*5,stroke:st,'stroke-width':2}))}
 function drawBlock2d(g,b,thru,ghost){const t=T[b.t],e=edgeRect(b),x=e.x*SC,y=e.y*SC,w=e.w*SC,d=e.d*SC;
   if(t.look==='hesco'){const top=b.z+H(b),inset=1.5+Math.min(b.z,3)*1.5;
-    g.append(s('rect',{x:x+inset,y:y+inset,width:w-inset*2,height:d-inset*2,rx:2,fill:'var(--entry)','fill-opacity':ghost?.35:Math.min(.95,.6+top*.06),stroke:b.z?'var(--ink)':'var(--entry)','stroke-width':b.z?1.6:1}))}
+    g.append(s('rect',{x:x+inset,y:y+inset,width:w-inset*2,height:d-inset*2,rx:2,fill:'var(--entry)','fill-opacity':ghost?.35:Math.min(.95,.6+top*.06),stroke:b.z?'var(--ink)':'var(--entry)','stroke-width':b.z?1.6:1}));
+    if(t.corner)g.append(s('path',{d:`M${x+inset} ${y+inset}h${w*.45}L${x+inset} ${y+inset+d*.45}z`,fill:'var(--ink)',opacity:ghost?.3:.75}))}
   else if(t.look==='bags'){const long=b.r%2?d:w,deep=b.r%2?w:d,gg=s('g',{transform:`translate(${x+w/2},${y+d/2}) rotate(${b.r%2?90:0}) translate(${-long/2},${-deep/2})`,opacity:ghost?.5:1});
     gg.append(s('rect',{x:0,y:0,width:long,height:deep,fill:'var(--sand)','fill-opacity':.25}));const ig=s('g',{transform:`translate(0,${-deep/2})`});drawIcon(ig,'sandbags',long,deep*2);gg.append(ig);g.append(gg)}
   else if(t.look==='window'){const gg=s('g',{opacity:ghost?.5:1});g.append(gg);
@@ -4833,7 +5057,10 @@ function renderMap(){map.replaceChildren();const L=ST.layer,lv=live();
   for(const b of lv){if(T[b.t].kind!=='solid')continue;const thru=b.z<L&&L<b.z+H(b);if(thru||b.z===L)drawBlock2d(g,b,thru)}
   for(const b of ST.s.blocks)if(ST.blown.has(b.id)&&b.z<=L&&L<b.z+Math.max(1,H(b)))for(const[cx,cy]of cellsOf(b))
     g.append(s('path',{d:`M${cx*SC+8} ${cy*SC+8}L${cx*SC+SC-8} ${cy*SC+SC-8}M${cx*SC+SC-8} ${cy*SC+8}L${cx*SC+8} ${cy*SC+SC-8}`,stroke:'var(--bad)','stroke-width':3,'stroke-linecap':'round'}));
-  for(const b of ST.s.blocks)if(b.t==='ladder'&&b.z>=L)drawLadder2d(g,b,b.z===L?1:.35);
+  const fl=collapse().fallenIds;
+  for(const b of ST.s.blocks)if(fl.has(b.id)&&b.z===L)for(const[cx,cy]of cellsOf(b))
+    g.append(s('rect',{x:cx*SC+4,y:cy*SC+4,width:SC-8,height:SC-8,fill:'none',stroke:'var(--bad)','stroke-width':1.5,'stroke-dasharray':'4 3',opacity:.8}));
+  for(const b of live())if(b.t==='ladder'&&b.z>=L)drawLadder2d(g,b,b.z===L?1:.35);
   if(L===0)for(const e of entrances()){const[dx,dy]=DV[e.dir],cx=e.x*SC+SC/2,cy=e.y*SC+SC/2,ox=cx+dx*SC*.55,oy=cy+dy*SC*.55,ix=cx-dx*SC*.1,iy=cy-dy*SC*.1,px=-dy,py=dx,col=e.hole?'var(--gap)':'var(--door)';
     g.append(s('line',{x1:ox,y1:oy,x2:ix,y2:iy,stroke:col,'stroke-width':3}));
     g.append(s('path',{d:`M${ix-dx*7+px*6} ${iy-dy*7+py*6}L${ix} ${iy}L${ix-dx*7-px*6} ${iy-dy*7-py*6}`,fill:'none',stroke:col,'stroke-width':3,'stroke-linejoin':'round'}))}
@@ -4873,7 +5100,7 @@ function drawLadder3d(g,b,z0,z1){const[dx,dy]=DV[b.r],ex=b.x+.5+dx*.62,ey=b.y+.5
   for(let z=.3;z<=b.z;z+=.3)if(z>=z0&&z<=z1){const a=Pj(...rails[0],z),c=Pj(...rails[1],z);g.append(s('line',{x1:a[0],y1:a[1],x2:c[0],y2:c[1],stroke:'var(--ladder)','stroke-width':1.4}))}}
 function renderIso(){const svg=$('stIso');svg.replaceChildren();const col=collapse(),cut=$('stCut').checked,L=ST.layer;
   const gnd=[Pj(...rotP(0,0),0),Pj(...rotP(SN,0),0),Pj(...rotP(SN,SN),0),Pj(...rotP(0,SN),0)];
-  const root=s('g',{opacity:col.down?.35:1});svg.append(root);
+  const root=s('g');svg.append(root);
   root.append(s('polygon',{points:pts(gnd),fill:'var(--grid)',stroke:'var(--line)'}));
   for(let i=1;i<SN;i++){const a=Pj(...rotP(i,0),0),b=Pj(...rotP(i,SN),0),c=Pj(...rotP(0,i),0),d=Pj(...rotP(SN,i),0);
     root.append(s('line',{x1:a[0],y1:a[1],x2:b[0],y2:b[1],stroke:'var(--bg)',opacity:.6}));root.append(s('line',{x1:c[0],y1:c[1],x2:d[0],y2:d[1],stroke:'var(--bg)',opacity:.6}))}
@@ -4902,7 +5129,7 @@ function renderIso(){const svg=$('stIso');svg.replaceChildren();const col=collap
     if(m&&svg.clientWidth){const px=m.a*rc[0]+m.c*rc[1]+m.e-wr.left,py=m.b*rc[0]+m.d*rc[1]+m.f-wr.top,left=Math.min(px+44,svg.clientWidth-34)+'px';
       up.style.left=dn.style.left=left;up.style.top=(py-17)+'px';dn.style.top=(py+17)+'px'}
     up.disabled=L>=MAXL;dn.disabled=L<=0}
-  if(col.down){const vb=svg.viewBox.baseVal;svg.append(s('text',{x:vb.x+vb.width/2,y:vb.y+24,'text-anchor':'middle',fill:'var(--bad)','font-size':20,'font-weight':700,'letter-spacing':2,'font-family':'var(--f-head)'},'COLLAPSED'))}}
+  if(col.down){const vb=svg.viewBox.baseVal;svg.append(s('text',{x:vb.x+vb.width/2,y:vb.y+24,'text-anchor':'middle',fill:'var(--bad)','font-size':20,'font-weight':700,'letter-spacing':2,'font-family':'var(--f-head)'},col.rules.filter(r=>r.down).map(r=>(r.kind==='corners'?'ROOF':'FLOOR')+' H'+r.z+' DOWN').join(' · ')))}}
 
 // ---------- palette, layers, checks, properties ----------
 function swatch(t){const sv=s('svg',{viewBox:'0 0 14 14',width:14,height:14});
@@ -4928,12 +5155,14 @@ function renderPal(){const root=$('stPal');root.replaceChildren();
 function renderLayers(){const seg=$('stLayers');seg.replaceChildren();
   for(let z=0;z<=MAXL;z++){const n=ST.s.blocks.filter(b=>b.z===z).length,bt=el('button',{type:'button',class:z===ST.layer?'on':'','aria-pressed':z===ST.layer?'true':'false',title:z?'Height '+z:'Ground'},'H'+z);
     if(n)bt.append(el('i',{},String(n)));bt.onclick=()=>{ST.layer=z;renderAll()};seg.append(bt)}
-  $('stTestInfo').textContent=ST.testing?`C4 test · ${ST.c4} C4 used · click blocks to blow them`:''}
+  const ti=$('stTestInfo');ti.replaceChildren();if(!ST.testing)return;
+  for(const[m,n]of[['hammer','Hammer'],['c4','C4']])ti.append(el('button',{type:'button',class:'mini','aria-pressed':ST.tmode===m?'true':'false',onclick:()=>{ST.tmode=m;renderAll()}},n));
+  ti.append(` ${ST.tmode==='c4'?'C4 on the outside face: the blast takes every block in the 3×3 around it':'Hammer: one block at a time'} · ${ST.blown.size} removed · ${ST.c4} C4 used`)}
 function renderChecks(){const col=collapse(),ents=entrances(),s0=ST.s,cnt={};for(const b of s0.blocks)cnt[b.t]=(cnt[b.t]||0)+1;
-  const ct=s0.ctype==='any'?'normal blocks':T[s0.ctype].n,st=$('stStatus');
+  const st=$('stStatus'),rl=r=>r.kind==='corners'?`Roof at H${r.z}: ${r.gone} of ${r.total} corners gone, falls at ${r.fall}`:`Floor at H${r.z}: ${r.gone} of ${r.total} ground blocks gone, falls at ${r.fall}`;
   st.replaceChildren(!s0.blocks.length?el('div',{class:'st-banner ok'},'Empty. Start with Floor on the ground, or open an example.')
-    :col.total===0?el('div',{class:'st-banner bad'},`The collapse rule finds no ${ct} on the ground floor.`)
-    :el('div',{class:'st-banner '+(col.down?'bad':'ok')},col.down?`Collapsed: ${col.left} of ${col.total} ${ct} left, fewer than ${s0.cmin}. Floor, roof, windows and ladder go with it.`:`Standing: ${col.left} of ${col.total} ${ct} on the ground floor (falls below ${s0.cmin}).`));
+    :!col.rules.length?el('div',{class:'st-banner ok'},'No roof or upper floor: nothing can fall.')
+    :el('div',{class:'st-banner '+(col.down?'bad':'ok')},...col.rules.map((r,k)=>el('div',{},(r.down?'FELL · ':'')+rl(r)))));
   const fp=footprint(),xs=[...fp].map(k=>+k.split(',')[0]),ys=[...fp].map(k=>+k.split(',')[1]);
   const roofs=[...new Set(s0.blocks.filter(b=>b.t==='roof').map(b=>b.z))].sort((a,b)=>a-b);
   const list=f=>ORDER.filter(t=>f(T[t])&&cnt[t]).map(t=>`${cnt[t]} ${T[t].n}`).join(' · ')||'none';
@@ -4949,9 +5178,15 @@ function renderChecks(){const col=collapse(),ents=entrances(),s0=ST.s,cnt={};for
     ['Trim parts',trims?`${trims} (≈ ${trims*WD.F('t.remove')} s at ${WD.F('t.remove')} s each; set: ${s0.trim} s)`:'none'],
     ['C4 for all normal blocks',String(s0.blocks.filter(b=>T[b.t].normal).reduce((a,b)=>a+c4Of(b.t),0))]];
   const dl=$('stChecks');dl.replaceChildren();for(const[k,v]of rows)dl.append(el('dt',{},k),el('dd',{},v))}
-const PROPS={stp_name:'name',stp_short:'short',stp_tier:'tier',stp_supplies:'supplies',stp_build:'build',stp_trim:'trim',stp_seal:'seal',stp_maxbase:'maxbase',stp_cmin:'cmin',stp_ctype:'ctype'};
-const NUMP=new Set(['tier','supplies','build','trim','maxbase','cmin']);
-function renderProps(){for(const id in PROPS)if(document.activeElement!==$(id))$(id).value=ST.s[PROPS[id]];$('stp_ground').checked=!!ST.s.ground;$('stp_maxbase').disabled=!!ST.s.ground}
+const PROPS={stp_name:'name',stp_short:'short',stp_tier:'tier',stp_supplies:'supplies',stp_build:'build',stp_trim:'trim',stp_seal:'seal',stp_maxbase:'maxbase',stp_ctype:'ctype'};
+const NUMP=new Set(['tier','supplies','build','trim','maxbase']);
+function renderProps(){for(const id in PROPS)if(document.activeElement!==$(id))$(id).value=ST.s[PROPS[id]];$('stp_ground').checked=!!ST.s.ground;$('stp_maxbase').disabled=!!ST.s.ground;
+  const box=$('stp_rules');if(box.contains(document.activeElement))return;box.replaceChildren();
+  const rules=collapse().rules;if(!rules.length){box.append(el('span',{class:'status'},'No roof or upper floor yet: nothing can fall.'));return}
+  for(const r of rules){const inp=el('input',{type:'number',min:1,max:r.total,value:r.fall,style:'width:56px'});
+    inp.addEventListener('change',()=>{const v=Math.max(1,Math.min(r.total,+inp.value|0));ST.s.fall={...ST.s.fall};
+      const def=r.kind==='corners'?Math.min(2,r.total):Math.ceil(r.total/2);if(v===def)delete ST.s.fall[r.z];else ST.s.fall[r.z]=v;renderAll()});
+    box.append(el('label',{},r.kind==='corners'?`Roof at H${r.z} (on ${r.total} Corner HESCO) falls when this many corners are gone`:`Floor at H${r.z} (on the ground ring, ${r.total} ${$('stp_ctype').selectedOptions[0].text}) falls when this many are gone`,inp))}}
 for(const id in PROPS)$(id).addEventListener('input',()=>{const k=PROPS[id],v=$(id).value;ST.s[k]=NUMP.has(k)?+v||0:v;renderAll()});
 $('stp_ground').addEventListener('change',()=>{ST.s.ground=$('stp_ground').checked;renderAll()});
 function renderTools(){$('stErase').setAttribute('aria-pressed',ST.tool==='erase'&&!ST.testing);$('stTrim').setAttribute('aria-pressed',ST.tool==='trim'&&!ST.testing);
@@ -4978,7 +5213,7 @@ $('stBack').onclick=()=>showTab('design');
     $('stIsoTitle').textContent=ST.big?'Layer map':'3D view';$('stIsoNote').hidden=ST.big;renderAll()}}
 $('stLayUp').onclick=()=>{ST.layer=Math.min(MAXL,ST.layer+1);renderAll()};$('stLayDn').onclick=()=>{ST.layer=Math.max(0,ST.layer-1);renderAll()};
 $('stTurnL').onclick=()=>{ST.view=(ST.view+3)%4;renderIso()};$('stTurnR').onclick=()=>{ST.view=(ST.view+1)%4;renderIso()};$('stCut').onchange=renderIso;
-function startTest(){ST.testing=true;ST.blown=new Set();ST.c4=0;msg('Click a block on this layer to blow it. Change layer to reach higher blocks.');renderAll()}
+function startTest(){ST.testing=true;ST.blown=new Set();ST.c4=0;msg('Click a block on this layer to remove it (hammer) or blow it (C4). Change layer to reach higher blocks.');renderAll()}
 function endTest(){ST.testing=false;ST.blown=new Set();ST.c4=0;renderAll()}
 $('stJsonBtn').onclick=()=>{const b=$('stJsonBtn'),o=b.getAttribute('aria-expanded')!=='true';b.setAttribute('aria-expanded',o);$('stJsonBody').hidden=!o;b.querySelector('.tdet-c').textContent=o?'▲':'▼'};
 
@@ -5025,27 +5260,8 @@ $('stLoad').onclick=()=>{try{const d=JSON.parse($('stJson').value);snap();ST.s=f
 const ring=(w,d)=>{const o=[];for(let x=0;x<w;x++)for(let y=0;y<d;y++)if(!x||!y||x===w-1||y===d-1)o.push([x,y]);return o};
 const all=(w,d)=>{const o=[];for(let x=0;x<w;x++)for(let y=0;y<d;y++)o.push([x,y]);return o};
 const has=(l,x,y)=>l.some(([a,b])=>a===x&&b===y);
-const EX={
-  recon:()=>{const B=[];for(const[x,y]of all(4,4))B.push(['floor',x,y,0]);
-    for(const[x,y]of ring(4,4))if(!has([[0,2],[3,1]],x,y))B.push(['hesco_l',x,y,0]);
-    for(const[x,y]of all(4,4))B.push(['roof',x,y,2]);
-    for(const[x,y]of[[0,0],[3,0],[0,3],[3,3],[2,3]])B.push(['hesco_l',x,y,2]);
-    B.push(['sandbags',1,0,2,0],['sandbags',0,1,2,3],['sandbags',3,1,2,1],['window',1,0,3,0],['window',0,1,3,3],['window',3,1,3,1]);
-    for(const[x,y]of all(4,4))B.push(['roof',x,y,4]);
-    for(const[x,y]of[[1,1],[2,1],[1,2],[2,2]])B.push(['hesco_s',x,y,4,0,1]);
-    B.push(['ladder',1,3,2,2]);
-    return{name:'Recon Tower',short:'RECON',tier:WD.F('h.recon_tower'),supplies:WD.build('recon_tower'),build:WD.F('t.recon_tower'),trim:WD.F('t.trim.recon_tower'),seal:'large_door',ground:true,maxbase:0,cmin:6,ctype:'hesco_l',blocks:B}},
-  shelter:()=>{const B=[];for(const[x,y]of all(5,5))B.push(['floor',x,y,0]);
-    for(const[x,y]of ring(5,5))if(!has([[2,0],[0,2],[4,2],[2,4]],x,y))B.push(['hesco_l',x,y,0]);
-    for(const[x,y]of all(5,5))B.push(['roof',x,y,2]);
-    for(let x=1;x<4;x++)for(let y=1;y<4;y++)B.push(['hesco_s',x,y,2,0,1]);
-    return{name:'Indirect Fire Shelter',short:'SHELTER',tier:WD.F('h.ifs'),supplies:WD.build('ifs'),build:WD.F('t.ifs'),trim:WD.F('t.trim.ifs'),seal:'large_door',ground:true,maxbase:0,cmin:6,ctype:'hesco_l',blocks:B}},
-  bunker:()=>{const B=[];for(const[x,y]of all(4,4))B.push(['floor',x,y,0]);
-    B.push(['sandbags',0,0,0,0],['sandbags',2,0,0,0],['sandbags',0,1,0,3],['sandbags',3,1,0,1],['sandbags',0,3,0,2],['hesco_s',3,3,0]);
-    B.push(['window',0,0,1,0],['window',2,0,1,0],['window',0,1,1,3],['window',3,1,1,1],['window',0,3,1,2]);
-    for(const[x,y]of all(4,4))B.push(['roof',x,y,2]);
-    return{name:'Bunker (guess)',short:'BUNKER',tier:WD.F('h.bunker'),supplies:WD.build('bunker'),build:WD.F('t.bunker'),trim:0,seal:'small',ground:false,maxbase:WD.F('stack.bunker'),cmin:3,ctype:'sandbags',blocks:B}}};
-const EX_NAME={recon:'Recon Tower',shelter:'Indirect Fire Shelter',bunker:'Bunker (guess: sandbags)'};
+const EX={recon:()=>BUILTIN_BP.recon_tower(),shelter:()=>BUILTIN_BP.ifs(),bunker:()=>BUILTIN_BP.bunker()};   // as tested in game 10 Oct 2026 (wd-custom)
+const EX_NAME={recon:'Recon Tower',shelter:'Indirect Fire Shelter',bunker:'Bunker'};
 
 // ---------- saving: Published (admin, everyone sees) and My structures (personal) ----------
 const COL=()=>TEST_MODE?'test_structures':'structures';

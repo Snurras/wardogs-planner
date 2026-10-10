@@ -214,5 +214,13 @@ If the rules already have an `isAdmin()` function, keep the existing one and ski
 - Saved designs carry the blueprints they use (`design.customs`), registered again on load and from the draft, so a shared design opens for others.
 - Known gaps: Side view draws them as plain HESCO blocks; no trim on the map yet; Bremer "covers an opening" only knows the built-in buildings; the old built-in Bunker / Recon / Shelter are still separate pieces.
 
+### Collapse and Modify structure (v117, on test 10 Oct 2026)
+- Shared engine in `<script id="wd-custom">`: `bpBlocks`, `bpRules` (count rule / corner rule per slab level, numbers overridable in the blueprint as `fall:{z:n}`), `bpState(d,rm,back)` (what stands, what fell and why), `pieceState(p)`. Built-in blueprints `BUILTIN_BP` (recon_tower, ifs, bunker as tested), `bpOf(type)` (trimmed types use the base blueprint with trim blocks gone). New block `corner` (Corner HESCO, 1.65 + roof = 2).
+- Piece data: `p.mod={rm:[…],back:[…]}`, blueprint block numbers. `back` = put back: stands, never counts as support. Cleaned on load, kept by copy/paste.
+- `TT(p)` (wd-design) = the piece type as it stands (`structGeo`, cached): heights, holes added after the original entrances (seal keys unchanged), windows/ladder that still stand, `two` only while floor 2 stands (windows of a fallen floor 2 are dropped). Used by `cellTop`, `topOf`, `entrancesOf`, `windowsOf`, `ladderSpots`, `drawPiece`, `heightText` and the threat check (`twoOf`). Unmodified pieces use their type as before.
+- `<script id="wd-modify">`: the Modify structure panel (selection bar button). Warns before a removal that brings down more than the block.
+- Designer: Test collapse with Hammer / C4 (3×3 blast at the block's level, charge on the outside face).
+- Known gaps: Side view and protection pictures don't show changes yet; no build time for removals; the threat check doesn't plan collapses or the 3×3 blast itself.
+
 ### Next
 - Make the old built-in structures use blueprints too (step 1–2 of section 9), then Side view from the blocks.

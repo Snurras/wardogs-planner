@@ -15,7 +15,7 @@ Select (V) · Brush (B) · Undo · Rotate (R) · Erase (E) · Modify an entrance
 | Vanguard CIWS | 4×4 | emp |
 | Refuel / Repair Station | 2×2 | H2 |
 | Drill Rig | 2×3 | H3 |
-| Bunker | 4×4 | roof H2, one floor, windows |
+| Bunker | 4×4 | roof H2, one floor, 4 corner HESCO, sandbags + 6 windows, entrance S x1 |
 | Recon Tower | 4×4 | edges H4, centre 2×2 H5, floor 2 at H2, outside ladder |
 | Indirect Fire Shelter | 5×5 | edges H2, centre 3×3 H3 |
 | Trimmed Recon / Shelter | same | flat H4 / H2 (centre removed, extra trim time) |
@@ -27,11 +27,14 @@ Select (V) · Brush (B) · Undo · Rotate (R) · Erase (E) · Modify an entrance
 | FOB 3×3 | fixed, can be moved not erased | |
 
 ## Building rules (all numbers are facts, see Fact sheet)
-- HESCO/Doors on HESCO/Doors up to H7; anything on a building up to H10. Bunker on ground or on HESCO ≤ H2. Recon Tower / Shelter on the ground only.
+- HESCO/Doors on HESCO/Doors up to H7; anything on a building up to H10. Bunker on ground or on HESCO ≤ H2. Recon Tower / Shelter on the ground only. Nothing on the square in front of a structure's ladder.
 - FOB build area: 60 m square centred on the FOB (field pieces may sit outside). One Refuel and one Repair Station per FOB.
 - Emplacements keep a 1-square clear gap (gap rule).
 - **Elevation Stacking** (free foundation): a piece snapped side-to-side to a piece standing on a small HESCO is built one level up for free; it chains; stays when the Bumper block is removed. Not for barbed wire, tents, hedgehogs, sandbags.
 - **Guide blocks (GB) / Bumper blocks (BB)**: helper blocks for stacking; placed only (1 s, 1 supply). “Show Guide and Bumper blocks” checkbox under the notices hides their markers on the map (build steps keep them).
+
+## Modify structure (selection bar, one structure selected)
+- Panel over the map: pick a layer, click a block to take it off with the hammer, click a removed block to put it back. Warns before anything more than the block falls (can't be undone in game). Put-back blocks hold nothing up. Collapse rules and code: doc 11 §6 and §11.
 
 ## Entrances (Modify an entrance, M)
 - Red arrows = entrances. Recon/Shelter: seal with Large HESCO or Door; Bunker: Small HESCO only. Cycle: open → HESCO → Door → open.
