@@ -17,3 +17,5 @@
 - The square in front of a structure's ladder must stay free, as in the game. Nothing can be built there, and a structure can't be placed with its ladder against a piece.
 
 Rules: **change needed** for the Structure designer: new collections `structures` and `test_structures` (rules in doc 11, section 11). Until then saving structures online is refused; the rest works.
+
+- New: **Copy as text** in the top bar copies the open design as text, to paste into a chat with Claude. If the browser blocks copying, a box opens with the text selected.
