@@ -4,12 +4,12 @@
 Every message in a long chat re-sends the whole history (hundreds of screenshots, code and test runs). The app file itself is also big (~700 KB). A short chat with only the right docs costs a fraction.
 
 ## The rule
-**One topic per chat. Point Claude at `01_PROJECT_CORE.md` + one topic doc (they live in the repo, no need to attach). Start a new chat after each release or after ~20 messages.**
+**One topic per chat. Point Claude at `01_PROJECT_CORE.md` + the topic doc(s) in the table below — usually one, structures need two or three (they live in the repo, no need to attach). Start a new chat after each release or after ~20 messages.**
 
 ## Pick your chat
 | I want to… | Docs | Model |
 |---|---|---|
-| Change a tool, piece, stacking rule, entrances, Wall Optimization, templates | 01 + 02 | Opus |
+| Change a tool, piece, stacking rule, entrances, Modify structure, Wall Optimization, templates | 01 + 02 (+11 for structures) | Opus |
 | Change how attackers get in, C4, movement, the attack animation or its jokes | 01 + 03 | Opus |
 | Structures as blocks, Structure Builder, modify a structure (Bunker, Recon, Shelter, new buildings) | 01 + 11 (+03 threat, +04 side view) | Opus |
 | Protection rules, hover picture, Side view, how pieces look from the side | 01 + 04 (+07 for look) | Opus |
@@ -41,7 +41,7 @@ Mockup first: <yes/no>.  Put it on staging when done: <yes/no>.
 | Version | Address | Who sees it |
 |---|---|---|
 | Staging | the claude.ai artifact | only you (Claude's workbench) |
-| Test | https://snurras.github.io/wardogs-planner/test.html | logged-in testers only (Firebase list `testers`), own test data |
+| Test | https://snurras.github.io/wardogs-planner/test.html | logged-in testers only (Firebase list `testers`), own designs, feedback, facts and structures; logins and user settings are shared with Live |
 | Live | https://snurras.github.io/wardogs-planner/ | everyone |
 
 ## The two commands (any chat with 08, Sonnet is fine)

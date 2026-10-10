@@ -371,6 +371,7 @@ section.tab{display:flex;flex-direction:column;gap:16px}
 .toolbar .btn:has(.ti){padding-left:9px;padding-right:10px}
 .toolbar{column-gap:5px}
 .toolbar .btn{letter-spacing:.05em}
+@media (max-width:1440px){.toolbar .btn{letter-spacing:.01em}.toolbar .btn:has(.ti){padding-left:6px;padding-right:7px}.toolbar .btn .ti{margin-right:3px}.toolbar .chk{gap:4px}}
 .trip-t .k svg{vertical-align:-4px;margin-right:5px}
 .gbchk{display:flex;align-items:center;gap:8px;font-size:13.5px;font-weight:600;border-top:1px solid var(--line);padding-top:6px;margin-top:2px;cursor:pointer}.gbchk input{margin:0}
 .btnnote{position:fixed;z-index:55;background:var(--ok);color:#fff;font:700 14px var(--f-head);letter-spacing:.04em;padding:6px 12px;border-radius:6px;box-shadow:0 4px 14px rgba(0,0,0,.2);white-space:nowrap;pointer-events:none}
@@ -573,7 +574,7 @@ a{color:var(--accent)}
     <button class="edit-only btn ghost" type="button" id="undoBtn" title="Undo the last change (Ctrl+Z)"><span class="ti"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" style="flex:none"><circle cx="12" cy="12" r="10" fill="#5B6452"/><path d="M10 8l-4 4 4 4M6 12h8a3 3 0 010 6h-1" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Undo</button>
     <button class="edit-only btn ghost" type="button" id="rotBtn"><span class="ti"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" style="flex:none"><circle cx="12" cy="12" r="10" fill="#4D5C27"/><path d="M17 12a5 5 0 11-1.5-3.6" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"/><path d="M16 5v4h-4" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Rotate (R)</button>
     <button class="edit-only btn ghost tool" type="button" id="eraseBtn" aria-pressed="false" title="Erase the top piece where you click (E)"><span class="ti"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" style="flex:none"><path d="M14 3l7 7-10 10H6l-3.5-3.5z" fill="#E8A0A0" stroke="#1F251B" stroke-width="1.4" stroke-linejoin="round"/><path d="M8.5 8.5l7 7" stroke="#1F251B" stroke-width="1.4"/><path d="M2.5 16.5L6 20h5l2.5-2.5-7-7z" fill="#F4F6EF" stroke="#1F251B" stroke-width="1.4" stroke-linejoin="round"/></svg></span>Erase (E)</button>
-    <button class="edit-only btn ghost tool" type="button" id="sealToolBtn" aria-pressed="false" title="Modify structure (M): click a structure on the map, then remove blocks from it or add HESCO, Doors and Sandbags, one layer (floor) at a time"><span class="ti"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" style="flex:none"><rect x="1" y="3" width="22" height="18" rx="2" fill="#1E8A3E"/><rect x="13" y="6" width="7" height="12" fill="none" stroke="#fff" stroke-width="1.6"/><circle cx="8" cy="7" r="1.7" fill="#fff"/><path d="M7.5 9.5l-2 3.5 2.5 1.5-1 3.5M7.5 9.5l3 2.5h2.5M5.5 13l-2.5 1.5" fill="none" stroke="#fff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Modify structure (M)</button>
+    <button class="edit-only btn ghost tool" type="button" id="sealToolBtn" aria-pressed="false" title="Modify structure (M): click a structure on the map, then remove blocks from it or add HESCO, Doors and Sandbags, one layer (floor) at a time"><span class="ti"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" style="flex:none"><rect x="1.5" y="12" width="15" height="9" rx=".8" fill="#C9A86A" stroke="#8A6A35" stroke-width="1"/><rect x=".8" y="10" width="16.4" height="2.4" rx=".6" fill="#7A7F72" stroke="#3E4238" stroke-width=".8"/><rect x="7" y="15.5" width="4" height="5.5" fill="#3E4238"/><path d="M5.5 12v9M12.5 12v9" stroke="#8A6A35" stroke-width=".7"/><path d="M14 10.5L20.5 3.5" stroke="#6B4A2A" stroke-width="2" stroke-linecap="round"/><rect x="17.2" y="0.8" width="6" height="3.6" rx=".8" transform="rotate(45 20.2 2.6)" fill="#5B6063" stroke="#1F251B" stroke-width=".8"/></svg></span>Modify structure (M)</button>
     <button class="edit-only btn ghost" type="button" id="wallOptBtn" title="Wall Optimization: every 4 large HESCO (H2) standing in a straight row become one HESCO Wall, which is cheaper and quicker to build. Same height and shape, so the base holds the same. Undo takes it back."><span class="ti"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" style="flex:none"><rect x="1" y="12" width="22" height="8" rx=".8" fill="#C9A86A" stroke="#8A6A35" stroke-width="1"/><path d="M6.5 12v8M12 12v8M17.5 12v8" stroke="#8A6A35" stroke-width=".7"/><path d="M6 17.5L16.5 4" stroke="#1F251B" stroke-width="2.6" stroke-linecap="round"/><path d="M15 6L17 3.5" stroke="#F4F6EF" stroke-width="2.6" stroke-linecap="round"/><path d="M19.5 1.5l.7 1.6 1.6.7-1.6.7-.7 1.6-.7-1.6-1.6-.7 1.6-.7z" fill="#F2C230" stroke="#1F251B" stroke-width=".5"/><path d="M21 8l.45 1 1 .45-1 .45-.45 1-.45-1-1-.45 1-.45z" fill="#F2C230"/><path d="M12 2.3l.4.9.9.4-.9.4-.4.9-.4-.9-.9-.4.9-.4z" fill="#F2C230"/></svg></span>Wall Optimization</button>
     <button class="edit-only btn ghost tool" type="button" id="sideBtn" aria-pressed="false" title="Side view (S): drag over part of the design to see it from the side. R turns the view. Click Side view again to go back to the map with the area still marked, and again to see the view. ✕ closes it and clears the area."><span class="ti"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" style="flex:none"><path d="M1 21.5h22" stroke="#5B6452" stroke-width="1.2"/><rect x="3" y="13" width="6" height="8.5" fill="#C9A86A" stroke="#8A6A35"/><rect x="9" y="9" width="6" height="12.5" fill="#B8B8B4" stroke="#7B7E79"/><rect x="15" y="15" width="6" height="6.5" fill="#C9A86A" stroke="#8A6A35"/><path d="M1.5 5.5c2.6-3.3 7.9-3.3 10.5 0c-2.6 3.3-7.9 3.3-10.5 0z" fill="#fff" stroke="#1F251B"/><circle cx="6.75" cy="5.5" r="1.7" fill="#2C6894"/><circle cx="6.75" cy="5.5" r=".6" fill="#111"/></svg></span>Side view (S)</button>
     <span class="vsep edit-only"></span>
@@ -1213,8 +1214,10 @@ function place(np,list=pieces){
   if(ONE_PER_FOB.has(np.t)&&list.some(q=>q.t===np.t&&q!==np))return{err:`Only one ${t.n} per FOB`};
   // the square in front of a structure's ladder is taken by the ladder: nothing can be built there (game rule)
   const feet=q=>ladderSpots(q).map(l=>({x:l.x+l.out[0],y:l.y+l.out[1]}));
-  for(const q of list){if(q===np||!P[q.t].sym)continue;if(feet(q).some(f=>hit(r,{...f,w:1,d:1})))return{err:`The ladder of the ${P[q.t].n} needs the square in front of it free`};
-    if(t.sym&&feet(np).some(f=>hit(rectOf(q),{...f,w:1,d:1})))return{err:`This ${t.n}'s ladder needs the square in front of it free: the ${P[q.t].n} is in the way`}}
+  const myFeet=t.sym?feet(np):[];
+  for(const q of list){if(q===np)continue;
+    if(P[q.t].sym&&feet(q).some(f=>hit(r,{...f,w:1,d:1})))return{err:`The ladder of the ${P[q.t].n} needs the square in front of it free`};
+    if(myFeet.some(f=>hit(rectOf(q),{...f,w:1,d:1})))return{err:`This ${t.n}'s ladder needs the square in front of it free: the ${P[q.t].n} is in the way`}}
   let z=null;
   for(let x=r.x;x<r.x+r.w;x++)for(let y=r.y;y<r.y+r.d;y++){
     const u=topAt(x,y,list);
@@ -2726,6 +2729,8 @@ function commitEraseLine(){const L=eraseLinePlan();line=null;if(!L.ok.length){if
 function commitLine(){if(line&&line.erase){commitEraseLine();return}const L=linePlan();line=null;if(!L.ok.length){if(L.bad.length)flashMsg(L.bad[0].err,true);return}
   snapshot();strokeSaved=true;for(const np of L.ok){pieces.push(np);stroke.add(np)}changedDuringStroke();window.tipAfterPlace?.(L.ok[L.ok.length-1])}
 function snapshot(){history.push(JSON.stringify(pieces));if(history.length>80)history.shift()}
+// before Open or Clear: also keep the name, the saved design it belongs to, Only FOB and the haul plan, so Undo brings all of it back
+function snapshotDoc(){history.push(JSON.stringify({doc:window.docState?docState():null,pieces}));if(history.length>80)history.shift()}
 function supports(p){return pieces.some(q=>q!==p&&q.z>p.z&&q.z<=topOf(p)&&hit(rectOf(q),rectOf(p)))}
 function act(c){
   if(!c||mode!=='edit')return;
@@ -2772,7 +2777,7 @@ document.addEventListener('keydown',e=>{const tg=e.target;if((tg.tagName==='INPU
   if((e.key==='r'||e.key==='R')&&dgfHoverEmp()){dgfView=dgfView==='NS'?'WE':'NS';draw();return}   // turn the protection picture, not a piece
   if((e.key==='r'||e.key==='R')&&tool==='seal'){turnCentreDoor();return}
   if(e.key==='r'||e.key==='R'){if(tool==='brush'){if(brush){turnBrush();draw()}}else if(inSel&&pasting){turnClip();draw()}else if(inSel&&sel.size)turnSel();else turn()}
-  else if(e.key==='e'||e.key==='E'){setTool(tool==='erase'?'hesco_wall':'erase')}
+  else if(e.key==='e'||e.key==='E'){setTool(tool==='erase'?lastPiece:'erase')}
   else if(e.key==='v'||e.key==='V'){setTool('select')}
   else if(e.key==='b'||e.key==='B'){brushButton()}
   else if(e.key==='m'||e.key==='M'){setTool(tool==='seal'?lastPiece:'seal')}
@@ -2841,7 +2846,9 @@ function optimizeWalls(){if(!wallPlan(pieces).length){btnNote($('wallOptBtn'),'N
   btnNote($('wallOptBtn'),`${save} supplies${secs>0?' and '+secs+' s':''} saved`)}
 $('wallOptBtn').onclick=optimizeWalls;
 $('selTurn').onclick=()=>{if(pasting){turnClip();draw()}else turnSel()};$('selCopy').onclick=copySel;$('selPaste').onclick=startPaste;$('selDel').onclick=deleteSel;$('selBrush').onclick=brushButton;$('brushBtn').onclick=brushButton;
-function undo(){if(!history.length)return;pieces=JSON.parse(history.pop());sel=new Set();updateSelBar();changed()}
+function undo(){if(!history.length)return;const h=JSON.parse(history.pop());
+  if(Array.isArray(h))pieces=h;else{pieces=h.pieces;if(h.doc&&window.restoreDoc)restoreDoc(h.doc)}
+  sel=new Set();updateSelBar();changed()}
 $('gapRule').onchange=()=>{markAll();changed()};
 // check every piece against the rules again (after a rule toggle)
 function markAll(){for(const p of pieces)if(p.t!=='fob')p.bad='?';recheck()}
@@ -2866,7 +2873,7 @@ const TRIM_OF={recon_tower:'recon_trim',ifs:'ifs_trim'},TRIMMED=new Set(Object.v
 const SHORT_NAME={ifs:'Shelter',hesco_s:'HESCO Small',hesco_l:'HESCO Large'};   // palette label (full name in the tooltip)
 function renderPalette(){
   const root=$('palette');root.replaceChildren();
-  CATS.forEach((cat,ci)=>{root.append(el('h4',{},cat,...(ci?[]:[el('span',{class:'phl',title:'Footprint in blocks, and height where it can be stood on'},'Space'),el('span',{class:'phl c',title:'Build supplies'},'$')])));
+  CATS.forEach((cat,ci)=>{root.append(el('h4',{},cat,...(ci?[]:[el('span',{class:'phl',title:'Footprint in blocks, and height where it can be stood on'},'Space'),el('span',{class:'phl c',title:'Build supplies'},'Supply')])));
     const pub=cat==='Structures'?(window.publishedStructs?.()||[]):[];
     const rows=pub.length?pub.map(id=>[id,P[id]]):Object.entries(P).filter(([id,t])=>(t.pal||t.cat)===cat&&!TRIMMED.has(id)&&!t.custom);
     for(const[id,t]of rows){
@@ -3101,7 +3108,8 @@ function buildTime(){const F=WD.F,missing=new Set();let sec=0;
     else if(st.kind==='helper')sec+=st.act==='build'?T('t.hesco_s',P.hesco_s.n)+T('t.place'):T('t.remove','Removing a piece')+T('t.place');
     else if(st.kind==='align')sec+=T('t.place');
     else if(st.kind==='alignOff')sec+=st.cells.length*T('t.place')}
-  for(const p of pieces){for(const e of openingsOf(p))if(e.sealType)sec+=piece(e.sealType);for(const a of addsOf(p))sec+=piece(a[0])}
+  for(const p of pieces){for(const e of openingsOf(p))if(e.sealType)sec+=piece(e.sealType);for(const a of addsOf(p))sec+=piece(a[0]);
+    if(p.mod&&Array.isArray(p.mod.rm)){const back=new Set(p.mod.back||[]);sec+=p.mod.rm.filter(i=>!back.has(i)).length*T('t.remove','Removing a block')}}   // taken off with Modify structure
   return{sec,missing:[...missing]}}
 const mmss=s=>{s=Math.round(s);const h=Math.floor(s/3600),m=Math.floor(s%3600/60),x=s%60;return(h?h+':'+String(m).padStart(2,'0'):m)+':'+String(x).padStart(2,'0')};
 function renderTime(){const box=$('timeCard');if(!box)return;const real=pieces.filter(p=>p.t!=='fob');
@@ -3583,7 +3591,7 @@ function renderSummary(T){const sum=$('threat');sum.replaceChildren();const W=T.
     const title=can?`Play the attack: ${isC4?(r.id==='footC4'?'on foot with C4':r.id==='carC4'?'car and C4':'Ural and C4'):r.label}`:'Nothing to play: it holds';
     const play=el('button',{type:'button',class:'tplay'+(playing===r.id?' on':''),'data-row':r.id,'data-title':title,title,'aria-label':title,'aria-pressed':playing===r.id?'true':'false'},PLAY_SVG());
     if(!can)play.disabled=true;else play.onclick=()=>window.playAttack?.(r.id);
-    const name=el('button',{type:'button',class:'tname','aria-pressed':threatSel===r.id?'true':'false',title:threatSel===r.id?'Hide the route':'Show the route on the map'},r.label);name.onclick=()=>selectRoute(r.id);
+    const name=el('button',{type:'button',class:'tname','aria-pressed':threatSel===r.id?'true':'false',title:threatSel===r.id?'Hide the route':'Show the route on the map'},r.label);name.onclick=()=>{if(threatSel!==r.id&&svIsOpen())svClose();selectRoute(r.id)};
     const res=el('span',{class:'tres'},isC4?c4Badge(!r.b?'–':r.b.incomplete?'?':r.b.c4):el('span',{class:'tpill '+(r.gets?'in':'ok')},r.gets?'GETS IN':'HOLDS'));
     sum.append(el('div',{class:'trw'+(isC4?' sub':'')+(threatSel===r.id?' sel':''),role:'listitem'},name,play,res))}
   $('threatHint').textContent=threatSel?'Route shown on the map. Click the name again to hide it.':''}
@@ -4495,11 +4503,25 @@ function at(p,I,x,y){const[wx,wy]=toWorld(p,x-I.x0,y-I.y0);return[wx-p.x,wy-p.y]
 // the blueprint square under a map square (or null)
 function bpOfCell(p,I,cx,cy){for(const[bx,by]of I.foot){const[x,y]=at(p,I,bx,by);if(p.x+x===cx&&p.y+y===cy)return[bx,by]}return null}
 const userRm=p=>new Set((p.mod&&p.mod.rm)||[]),userBack=p=>new Set((p.mod&&p.mod.back)||[]),userAdd=p=>((p.mod&&p.mod.add)||[]).map(a=>[...a]);
-function setMod(p,rm,back,add=userAdd(p)){back=[...back].filter(i=>rm.has(i));snapshot();const m={};
+// pieces placed on the map that nothing holds up any more (every square under them must reach their base), and what stands on them
+function unheld(list){const out=new Set();let grew=true;
+  while(grew){grew=false;for(const q of list){if(out.has(q)||!q.z||q.fnd)continue;const r=rectOf(q);let ok=true;
+    for(let x=r.x;x<r.x+r.w&&ok;x++)for(let y=r.y;y<r.y+r.d&&ok;y++)
+      ok=list.some(u=>u!==q&&!out.has(u)&&u.z<q.z&&hit(rectOf(u),{x,y,w:1,d:1})&&cellTop(u,x,y)>=q.z);
+    if(!ok){out.add(q);grew=true}}}
+  return out}
+const modOf=(rm,back,add)=>{back=[...back].filter(i=>rm.has(i));const m={};
   if(rm.size){m.rm=[...rm].sort((a,b)=>a-b);if(back.length)m.back=back.sort((a,b)=>a-b)}
-  if(add.length)m.add=add;
-  if(Object.keys(m).length)p.mod=m;else delete p.mod;
+  if(add.length)m.add=add;return Object.keys(m).length?m:null};
+// what a change to p would bring down among the other pieces (only what is newly left without support)
+function dropsIf(p,m){const was=unheld(pieces),keep=p.mod;if(m)p.mod=m;else delete p.mod;
+  const now=unheld(pieces);if(keep)p.mod=keep;else delete p.mod;return[...now].filter(q=>!was.has(q))}
+function setMod(p,rm,back,add=userAdd(p)){const m=modOf(rm,back,add),drop=dropsIf(p,m);snapshot();
+  if(m)p.mod=m;else delete p.mod;
+  if(drop.length){const d=new Set(drop);pieces=pieces.filter(q=>!d.has(q));MS.dropped=drop}else MS.dropped=null;
   changed();render()}
+const dropText=list=>{const n={};for(const q of list)n[P[q.t].n]=(n[P[q.t].n]||0)+1;return Object.entries(n).map(([k,v])=>(v>1?v+' × ':'')+k).join(', ')};
+const dropNote=()=>MS.dropped&&MS.dropped.length?` · fell with it: ${dropText(MS.dropped)}`:'';
 const name=b=>BT(b.t);
 const layersOf=I=>[...new Set([0,...I.bl.filter(b=>b.t==='roof').map(b=>b.z)])].sort((a,b)=>a-b);
 const lvl=(Ls,z)=>{let r=Ls[0];for(const L of Ls)if(L<=z)r=L;return r};
@@ -4523,10 +4545,11 @@ function act(i){const p=MS.p;if(!p)return;const I=info(p),b=I.bl[i],rm=userRm(p)
     back.add(i);MS.ask=null;setMod(p,rm,back);flashMsg(`Put back the ${name(b)}. It stands, but doesn't hold anything up any more`);return}
   if(!CAN_RM(b.t)){flashMsg(`${name(b)} has no C4 and no hammer removal of its own: it goes when what holds it falls`,true);return}
   if(back.has(i)){back.delete(i);MS.ask=null;setMod(p,rm,back);flashMsg(`Removed the ${name(b)} again`);return}
-  const after=bpState(I.d,[...rm,i],[...back],I.bl),extra=[...after.fallen].filter(k=>!I.st.fallen.has(k)).map(k=>I.bl[k]);
-  if(extra.length&&!(MS.ask&&MS.ask.i===i&&MS.ask.p===p)){MS.ask={p,i,extra,rules:after.rules.filter(r=>r.down&&!I.st.rules.find(q=>q.z===r.z).down)};render();
+  const after=bpState(I.d,[...rm,i],[...back],I.bl),extra=[...after.fallen].filter(k=>!I.st.fallen.has(k)).map(k=>I.bl[k]),
+    on=dropsIf(p,modOf(new Set([...rm,i]),back,userAdd(p)));
+  if((extra.length||on.length)&&!(MS.ask&&MS.ask.i===i&&MS.ask.p===p)){MS.ask={p,i,extra,on,rules:after.rules.filter(r=>r.down&&!I.st.rules.find(q=>q.z===r.z).down)};render();
     flashMsg(`Taking off the ${name(b)} brings more down: answer the warning above the map`,true);return}
-  rm.add(i);MS.ask=null;setMod(p,rm,back);flashMsg(`Removed the ${name(b)}${extra.length?': '+groupText(extra,I)+' fell':''}`,!!extra.length)}
+  rm.add(i);MS.ask=null;setMod(p,rm,back);flashMsg(`Removed the ${name(b)}${extra.length?': '+groupText(extra,I)+' fell':''}${dropNote()}`,!!(extra.length||on.length))}
 
 /* ----- adding blocks ----- */
 const slabAt=(I,z,x,y)=>z===0?I.foot.some(([u,v])=>u===x&&v===y):I.bl.some(b=>b.t==='roof'&&b.z===z&&b.x===x&&b.y===y&&I.st.present(b.i));
@@ -4552,15 +4575,18 @@ function addErr(p,I,Ls,L,blk){const t=blk.t,n=Ls.indexOf(L)+1;
   return null}
 function doAdd(p,blk,L,n){const add=userAdd(p);add.push([blk.t,blk.x,blk.y,L,blk.r]);MS.ask=null;setMod(p,userRm(p),userBack(p),add);
   flashMsg(`Added a ${P[blk.t].n} on layer ${n} (${WD.build(blk.t)} supplies). Erase (E) or right-click takes it off again`)}
-function dropAdd(p,k){const add=userAdd(p),a=add[k];if(!a)return;add.splice(k,1);MS.ask=null;setMod(p,userRm(p),userBack(p),add);flashMsg(`Took off the added ${P[a[0]].n}`)}
+function dropAdd(p,k){const add=userAdd(p),a=add[k];if(!a)return;add.splice(k,1);MS.ask=null;setMod(p,userRm(p),userBack(p),add);flashMsg(`Took off the added ${P[a[0]].n}${dropNote()}`)}
 // entrances and the open centre on Layer 1: closed with the chosen block, opened with Erase
 function sealErr(p){if(MS.add==='sandbags')return"Sandbags don't close an entrance: pick a HESCO or a Door";
-  if(MS.add==='door'&&!DOOR_OK(p.t))return`A ${P[p.t].n} entrance takes a ${P[SEAL_WITH(p.t)].n}, not a Door`;return null}
+  const sw=SEAL_WITH(p.t);
+  if(MS.add==='door'&&!DOOR_OK(p.t))return`Entrances of the ${P[p.t].n} take a ${P[sw].n}, not a Door: pick ${P[sw].n} in the bar above`;
+  if(MS.add!=='door'&&MS.add!==sw&&!(P[p.t]&&P[p.t].seal==='any'))return`Entrances of the ${P[p.t].n} take a ${P[sw].n}${DOOR_OK(p.t)?' or a Door':''}: pick it in the bar above`;
+  return null}
 function toggleOpening(p,e){const c=new Set(p.closed||[]),d=new Set(p.doors||[]);
   if(e.sealType){c.delete(e.k);d.delete(e.k);if(p.doorR){delete p.doorR[e.k];if(!Object.keys(p.doorR).length)delete p.doorR}snapshot();flashMsg('Opened the '+(e.centre?'centre square':'entrance'))}
   else{const err=sealErr(p);if(err){flashMsg(err,true);return}
     snapshot();if(MS.add==='door')d.add(e.k);else c.add(e.k);
-    const sw=SEAL_WITH(p.t);flashMsg(MS.add==='door'?'Closed with a Door':`Closed with a ${P[sw].n}`+(MS.add!==sw?` (this entrance takes that size)`:''))}
+    flashMsg(MS.add==='door'?'Closed with a Door':`Closed with a ${P[MS.add].n}`)}
   p.closed=[...c].sort((a,b)=>a-b);p.doors=[...d].sort((a,b)=>a-b);if(!p.closed.length)delete p.closed;if(!p.doors.length)delete p.doors;
   MS.ask=null;changed();render()}
 
@@ -4584,7 +4610,7 @@ function planAt(p,bx,by,erase){const I=info(p),Ls=layersOf(I),n=MS.n;
   if(op){const what=op.centre?'centre square':'entrance';
     if(op.sealType)return{bad:true,cells:me,text:pre+`the ${what} is closed with a ${P[op.sealType].n}. Erase (E) or right-click opens it`};
     const err=sealErr(p);if(err)return{bad:true,cells:me,text:pre+err};
-    return{cells:me,text:pre+`close the ${what} with a ${P[MS.add==='door'?'door':SEAL_WITH(p.t)].n}`,run:()=>toggleOpening(p,op)}}
+    return{cells:me,text:pre+`close the ${what} with a ${P[MS.add].n}`,run:()=>toggleOpening(p,op)}}
   let blk={t:MS.add,x:bx,y:by,r:0};
   if(MS.add==='sandbags'){   // the second square is always to the right (↔) or below (↕) on the map
     const o=bpOfCell(p,I,wx+(MS.ar?0:1),wy+(MS.ar?1:0));
@@ -4594,9 +4620,9 @@ function planAt(p,bx,by,erase){const I=info(p),Ls=layersOf(I),n=MS.n;
   return{bad:!!err,cells:W(blk),text:pre+(err||`add a ${P[MS.add].n} (${WD.build(MS.add)} supplies)`),run:err?null:()=>doAdd(p,blk,L,n)}}
 function runPlan(pl){if(pl.run)pl.run();else{flashMsg(pl.text,true);render()}}
 // make a structure the one being modified; a smaller one moves the layer down to its top layer
-function pick(p){if(MS.p===p)return true;MS.p=p;MS.ask=null;const Ls=layersOf(info(p));
-  if(MS.n>Ls.length){MS.n=Ls.length;render();draw();flashMsg(`The ${P[p.t].n} has ${Ls.length} layers: now on Layer ${MS.n}. Click again`,true);return false}
-  return true}
+function pick(p){if(target()===p)return true;MS.p=p;MS.ask=null;const Ls=layersOf(info(p));
+  if(MS.n>Ls.length)MS.n=Ls.length;
+  render();draw();flashMsg(`Modifying the ${P[p.t].n} at ${where(p)} (Layer ${MS.n}). Now click its squares to add or take off blocks`);return false}
 
 /* ----- on the map ----- */
 window.modMapClick=(cx,cy,erase)=>{const p=modPieceAt(cx,cy);
@@ -4612,13 +4638,12 @@ window.drawModHover=(g,h)=>{const q=modPieceAt(h.cx,h.cy),p=target();
   if(q!==p){const r=rectOf(q);g.append(s('rect',{x:r.x*C-1.5,y:r.y*C-1.5,width:r.w*C+3,height:r.d*C+3,fill:'none',stroke:'var(--accent)','stroke-width':2,'stroke-dasharray':'5 3',rx:2}))}
   if(MS.adv){$('msg').textContent=`Click to modify the ${P[q.t].n} at ${where(q)} in the Advanced view`;$('msg').className='msg';return}
   const I=info(q),b=bpOfCell(q,I,h.cx,h.cy);if(!b){$('msg').textContent='';return}
-  const nL=layersOf(I).length;
-  if(q!==p&&MS.n>nL){g.append(s('rect',{x:h.cx*C+1.5,y:h.cy*C+1.5,width:C-3,height:C-3,rx:2,fill:'none',stroke:'var(--muted)','stroke-width':2}));
-    $('msg').textContent=`The ${P[q.t].n} has ${nL} layers: a click switches to it, on Layer ${nL}`;$('msg').className='msg';return}
+  if(q!==p){g.append(s('rect',{x:h.cx*C+1.5,y:h.cy*C+1.5,width:C-3,height:C-3,rx:2,fill:'none',stroke:'var(--muted)','stroke-width':2}));
+    $('msg').textContent=`Click to modify the ${P[q.t].n} at ${where(q)}`;$('msg').className='msg';return}
   const pl=planAt(q,b[0],b[1],MS.erase);
   const col=pl.bad?'var(--bad)':pl.erase?'var(--bad)':'var(--ok)';
   for(const[x,y]of pl.cells)g.append(s('rect',{x:x*C+1.5,y:y*C+1.5,width:C-3,height:C-3,rx:2,fill:pl.bad?'var(--bad)':pl.erase?'none':'var(--ok)','fill-opacity':pl.bad?.22:.18,stroke:col,'stroke-width':2,'stroke-dasharray':pl.erase&&!pl.bad?'3 2':'none'}));
-  $('msg').textContent=(p&&q!==p?'Switches to this one · ':'')+pl.text;$('msg').className='msg'+(pl.bad?' bad':'')};
+  $('msg').textContent=pl.text;$('msg').className='msg'+(pl.bad?' bad':'')};
 window.drawModTarget=g=>{const p=on()&&target();if(!p)return;const r=rectOf(p);
   g.append(s('rect',{x:r.x*C-3,y:r.y*C-3,width:r.w*C+6,height:r.d*C+6,fill:'none',stroke:'var(--accent)','stroke-width':3,rx:3}))};
 
@@ -4650,7 +4675,7 @@ function renderBar(){const bar=$('modBar');if(!bar)return;const show=on();$('cle
   if(MS.ask&&MS.ask.p===p){const I=info(p),b=I.bl[MS.ask.i],yes=el('button',{type:'button',class:'btn bad'},'Remove it'),no=el('button',{type:'button',class:'btn ghost'},'Cancel');
     yes.onclick=()=>act(MS.ask.i);no.onclick=()=>{MS.ask=null;render();flashMsg('')};
     ask.append(el('div',{class:'modask',role:'alert'},el('b',{},'This destroys more than the block. '),
-      el('span',{},`Taking off the ${name(b)} brings down ${MS.ask.rules.length?MS.ask.rules.map(r=>(r.kind==='corners'?'the roof':'the floor')+' at H'+r.z).join(' and ')+': ':''}${groupText(MS.ask.extra,I)}. In the game this can't be undone: fallen parts can't be rebuilt.`),
+      el('span',{},`Taking off the ${name(b)} brings down ${MS.ask.rules.length?MS.ask.rules.map(r=>(r.kind==='corners'?'the roof':'the floor')+' at H'+r.z).join(' and ')+': ':''}${[MS.ask.extra.length?groupText(MS.ask.extra,I):'',MS.ask.on&&MS.ask.on.length?'and what you placed on it ('+dropText(MS.ask.on)+')':''].filter(Boolean).join(' ')}. In the game this can't be undone: fallen parts can't be rebuilt.`),
       el('span',{class:'row'},yes,no)))}
   else MS.ask=null}
 
@@ -4754,6 +4779,8 @@ const IN_CLAUDE=!!window.claude;
    Release = copy test.html to index.html unchanged. Tester list: Firebase 'testers/{uid}'. */
 const TEST_MODE=/(^|\/)test\.html$/i.test(location.pathname);
 const FC=n=>TEST_MODE&&(n==='designs'||n==='feedback'||n==='facts')?'test_'+n:n;
+window.docState=()=>({name:designName,cur:S.cur,onlyFob:$('onlyFob').checked,plan:{...plan}});
+window.restoreDoc=d=>{designName=d.name||'';$('dName').value=designName;S.cur=d.cur||null;$('onlyFob').checked=!!d.onlyFob;plan={...Haul.PLAN_DEFAULT,...(d.plan||{})};renderSaved()};
 const S={mode:IN_CLAUDE?'local':'firebase',fb:null,user:null,admin:false,remote:[],local:[],cur:null,pendDel:null,pendSave:null,pendOut:false,unsub:[]};
 let levels=ls.get('wd_levels')||{support:null,driver:null,pilot:null};
 const fmt=n=>Math.round(n).toLocaleString('en-US'),money=n=>'$'+fmt(n);
@@ -5237,7 +5264,7 @@ let db=null;   // the claude.ai page database, when running there
 S.local=ls.get('wd_designs')||[];
 let statusTimer=0;
 function status(t){const e=$('saveStatus');e.textContent=t;clearTimeout(statusTimer);if(t)statusTimer=setTimeout(()=>{e.textContent=''},7000)}
-function load(d){registerCustoms(d.customs);snapshot();$('gapRule').checked=false;$('onlyFob').checked=!!d.onlyFob;pieces=rebuild(d.pieces||[],isLegacy(d));sel=new Set();updateSelBar();plan={...Haul.PLAN_DEFAULT,...(d.plan||{})};designName=d.name||'';$('dName').value=designName;changed();renderSaved();
+function load(d){registerCustoms(d.customs);snapshotDoc();$('gapRule').checked=false;$('onlyFob').checked=!!d.onlyFob;pieces=rebuild(d.pieces||[],isLegacy(d));sel=new Set();updateSelBar();plan={...Haul.PLAN_DEFAULT,...(d.plan||{})};designName=d.name||'';$('dName').value=designName;changed();renderSaved();
   const r=flaggedText();flashMsg(r?`Loaded "${designName||'design'}". ${r}.`:'',!!r)}
 const userName=()=>{const u=S.user;if(!u)return'';const n=u.displayName||(u.email||'').split('@')[0];return n.charAt(0).toUpperCase()+n.slice(1)};
 function parseDoc(r){try{return{...JSON.parse(r.data),name:r.name}}catch(e){return{name:r.name,pieces:[]}}}
@@ -5305,7 +5332,7 @@ $('saveForm').addEventListener('submit',async e=>{e.preventDefault();const name=
     else{const id=same?same.id:'d'+Date.now().toString(36);S.local=S.local.filter(d=>d.id!==id);S.local.push({id,...body,updated:now});ls.set('wd_designs',S.local);S.cur='l'+id;status(`Saved "${name}" in this browser.`)}}
   catch(err){status('Could not save: '+errText(err))}
   changed();renderSaved()});
-$('clearBtn').onclick=()=>{snapshot();pieces=rebuild([]);sel=new Set();designName='';S.cur=null;$('dName').value='';changed();renderSaved()};
+$('clearBtn').onclick=()=>{snapshotDoc();pieces=rebuild([]);sel=new Set();designName='';S.cur=null;$('dName').value='';changed();renderSaved()};
 
 /* ---------- logins (Firebase) ---------- */
 function errText(e){const c=(e&&e.code)||'';
@@ -5663,7 +5690,7 @@ function swatch(t){const sv=s('svg',{viewBox:'0 0 14 14',width:14,height:14});
   else R({x:1,y:1,width:12,height:12,rx:2,fill:'var(--entry)','fill-opacity':t==='hesco_s'?.6:.85});
   return sv}
 function renderPal(){const root=$('stPal');root.replaceChildren();
-  const grp=(name,ids,first)=>{root.append(el('h4',{},name,...(first?[el('span',{class:'phl',title:'Footprint and height'},'Space'),el('span',{class:'phl c',title:'Build supplies'},'$')]:[])));
+  const grp=(name,ids,first)=>{root.append(el('h4',{},name,...(first?[el('span',{class:'phl',title:'Footprint and height'},'Space'),el('span',{class:'phl c',title:'Build supplies'},'Supply')]:[])));
     for(const id of ids){const t=T[id],on=ST.tool===id&&!ST.testing;
       const size=t.kind==='slab'?'1×1 · thin':t.kind==='ladder'?'edge':`${t.w}×1 · H${t.h}`+(t.edge?` · ${Math.round(t.edge*100)}%`:'');
       const row=el('div',{class:'pc'+(on?' on':''),title:t.n+(t.note?': '+t.note:'')+(t.normal?` · C4 ${c4Of(id)}`:' · no C4 of its own')});

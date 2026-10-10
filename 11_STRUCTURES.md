@@ -1,6 +1,6 @@
-# 11 · Structures built from blocks + Structure Builder (plan)
-Use for: rebuilding Bunker, Recon Tower and Indirect Fire Shelter as real blocks; the Structure Builder (admin); modifying structures in a design; new structures from game updates.
-**Status (10 Oct 2026): Structure designer on staging (v110); the base map still uses the old structures. Collapse rules for Recon, Shelter and Bunker confirmed in game (section 6).** Read with 01 (+ 03 for the threat check, + 04 for Side view).
+# 11 · Structures built from blocks + Structure designer
+Use for: rebuilding Bunker, Recon Tower and Indirect Fire Shelter as real blocks; the Structure designer; modifying structures in a design; new structures from game updates.
+**Status (10 Oct 2026, v130): released. Structure designer, your own structures on the map, Modify structure and the block-based threat check are all live (sections 11–). Collapse rules for Recon, Shelter and Bunker confirmed in game (section 6). Still to do: one record per structure (old Trimmed pieces and seals, §8), the 3×3 blast and collapse in the threat check.** Read with 01 (+ 03 for the threat check, + 04 for Side view).
 
 **How to read this doc:** everything ending in **?** is an assumption. Snurra checks it in the game and deletes the ? (true) or corrects it. Section 10 has the questions that can't be guessed.
 
@@ -15,11 +15,11 @@ Today each structure is one big piece with special rules: height maps, "raised"/
 - **Sandbags under the windows** are normal Sandbags (2×1, H1). Sandbags get **1 C4** (to add to the Fact sheet; today they have 1 there already?).
 - **Entrances are just a missing block** in the wall. Sealing an entrance = putting a block in the gap.
 - **Collapse:** not one rule but two, per floor/roof (tested on the Recon Tower 10 Oct 2026, see section 6): a slab on the ground ring **falls when half the original ground HESCO are gone**; a roof on corner HESCO **falls when 2 corners are gone**. Ground HESCO never fall from a collapse.
-- **Build time and cost** belong to the structure as a whole (set in the Structure Builder), not to its blocks.
+- **Build time and cost** belong to the structure as a whole (set in the Structure designer), not to its blocks.
 
 ## 3. The idea
 - A structure is a **blueprint**: blocks placed layer by layer, exactly as in the game.
-- **Structure Builder** (admin only): a design tool where Snurra builds a structure from normal blocks + special parts, sets its properties and saves it. It then shows up in the Structures palette for everyone.
+- **Structure designer** (called Structure Builder in the first plan): a design tool where anyone builds a structure from normal blocks + special parts, sets its properties and saves it to My structures. Only the admin can **publish** one so it shows for everyone.
 - Placing a structure is still one click, and it stays **one thing** in the planner (select, move, rotate, erase, brush, build order).
 - Users can **Modify** a placed structure: pick a layer, then add blocks in free spots or remove parts. This is possible in the game but not supported by the planner today.
 - The threat check, Side view, protection pictures and a future 3D view all read the blocks. They never need to know which structure it is.
@@ -134,8 +134,8 @@ Useful trick (Recon test 7): with A2, A3, D2, D3, C4, D4 + one more gone, the ro
 - The threat check can use it: 2 corners clear a Recon or Bunker roof; half the ground HESCO clear Recon floor 2 or the Shelter roof; with the 3×3 blast, one C4 spot can take 3 ground HESCO at once.
 - Filling gaps or adding HESCO inside a structure makes it harder to enter but **not** harder to collapse.
 
-## 7. Structure Builder (admin)
-- A new design tool, only visible to the admin. Works like the normal map but on a small grid for one structure.
+## 7. Structure designer (first plan; what was built is in section 11)
+- A design tool for everyone; only the admin publishes. Works like the normal map but on a small grid for one structure.
 - **Build layer by layer**, starting from the bottom: pick a layer, click to place normal blocks and special parts. The layers below show faded. Side view (and later 3D) as a preview.
 - **Properties to fill in:** name, short name, size, build supplies, build time, hammer tier, trim time (if it has a top that can be removed), ground only / allowed on HESCO up to H?, collapse rule (block type + number), which blocks are the "trim" blocks.
 - **Entrances need no setting**: a gap in the wall at ground level is an entrance. What may seal it (Large HESCO, Door, Small HESCO only) is a property?
@@ -149,7 +149,7 @@ Useful trick (Recon test 7): with A2, A3, D2, D3, C4, D4 + one more gone, the ro
 - Removing too many ground-floor HESCO shows a warning: "This structure collapses".
 - Supplies and build time: the structure's own numbers + normal blocks added (normal cost) + removals (7 s each, like trimming).
 - Saved as **structure + changes** ("Recon Tower at X; removed: the 4 roof HESCO; added: Door at W y2"), not every block. Saves stay small and pick up fixes to the blueprint.
-- Old saves (`recon_trim`, `ifs_trim`, `closed`, `doors`) load as the matching structure + changes.
+- Old saves (`recon_trim`, `ifs_trim`, `closed`, `doors`) load as the matching structure + changes. **Not done yet**: they still load as before (Trimmed pieces stay their own type, seals stay in `closed`/`doors`). See the assessment, I2.
 
 ## 9. Plan of work (each step can go on test by itself)
 1. **Block model inside the threat check.** Roof slabs with space underneath; the three structures written as blueprints in code. No visible change. Compare old and new threat check on all templates and some saved designs until they match.
@@ -175,7 +175,7 @@ Answer as a short text list + 1–2 photos. Correct any **?** above at the same 
 11. **New buildings:** name + size + 1–2 photos of each new one is enough to try the Structure Builder on.
 
 ## 11. Structure designer (on staging, 9 Oct 2026)
-- Opened from the **Structure designer** link under the piece list (above Legend). Own section `#tab-structs` (`showTab('structs')`), module `<script id="wd-structs">` at the end of the file. "Map" goes back.
+- Opened from the **Structure designer** link in the header (next to Fact sheet and About). Own section `#tab-structs` (`showTab('structs')`), module `<script id="wd-structs">` at the end of the file. "Map" goes back.
 - Toolbar reuses the planner's Undo, Rotate, Erase and Clear buttons (icons copied at start-up) + Trim parts (T) + Test C4. Palette rows look like the planner's (Space, $). Keys R, E, T, [ ], Ctrl+Z, Esc are caught while the section is open.
 - Blocks: HESCO Small / Large, Sandbags (2×1, on one edge, 50 % deep), Door; special: Floor (H0), Roof / middle floor (thin, walkable, open space under), Window (2×1 wooden frame on the edge, 20 % deep, H1, no glass: a 1h opening = crawl only), Ladder (outside edge of a square, up to its layer). R picks the edge / side.
 - Corrections from Snurra 9 Oct: windows are a wooden frame 2 wide, no glass, on the edge; sandbags on the edge, half as thick as HESCO.
@@ -208,23 +208,25 @@ match /test_structures/{id} {   // same, testers only
 If the rules already have an `isAdmin()` function, keep the existing one and skip that line.
 
 ### Placing them on the base map (staging v111, on test 10 Oct 2026)
-- Card under the Structure designer link (`#stPlace`): drop-down of Published + My structures, and an icon button with the short name → `setTool('cs_…')`, place like any building.
+- Card in the left column, under the piece list (`#stPlace`): drop-down of Published + My structures, and an icon button with the short name → `setTool('cs_…')`, place like any building.
 - `<script id="wd-custom">` (before `wd-app`): `registerCustom(id, blueprint)` builds a normal piece type in `P` from the blueprint: footprint, height map (`hm`), entrances = floor squares on the edge with no ground block, windows (side from the window's edge, `winZ` = the floor under it; windows above ground make it two-floor like the Recon), ladder, `seal`, ground only / `maxbase`; cost, build time, hammer and wall C4 go into `WD.DEF` (`b.` `t.` `h.` `c4.` + id). Not shown in the normal palette.
-- Threat check: `two` also true for custom two-floor structures, floor 2 height via `WZ(p)`; windows of any custom structure count.
+- Threat check: reads custom structures as blocks like the built-in ones (doc 03); windows of any custom structure count.
 - Saved designs carry the blueprints they use (`design.customs`), registered again on load and from the draft, so a shared design opens for others.
-- Known gaps: Side view draws them as plain HESCO blocks; no trim on the map yet; Bremer "covers an opening" only knows the built-in buildings; the old built-in Bunker / Recon / Shelter are still separate pieces.
+- Known gaps: no trim on the map yet; the old built-in Bunker / Recon / Shelter are still separate piece types (with blueprints). Side view draws them from their blocks (doc 04).
 
 ### Collapse and Modify structure (v117, on test 10 Oct 2026)
 - Shared engine in `<script id="wd-custom">`: `bpBlocks`, `bpRules` (count rule / corner rule per slab level, numbers overridable in the blueprint as `fall:{z:n}`), `bpState(d,rm,back)` (what stands, what fell and why), `pieceState(p)`. Built-in blueprints `BUILTIN_BP` (recon_tower, ifs, bunker as tested), `bpOf(type)` (trimmed types use the base blueprint with trim blocks gone). New block `corner` (Corner HESCO, 1.65 + roof = 2).
 - Piece data: `p.mod={rm:[…],back:[…]}`, blueprint block numbers. `back` = put back: stands, never counts as support. Cleaned on load, kept by copy/paste.
-- `TT(p)` (wd-design) = the piece type as it stands (`structGeo`, cached): heights, holes added after the original entrances (seal keys unchanged), windows/ladder that still stand, `two` only while floor 2 stands (windows of a fallen floor 2 are dropped). Used by `cellTop`, `topOf`, `entrancesOf`, `windowsOf`, `ladderSpots`, `drawPiece`, `heightText` and the threat check (`twoOf`). Unmodified pieces use their type as before.
-- `<script id="wd-modify">`: the Modify structure panel (selection bar button). Warns before a removal that brings down more than the block.
+- `TT(p)` (wd-design) = the piece type as it stands (`structGeo`, cached): heights, holes added after the original entrances (seal keys unchanged), windows/ladder that still stand, `two` only while floor 2 stands (windows of a fallen floor 2 are dropped). Used by `cellTop`, `topOf`, `entrancesOf`, `windowsOf`, `ladderSpots`, `drawPiece`, `heightText` and the threat check. Unmodified pieces use their type as before.
+- `<script id="wd-modify">`: Modify structure (M), how it works for players is in doc 02. Warns before a removal that brings down more than the block, including pieces placed on the falling part (they are removed with it: `unheld`, `dropsIf`). Adds: `p.mod.add=[[type,x,y,z,r],…]`.
 - Designer: Test collapse with Hammer / C4 (3×3 blast at the block's level, charge on the outside face).
-- Known gaps: Side view and protection pictures don't show changes yet; no build time for removals; the threat check doesn't plan collapses or the 3×3 blast itself.
+- Known gaps: Side view doesn't draw added blocks or seals; protection pictures don't show changes; the threat check doesn't plan collapses or the 3×3 blast itself. Removals cost 7 s each in the build time (since v130).
 
 ### Threat check on blocks (staging v123, 10 Oct 2026)
 - Step 1 of section 9 done: the threat check reads every structure as its blocks (doc 03). Whole-structure C4 facts removed.
 - Still open: collapse is not planned by the threat check (blowing a ground block leaves the roof up); 3×3 blast not used.
 
 ### Next
-- Side view and heights from the blocks; remove the old height maps / `raised` / `trimmed` (step 2).
+- Remove the old height maps / `raised` / `trimmed` and load old Trimmed pieces + seals as structure + changes (step 2, §8).
+- Threat check: 3×3 blast and collapse (doc 03).
+- Game questions still open: 4, 5, 6, 7, 8, 10, 11, and whether pieces built on a roof fall with it (the planner assumes they do).

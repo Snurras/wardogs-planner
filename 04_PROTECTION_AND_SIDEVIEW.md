@@ -29,13 +29,13 @@ Use for: Direct ground fire protection rules, the emplacement hover picture, the
 - **Layer ▼ ▲** (or [ ]): everything under that height under a grey veil; blocks crossing the layer are cut at it. **Hide above**: hides what is over the layer. A new area starts at H0.
 - **3D** button: back to the old flat side view (remembered in this browser, `wd_sv3d`).
 - Clicking Side view (or S) again → back to the map with the area kept as a dashed outline; again → same view. Esc = back to map. ✕, a new area, or another tool clears it. Zoom − / Fit / +.
-- Structures (built-in, your own, Modify changes) are drawn from their blueprint blocks: corner HESCO 1.65, roof slab resting on it, windows as wooden frames, ladders, camo net on the top roof.
+- Structures (built-in and your own) are drawn from their blueprint blocks: corner HESCO 1.65, roof slab resting on it, windows as wooden frames, ladders, camo net on the top roof. Blocks taken off or fallen in Modify structure are left out. **Not drawn yet**: blocks added in Modify structure and entrance/centre seals.
 - Emplacements: weapon + soldier are the old 2D drawings standing upright, aimed at the worse of the left/right sides. Protection in the **real direction for all four sides**: faint blue fan per side; a limited side gets a dashed ground line out to the checked distance (red poor / orange limited) and its blocked angle (CIWS, Talon) or mortar range standing up in that direction. Stingray: one dashed 80° line.
-- Field pieces in 3D: Sandbags (bags on both visible faces), Barbed wire (posts, strands, coil rings), Hedgehog (three beams), Recon tent (camo net on four poles).
+- Field pieces in the 3D look: Sandbags (bags on both visible faces), Barbed wire (posts, strands, coil rings), Hedgehog (three beams), Recon tent (camo net on four poles). In the old flat look they stay flat icons (see the end of this doc).
 - Code: `sv3dSvg(a,view,L,{cut})` (projection `YAW` 22°, `EL` 30°, `KZ`), `svRender3d`, `sv3dOn`, `svLayer`; the old picture is `svRender` below it. Prototype + review page: private artifact "Side View 3D Mockup".
 
-## How pieces are drawn (3D boxes in each piece's own layout: `svPieceBoxes`, `svBoxes`, `svFrame`, `svDetail`; the 3D look uses the same boxes)
-- Bunker: 2h HESCO walls; entrance 1.4h with HESCO above; windows 1–1.3h on the middle two squares (not on the entrance side); thin roof (no extra height); camo net.
+## How pieces are drawn in the old flat Side view (3D boxes in each piece's own layout: `svPieceBoxes`, `svBoxes`, `svFrame`, `svDetail`). Structures in the 3D look come from their blocks instead (above)
+- Bunker (flat look only, older than the block model): 2h HESCO walls; entrance 1.4h with HESCO above; windows 1–1.3h on the middle two squares (not on the entrance side); thin roof (no extra height); camo net. The real Bunker is 4 corner HESCO + sandbags + windows (doc 11).
 - Recon Tower: ground ring 2h with entrances (1.4h assumed), bunker-style floor 2 with windows and the opening at the ladder, yellow ladder outside, 2×2 small HESCOs on top (gone when trimmed).
 - Shelter: 2h ring, 2h entrances, thin roof, 3×3 small HESCOs on top (gone when trimmed).
 - Door: full square, plank floor, wooden pillar in all 4 corners, single plank roof, door leaf at the front edge.
@@ -47,5 +47,5 @@ Use for: Direct ground fire protection rules, the emplacement hover picture, the
 - Drill Rig: tall lattice tower on 4 sandbag blocks, platform, antennas, generator box.
 - Loudspeaker: steel frame tower on a slab, sandbag base, rusty corrugated walls, platform at 2h with ladder, 4 horns on top, roof.
 - Builder's Radio: steel table, yellow radio, green cases under, sandbags behind.
-- Accepted as is (flat icons): Sandbags, Barbed wire, Hedgehog, Recon tent.
+- Accepted as is in the flat look (flat icons): Sandbags, Barbed wire, Hedgehog, Recon tent.
 - Reference mockup pages (private artifacts): Protection Picture Review, Side View Depth Options, Side View Icons.
