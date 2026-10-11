@@ -3,12 +3,12 @@
 ## What this is
 **Wardogs Base Planner**: a web app for the game WARDOGS. Plan a base on the HESCO grid, check how attackers get in, work out what to haul, and get a build order.
 - Owner: Snurra. Not a coder: everything is built by Claude. Talk in plain language, no code jargon.
-- The whole app is **one HTML file** (~5,900 lines, ~870 KB): HTML + CSS + nine `<script>` modules.
+- The whole app is **one HTML file** (~6,000 lines, ~900 KB): HTML + CSS + nine `<script>` modules.
 
 ## Where things live
 | What | Where |
 |---|---|
-| Staging (Claude's workbench) | claude.ai artifact https://claude.ai/artifact/BeyFVpAnFDRbygmRGARv9Z (version 130 at release 10 Oct 2026 (c), also on test) |
+| Staging (Claude's workbench) | claude.ai artifact https://claude.ai/artifact/BeyFVpAnFDRbygmRGARv9Z (version 138, on test 11 Oct 2026: Haul it redesign) |
 | Test version | `test.html` in the repo → https://snurras.github.io/wardogs-planner/test.html. Same code as `index.html`; the file name switches on test mode (tester login + `test_*` data, doc 06) |
 | Production | GitHub Pages https://snurras.github.io/wardogs-planner/ (repo `Snurras/wardogs-planner`, file `index.html`) |
 | Docs | the `0x_*.md` files in the repo root (these files) |
@@ -28,18 +28,18 @@
 - Snurra tests in the game and sends screenshots + measurements; trust those over assumptions.
 - Never commit/push unless asked (“put it on test”, “release” and “update the docs” count as asking). The admin UID never goes in the page (only in Firebase rules). Don't send the email address anywhere.
 
-## Code map (search for these headings; line numbers are approximate, v130)
+## Code map (search for these headings; line numbers are approximate, v138)
 | Module (`<script id=…>`) | Starts ~line | Contains |
 |---|---|---|
-| `wd-facts` | 890 | `WD` fact sheet: `WD.F(key)`, fact groups (`GROUPS`), limits (`LIM`), piece costs/heights/build times |
-| `wd-design` | 1118 | piece catalogue `P`, placing rules (`place()`), geometry, entrances, map drawing, protection maths + hover picture, Side view (flat + 3D), select/brush, keys, undo, build order + build time |
-| `wd-threat` | 3228 | threat check (block model, movement graph, C4, routes), threat summary |
-| `wd-attack` | 3689 | attack animation (soldier, vehicles, speech) |
-| `wd-haul` | 4130 | supplies, packing (`Haul.packFor`), team, pack list |
-| `wd-custom` | 4293 | structures as blocks: blueprints (`BUILTIN_BP`, `bpOf`), collapse (`bpState`, `pieceState`), `structGeo`, `registerCustom` for your own structures |
-| `wd-modify` | 4476 | Modify structure (M): the bar under the toolbar, Advanced panel, add/remove blocks, collapse warning, pieces that fall with a roof (`unheld`) |
-| `wd-app` | 4766 | tabs, tips, fact sheet UI, saving/opening designs (`load`, `designDoc`, Undo of Open), logins, comments, test gate, start-up |
-| `wd-structs` | 5470 | Structure designer (own tab) |
+| `wd-facts` | 1012 | `WD` fact sheet: `WD.F(key)`, fact groups (`GROUPS`), limits (`LIM`), piece costs/heights/build times |
+| `wd-design` | 1242 | piece catalogue `P`, placing rules (`place()`), geometry, entrances, map drawing, protection maths + hover picture, Side view (flat + 3D), select/brush, keys, undo, build order + build time |
+| `wd-threat` | 3352 | threat check (block model, movement graph, C4, routes), threat summary |
+| `wd-attack` | 3813 | attack animation (soldier, vehicles, speech) |
+| `wd-haul` | 4254 | supplies, packing (`Haul.packFor`, trunk, priority `Haul.rankOf`) |
+| `wd-custom` | 4424 | structures as blocks: blueprints (`BUILTIN_BP`, `bpOf`), collapse (`bpState`, `pieceState`), `structGeo`, `registerCustom` for your own structures |
+| `wd-modify` | 4607 | Modify structure (M): the bar under the toolbar, Advanced panel, add/remove blocks, collapse warning, pieces that fall with a roof (`unheld`) |
+| `wd-app` | 4897 | tabs, tips, fact sheet UI, saving/opening designs (`load`, `designDoc`, Undo of Open), logins, comments, test gate, start-up |
+| `wd-structs` | 5686 | Structure designer (own tab) |
 
 Section headings inside `wd-design` (grep `/* ---------- `): geometry · entrances · symbols · drawing · height checks · **Direct ground fire protection** · **hover picture** · **Side view tool** · **3D pieces for the side view** · Fact sheet pictures · legend · select tool · brush · interaction · build order + BOM · templates (the built-in list is empty: templates are designs the admin saves online).
 

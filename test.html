@@ -308,9 +308,120 @@ dialog#loginDlg::backdrop{background:rgba(20,25,15,.45)}
 section.tab{display:flex;flex-direction:column;gap:16px}
 [hidden]{display:none!important}
 /* supplies & haul */
-:root{--build:#B5860F;--ammo:#A8402B;--fuel:#2C6894;--mech:#5A6470}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--build:#E0B23C;--ammo:#E07059;--fuel:#62A4D6;--mech:#9DA8B5}}
-:root[data-theme="dark"]{--build:#E0B23C;--ammo:#E07059;--fuel:#62A4D6;--mech:#9DA8B5}
+/* supplies & haul: game colours (Supplies off-white, Ammo military green, Fuel rusty red, Mechanical dark grey) */
+:root{--build:#A8A08A;--build-fill:#F6F3E8;--build-ink:#3E3A2C;--ammo:#56662B;--ammo-fill:#C5CDA6;--ammo-ink:#26300F;--fuel:#9C4425;--fuel-fill:#E9C2B2;--fuel-ink:#5E2310;--mech:#43484E;--mech-fill:#B4B8BD;--mech-ink:#1E2124;
+  --free-bg:#FFF4CC;--free-line:#8A6A00;--free-ink:#4A3B00;--band-r-bg:#F6D3CC;--band-r:#7A1E12;--band-y-bg:#FFE9A8;--band-y:#5C4600;--band-g-bg:#D6E8C4;--band-g:#2A4510}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--build:#CFC7AE;--build-fill:#4A4638;--build-ink:#F3EFE2;--ammo:#93A65A;--ammo-fill:#39431E;--ammo-ink:#DCE6BE;--fuel:#D07A58;--fuel-fill:#4E2518;--fuel-ink:#F6D6C8;--mech:#9AA1A9;--mech-fill:#3A3F45;--mech-ink:#E3E6E9;
+  --free-bg:#3A3112;--free-line:#D9B54A;--free-ink:#F3DF9C;--band-r-bg:#4A1E17;--band-r:#F2B8AC;--band-y-bg:#4A3D10;--band-y:#F3DF9C;--band-g-bg:#26381A;--band-g:#C6E3A8}}
+:root[data-theme="dark"]{--build:#CFC7AE;--build-fill:#4A4638;--build-ink:#F3EFE2;--ammo:#93A65A;--ammo-fill:#39431E;--ammo-ink:#DCE6BE;--fuel:#D07A58;--fuel-fill:#4E2518;--fuel-ink:#F6D6C8;--mech:#9AA1A9;--mech-fill:#3A3F45;--mech-ink:#E3E6E9;
+  --free-bg:#3A3112;--free-line:#D9B54A;--free-ink:#F3DF9C;--band-r-bg:#4A1E17;--band-r:#F2B8AC;--band-y-bg:#4A3D10;--band-y:#F3DF9C;--band-g-bg:#26381A;--band-g:#C6E3A8}
+.t-build{--tc:var(--build);--tf:var(--build-fill);--ti:var(--build-ink)}.t-ammo{--tc:var(--ammo);--tf:var(--ammo-fill);--ti:var(--ammo-ink)}
+.t-fuel{--tc:var(--fuel);--tf:var(--fuel-fill);--ti:var(--fuel-ink)}.t-mech{--tc:var(--mech);--tf:var(--mech-fill);--ti:var(--mech-ink)}
+.hz-h{margin:0;font:700 18px var(--f-head);letter-spacing:.08em;text-transform:uppercase}.hz-h2{font-size:22px}
+.hz-plan{position:relative;background:var(--panel);border:2px solid var(--accent);border-radius:6px;padding:18px;display:flex;flex-direction:column;gap:16px}
+.hz-top{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-start;justify-content:space-between}
+.hz-vehs{display:flex;flex-wrap:wrap;gap:8px;flex:1 1 560px;align-items:stretch}
+.hz-team-k{font:700 15px var(--f-head);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);align-self:center}
+.hz-veh{display:flex;flex-direction:column;align-items:flex-start;gap:2px;min-height:54px;padding:7px 14px;border-radius:4px;border:2px solid var(--line);background:var(--bg);color:var(--ink);font:inherit;cursor:pointer;text-align:left}
+.hz-veh .nm{font:700 18px var(--f-head);display:flex;align-items:center;gap:6px}.hz-veh .ln{font:500 13px var(--f-mono)}
+.hz-veh[aria-pressed=true]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.hz-veh:disabled{opacity:.5;cursor:not-allowed}
+.hz-best{font:700 11px var(--f-head);letter-spacing:.08em;text-transform:uppercase;background:var(--accent);color:var(--accent-ink);padding:1px 6px;border-radius:3px}
+.hz-veh[aria-pressed=true] .hz-best{background:var(--accent-ink);color:var(--accent)}
+.hz-packbtn{display:flex;align-items:center;gap:10px;min-height:54px;padding:7px 16px;border-radius:4px;border:2px solid var(--accent);background:var(--bg);color:var(--ink);cursor:pointer;font:inherit;text-align:left}
+.hz-packbtn[aria-expanded=true]{background:var(--accent);color:var(--accent-ink)}
+.hz-packbtn .t{display:block;font:700 18px/1.1 var(--f-head);letter-spacing:.06em;text-transform:uppercase}.hz-packbtn .s{display:block;font-size:12px}
+.hz-pop{position:absolute;top:84px;right:18px;z-index:20;width:min(460px,calc(100% - 36px));max-height:70vh;overflow:auto;background:var(--panel);border:2px solid var(--accent);border-radius:6px;box-shadow:0 10px 30px rgba(0,0,0,.25);padding:14px;display:flex;flex-direction:column;gap:14px}
+.hz-pop-h{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.hz-pl{display:flex;flex-direction:column;gap:6px}
+.hz-pl-h{display:flex;justify-content:space-between;align-items:center;gap:8px}.hz-pl-h b{font:700 17px var(--f-head)}
+.hz-pr{display:flex;gap:10px;align-items:flex-start;border-top:1px solid var(--line);padding-top:6px}
+.hz-pr .tn{font:700 14px var(--f-head);min-width:54px;letter-spacing:.04em}
+.hz-chips{display:flex;flex-wrap:wrap;gap:5px}
+.hz-chip{font-size:13px;font-weight:600;padding:2px 8px;border-radius:3px;border:1px solid var(--tc,var(--line));background:var(--tf,var(--bg));color:var(--ti,var(--ink))}
+.hz-btn{min-height:40px;padding:0 14px;border-radius:4px;border:0;background:var(--accent);color:var(--accent-ink);font:700 14px var(--f-body);cursor:pointer;white-space:nowrap}
+.hz-btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.hz-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 28px;border-bottom:1px solid var(--line);padding-bottom:12px}
+.hz-title{font:700 38px/1 var(--f-head)}
+.hz-stats{display:flex;gap:24px;flex-wrap:wrap}
+.hz-stat .k{display:block;font:600 12px var(--f-head);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}.hz-stat .v{font:600 21px var(--f-mono)}
+.hz-ways{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:13px;color:var(--muted)}
+.hz-way{border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:14px;padding:4px 12px;font:inherit;font-size:13px;cursor:pointer;min-height:32px}
+.hz-way[aria-pressed=true]{border-color:var(--accent);background:var(--hi);font-weight:600}
+.hz-body{display:flex;flex-wrap:wrap;gap:16px;align-items:flex-start}
+.hz-trips-w{flex:999 1 620px;min-width:0;display:flex;flex-direction:column;gap:12px}
+.hz-who{font:700 13px var(--f-head);letter-spacing:.06em;text-transform:uppercase;color:var(--accent);margin-bottom:-4px}
+.hz-round{font:700 15px var(--f-head);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.hz-trips{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+.hz-trip{display:flex;flex-direction:column;gap:8px;padding:12px;border-radius:5px;background:var(--bg);border:1px solid var(--line)}
+.hz-trip.done{opacity:.45}
+.hz-trip-h{display:flex;justify-content:space-between;align-items:center}.hz-trip-h .tn{font:700 19px var(--f-head);letter-spacing:.04em}
+.hz-done{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--muted);cursor:pointer;min-height:30px}.hz-done input{width:18px;height:18px;accent-color:var(--accent)}
+.hz-carry{font-size:13px;background:var(--hi);border-radius:3px;padding:5px 8px;line-height:1.35}
+.hz-bed{display:flex;gap:6px;border:2px solid var(--muted);border-radius:4px;padding:6px;background:var(--panel)}
+.hz-slot{flex:1;min-width:0;display:flex;height:60px;border-radius:3px;overflow:hidden;border:1px solid var(--muted)}
+.hz-slot.crate{height:52px}
+.hz-seg{min-width:0;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:1px;background:var(--tf);color:var(--ti);border-left:4px solid var(--tc);overflow:hidden;white-space:nowrap;padding:0 2px}
+.hz-seg .l{font-weight:700;font-size:12px;letter-spacing:.06em}.hz-seg .a{font:500 12px var(--f-mono)}
+.hz-seg.free{background:var(--free-bg);color:var(--free-ink);border-left:0}
+.hz-slot.empty{border:2px dashed var(--free-line);background:var(--free-bg);color:var(--free-ink);flex-direction:column;justify-content:center;align-items:center}
+.hz-slot.empty .l{font-weight:700;font-size:12px;letter-spacing:.06em}.hz-slot.empty .a{font-size:12px}
+.hz-backpack{font-size:13px}
+.hz-note{font-size:13px;color:var(--muted)}
+.hz-free{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;background:var(--free-bg);border:2px dashed var(--free-line);border-radius:6px;padding:12px 14px;color:var(--free-ink)}
+.hz-free .t{font-weight:700;font-size:17px}.hz-free .s{font-size:14px}.hz-free>div:first-child{flex:1 1 260px}
+.hz-fills{display:flex;flex-wrap:wrap;gap:8px}
+.hz-fill{min-height:44px;padding:0 14px;border-radius:4px;font:700 15px var(--f-body);background:var(--tf);color:var(--ti);border:2px solid var(--tc);cursor:pointer}
+.hz-full{font-size:14px;font-weight:600;color:var(--ok)}
+.hz-buy{flex:1 1 260px;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:12px 14px;display:flex;flex-direction:column;gap:8px}
+.hz-buy-r{display:flex;justify-content:space-between;gap:10px;align-items:baseline;border-bottom:1px dotted var(--line);padding-bottom:5px}
+.hz-buy-r .n{font:500 13px var(--f-mono);color:var(--muted);white-space:nowrap}
+.hz-dot{display:inline-block;width:10px;height:10px;border-radius:2px;background:var(--tc,var(--accent));margin-right:8px;flex:none}
+.hz-warns{display:flex;flex-direction:column;gap:6px}
+.hz-tune{display:flex;flex-direction:column;gap:10px}
+.hz-tune-h{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px}
+.hz-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:14px}
+.hz-card{background:var(--panel);border:1px solid var(--line);border-top:5px solid var(--tc);border-radius:6px;padding:14px;display:flex;flex-direction:column;gap:12px}
+.hz-card.short{box-shadow:0 0 0 2px var(--bad)}
+.hz-card-h{display:flex;align-items:center;gap:10px}
+.hz-ic{width:36px;height:36px;border-radius:4px;display:flex;align-items:center;justify-content:center;background:var(--tf);color:var(--ti);flex:none;border:1px solid var(--tc)}
+.hz-card-h .nm{font:700 20px/1.1 var(--f-head)}.hz-card-h .pu{font-size:13px;color:var(--muted)}
+.hz-st{margin-left:auto;font:600 13px var(--f-mono);padding:3px 8px;border-radius:3px;background:var(--tf);color:var(--ti);white-space:nowrap;border:1px solid var(--tc)}
+.hz-step{display:flex;align-items:center;gap:8px}
+.hz-pm{border:1px solid var(--muted);background:var(--bg);color:var(--ink);border-radius:4px;font-weight:600;line-height:1;cursor:pointer;flex:none;display:flex;align-items:center;justify-content:center;padding:0}
+.hz-pm.pal{width:46px;height:52px;flex-direction:column;gap:3px;font-size:18px;border-width:2px}
+.hz-pm.stk{width:38px;height:32px;font:600 12px var(--f-mono);border-style:dashed}
+.hz-reset{display:inline-flex;align-items:center;gap:6px;min-height:40px;padding:0 14px;border-radius:4px;border:2px solid var(--bad);background:var(--panel);color:var(--bad);font:700 14px var(--f-head);letter-spacing:.08em;text-transform:uppercase;cursor:pointer}
+.hz-reset:not(:disabled){background:var(--bad);color:#fff}
+.hz-reset:disabled{border-color:var(--line);color:var(--muted);cursor:default}
+.hz-legend{display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-left:auto}
+.hz-legend .k{display:inline-flex;align-items:center;justify-content:center;gap:2px;border:2px solid var(--muted);border-radius:3px;padding:1px 4px;color:var(--ink)}
+.hz-legend .k.stk{border:1px dashed var(--muted);font:600 11px var(--f-mono)}
+.hz-pm:disabled{opacity:.4;cursor:default}
+.hz-big{flex:1;min-width:0;text-align:center}.hz-big .v{display:block;font:600 30px/1.05 var(--f-mono)}.hz-big .u{font-size:13px;color:var(--muted)}
+.hz-bar{display:flex;height:14px;border-radius:3px;overflow:hidden;background:var(--bg);border:1px solid var(--line)}
+.hz-bar .n{background:var(--tc)}.hz-bar .sp{background-color:var(--tf);background-image:repeating-linear-gradient(135deg,rgba(0,0,0,.18) 0 4px,transparent 4px 8px)}.hz-bar .sh{background:var(--bad)}
+.hz-mg{display:flex;justify-content:space-between;align-items:center;font:500 13px var(--f-mono);gap:8px}
+.hz-band{padding:3px 8px;border-radius:3px;font-weight:600}.hz-band b{font-size:15px}
+.hz-band.red{background:var(--band-r-bg);color:var(--band-r)}.hz-band.yellow{background:var(--band-y-bg);color:var(--band-y)}.hz-band.green{background:var(--band-g-bg);color:var(--band-g)}.hz-band.grey{background:var(--bg);color:var(--muted)}
+.hz-lasts{display:flex;flex-direction:column;gap:6px;border-top:1px solid var(--line);padding-top:10px}
+.hz-get{display:flex;justify-content:space-between;align-items:baseline;gap:8px}.hz-get .v{font:600 18px var(--f-mono);white-space:nowrap}
+.hz-sub{font-size:13px;color:var(--muted);line-height:1.35}.hz-em{font-size:14px;font-weight:600}.hz-bad{font-size:14px;font-weight:700;color:var(--bad)}
+.hz-bottom{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-start}
+.hz-set{flex:999 1 560px;min-width:0;padding:16px 18px;gap:12px}.hz-cash{flex:1 1 300px;padding:16px 18px}
+.hz-set-g{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px}
+.hz-set .levels label{flex-direction:column;align-items:flex-start;gap:3px}.hz-set .levels input{width:64px;height:34px}
+.hz-prio{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:4px;align-items:center}
+.hz-prio li{display:flex;align-items:center;gap:2px;background:var(--tf);color:var(--ti);border:1px solid var(--tc);border-radius:3px;padding:1px 2px;font-size:13px;font-weight:600}
+.hz-prio .n{font:600 11px var(--f-mono);opacity:.75;margin-left:3px}.hz-prio .nm{margin:0 2px}
+.hz-prio button{width:22px;height:24px;border:0;background:transparent;color:inherit;border-radius:2px;cursor:pointer;font-size:11px;padding:0}
+.hz-prio button:hover{background:rgba(0,0,0,.08)}.hz-prio button:disabled{opacity:.25;cursor:default}
+.hz-prio .sep{color:var(--muted);font-size:12px}
+.hz-mode{display:inline-flex;gap:3px;margin-left:2px}.hz-mode svg{display:block}
+.hz-trunk{font-size:13px;color:var(--free-ink);background:var(--free-bg);border:1px dashed var(--free-line);border-radius:3px;padding:3px 8px}
+.hz-shot{font:500 13px var(--f-mono);color:var(--muted)}
+.hz-det>summary{cursor:pointer;font-weight:700;min-height:28px}
+.hz-cash .cash .tot{font-size:17px;border-top:2px solid var(--ink)}
 .hgrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1.15fr);gap:16px;align-items:start}
 @media (max-width:1100px){.hgrid{grid-template-columns:minmax(0,1fr) minmax(0,1fr)} .hplans{grid-column:1/-1}}
 @media (max-width:720px){.hgrid{grid-template-columns:minmax(0,1fr)}}
@@ -767,40 +878,51 @@ a{color:var(--accent)}
   </section>
 
   <section class="tab" id="tab-haul" hidden>
-    <div class="bar levels">
-      <label for="lv_support">Support <input id="lv_support" type="number" min="0" max="200" placeholder="–"></label>
-      <label for="lv_driver">Driver <input id="lv_driver" type="number" min="0" max="200" placeholder="–"></label>
-      <label for="lv_pilot">Pilot <input id="lv_pilot" type="number" min="0" max="200" placeholder="–"></label>
-      <span class="status" id="lvStatus"></span>
-    </div>
-    <div class="hgrid">
-      <div class="col">
-        <div class="card"><h3>From the design</h3><div class="parts" id="hParts"></div></div>
-        <div class="card"><h3>Supplies, ammo, fuel and mechanical</h3><div class="col" style="gap:6px" id="hPlan"></div>
-          <button class="btn ghost" type="button" id="planReset" style="align-self:flex-start">Reset plan</button></div>
-        <div class="card"><h3>Options</h3>
-          <label class="opt"><input type="checkbox" id="optStock"> Subtract the new FOB's starting build supplies</label>
-          <label class="opt"><input type="checkbox" id="optFobPack2"> FOB kit in backpack (vehicles; on foot it always is)</label>
-          <label class="opt"><input type="checkbox" id="optHamPack2"> Hammer in backpack (vehicles; on foot it always is)</label>
-          <label class="opt" for="optReserve">Repair reserve on build supplies
-            <select id="optReserve"><option value="0">none</option><option value="10">+10%</option><option value="25">+25%</option><option value="50">+50%</option></select></label>
-          <div class="team">
-            <div class="team-h"><b>Team</b><span class="muted">Count yourself in. Team plans start at 2 players; at 0 the plans are for one vehicle, as before.</span></div>
-            <div class="team-g" id="teamGrid"></div>
-            <div class="team-warn" id="teamWarn" hidden>A team must be at least 2 players, including you.</div>
+    <section class="hz-plan" id="hzPlan" aria-label="The plan"></section>
+    <section class="hz-tune" aria-label="Tune the load">
+      <div class="hz-tune-h"><h2 class="hz-h hz-h2">Tune the load</h2><span class="hz-legend" id="hzStepHint"></span><button class="hz-reset" type="button" id="hzReset" title="Take off everything added or removed here"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.3-5.7"/><path d="M4 3v5h5"/></svg>Reset</button></div>
+      <div class="hz-cards" id="hzCards"></div>
+    </section>
+    <div class="hz-bottom">
+      <section class="card hz-set" aria-label="Settings">
+        <h2 class="hz-h">Settings for the calculation</h2>
+        <div class="hz-set-g">
+          <div class="col" style="gap:8px">
+            <b>Your levels</b>
+            <div class="levels">
+              <label for="lv_support">Support <input id="lv_support" type="number" min="0" max="200" placeholder="–"></label>
+              <label for="lv_driver">Driver <input id="lv_driver" type="number" min="0" max="200" placeholder="–"></label>
+              <label for="lv_pilot">Pilot <input id="lv_pilot" type="number" min="0" max="200" placeholder="–"></label>
+            </div>
+            <span class="status" id="lvStatus"></span>
+            <b style="margin-top:6px">Loading</b>
+            <label class="opt"><input type="checkbox" id="optStock"> Count the build supplies a new FOB starts with</label>
+            <label class="opt"><input type="checkbox" id="optFobPack2"> FOB kit in backpack (vehicles; on foot it always is)</label>
+            <label class="opt"><input type="checkbox" id="optHamPack2"> Hammer in backpack (vehicles; on foot it always is)</label>
+            <label class="opt" title="Plan with pallets wherever you can. Crates are used on one trip at most, and only when that saves a whole trip. Pallets cost less per supply and unload in one go; crates are unloaded by hand. Kodiak, Humvee and MH-6 have no pallet bed and still use crates."><input type="checkbox" id="optPalletPrio"> Pallets Priority (they unload in one go)</label>
+            <label class="opt"><input type="checkbox" id="optUseHeli"> Use helicopters (Z20 Lakota, MH-6)</label>
+          </div>
+          <div class="col" style="gap:8px">
+            <div class="team" style="margin-top:0;padding-top:0;border-top:0">
+              <div class="team-h"><b>Team</b><span class="muted">Count yourself in. Team plans start at 2 players; at 0 the plan is for one vehicle.</span></div>
+              <div class="team-g" id="teamGrid"></div>
+              <div class="team-warn" id="teamWarn" hidden>A team must be at least 2 players, including you.</div>
+            </div>
+            <div class="col" style="gap:4px"><div class="team-h"><b>Haul priority</b><span class="muted">FOB kit and hammer always go first.</span></div>
+              <ol class="hz-prio" id="hzPrio" aria-label="Haul priority"></ol></div>
+            <details class="hz-det"><summary>From the design · <span id="hzPartsSum"></span></summary><div class="parts" id="hParts" style="margin-top:8px"></div></details>
+            <details class="hz-det"><summary>What “Minimal” is based on</summary>
+              <div class="col" style="gap:6px;margin-top:8px"><span class="status" style="margin:0">Your plan per emplacement. Change it if you plan differently; the + / − in Tune the load come on top.</span>
+                <div class="col" style="gap:6px" id="hPlan"></div>
+                <button class="btn ghost" type="button" id="planReset" style="align-self:flex-start">Reset plan</button></div></details>
           </div>
         </div>
-      </div>
-      <div class="col">
-        <div class="card"><h3>To haul</h3><div class="meters" id="hMeters"></div><div class="col" style="gap:6px" id="hWarns"></div></div>
-        <div class="card" id="hShotsCard"><h3>Ammo lasts</h3><div class="col" style="gap:6px" id="hShots"></div>
-          <div class="status" id="hShotsNote">With several of the same: all of it to one / shared evenly between them.</div></div>
-        <div class="card"><h3>Cash estimate</h3><div class="cash" id="hCash"></div></div>
-      </div>
-      <div class="col hplans">
-        <h2>How to pack it</h2>
-        <div class="col" style="gap:12px" id="hPlans"></div>
-      </div>
+      </section>
+      <section class="card hz-cash" aria-label="Cash">
+        <h2 class="hz-h">Cash</h2>
+        <div class="cash" id="hCash"></div>
+        <span class="status" style="margin:0">Same total as at the top of the plan and in the step bar.</span>
+      </section>
     </div>
   </section>
 
@@ -1033,16 +1155,18 @@ a{color:var(--accent)}
       ['v.ural.lvl','Ural · Driver level',0,'No level needed (4 Oct 2026)'],
       ['v.lakota.w','Z20 Lakota · bed width (cells)',2,'Checked in game, 2 Oct 2026'],
       ['v.lakota.l','Z20 Lakota · bed length (cells)',4,'1 pallet or 2 large crates. Checked in game, 2 Oct 2026'],
-      ['v.lakota.trunk','Z20 Lakota · trunk items',20],
+      ['v.lakota.trunk','Z20 Lakota · trunk items for the base (countermeasures only)',0],
       ['v.lakota.spawn','Z20 Lakota · spawn cost ($)',7400],
       ['v.lakota.lvl','Z20 Lakota · Pilot level',10],
       ['v.kodiak.w','Kodiak · bed width (cells)',1,'Checked in game, 2 Oct 2026'],
       ['v.kodiak.l','Kodiak · bed length (cells)',4,'One crate · no pallets. Checked in game, 2 Oct 2026'],
       ['v.kodiak.spawn','Kodiak · spawn cost ($)',2500],
+      ['v.kodiak.trunk','Kodiak · trunk items',12,'One slot per item or stack'],
       ['v.kodiak.lvl','Kodiak · Driver level',0],
       ['v.humvee.w','Humvee · bed width (cells)',1,'Same bed as the Kodiak'],
       ['v.humvee.l','Humvee · bed length (cells)',4,'Same bed as the Kodiak'],
       ['v.humvee.spawn','Humvee · spawn cost ($)',3000],
+      ['v.humvee.trunk','Humvee · trunk items',9,'One slot per item or stack'],
       ['v.humvee.lvl','Humvee · Driver level',15],
       ['v.mh6.racks','MH-6 · crate racks',2,'One small crate per rack. Checked in game, 2 Oct 2026'],
       ['v.mh6.w','MH-6 · rack width (cells)',1,'Checked in game, 2 Oct 2026'],
@@ -4137,7 +4261,7 @@ if(run&&run.def&&run.def.alarm!=null&&!run.def.dead&&run.defPos)p={x:(p.x+run.de
   const F=WD.F;
   const TYPES={build:'Build',ammo:'Ammo',fuel:'Fuel',mech:'Mechanical'};
   const ORDER=['build','ammo','fuel','mech'];
-  const PLAN_DEFAULT={fobInPack:false,hammerInPack:true,noHeli:false,palletPrio:true,team:{oneway:{foot:0,driver:0,lakota:0,mh6:0},trans:{foot:0,driver:0,lakota:0,mh6:0}},mortarShells:24,ciwsRounds:2000,talonMissiles:4,stingShots:1,drillFuel:'min',refuelStock:1800,repairStock:900,
+  const PLAN_DEFAULT={fobInPack:false,hammerInPack:true,noHeli:false,palletPrio:true,prio:['build','ammo','mech','fuel'],team:{oneway:{foot:0,driver:0,lakota:0,mh6:0},trans:{foot:0,driver:0,lakota:0,mh6:0}},mortarShells:24,ciwsRounds:2000,talonMissiles:4,stingShots:1,drillFuel:'min',refuelStock:1800,repairStock:900,
     extra:{build:0,ammo:0,fuel:0,mech:0},useFobStock:true,reserve:0};
 
   // What each consumer burns. Add a new emplacement here and nowhere else.
@@ -4162,13 +4286,13 @@ if(run&&run.def&&run.def.alarm!=null&&!run.def.dead&&run.defPos)p={x:(p.x+run.de
     for(const[id,n]of Object.entries(counts)){if(id==='fob'||!n)continue;
       need.build+=WD.build(id)*n;maxTier=Math.max(maxTier,WD.tier(id))}
     const buildRaw=need.build;
-    need.build=Math.ceil(buildRaw*(1+(+plan.reserve||0)/100))+Math.max(0,+plan.extra.build||0);
+    need.build=Math.max(0,Math.ceil(buildRaw*(1+(+plan.reserve||0)/100))+(+plan.extra.build||0));   // extra may be negative: Tune the load can take some off
     for(const[id,c]of Object.entries(CONSUMERS)){const n=counts[id]||0;if(!n)continue;
       let total;
       if(c.fixed)total=c.fixed(plan)*n;
       else{const want=+plan[c.input]||0;total=(c.need?c.need(want):Math.ceil(want*c.per()))*n;if(c.cash)cash+=c.cash()*want*n}
       need[c.type]+=total;lines.push({id,n,type:c.type,total,input:c.input,unit:c.unit,estimate:!!c.estimate})}
-    for(const t of['ammo','fuel','mech'])need[t]+=Math.max(0,+plan.extra[t]||0);
+    for(const t of['ammo','fuel','mech'])need[t]=Math.max(0,need[t]+(+plan.extra[t]||0));
     const stock=plan.useFobStock?F('fobStock'):0,S=F('stack');
     const haul={};for(const t of ORDER){const raw=Math.max(0,need[t]-(t==='build'?stock:0));haul[t]=Math.ceil(raw/S)*S}
     // how far the ammo and mechanical go: all to one emplacement / split evenly between all that use it
@@ -4226,16 +4350,18 @@ if(run&&run.def&&run.def.alarm!=null&&!run.def.dead&&run.defPos)p={x:(p.x+run.de
     const bed=bedOf(v),cells=bedCells(bed),allow=v.allow.filter(k=>contAvail(k,levels));
     const P=cont('pallet'),L=cont('large'),Sm=cont('small'),res=[];
     const cap=n=>Math.min(8,Math.max(0,Math.floor(n)));     // never more than 8 of one container per trip: keeps the search small
+    // trunk: one slot per item, a stack too. opt.trunk = slots per trip, opt.trunk1 = slots left on trip 1 (FOB kit / hammer in it)
+    const tr=Math.max(0,+(opt&&opt.trunk)||0),tk={per:tr,first:Math.max(0,Math.min(tr,opt&&opt.trunk1!=null?+opt.trunk1:tr))};
     const maxP=allow.includes('pallet')?cap(cells/P.cells):0,maxL=allow.includes('large')?cap(cells/L.cells):0,maxS=allow.includes('small')?cap(cells/Sm.cells):0;
     for(let p=0;p<=maxP;p++)for(let l=0;l<=maxL;l++)for(let s=0;s<=maxS;s++){
-      if(!(p+l+s)||!fits(bed,{pallet:p,large:l,small:s}))continue;
-      for(let T=1;T<=40;T++){const r=tryPack(st,p,l,s,T,P,L,Sm,cells,opt&&opt.first);if(r){res.push(r);break}}}
+      if(!(p+l+s)&&!tr||!fits(bed,{pallet:p,large:l,small:s}))continue;
+      for(let T=1;T<=(p+l+s?40:1);T++){const r=tryPack(st,p,l,s,T,P,L,Sm,cells,opt&&opt.first,rankOf(opt&&opt.prio),tk);if(r){res.push(r);break}}}   // trunk only: just for a tiny load in one trip
     for(const r of res)r.unpack=unpackTime(r);
     if(opt&&opt.palletPrio&&allow.includes('pallet')){const crateTrips=r=>r.tripList.filter(t=>t.crates.length).length;
       const p0=Math.min(...res.filter(r=>!r.crates.length).map(r=>r.trips));
       const keep=res.filter(r=>!r.crates.length||crateTrips(r)<=1&&r.trips<p0);
       if(keep.length)res.splice(0,res.length,...keep)}
-    // pallets first: at the same number of trips, the plan that unloads fastest (pallets unload themselves) wins over a cheaper crate load
+    // pallets first: at the same number of trips, the plan that unloads fastest (pallets unload in one go) wins over a cheaper crate load
     const seen=new Set(),uniq=[];res.sort((a,b)=>a.trips-b.trips||a.unpack-b.unpack||a.cost-b.cost);
     for(const r of res)if(!seen.has(r.sig)){seen.add(r.sig);uniq.push(r)}
     const pick=[],add=(r,tag)=>{if(r&&!pick.includes(r)){r.tag=tag;pick.push(r)}};
@@ -4247,15 +4373,18 @@ if(run&&run.def&&run.def.alarm!=null&&!run.def.dead&&run.defPos)p={x:(p.x+run.de
   }
   /* Trip order (first trips first): required build · ammo · fuel for the first drill (whole pallets, never split into crates
      just for it) · mechanical · the rest of the fuel · extra build (reserve and "extra on top"). */
-  const RANK={build:[1,6],ammo:[2,2],fuel:[3,5],mech:[4,4]};
-  function tryPack(st,p,l,s,T,P,L,Sm,cells,first){
+  /* Trip order from the player's priority (Settings). Each type's required part goes in that order
+     (required build, the first drill's fuel, all ammo and mechanical); the rest (extra build, more drill fuel) after all of them. */
+  const rankOf=prio=>{const o=Array.isArray(prio)&&prio.length===4&&ORDER.every(t=>prio.includes(t))?prio:PLAN_DEFAULT.prio,R={};o.forEach((t,i)=>R[t]=[i+1,i+5]);return R};
+  function tryPack(st,p,l,s,T,P,L,Sm,cells,first,RANK,tk){
     const firstN=t=>t==='build'?(first?first.build:Infinity):t==='fuel'?(first?first.fuel:0):Infinity;
-    const rem={...st},alloc=[],PT=p*T,ST=(L.stacks*l+Sm.stacks*s)*T;
+    const tkCap=i=>!tk||!tk.per?0:i===0?tk.first:tk.per;   // a small top-up rides in the trunk instead of a whole extra pallet / trip
+    const rem={...st},alloc=[],PT=p*T,ST=(L.stacks*l+Sm.stacks*s)*T+Array.from({length:T},(_,i)=>tkCap(i)).reduce((a,x)=>a+x,0);
     const maxT=()=>ORDER.reduce((m,t)=>rem[t]>rem[m]?t:m,'build'),sum=()=>ORDER.reduce((a,t)=>a+rem[t],0);
     while(alloc.length<PT){const t=maxT();if(rem[t]<P.stacks)break;alloc.push(t);rem[t]-=P.stacks}
     while(sum()>ST&&alloc.length<PT){const t=maxT();if(rem[t]<=0)break;alloc.push(t);rem[t]=Math.max(0,rem[t]-P.stacks)}
     if(sum()>ST)return null;
-    const trips=Array.from({length:T},()=>({pallets:[],crates:[]}));
+    const trips=Array.from({length:T},()=>({pallets:[],crates:[],trunk:[]}));
     const seen={},ranked=alloc.map(t=>{const k=seen[t]||0;seen[t]=k+1;return{t,r:k*P.stacks<firstN(t)?RANK[t][0]:RANK[t][1]}});
     ranked.sort((a,b)=>a.r-b.r||ORDER.indexOf(a.t)-ORDER.indexOf(b.t)).forEach((x,i)=>trips[Math.floor(i/p)].pallets.push(x.t));
     // what is left for crates, in the same order
@@ -4266,11 +4395,13 @@ if(run&&run.def&&run.def.alarm!=null&&!run.def.dead&&run.defPos)p={x:(p.x+run.de
       if(!queue.length)break outer;const capTot=kind==='large'?L.stacks:Sm.stacks;let cap=capTot;const c={kind,fill:[],cap:capTot};
       while(cap>0&&queue.length){const q=queue[0],n=Math.min(cap,q[1]),last=c.fill[c.fill.length-1];if(last&&last[0]===q[0])last[1]+=n;else c.fill.push([q[0],n]);cap-=n;q[1]-=n;if(!q[1])queue.shift()}
       c.free=cap;trips[i].crates.push(c);crates.push(c)}
-    const used=trips.filter(t=>t.pallets.length||t.crates.length);
+    for(let i=0;i<T&&queue.length;i++){let cap=tkCap(i);const tt=trips[i].trunk;
+      while(cap>0&&queue.length){const q=queue[0],n=Math.min(cap,q[1]),last=tt[tt.length-1];if(last&&last[0]===q[0])last[1]+=n;else tt.push([q[0],n]);cap-=n;q[1]-=n;if(!q[1])queue.shift()}}
+    const used=trips.filter(t=>t.pallets.length||t.crates.length||t.trunk.length);
     for(const t of used)t.load={pallet:t.pallets.length,large:t.crates.filter(c=>c.kind==='large').length,small:t.crates.filter(c=>c.kind==='small').length};
-    const crateStacks=crates.reduce((a,c)=>a+c.fill.reduce((x,f)=>x+f[1],0),0);
+    const crateStacks=crates.reduce((a,c)=>a+c.fill.reduce((x,f)=>x+f[1],0),0)+used.reduce((a,t)=>a+t.trunk.reduce((x,f)=>x+f[1],0),0);
     const cost=alloc.length*P.price+crates.reduce((a,c)=>a+(c.kind==='large'?L.price:Sm.price),0)+crateStacks*F('packPrice');
-    const shape=t=>t.pallets.length+'p'+t.crates.map(c=>c.kind[0]).join('');
+    const shape=t=>t.pallets.length+'p'+t.crates.map(c=>c.kind[0]).join('')+(t.trunk.length?'k'+t.trunk.reduce((x,f)=>x+f[1],0):'');
     return{trips:used.length,tripList:used,pallets:alloc,crates,cost,sig:used.map(shape).join('|')};
   }
   /* Unloading at the FOB (an indicator, not a measurement of your run): a pallet unloads itself once dropped;
@@ -4278,7 +4409,7 @@ if(run&&run.def&&run.def.alarm!=null&&!run.def.dead&&run.defPos)p={x:(p.x+run.de
   function unpackTime(r){const sl=Math.max(1,F('unpack.slots')),r1=F('unpack.run1'),rf=F('unpack.runFull');
     const run=k=>r1+(k-1)*(sl>1?(rf-r1)/(sl-1):0);let pal=0,hand=0;
     for(const t of r.tripList){pal+=t.pallets.length*F('unpack.pallet');
-      let n=t.crates.reduce((a,c)=>a+c.fill.reduce((x,f)=>x+f[1],0),0);while(n>0){const k=Math.min(sl,n);hand+=run(k);n-=k}}
+      let n=t.crates.reduce((a,c)=>a+c.fill.reduce((x,f)=>x+f[1],0),0)+(t.trunk||[]).reduce((x,f)=>x+f[1],0);while(n>0){const k=Math.min(sl,n);hand+=run(k);n-=k}}
     r.unpackHand=hand;return pal+hand}
   function freeFits(load,v,levels){   // what else would still fit next to this trip's load
     const out=[],allow=v.allow.filter(k=>contAvail(k,levels)),bed=bedOf(v);
@@ -4286,7 +4417,7 @@ if(run&&run.def&&run.def.alarm!=null&&!run.def.dead&&run.defPos)p={x:(p.x+run.de
       if(!allow.includes(k))continue;let n=0;while(n<8&&fits(bed,{...load,[k]:load[k]+n+1}))n++;if(n)out.push(`${n} ${word}${n>1?'s':''}`)}
     return out;
   }
-  window.Haul={TYPES,ORDER,PLAN_DEFAULT,CONSUMERS,VEH,CNAME,needs,packFor,freeFits,fits,bedOf,vehAvail,contAvail,hammerOk,unpackTime};
+  window.Haul={rankOf,TYPES,ORDER,PLAN_DEFAULT,CONSUMERS,VEH,CNAME,needs,packFor,freeFits,fits,bedOf,vehAvail,contAvail,hammerOk,unpackTime};
 })();
 </script>
 
@@ -4799,7 +4930,7 @@ const TIPS={
   play:{sel:'#threat .tplay:not([disabled])',side:'l',title:'Watch the attack',text:()=>`Your base can be got into. Press <b>▶</b> to watch how, and tick <b>Show weak points on the map</b> to see where.`},
   order:{sel:'#ordBar .btn:nth-child(2)',side:'b',title:'Build order',text:()=>`The order follows how you placed the pieces. <b>Easy build</b> or <b>Perimeter first</b> reorder it for you; <b>Edit order</b> lets you do it by hand.`},
   team:{sel:'#teamGrid',side:'t',title:'Team',text:()=>`Hauling with friends? Fill in the <b>Team</b> and each player gets their own trips, cost and pack list.`},
-  packlist:{sel:'.packlist summary',side:'t',title:'Pack list',text:()=>`Open the <b>Pack list</b> and copy it to your drivers in Discord. Everyone gets their trips as plain text.`}};
+  packlist:{sel:'#packBtn',side:'b',title:'Pack list',text:()=>`Open the <b>Pack list</b> and copy it to your drivers, e.g. in Discord. Everyone gets their own trips.`}};
 let tipsOff=new Set(ls.get('wd_tipsOff')||[]);const tipsShown=new Set();let tipEl=null,tipTarget=null;
 function closeTip(){if(tipEl){tipEl.remove();tipEl=null}if(tipTarget){tipTarget.classList.remove('tip-on');tipTarget=null}}
 function saveTips(){ls.set('wd_tipsOff',[...tipsOff]);
@@ -4835,7 +4966,7 @@ function showTab(t){tab=t;for(const b of document.querySelectorAll('#tabs button
   $('steps').hidden=t==='build'?false:$('orderBtn').getAttribute('aria-expanded')!=='true';   // Build always shows the order
   if(sec==='design'){const m=t==='build'?'blue':'edit';if(m!==mode){window.stopAttack?.();mode=m;if(m==='blue'&&(tool==='select'||tool==='brush'||tool==='side'))setTool(lastPiece)}renderSide();requestAnimationFrame(()=>{fitLayout();draw()})}
   if(t==='haul')renderHaul();if(t==='facts')renderFacts();
-  closeTip();later(()=>requestAnimationFrame(()=>{if(t==='build')showTip('order');if(t==='haul'&&document.querySelector('#hPlans .rec')){if(!showTip('packlist'))showTip('team')}}))}
+  closeTip();later(()=>requestAnimationFrame(()=>{if(t==='build')showTip('order');if(t==='haul'&&document.querySelector('#hzPlan .hz-trip')){if(!showTip('packlist'))showTip('team')}}))}
 for(const b of document.querySelectorAll('#tabs button, #proc .st'))b.onclick=()=>showTab(b.dataset.tab);
 // the live line under each step: where you are in Design → Haul → Build
 let haulSummary='';
@@ -4891,196 +5022,279 @@ window.renderTrips=()=>{const root=$('bomTrips');if(!root)return;root.replaceChi
   const tile=(k,v,sub,ic)=>{const kk=el('span',{class:'k'});kk.innerHTML=VEH_ICON[ic]||'';kk.append(k);return el('button',{class:'trip-t',type:'button',onclick:()=>showTab('haul'),title:'Open Haul'},kk,el('span',{class:'v'},v),el('span',{class:'s'},sub))};
   const foot=Math.ceil(stacks/Math.max(1,WD.F('foot.stacks')));
   root.append(tile('On foot',`${foot} trip${foot>1?'s':''}`,`${fmt(stacks*S)} supplies`,'foot'));
-  for(const id of['ural','lakota']){const v=Haul.VEH.find(x=>x.id===id),best=Haul.packFor(v,r.haul,levels,{palletPrio:plan.palletPrio,first:r.first})[0];
+  for(const id of['ural','lakota']){const v=Haul.VEH.find(x=>x.id===id),best=Haul.packFor(v,r.haul,levels,{palletPrio:plan.palletPrio,first:r.first,prio:plan.prio,trunk:v.track==='pilot'?0:WD.F('v.'+v.id+'.trunk'),trunk1:(v.track==='pilot'?0:WD.F('v.'+v.id+'.trunk')||0)-(plan.fobInPack?0:1)-(r.maxTier===3&&plan.hammerInPack===false?1:0)})[0];
     root.append(tile(v.name,best?`${best.trips} trip${best.trips>1?'s':''}`:'—',Haul.vehAvail(v,levels)?(best?'best plan':'too much'):el('span',{class:'lockd'},'Locked at your level'),id))}};
 
 /* ---------- Supplies & haul ---------- */
-let haulPick={sig:'',i:0},haulAllOpen=false,packOpen=false;   // which option the recommended card shows (and the cash estimate uses); "All options" open or not
+let haulPick={veh:null,i:0},haulDone={sig:'',set:new Set()},packOpen=false;   // chosen vehicle + which of its packing ways; trips ticked off; pack list open
+const HZ_ICON={
+  build:'<svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true"><path d="M2 2h6v2H4v4H2zM16 2h6v6h-2V4h-4zM2 16h2v4h4v2H2zM20 16h2v6h-6v-2h4z"/><path fill-rule="evenodd" d="M6 6h12v12H6zm2 2v3h3V8zm5 0v3h3V8zm-5 5v3h3v-3zm5 0v3h3v-3z"/></svg>',
+  ammo:'<svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true"><path d="M3 9c0-3 1-5 2.5-6.5C7 4 8 6 8 9v1H3zM3 11h5v8H3zM2.5 20h6v2h-6zM9.5 9c0-3 1-5 2.5-6.5C13.5 4 14.5 6 14.5 9v1h-5zM9.5 11h5v8h-5zM9 20h6v2H9zM16 9c0-3 1-5 2.5-6.5C20 4 21 6 21 9v1h-5zM16 11h5v8h-5zM15.5 20h6v2h-6z"/></svg>',
+  fuel:'<svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M3 3.5A1.5 1.5 0 0 1 4.5 2h9A1.5 1.5 0 0 1 15 3.5V20h1v2H2v-2h1zM5 5v5h8V5z"/><path d="M15 7h2.2l3 3V18a2 2 0 0 1-4 0v-4H15v-2h3v6h.2v-7.2L16.4 9H15z"/></svg>',
+  mech:'<svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M10.3 1.5h3.4l.5 2.6a8 8 0 0 1 2 .8l2.2-1.5 2.4 2.4-1.5 2.2a8 8 0 0 1 .8 2l2.6.5v3.4l-2.6.5a8 8 0 0 1-.8 2l1.5 2.2-2.4 2.4-2.2-1.5a8 8 0 0 1-2 .8l-.5 2.6h-3.4l-.5-2.6a8 8 0 0 1-2-.8l-2.2 1.5-2.4-2.4 1.5-2.2a8 8 0 0 1-.8-2l-2.6-.5v-3.4l2.6-.5a8 8 0 0 1 .8-2L3.2 5.8l2.4-2.4 2.2 1.5a8 8 0 0 1 2-.8zM12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8z"/></svg>',
+  pallet:'<svg viewBox="0 0 26 17" width="22" height="15" aria-hidden="true" fill="currentColor"><path d="M2 8.6l2.7 1.1 9.6-5.3-2.7-1.1zM6.2 10.3l2.7 1.1 9.6-5.3-2.7-1.1zM10.4 12l2.7 1.1 9.6-5.3-2.7-1.1zM14.6 13.7l2.4 1 7-3.9v-.9l-.4-.2z"/><path fill-rule="evenodd" d="M2 9.4l15 6.1v1.4L2 10.8zM3.6 10.6v.7l3 1.2v-.7zM10.4 13.4v.7l3 1.2v-.7z"/><path d="M17 15.5l7-3.9v1.4l-7 3.9z"/></svg>',
+  crate:'<svg viewBox="0 0 24 18" width="20" height="15" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="1.5" y="5" width="21" height="11.5" rx="2"/><path d="M8.5 5V2.8c0-.7.5-1.2 1.2-1.2h4.6c.7 0 1.2.5 1.2 1.2V5M1.5 9.8h21"/><rect x="5.5" y="8.3" width="3.2" height="3" rx="1" fill="var(--panel)"/><rect x="15.3" y="8.3" width="3.2" height="3" rx="1" fill="var(--panel)"/></svg>',
+  pack:'<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><rect x="5" y="4" width="14" height="17" rx="1.5"/><path d="M9 4V3h6v1M8.5 10h7M8.5 14h7M8.5 18h4"/></svg>'};
+const HZ_VEH_ORDER=['ural','kodiak','lakota','mh6','humvee'],hzVehs=()=>HZ_VEH_ORDER.map(id=>Haul.VEH.find(v=>v.id===id)).filter(Boolean);
+const HZ_NAME={build:'Supplies',ammo:'Ammo',fuel:'Fuel',mech:'Mechanical'},HZ_SHORT={build:'SUPPLIES',ammo:'AMMO',fuel:'FUEL',mech:'MECH'};
+const HZ_FOR={build:'Build + spare for repairs',ammo:'Mortars, CIWS, Talon',fuel:'Drill Rig',mech:'Stingray'};
+const hzIc=t=>{const x=el('span',{class:'hz-ic t-'+t});x.innerHTML=HZ_ICON[t];return x};
+function copyText(txt,btn,label){const done=()=>{btn.textContent='Copied ✓';setTimeout(()=>{btn.textContent=label},1500)};
+  try{navigator.clipboard.writeText(txt).then(done,()=>{btn.textContent='Copy failed'})}catch(e){btn.textContent='Copy failed'}}
 function renderHaul(){
-  const c=counts(),r=Haul.needs(c,plan);
-  // parts from the design
+  const c=counts();
+  // older drafts: the repair reserve % is now simply extra Supplies (spare for repairs)
+  if(+plan.reserve){const a=Haul.needs(c,plan).need.build,b=Haul.needs(c,{...plan,reserve:0}).need.build;plan.extra={...plan.extra,build:(+(plan.extra||{}).build||0)+(a-b)};plan.reserve=0}
+  const r=Haul.needs(c,plan),base=Haul.needs(c,{...plan,extra:{build:0,ammo:0,fuel:0,mech:0}});
+  const S=WD.F('stack'),PS=WD.F('palletSize'),plu=(n,w)=>`${n} ${w}${n===1?'':'s'}`;
+  // ---- from the design (Settings)
   const parts=$('hParts');parts.replaceChildren();
   const ids=Object.keys(c).filter(id=>id!=='fob').sort((a,b)=>WD.build(b)*c[b]-WD.build(a)*c[a]);
   if(!ids.length)parts.append(el('div',{class:'empty'},'The design is empty. Place pieces on the Design tab.'));
   for(const id of ids){const ok=Haul.hammerOk(WD.tier(id),levels);
     parts.append(el('span',{},nameOf(id),!ok?el('span',{class:'lock'},' Support '+(WD.tier(id)===2?WD.F('ham.m.lvl'):WD.F('ham.l.lvl'))):null),el('span',{class:'n'},'×'+c[id]),el('span',{class:'n'},fmt(WD.build(id)*c[id])))}
-  if(ids.length){parts.append(el('span',{class:'tot'},'Build supplies'),el('span',{class:'tot'}),el('span',{class:'n tot'},fmt(r.buildRaw)));
-    if(plan.reserve)parts.append(el('span',{class:'muted'},`+${plan.reserve}% repair reserve`),el('span',{}),el('span',{class:'n muted'},fmt(r.need.build-r.buildRaw)))}
-  // consumables plan
+  if(ids.length)parts.append(el('span',{class:'tot'},'Build supplies'),el('span',{class:'tot'}),el('span',{class:'n tot'},fmt(r.buildRaw)));
+  $('hzPartsSum').textContent=ids.length?`${fmt(r.buildRaw)} build supplies`:'empty';
+  // ---- the plan per emplacement ("Need" is based on it)
   const pl=$('hPlan');pl.replaceChildren();
-  const num=(key,val,step,label,after)=>{const i=el('input',{type:'number',min:'0',step,value:val,id:'pl_'+key,'aria-label':label});
-    i.addEventListener('change',()=>{const v=Math.max(0,+i.value||0);if(key.startsWith('extra.'))plan.extra={...plan.extra,[key.slice(6)]:v};else plan[key]=v;planChanged()});return i};
-  for(const line of r.lines){const cfg=Haul.CONSUMERS[line.id];const row=el('div',{class:'prow',style:`--c:var(--${line.type})`},
-      el('span',{class:'pname'},`${nameOf(line.id)} ×${line.n}`));
+  const num=(key,val,step,label)=>{const i=el('input',{type:'number',min:'0',step,value:val,id:'pl_'+key,'aria-label':label});
+    i.addEventListener('change',()=>{plan[key]=Math.max(0,+i.value||0);planChanged()});return i};
+  for(const line of base.lines){const row=el('div',{class:'prow',style:`--c:var(--${line.type})`},el('span',{class:'pname'},`${nameOf(line.id)} ×${line.n}`));
     if(line.input)row.append(num(line.input,plan[line.input],line.id==='ciws'?WD.F('ciws.rounds'):1,line.unit+' each'),el('span',{class:'muted'},`${line.unit} each`));
     else if(line.id==='drill'){const sel=el('select',{id:'pl_drill','aria-label':'Drill fuel'},
         el('option',{value:'min'},`Minimum run · ${fmt(WD.F('drill.min'))}`),...[1,2,3,4,5].map(n=>el('option',{value:'x'+n},`${n}× full duration · ${fmt(WD.F('drill.max')*n)}`)));
       sel.value=plan.drillFuel==='max'?'x1':plan.drillFuel||'min';sel.onchange=()=>{plan.drillFuel=sel.value;planChanged()};row.append(sel)}
     else{const key=line.id==='refuel'?'refuelStock':'repairStock';row.append(num(key,plan[key],50,'stock'),el('span',{class:'muted'},`${Haul.TYPES[line.type].toLowerCase()} stocked`))}
-    row.append(el('span',{class:'n ptot'},`${fmt(line.total)} ${Haul.TYPES[line.type].toLowerCase()}`,line.estimate?el('span',{class:'est'},' est.'):null));
-    pl.append(row)}
-  if(!r.lines.length)pl.append(el('div',{class:'empty'},'No emplacements, stations or drill in the design, so no ammo, fuel or mechanical is planned.'));
-  // extra on top, and the total per supply type, in four aligned columns
-  const sg=el('div',{class:'sgrid'},el('span'),...Haul.ORDER.map(t=>el('span',{class:'sg-h',style:`--c:var(--${t})`},Haul.TYPES[t])),
-    el('span',{class:'sg-l'},'Extra on top'),...Haul.ORDER.map(t=>{const ps=WD.F('palletSize'),b=el('button',{type:'button',class:'pal-add',style:`--c:var(--${t})`,
-        title:`Add one ${Haul.TYPES[t].toLowerCase()} pallet (${fmt(ps)} supplies)`,'aria-label':`Add one ${Haul.TYPES[t].toLowerCase()} pallet`,
-        onclick:()=>{plan.extra={...plan.extra,[t]:(+plan.extra[t]||0)+ps};planChanged()}});
-      b.innerHTML='<svg viewBox="0 0 16 12" aria-hidden="true"><rect x="1" y="1" width="14" height="6" rx="1"/><path d="M1 8.5h14M2.5 8.5v2.5M8 8.5v2.5M13.5 8.5v2.5"/></svg>';
-      return el('span',{class:'sg-in'},b,num('extra.'+t,plan.extra[t]||0,50,'Extra '+Haul.TYPES[t].toLowerCase()))}),
-    el('span',{class:'sg-l',title:'Everything planned right now: build supplies for the design (plus any reserve and extra), and the ammo, fuel and mechanical above, plus extra. The new FOB\'s starting build supplies are taken off later, under "To haul".'},'Total supplies'),
-    ...Haul.ORDER.map(t=>el('b',{class:'sg-v',style:`--c:var(--${t})`},fmt(r.need[t]))));
-  pl.append(sg);
-  // options
-  $('optStock').checked=plan.useFobStock;
-  for(const[id,k]of[['optFobPack','fobInPack'],['optFobPack2','fobInPack'],['optHamPack','hammerInPack'],['optHamPack2','hammerInPack']])$(id).checked=!!plan[k];{const t=teamOf();for(const row of['oneway','trans'])for(const k of TEAM_KINDS)$(`team_${row}_${k}`).value=String(t[row][k]);$('teamWarn').hidden=teamSize(t)!==1}$('optReserve').value=String(plan.reserve||0);
-  // meters
-  const m=$('hMeters');m.replaceChildren();
-  for(const t of Haul.ORDER){const sub=t==='build'&&r.stock?`${fmt(r.need.build)} needed − ${fmt(Math.min(r.stock,r.need.build))} in new FOB`:(r.need[t]?`${fmt(r.need[t])} planned`:'none');
-    m.append(el('div',{class:'meter',style:`--c:var(--${t})`},el('span',{class:'t'},Haul.TYPES[t]+' to haul'),el('span',{class:'v'},fmt(r.haul[t])),el('span',{class:'s'},sub)))}
-  // shots
-  const sh=$('hShots');sh.replaceChildren();
-  for(const[id,s]of Object.entries(r.shots)){
-    sh.append(el('div',{class:'shot'},el('span',{},nameOf(id)),el('b',{},(s.estimate?'≈':'')+(s.units>1?`${fmt(s.alone)} / ${fmt(s.shared)}`:fmt(s.alone))),
-      el('span',{class:'muted'},` ${s.unit}`)))}
-  $('hShotsNote').hidden=!Object.values(r.shots).some(s=>s.units>1);
-  $('hShotsCard').hidden=!sh.children.length;
-  // warnings
-  const w=$('hWarns');w.replaceChildren();
-  const locked=ids.filter(id=>!Haul.hammerOk(WD.tier(id),levels));
-  if(locked.length)w.append(el('div',{class:'warn'},`At your Support level you can't build: ${locked.map(nameOf).join(', ')}.`));
-  else if(r.maxTier===3)w.append(el('div',{class:'warn'},`Needs a Large Hammer (${money(WD.F('ham.l.price'))}). The FOB only comes with a medium one.`));
-  for(const t of Haul.ORDER)if(r.need[t]>WD.F('fobCap'))w.append(el('div',{class:'warn'},`${Haul.TYPES[t]} is over the FOB cap of ${fmt(WD.F('fobCap'))}. Bring it in waves.`));
-  // packing plans: one recommended plan on top (arrows step through the next best), every option below, collapsed
-  const root=$('hPlans');root.replaceChildren();
-  const total=Haul.ORDER.reduce((a,t)=>a+r.haul[t],0);
-  // what goes with you: in the trunk, or in your own backpack (the planner's choice; vehicles without a trunk: backpack)
-  const carry=[['FOB kit',!!plan.fobInPack]];if(r.maxTier===3)carry.push(['Large Hammer',plan.hammerInPack!==false]);
-  const HELI_SPEED=10;   // a helicopter does a round trip about 10 times faster than a ground vehicle
-  const isHeli=v=>v.track==='pilot';
-  let cheapest=null;const lockedV=[],opts=[];
-  const S=WD.F('stack'),plu=(n,w)=>`${n} ${w}${n===1?'':'s'}`;
+    row.append(el('span',{class:'n ptot'},`${fmt(line.total)} ${Haul.TYPES[line.type].toLowerCase()}`));pl.append(row)}
+  if(!base.lines.length)pl.append(el('div',{class:'empty'},'No emplacements, stations or drill in the design, so no ammo, fuel or mechanical is planned.'));
+  // ---- settings sync
+  $('optStock').checked=plan.useFobStock;$('optPalletPrio').checked=plan.palletPrio!==false;$('optUseHeli').checked=!plan.noHeli;
+  for(const[id,k]of[['optFobPack','fobInPack'],['optFobPack2','fobInPack'],['optHamPack','hammerInPack'],['optHamPack2','hammerInPack']])$(id).checked=!!plan[k];
+  {const pr=$('hzPrio'),o=Haul.rankOf(plan.prio),order=Object.keys(o).sort((a,b)=>o[a][0]-o[b][0]);pr.replaceChildren();
+    const move=(i,d)=>{const n=[...order];[n[i],n[i+d]]=[n[i+d],n[i]];plan.prio=n;planChanged()};
+    order.forEach((t,i)=>{if(i)pr.append(el('li',{class:'sep','aria-hidden':'true',style:'background:none;border:0'},'›'));
+      pr.append(el('li',{class:'t-'+t},el('button',{type:'button','aria-label':`Move ${HZ_NAME[t]} earlier`,title:'Earlier',disabled:i?null:'',onclick:()=>move(i,-1)},'◀'),
+        el('span',{class:'n'},String(i+1)),el('span',{class:'nm'},HZ_NAME[t]),
+        el('button',{type:'button','aria-label':`Move ${HZ_NAME[t]} later`,title:'Later',disabled:i<3?null:'',onclick:()=>move(i,1)},'▶')))})}
   const team=teamOf(),teamN=teamSize(team),useTeam=teamN>=2;
-  // one trip as pills: backpack / trunk items on the first trip, then what lies on the bed
-  const tripLoad=(t,v,trunkCap,items)=>{const load=el('div',{class:'load'}),bed=el('div',{class:'load'}),pc={};
-    const inTrunk=trunkCap?items.filter(c=>!c[1]).map(c=>c[0]):[],inPack=items.filter(c=>!trunkCap||c[1]).map(c=>c[0]);
-    if(inPack.length)load.append(el('span',{class:'pill'},el('b',{},'Backpack:'),' '+inPack.join(', ')));
-    if(inTrunk.length)load.append(el('span',{class:'pill'},el('b',{},'Trunk:'),' '+inTrunk.join(', ')));
-    if(t.foot)load.append(el('span',{class:'pill'},el('b',{},'Backpack:'),' '+t.foot.map(([x,n])=>`${n} ${Haul.TYPES[x].toLowerCase()}`).join(' + ')+' stacks'));
-    if(t.pallets.length||t.crates.length)bed.append(el('span',{class:'bedl'},'Bed'));
-    t.pallets.forEach(x=>pc[x]=(pc[x]||0)+1);
-    for(const[x,n]of Object.entries(pc))bed.append(el('span',{class:'pill pal',style:`--c:var(--${x})`},el('b',{},(n>1?n+'× ':'')+Haul.TYPES[x]+' pallet')));
-    for(const cr of t.crates)bed.append(el('span',{class:'pill'},el('b',{},Haul.CNAME[cr.kind]+':'),' '+cr.fill.map(([x,n])=>`${n} ${Haul.TYPES[x].toLowerCase()}`).join(' + ')+' stacks'));
-    const free=el('div',{class:'free'});
-    for(const cr of t.crates)if(cr.free>0)free.append(el('span',{},`${cr.free} free slot${cr.free>1?'s':''} in ${Haul.CNAME[cr.kind].toLowerCase()} (${fmt(cr.free*S)} supplies)`));
-    if(v&&t.load){const fits=Haul.freeFits(t.load,v,levels);if(fits.length)free.append(el('span',{},'Bed room for '+fits.join(' or ')))}
-    if(trunkCap){const left=trunkCap-inTrunk.length;if(left>0)free.append(el('span',{},`${left} trunk slot${left>1?'s':''} free`))}
-    return el('div',{class:'col',style:'gap:4px'},load.children.length?load:null,bed.children.length?bed:null,free.children.length?free:null)};
-  // the same trip as one line of text, for the pack list
-  const tripText=(t,trunkCap,items)=>{const bits=[],pc={};
-    const inTrunk=trunkCap?items.filter(c=>!c[1]).map(c=>c[0]):[],inPack=items.filter(c=>!trunkCap||c[1]).map(c=>c[0]);
-    t.pallets.forEach(x=>pc[x]=(pc[x]||0)+1);for(const[x,n]of Object.entries(pc))bits.push(`${n}× ${Haul.TYPES[x]} pallet`);
-    for(const cr of t.crates)bits.push(`${Haul.CNAME[cr.kind]} (${cr.fill.map(([x,n])=>`${n} ${Haul.TYPES[x].toLowerCase()}`).join(' + ')} stacks)`);
-    if(t.foot)bits.push(`Backpack: ${t.foot.map(([x,n])=>`${n} ${Haul.TYPES[x].toLowerCase()}`).join(' + ')} stacks`);
-    if(inPack.length)bits.push('Backpack: '+inPack.join(', '));if(inTrunk.length)bits.push('Trunk: '+inTrunk.join(', '));
-    return bits.join(' · ')};
-  // one plan, its trips in the order you act in game: backpack (gear vendor), trunk, then the bed (garage)
-  let selO=null,packText='';
-  const planView=(o,big)=>{const{v,p,i,spawn,trunkCap}=o;const on=o===selO;
-    const pick=big?null:el('button',{type:'button',class:'mini plan-sel'+(on?' on':''),'aria-pressed':on?'true':'false',disabled:on?'':null,
-      title:on?'This plan is selected: the card above and the cash estimate use it':'Use this plan: the card above and the cash estimate follow it',
-      onclick:()=>{haulPick.i=opts.indexOf(o);renderHaul()}},on?'Selected':'Select');
-    const head=el('div',{class:'plan-h'},el('span',{},el('b',{},plu(p.trips,'trip')),' ',el('span',{class:'tag'+(i===0?' best':'')},p.tag)),
-      el('span',{class:'plan-r'},el('span',{class:'mono muted',style:'font-size:13px'},'~'+money(p.cost)+' supplies'+(spawn?' + '+money(spawn*p.trips)+' spawn':'')+' · unpack ~'+mmss(p.unpack)),pick));
-    const box=el('div',{class:'plan'+(big?' big':'')},big?null:head);
-    p.tripList.forEach((t,ti)=>box.append(el('div',{class:'trip'},el('span',{class:'tn'},'Trip '+(ti+1)),tripLoad(t,v,trunkCap,ti===0?carry:[]))));
-    const over=p.pallets.length*WD.F('palletSize')+p.crates.reduce((a,cr)=>a+(cr.cap-cr.free)*S,0)-total;
-    box.append(el('div',{class:'plan-f'},`${p.crates.length?'Crates are unloaded by hand into the FOB. ':''}${p.pallets.length?'Drop pallets inside the FOB square. ':''}${over>0?'Pallets bring '+fmt(over)+' more than planned.':''}`));
-    return box};
-  const prioBox=el('input',{type:'checkbox',id:'optPalletPrio'});
-  prioBox.checked=plan.palletPrio!==false;prioBox.onchange=e=>{plan.palletPrio=e.target.checked;haulPick.i=0;planChanged()};
-  const prioLbl=el('label',{class:'chk noheli',title:'Pallets prio: plan with pallets wherever you can. Crates are used on one trip at most, and only when that saves a whole trip. Pallets cost less per supply and unload themselves in about 10 s; crates pack tighter but are unloaded by hand. Kodiak, Humvee and MH-6 have no pallet bed and still use crates.'},prioBox,' Pallets prio');
-  let teamRes=null;
-  if(!total)root.append(el('div',{class:'card'},el('h3',{},ids.length?'No haul needed':'Nothing to pack'),el('div',{class:'muted'},ids.length?'The new FOB\'s starting stock covers this design. Carry the FOB kit in a backpack (it takes 2×3).':'Place pieces on the Design tab.')));
-  else if(useTeam){
-    teamRes=planTeam(r,team);
-    const T=teamRes,card=el('section',{class:'rec'});
-    card.append(el('div',{class:'rec-h'},el('span',{class:'rec-k'},`Team plan · ${teamN} players`),el('span',{class:'rec-opts'},prioLbl)),
-      el('div',{class:'rec-t'},el('b',{},plu(T.trips,'trip')),' · ',el('b',{title:'Time on the road until the last load is in, counted in ground round trips (a helicopter round trip is about a tenth of one)'},`all in after ~${T.span} ground trip${T.span===1?'':'s'}`),' · ',el('span',{class:'mono'},money(T.cost+T.vehCost))),
-      el('div',{class:'rec-u',title:`Estimate: a pallet unloads in ${WD.F('unpack.pallet')} s once dropped. The whole team (${teamN}) shares carrying crates into the FOB. Foot players carry their stacks straight in.`},'Time to unpack (~): ',el('b',{class:'mono'},mmss(T.unpack))),
-      el('div',{class:'rec-s'},`${money(T.cost)} supplies`+(T.vehCost?` + ${money(T.vehCost)} vehicles (bought once each)`:'')));
-    if(T.left>0)card.append(el('div',{class:'warn bad-list',style:'margin:6px 0'},`The team can't carry it all: ${fmt(T.left)} supplies are left over. Add transporters, or more one-way players.`));
-    const box=el('div',{class:'plan big'});
-    for(const c of T.carriers){if(!c.trips.length)continue;
-      box.append(el('div',{class:'round'},c.label));
-      c.trips.forEach((t,ti)=>box.append(el('div',{class:'trip'},el('span',{class:'tn'},'Trip '+(ti+1)),tripLoad(t,c.v,c.trunkCap,t.items||[]))))}
-    const idle=T.carriers.filter(c=>!c.trips.length);
-    if(idle.length)box.append(el('div',{class:'plan-f'},`Not needed: ${idle.map(c=>c.label).join(', ')}.`));
-    card.append(box);root.append(card);
-    packText=[`WARDOGS haul${designName?' · '+designName:''}`,...T.carriers.filter(c=>c.trips.length).flatMap(c=>[``,c.label,...c.trips.map((t,ti)=>`  Trip ${ti+1}: ${tripText(t,c.trunkCap,t.items||[])}`)])].join('\n');
-  }
-  else{
-    for(const v of Haul.VEH){
-      if(!Haul.vehAvail(v,levels)){lockedV.push(`${v.name} needs ${v.track==='driver'?'Driver':'Pilot'} ${WD.F('v.'+v.id+'.lvl')}`);continue}
-      if(plan.noHeli&&isHeli(v))continue;
-      const spawn=WD.F('v.'+v.id+'.spawn')||0,trunkCap=WD.F('v.'+v.id+'.trunk');
-      Haul.packFor(v,r.haul,levels,{palletPrio:plan.palletPrio,first:r.first}).forEach((p,i)=>{if(!cheapest||p.cost<cheapest.cost)cheapest=p;
-        opts.push({v,p,i,spawn,trunkCap,time:p.trips/(isHeli(v)?HELI_SPEED:1),cash:p.cost+spawn*p.trips})})}
-    // fewest trips (helicopters ~10× faster), then pallets first (quickest to unload), then cash
+  for(const row of['oneway','trans'])for(const k of TEAM_KINDS)$(`team_${row}_${k}`).value=String(team[row][k]);$('teamWarn').hidden=teamN!==1;
+  // ---- warnings
+  const warns=[];
+  const locked=ids.filter(id=>!Haul.hammerOk(WD.tier(id),levels));
+  if(locked.length)warns.push(`At your Support level you can't build: ${locked.map(nameOf).join(', ')}.`);
+  else if(r.maxTier===3)warns.push(`Needs a Large Hammer (${money(WD.F('ham.l.price'))}). The FOB only comes with a medium one.`);
+  for(const t of Haul.ORDER)if(r.need[t]>WD.F('fobCap'))warns.push(`${HZ_NAME[t]} is over the FOB cap of ${fmt(WD.F('fobCap'))}. Bring it in waves.`);
+  // ---- packing: one vehicle (solo) or the team
+  const total=Haul.ORDER.reduce((a,t)=>a+r.haul[t],0);
+  const carry=[['FOB kit',!!plan.fobInPack]];if(r.maxTier===3)carry.push(['Large Hammer',plan.hammerInPack!==false]);
+  const HELI_SPEED=10,isHeli=v=>v.track==='pilot';
+  const stingCash=WD.F('sting.cash'),stingMech=WD.F('sting.mech');
+  const carriedOf=trips=>{const k={build:0,ammo:0,fuel:0,mech:0};
+    for(const t of trips){for(const x of t.pallets)k[x]+=PS;for(const cr of t.crates)for(const[x,n]of cr.fill)k[x]+=n*S;for(const[x,n]of t.foot||[])k[x]+=n*S;for(const[x,n]of t.trunk||[])k[x]+=n*S}return k};
+  const shotsOf=mech=>c.stingray?Math.floor(Math.max(0,mech-(+plan.repairStock||0)*(c.repair||0))/stingMech):0;
+  const fixed=WD.F('fobPrice')+(r.maxTier===3?WD.F('ham.l.price'):0);
+  let players=[],sel=null,T=null,carried={build:0,ammo:0,fuel:0,mech:0},cashRows=[],totalCash=0,unpack=0,trips=0,vehOpts=new Map(),best=null;
+  if(total&&useTeam){
+    T=planTeam(r,team);
+    players=T.carriers.filter(x=>x.trips.length).map(x=>({label:x.label,v:x.v,trunkCap:x.trunkCap,heli:x.v&&isHeli(x.v),trips:x.trips.map(t=>({t,items:t.items||[]}))}));
+    carried=carriedOf(players.flatMap(p=>p.trips.map(x=>x.t)));unpack=T.unpack;trips=T.trips;
+    for(const x of T.carriers){if(!x.cash.length)continue;cashRows.push([x.label,x.cash.reduce((a,y)=>a+y[1],0),true]);for(const[k,v]of x.cash)cashRows.push([k,v,false,true])}
+  }else if(total){
+    const opts=[];
+    for(const v of Haul.VEH){if(!Haul.vehAvail(v,levels)||plan.noHeli&&isHeli(v))continue;
+      const spawn=WD.F('v.'+v.id+'.spawn')||0,trunkCap=isHeli(v)?0:(WD.F('v.'+v.id+'.trunk')||0);   // helicopter trunks: countermeasures only
+      Haul.packFor(v,r.haul,levels,{palletPrio:plan.palletPrio,first:r.first,prio:plan.prio,trunk:trunkCap,trunk1:(trunkCap||0)-carry.filter(x=>!x[1]).length}).forEach((p,i)=>{const k=carriedOf(p.tripList);
+        opts.push({v,p,i,spawn,trunkCap,carried:k,time:p.trips/(isHeli(v)?HELI_SPEED:1),cash:fixed+p.cost+spawn})})}   // one vehicle, round trips: bought once
+    // fewest trips (helicopters ~10× faster), then quickest to unload, then cash
     opts.sort((a,b)=>a.time-b.time||a.p.unpack-b.p.unpack||a.cash-b.cash);
-    const sig=opts.map(o=>o.v.id+o.p.sig).join(',');if(sig!==haulPick.sig)haulPick={sig,i:0};
-    const heliBox=el('input',{type:'checkbox',id:'optNoHeli'});
-    heliBox.checked=!!plan.noHeli;heliBox.onchange=e=>{plan.noHeli=e.target.checked;haulPick.i=0;planChanged()};
-    const ctl=el('span',{class:'rec-opts'},prioLbl,el('label',{class:'chk noheli',title:'Leave out helicopters (Lakota, MH-6)'},heliBox,' No heli'));
-    const card=el('section',{class:'rec'});
-    if(!opts.length)card.append(el('div',{class:'rec-h'},el('h3',{},'No vehicle plan'),ctl),el('div',{class:'muted'},plan.noHeli?'No ground vehicle can carry this at your levels. Untick "No heli".':'No vehicle can carry this at your levels.'));
-    else{const k=Math.min(haulPick.i,opts.length-1),o=opts[k];selO=o;
-      const nav=(d)=>el('button',{type:'button',class:'mini rec-nav','aria-label':d<0?'Previous option':'Next option',title:d<0?'Better option':'Next best option',
-        disabled:(d<0?k===0:k===opts.length-1)?'':null,onclick:()=>{haulPick.i=k+d;renderHaul()}},d<0?'◀':'▶');
-      card.append(el('div',{class:'rec-h'},el('span',{class:'rec-k'},k===0?'Recommended':`Option ${k+1}`),el('span',{class:'rec-n'},nav(-1),el('span',{class:'mono'},`${k+1} / ${opts.length}`),nav(1)),ctl),
-        el('div',{class:'rec-t'},el('b',{},o.v.name),' · ',el('b',{},plu(o.p.trips,'trip')),' · ',el('span',{class:'mono'},money(o.cash))),
-        el('div',{class:'rec-u',title:`Estimate: a pallet unloads in ${WD.F('unpack.pallet')} s once dropped. Crates go by hand: crate → backpack → FOB and back, ${WD.F('unpack.runFull')} s with ${WD.F('unpack.slots')} stacks in the backpack, ${WD.F('unpack.run1')} s with one, over a 10 m run. Your distance and free slots change this.`},
-          'Time to unpack (~): ',el('b',{class:'mono'},mmss(o.p.unpack))),
-        el('div',{class:'rec-s'},o.p.tag+(isHeli(o.v)?' · helicopter, about 10× faster per trip':'')+(o.spawn?` · ${money(o.p.cost)} supplies + ${money(o.spawn*o.p.trips)} spawn`:'')),
-        planView(o,true));
-      packText=[`WARDOGS haul${designName?' · '+designName:''}`,'',`${isHeli(o.v)?'Pilot':'Driver'} · ${o.v.name}`,...o.p.tripList.map((t,ti)=>`  Trip ${ti+1}: ${tripText(t,o.trunkCap,ti===0?carry:[])}`)].join('\n')}
-    root.append(card);
-    // every option, grouped by vehicle, collapsed
-    const all=el('details',{class:'others',open:haulAllOpen?'':null},el('summary',{},`All options (${opts.length})`));
-    all.addEventListener('toggle',()=>{haulAllOpen=all.open});
-    for(const v of Haul.VEH){const mine=opts.filter(o=>o.v===v);if(!mine.length)continue;
-      const box=el('div',{class:'veh'},el('div',{class:'veh-h'},el('h3',{},v.name),el('span',{class:'sub'},v.sub)));
-      mine.sort((a,b)=>a.i-b.i).forEach(o=>box.append(planView(o,false)));all.append(box)}
-    if(opts.length)root.append(all)}
-  if(lockedV.length&&!useTeam)root.append(el('div',{class:'locked-veh'},'Locked at your levels: '+lockedV.join(' · ')));
-  if(teamRes&&teamRes.locked.length)root.append(el('div',{class:'locked-veh'},'Locked at your levels, left out of the team: '+teamRes.locked.join(' · ')));
-  // pack list: plain text to paste to each driver (Discord or similar)
-  if(packText){const pre=el('pre',{class:'packtxt',id:'packText'},packText),btn=el('button',{type:'button',class:'mini'},'Copy');
-    btn.onclick=()=>{const done=()=>{btn.textContent='Copied';setTimeout(()=>{btn.textContent='Copy'},1500)};
-      const sel=()=>{const rg=document.createRange();rg.selectNodeContents(pre);const s=getSelection();s.removeAllRanges();s.addRange(rg);btn.textContent='Selected: press Ctrl+C'};
-      try{navigator.clipboard.writeText(packText).then(done,sel)}catch(e){sel()}};
-    const det=el('details',{class:'others packlist',open:packOpen?'':null},el('summary',{},'Pack list'),el('div',{class:'col',style:'gap:6px;padding:8px 14px 12px'},
-      el('div',{class:'pack-h'},el('span',{class:'muted',style:'font-size:13px'},'Plain text to paste to each driver, e.g. in Discord.'),btn),pre));
-    det.addEventListener('toggle',()=>{packOpen=det.open});root.append(det)}
-  haulSummary=teamRes?`${plu(teamRes.trips,'trip')} · team of ${teamN}`:selO?`${plu(selO.p.trips,'trip')} · ${selO.v.name} · ${money(selO.cash)}`:'';renderProc();
-  // cash
+    best=hzVehs().map(v=>opts.find(o=>o.v===v)).find(Boolean)||null;   // no ranking: the first vehicle in the fixed order that can do it
+    for(const o of opts){if(!vehOpts.has(o.v.id))vehOpts.set(o.v.id,[]);vehOpts.get(o.v.id).push(o)}
+    for(const l of vehOpts.values())l.sort((a,b)=>a.i-b.i);
+    if(best){if(!vehOpts.has(haulPick.veh))haulPick={veh:best.v.id,i:0};
+      const mine=vehOpts.get(haulPick.veh);sel=mine[Math.min(haulPick.i,mine.length-1)];
+      players=[{label:`${isHeli(sel.v)?'Pilot':'Driver'} · ${sel.v.name}`,v:sel.v,trunkCap:sel.trunkCap,heli:isHeli(sel.v),trips:sel.p.tripList.map((t,ti)=>({t,items:ti===0?carry:[]}))}];
+      carried=sel.carried;unpack=sel.p.unpack;trips=sel.p.trips;
+      cashRows.push([`Supplies (${[sel.p.pallets.length?plu(sel.p.pallets.length,'pallet'):'',sel.p.crates.length?plu(sel.p.crates.length,'crate'):''].filter(Boolean).join(', ')})`,sel.p.cost]);
+      if(sel.spawn)cashRows.push([`${sel.v.name} (one, round trips)`,sel.spawn])}
+  }
+  const shots=shotsOf(carried.mech);
+  if(!useTeam||!T){cashRows.unshift(['FOB kit',WD.F('fobPrice')]);if(r.maxTier===3)cashRows.splice(1,0,['Large Hammer',WD.F('ham.l.price')])}
+  totalCash=cashRows.filter(x=>!x[3]).reduce((a,x)=>a+x[1],0);
+  const stingNote=c.stingray?`+ ${money(stingCash)} / Stingray shot`:'';
+  // ---- trip pictures
+  const inBag=(items,trunkCap)=>({pack:items.filter(x=>!trunkCap||x[1]).map(x=>x[0]),trunk:trunkCap?items.filter(x=>!x[1]).map(x=>x[0]):[]});
+  const freeSpots=(load,v)=>{if(!v||!load)return null;const allow=v.allow.filter(k=>Haul.contAvail(k,levels)),bed=Haul.bedOf(v);
+    for(const k of['pallet','large','small']){if(!allow.includes(k))continue;let n=0;while(n<8&&Haul.fits(bed,{...load,[k]:load[k]+n+1}))n++;if(n)return{k,n}}return null};
+  const tripText=(t,trunkCap,items)=>{const bits=[],pc={},b=inBag(items,trunkCap);
+    t.pallets.forEach(x=>pc[x]=(pc[x]||0)+1);for(const[x,n]of Object.entries(pc))bits.push(`${n}× ${HZ_NAME[x]} pallet`);
+    for(const cr of t.crates)bits.push(`${Haul.CNAME[cr.kind]} (${cr.fill.map(([x,n])=>`${n} ${HZ_NAME[x].toLowerCase()}`).join(' + ')} stacks)`);
+    if(t.foot)bits.push(`Backpack: ${t.foot.map(([x,n])=>`${n} ${HZ_NAME[x].toLowerCase()}`).join(' + ')} stacks`);
+    const tk=[...b.trunk,...(t.trunk||[]).map(([x,n])=>`${n} ${HZ_NAME[x].toLowerCase()} stacks`)];
+    if(b.pack.length)bits.push('Backpack: '+b.pack.join(', '));if(tk.length)bits.push('Trunk: '+tk.join(', '));return bits.join(' · ')};
+  const tripChips=(t,trunkCap,items)=>{const out=[],pc={},b=inBag(items,trunkCap);
+    for(const n of[...b.pack,...b.trunk])out.push(el('span',{class:'hz-chip'},n));
+    t.pallets.forEach(x=>pc[x]=(pc[x]||0)+1);for(const[x,n]of Object.entries(pc))out.push(el('span',{class:'hz-chip t-'+x},`${n}× ${HZ_NAME[x]} pallet`));
+    const ck={},cs={};for(const cr of t.crates){ck[cr.kind]=(ck[cr.kind]||0)+1;for(const[x,n]of cr.fill)cs[x]=(cs[x]||0)+n}
+    for(const[k,n]of Object.entries(ck))out.push(el('span',{class:'hz-chip'},`${n}× ${Haul.CNAME[k].toLowerCase()}`));
+    for(const x of Haul.ORDER)if(cs[x])out.push(el('span',{class:'hz-chip t-'+x},`${cs[x]} ${HZ_NAME[x].toLowerCase()} stacks`));
+    for(const[x,n]of t.foot||[])out.push(el('span',{class:'hz-chip t-'+x},`${n} ${HZ_NAME[x].toLowerCase()} stacks (backpack)`));
+    for(const[x,n]of t.trunk||[])out.push(el('span',{class:'hz-chip t-'+x},`${n} ${HZ_NAME[x].toLowerCase()} stacks (trunk)`));return out};
+  const sig=JSON.stringify(players.map(p=>[p.label,p.trips.map(x=>tripText(x.t,p.trunkCap,x.items))]));
+  if(sig!==haulDone.sig)haulDone={sig,set:new Set()};
+  const tripCard=(x,p,ti,key)=>{const{t,items}=x,b=inBag(items,p.trunkCap),done=haulDone.set.has(key);
+    const tick=el('input',{type:'checkbox'});tick.checked=done;tick.onchange=()=>{tick.checked?haulDone.set.add(key):haulDone.set.delete(key);card.classList.toggle('done',tick.checked)};
+    const card=el('div',{class:'hz-trip'+(done?' done':'')},useTeam?el('div',{class:'hz-who'},p.label):null,el('div',{class:'hz-trip-h'},el('span',{class:'tn'},'TRIP '+(ti+1)),el('label',{class:'hz-done'},tick,' Done')));
+    const cl=[];if(b.pack.length)cl.push('Backpack: '+b.pack.join(', '));if(b.trunk.length)cl.push('Trunk: '+b.trunk.join(', '));
+    if(cl.length)card.append(el('div',{class:'hz-carry'},cl.join(' · ')));
+    if(t.trunk&&t.trunk.length)card.append(el('div',{class:'hz-chips',title:'In the trunk to save a trip. Reset keeps what your minimal plan needs; change it with ±50 in Tune the load.'},el('span',{class:'hz-note',style:'align-self:center'},'Trunk:'),t.trunk.map(([y,n])=>el('span',{class:'hz-chip t-'+y},`${n} ${HZ_NAME[y].toLowerCase()} stack${n>1?'s':''}`))));
+    if(p.trunkCap){const left=p.trunkCap-b.trunk.length-(t.trunk||[]).reduce((a,f)=>a+f[1],0);if(left>0)card.append(el('div',{class:'hz-trunk'},`Trunk: ${plu(left,'free slot')} (1 stack or item each)`))}
+    if(t.foot)card.append(el('div',{class:'hz-chips'},t.foot.map(([y,n])=>el('span',{class:'hz-chip t-'+y},`${n} ${HZ_NAME[y].toLowerCase()} stacks in backpack`))));
+    if(t.pallets.length||t.crates.length){const bed=el('div',{class:'hz-bed'});
+      for(const y of t.pallets)bed.append(el('div',{class:'hz-slot'},el('div',{class:'hz-seg t-'+y,style:'flex:1'},el('span',{class:'l'},HZ_SHORT[y]),el('span',{class:'a'},fmt(PS)))));
+      for(const cr of t.crates){const sl=el('div',{class:'hz-slot crate',title:Haul.CNAME[cr.kind]});
+        // thin bits: colour only (the note below says what is in them); a crowded bed shows just the numbers
+        const many=t.crates.length+t.pallets.length>2,lab=(L,n)=>many?(n/cr.cap>=.45?el('span',{class:'a'},String(n)):null):n/cr.cap>=.3?[el('span',{class:'l'},L),el('span',{class:'a'},n+' st')]:null;
+        for(const[y,n]of cr.fill)sl.append(el('div',{class:'hz-seg t-'+y,style:`flex:${n} 1 0`,title:`${n} ${HZ_NAME[y].toLowerCase()} stacks`},lab(HZ_SHORT[y],n)));
+        if(cr.free>0)sl.append(el('div',{class:'hz-seg free',style:`flex:${cr.free} 1 0`,title:`${cr.free} free stacks`},lab('FREE',cr.free)));bed.append(sl)}
+      const fs=freeSpots(t.load,p.v);
+      if(fs)for(let i=0;i<fs.n;i++)bed.append(el('div',{class:'hz-slot empty'+(fs.k==='pallet'?'':' crate')},el('span',{class:'l'},'FREE'),el('span',{class:'a'},fs.k==='pallet'?'pallet spot':Haul.CNAME[fs.k].toLowerCase()+' spot')));
+      card.append(bed);
+      const pc={};t.pallets.forEach(y=>pc[y]=(pc[y]||0)+1);
+      const note=[...Object.entries(pc).map(([y,n])=>`${n}× ${HZ_NAME[y]} pallet`),...t.crates.map(cr=>`${Haul.CNAME[cr.kind]}: ${cr.fill.map(([y,n])=>`${n} ${HZ_NAME[y].toLowerCase()}`).join(' + ')} stacks`)];
+      card.append(el('div',{class:'hz-note'},note.join(' · ')))}
+    return card};
+  // ---- the plan box
+  const modeIcons=p=>{const m=el('span',{class:'hz-mode'}),k=[];
+    if(p.pallets.length){const x=el('span',{title:'Uses pallets'});x.innerHTML=HZ_ICON.pallet;m.append(x);k.push('pallets')}
+    if(p.crates.length){const x=el('span',{title:'Uses crates'});x.innerHTML=HZ_ICON.crate;m.append(x);k.push('crates')}
+    m.setAttribute('aria-label','Uses '+k.join(' and '));return m};
+  const box=$('hzPlan');box.replaceChildren();
+  const top=el('div',{class:'hz-top'}),vehs=el('div',{class:'hz-vehs',role:'group','aria-label':'Vehicle'});
+  if(useTeam)vehs.append(el('span',{class:'hz-team-k'},`Team plan · ${teamN} players`),el('span',{class:'muted',style:'align-self:center'},'Change the team in Settings below.'));
+  else for(const v of hzVehs()){const mine=vehOpts.get(v.id),o=mine&&mine[0],on=sel&&sel.v===v;
+    let why='';if(!Haul.vehAvail(v,levels))why=`Needs ${v.track==='driver'?'Driver':'Pilot'} ${WD.F('v.'+v.id+'.lvl')}`;else if(plan.noHeli&&isHeli(v))why='Helicopters off';else if(!o)why=total?"Can't carry this":'—';
+    vehs.append(el('button',{type:'button',class:'hz-veh','aria-pressed':on?'true':'false',disabled:o?null:'',onclick:()=>{haulPick={veh:v.id,i:0};renderHaul()}},
+      el('span',{class:'nm'},v.name,o?modeIcons(o.p):null),el('span',{class:'ln'},o?`${plu(o.p.trips,'trip')} · ${money(o.cash)}`:why)))}
+  const packBtn=el('button',{type:'button',class:'hz-packbtn',id:'packBtn','aria-expanded':packOpen?'true':'false','aria-controls':'packPop',disabled:players.length?null:'',onclick:()=>{packOpen=!packOpen;renderHaul()}});
+  packBtn.innerHTML=HZ_ICON.pack;packBtn.append(el('span',{},el('span',{class:'t'},'Pack list'),el('span',{class:'s'},'Copy-paste friendly')));
+  top.append(vehs,packBtn);box.append(top);
+  // pack list pop-up: one block per player
+  if(packOpen&&players.length){
+    const head=`WARDOGS haul${designName?' · '+designName:''}`;
+    const textOf=p=>[p.label,...p.trips.map((x,ti)=>`  Trip ${ti+1}: ${tripText(x.t,p.trunkCap,x.items)}`)].join('\n');
+    const allBtn=el('button',{type:'button',class:'hz-btn'},'Copy all');allBtn.onclick=()=>copyText([head,...players.map(p=>'\n'+textOf(p))].join('\n'),allBtn,'Copy all');
+    const closeB=el('button',{type:'button',class:'hz-btn ghost','aria-label':'Close pack list',onclick:()=>{packOpen=false;renderHaul()}},'Close');
+    const pop=el('div',{class:'hz-pop',id:'packPop',role:'dialog','aria-label':'Pack list'},el('div',{class:'hz-pop-h'},el('b',{class:'hz-h'},'Pack list'),el('span',{style:'display:flex;gap:6px'},players.length>1?allBtn:null,closeB)));
+    for(const p of players){const b=el('button',{type:'button',class:'hz-btn'},'Copy');b.onclick=()=>copyText(head+'\n\n'+textOf(p),b,'Copy');
+      const blk=el('div',{class:'hz-pl'},el('div',{class:'hz-pl-h'},el('div',{},el('b',{},p.label),el('div',{class:'hz-note'},plu(p.trips.length,'trip'))),b));
+      p.trips.forEach((x,ti)=>blk.append(el('div',{class:'hz-pr'},el('span',{class:'tn'},'TRIP '+(ti+1)),el('div',{class:'hz-chips'},tripChips(x.t,p.trunkCap,x.items)))));pop.append(blk)}
+    if(players.length===1)pop.append(el('div',{class:'hz-note'},'With a team (Settings), every player gets their own block here.'));
+    pop.addEventListener('keydown',e=>{if(e.key==='Escape'){packOpen=false;renderHaul();$('packBtn')?.focus()}});
+    box.append(pop)}
+  if(!total){box.append(el('div',{class:'hz-head'},el('span',{class:'hz-title'},ids.length?'No haul needed':'Nothing to pack')),
+    el('div',{class:'muted'},ids.length?'The new FOB\'s starting stock covers this design. Carry the FOB kit in a backpack (it takes 2×3).':'Place pieces on the Design tab.'))}
+  else if(!players.length){box.append(el('div',{class:'hz-head'},el('span',{class:'hz-title'},'No vehicle plan')),
+    el('div',{class:'muted'},plan.noHeli?'No ground vehicle can carry this at your levels. Tick "Use helicopters" in Settings.':useTeam?'Nobody in the team can carry this at your levels.':'No vehicle can carry this at your levels.'))}
+  else{
+    const nP=players.reduce((a,p)=>a+p.trips.reduce((b,x)=>b+x.t.pallets.length,0),0),nC=players.reduce((a,p)=>a+p.trips.reduce((b,x)=>b+x.t.crates.length,0),0);
+    const stat=(k,v,sub)=>el('div',{class:'hz-stat'},el('span',{class:'k'},k),el('span',{class:'v'},v),sub?el('span',{class:'hz-shot',style:'display:block'},sub):null);
+    box.append(el('div',{class:'hz-head'},el('span',{class:'hz-title'},(useTeam?`Team of ${teamN}`:sel.v.name)+' · '+plu(trips,'trip')),
+      el('div',{class:'hz-stats'},stat('Total cash',money(totalCash),stingNote),stat('Unload at FOB','~'+mmss(unpack)),stat('Carries',[nP?plu(nP,'pallet'):'',nC?plu(nC,'crate'):''].filter(Boolean).join(' + ')||'backpacks'),
+        useTeam?stat('All in after',`~${T.span} ground trip${T.span===1?'':'s'}`):null)));
+    if(!useTeam){const mine=vehOpts.get(sel.v.id);
+      if(mine.length>1)box.append(el('div',{class:'hz-ways'},'Ways to pack it:',...mine.map((o,k)=>el('button',{type:'button',class:'hz-way','aria-pressed':o===sel?'true':'false',
+        onclick:()=>{haulPick={veh:sel.v.id,i:k};renderHaul()}},modeIcons(o.p),` ${plu(o.p.trips,'trip')} · ${o.p.tag}`))));
+      if(isHeli(sel.v))box.append(el('div',{class:'hz-note'},'Helicopter: about 10× faster per trip than a ground vehicle.'))}
+    if(warns.length||T&&T.left>0||T&&T.locked.length){const w=el('div',{class:'hz-warns'});for(const x of warns)w.append(el('div',{class:'warn'},x));
+      if(T&&T.left>0)w.append(el('div',{class:'warn'},`The team can't carry it all: ${fmt(T.left)} supplies are left over. Add round-trip players, or more one-way players.`));
+      if(T&&T.locked.length)w.append(el('div',{class:'warn'},'Locked at your levels, left out of the team: '+T.locked.join(' · ')));box.append(w)}
+    const body=el('div',{class:'hz-body'}),tw=el('div',{class:'hz-trips-w'});
+    tw.append(el('div',{class:'hz-trips'},players.flatMap((p,pi)=>p.trips.map((x,ti)=>tripCard(x,p,ti,pi+':'+ti)))));
+    if(useTeam){const idle=T.carriers.filter(x=>!x.trips.length);if(idle.length)tw.append(el('div',{class:'hz-note'},`Not needed: ${idle.map(x=>x.label).join(', ')}.`))}
+    // free room on the bed: offer to fill it
+    if(!useTeam){const last=players[0].trips[players[0].trips.length-1].t,fs=freeSpots(last.load,sel.v),lc=last.crates[last.crates.length-1];
+      let title='',sub='',add=0;
+      // free trunk slots on every trip (one stack each)
+      const tc=sel.trunkCap,tkTrips=[];let tkFree=0;
+      if(tc)players[0].trips.forEach((x,i)=>{const f=Math.max(0,tc-(x.t.trunk||[]).reduce((a,y)=>a+y[1],0)-x.items.filter(y=>!y[1]).length);if(f){tkFree+=f;tkTrips.push(i+1)}});
+      const onTrips=tkTrips.length>1?`trips ${tkTrips.slice(0,-1).join(', ')} and ${tkTrips[tkTrips.length-1]}`:`trip ${tkTrips[0]}`;
+      const crFree=lc&&lc.free>0?lc.free:0;
+      if(crFree||(!fs&&tkFree)){   // loose stacks: the last crate and the trunks fill in one tap
+        add=(crFree+tkFree)*S;const bits=[crFree?`${crFree} in the last ${Haul.CNAME[lc.kind].toLowerCase()}`:'',tkFree?`${tkFree} in the trunk (${onTrips})`:''].filter(Boolean);
+        title=`Room for ${plu(crFree+tkFree,'more stack')}: ${bits.join(', ')}`;sub=`Please think of the environment - One tap fills it all: +${fmt(add)}, about +${money((crFree+tkFree)*WD.F('packPrice'))}. No extra trip.`+(tkFree?' Fine-tune it with ±50 (one stack) in Tune the load.':'')}
+      else if(fs){const cap=fs.k==='pallet'?PS:WD.F(`c.${fs.k}.stacks`)*S;add=cap;
+        title=`Room for ${fs.n} more ${fs.k==='pallet'?'pallet':Haul.CNAME[fs.k].toLowerCase()}${fs.n>1?'s':''} on trip ${trips}`;
+        sub=`Same trips, same spawn cost. Each tap adds one ${fs.k==='pallet'?'pallet':'crate'} (+${fmt(cap)}). Pick what you need most.`+(tkFree?` The trunks also have ${plu(tkFree,'free slot')} (${onTrips}).`+' Fine-tune it with ±50 (one stack) in Tune the load.':'')}
+      if(add)tw.append(el('div',{class:'hz-free'},el('div',{},el('div',{class:'t'},title),el('div',{class:'s'},sub)),
+        el('div',{class:'hz-fills'},Haul.ORDER.map(t=>el('button',{type:'button',class:'hz-fill t-'+t,onclick:()=>tune(t,add)},'+ '+HZ_NAME[t])))));
+      else tw.append(el('div',{class:'hz-full'},'Thank you for thinking about the environment - Every spot on the bed is filled.'+(tkFree?` The trunks still have ${plu(tkFree,'free slot')}`+' Fine-tune it with ±50 (one stack) in Tune the load.':'')))}
+    // buy at spawn
+    const buy=el('aside',{class:'hz-buy','aria-label':'Buy at spawn'},el('h3',{class:'hz-h'},'Buy at spawn'));
+    const row=(cls,qty,what,cost)=>buy.append(el('div',{class:'hz-buy-r'},el('span',{style:'display:flex;align-items:center'},el('span',{class:'hz-dot '+cls}),el('b',{},qty),' '+what),el('span',{class:'n'},cost)));
+    const allT=players.flatMap(p=>p.trips.map(x=>x.t)),pc={},cc={large:0,small:0},stx={};
+    for(const t of allT){t.pallets.forEach(y=>pc[y]=(pc[y]||0)+1);for(const cr of t.crates){cc[cr.kind]++;for(const[y,n]of cr.fill)stx[y]=(stx[y]||0)+n}for(const[y,n]of[...(t.foot||[]),...(t.trunk||[])])stx[y]=(stx[y]||0)+n}
+    row('','1×','FOB kit',money(WD.F('fobPrice')));if(r.maxTier===3)row('','1×','Large Hammer',money(WD.F('ham.l.price')));
+    for(const t of Haul.ORDER)if(pc[t])row('t-'+t,pc[t]+'×',HZ_NAME[t]+' pallet',money(pc[t]*WD.F('palletPrice')));
+    for(const k of['large','small'])if(cc[k])row('',cc[k]+'×',Haul.CNAME[k].toLowerCase(),money(cc[k]*WD.F(`c.${k}.price`)));
+    for(const t of Haul.ORDER)if(stx[t])row('t-'+t,stx[t]+'×',HZ_NAME[t].toLowerCase()+' stacks',money(stx[t]*WD.F('packPrice')));
+    if(useTeam)for(const[name,n,cost]of T.vehicles)row('',n+'×',name,money(cost));
+    else if(sel.spawn)row('','1×',sel.v.name+' (round trips)',money(sel.spawn));
+    buy.append(el('div',{class:'hz-note'},[nP?'Drop pallets inside the FOB square. They unload in one go.':'',nC?'Crates are unloaded by hand.':''].filter(Boolean).join(' ')));
+    body.append(tw,buy);box.append(body)}
+  // ---- tune the load: + / − moves what is carried by one pallet (pallet beds) or one stack
+  const palletStep=players.some(p=>p.v&&p.v.allow.includes('pallet')&&Haul.contAvail('pallet',levels)&&p.trips.some(x=>x.t.pallets.length));
+  const step=palletStep?PS:S;
+  const onHand=t=>useTeam?Math.max(carried[t],r.haul[t]):carried[t];   // a full team leaves some behind: count it so + / − always move
+  function tune(t,d,stack){const target=Math.max(0,(stack?r.haul[t]:onHand(t))+d);plan.extra={...plan.extra,[t]:(+(plan.extra||{})[t]||0)+(target-r.haul[t])};planChanged()}
+  {const h=$('hzStepHint');h.replaceChildren();const k=el('span',{class:'k'});k.innerHTML=HZ_ICON.pallet;
+    h.append(k,` = one pallet (${fmt(PS)})`,el('span',{class:'k stk',style:'margin-left:8px'},'±50'),` = one stack (${fmt(S)})`)}
+  $('hzReset').disabled=!Haul.ORDER.some(t=>+(plan.extra||{})[t]);$('hzReset').onclick=()=>{plan.extra={build:0,ammo:0,fuel:0,mech:0};planChanged()};
+  const cards=$('hzCards');cards.replaceChildren();
+  for(const t of Haul.ORDER){
+    const need=base.haul[t],h=players.length?onHand(t):r.haul[t],spare=h-need,mx=Math.max(h,need,1),short=spare<0,isSup=t==='build';
+    const behind=useTeam&&players.length?Math.max(0,r.haul[t]-carried[t]):0;
+    const pct=need?Math.round(spare/need*100):0;
+    let chip=null;const gets=[],notes=[];
+    if(t==='build'){if(r.stock&&base.need.build)notes.push(['hz-sub',`${fmt(base.need.build)} to build − ${fmt(Math.min(r.stock,base.need.build))} already in the new FOB`]);
+      notes.push(['hz-em','Spares are good for repairs and adjustments after getting hit in the face.'])}
+    if(t==='ammo'){const users=Object.entries(Haul.CONSUMERS).filter(([id,x])=>x.type==='ammo'&&x.shotsFrom&&c[id]),units=users.reduce((a,[id])=>a+c[id],0);
+      if(units){const each=h/units;for(const[id,x]of users)gets.push([`${nameOf(id)}${c[id]>1?` (×${c[id]}) each`:''}`,`${fmt(x.shotsFrom(each))} ${x.unit}`]);
+        notes.push(['hz-sub',units>1?`Shared evenly: ${fmt(each)} ammo to each of the ${units} emplacements.`:`All of it to one emplacement.`])}}
+    if(t==='fuel'){const refuel=(+plan.refuelStock||0)*(c.refuel||0),forDrill=Math.max(0,h-refuel);
+      if(refuel)gets.push(['Refuel station stock',fmt(Math.min(h,refuel))]);
+      if(c.drill){const p=Math.round(forDrill/c.drill/WD.F('drill.max')*100);gets.push([`Drill Rig${c.drill>1?` (×${c.drill}) each`:''}`,p+'% drill time']);
+        notes.push(['hz-sub',`100% = one full run (${fmt(WD.F('drill.max'))}). The rig needs ${fmt(WD.F('drill.min'))} to start.`]);chip=[p+'%','drill time']}}
+    if(t==='mech'){const repair=(+plan.repairStock||0)*(c.repair||0);
+      if(repair)gets.push(['Repair station stock',fmt(Math.min(h,repair))]);
+      if(c.stingray){const forS=Math.max(0,h-repair),n=Math.floor(forS/stingMech),rest=forS-n*stingMech,each=Math.floor(forS/c.stingray/stingMech);
+        gets.push([c.stingray>1?`Each Stingray (×${c.stingray})`:'Stingray',plu(c.stingray>1?each:n,'shot')]);if(rest)gets.push(['Spare',fmt(rest)]);
+        notes.push(['hz-sub',`${fmt(stingMech)} mechanical per shot. Shots are paid at the emplacement (${money(stingCash)} each).`]);chip=[plu(n,'shot'),'']}}
+    // spare only means something for Supplies; for the others more is simply more shots / drill time
+    const band=short?'red':!isSup?'grey':!need&&!h?'grey':pct<10?'red':pct<25?'yellow':'green';
+    const can=players.length||!total;
+    const pb=(d,big)=>{const b=el('button',{type:'button',class:'hz-pm '+(big?'pal':'stk'),'aria-label':`${d<0?'Less':'More'} ${HZ_NAME[t]}: one ${big?'pallet':'stack'} (${d<0?'−':'+'}${fmt(big?PS:S)})`,
+        title:`${d<0?'−':'+'}${fmt(big?PS:S)} (one ${big?'pallet':'stack'})`,disabled:(d<0?(big?h:r.haul[t])>0:can)?null:'',onclick:()=>tune(t,d*(big?PS:S),!big)});
+      if(big){const ic=el('span',{style:'display:flex'});ic.innerHTML=HZ_ICON.pallet;b.append(ic,d<0?'−':'+')}else b.append(d<0?'−50':'+50');return b};
+    const npal=Math.round(h/PS*10)/10;
+    const card=el('div',{class:'hz-card t-'+t+(short?' short':'')},
+      el('div',{class:'hz-card-h'},hzIc(t),el('div',{},el('div',{class:'nm'},HZ_NAME[t]),el('div',{class:'pu'},HZ_FOR[t])),el('span',{class:'hz-st'},(()=>{const np=players.reduce((a,p)=>a+p.trips.reduce((b,x)=>b+x.t.pallets.filter(y=>y===t).length,0),0),ns=Math.max(0,Math.round((h-np*PS)/S));return[np?plu(np,'pallet'):'',ns?plu(ns,'stack'):''].filter(Boolean).join(' + ')||'none'})())),
+      el('div',{class:'hz-step'},pb(-1,true),pb(-1,false),el('div',{class:'hz-big'},el('span',{class:'v'},fmt(h)),el('span',{class:'u',title:r.haul[t]!==h?'The rest of the pallet or crate is filled up anyway':null},r.haul[t]<h&&+(plan.extra||{})[t]?`to haul · planned ${fmt(r.haul[t])}`:'to haul')),pb(1,false),pb(1,true)),
+      el('div',{class:'col',style:'gap:4px'},isSup?el('div',{class:'hz-bar','aria-hidden':'true'},el('span',{class:'n',style:`width:${Math.min(h,need)/mx*100}%`}),el('span',{class:'sp',style:`width:${Math.max(0,spare)/mx*100}%`}),el('span',{class:'sh',style:`width:${Math.max(0,-spare)/mx*100}%`})):null,
+        el('div',{class:'hz-mg'},el('span',{},'Minimal '+fmt(need)),el('span',{class:'hz-band '+band},
+          short?[el('b',{},'−'+Math.round(-spare/need*100)+'%'),' short '+fmt(-spare)]:!need&&!h?'not needed':chip?[el('b',{},chip[0]),' '+chip[1]]:isSup?[el('b',{},pct+'%'),' '+(spare?'+'+fmt(spare)+' spare':'no spare')]:[el('b',{},'+'+fmt(spare)),' over minimal']))));
+    const lasts=el('div',{class:'hz-lasts'});
+    if(short)lasts.append(el('div',{class:'hz-bad'},`Below your minimal plan: short ${fmt(-spare)}.`));
+    if(behind)lasts.append(el('div',{class:'hz-bad'},`${fmt(behind)} won't fit: the team is full. Add round-trip players.`));
+    for(const[k,v]of gets)lasts.append(el('div',{class:'hz-get'},el('span',{},k),el('span',{class:'v'},v)));
+    for(const[cls,txt]of notes)lasts.append(el('div',{class:cls},txt));
+    if(lasts.children.length)card.append(lasts);cards.append(card)}
+  // ---- cash: one total, the same as the plan headline and the step bar
   const cash=$('hCash');cash.replaceChildren();
-  if(total&&teamRes){   // per team member: what each one buys
-    let all=0;
-    for(const c of teamRes.carriers){if(!c.cash.length)continue;const sum=c.cash.reduce((a,x)=>a+x[1],0);all+=sum;
-      cash.append(el('span',{class:'who-h'},c.label),el('span',{class:'n who-h'},money(sum)));
-      for(const[k,v]of c.cash)cash.append(el('span',{class:'who-r'},k),el('span',{class:'n muted'},money(v)))}
-    if(r.cash){cash.append(el('span',{class:'who-h'},'Stingray shots (paid when fired)'),el('span',{class:'n who-h'},money(r.cash)));all+=r.cash}
-    cash.append(el('span',{class:'tot'},'Team total'),el('span',{class:'n tot'},money(all)));renderLevelNotes();return}
-  const rows=[['FOB kit',WD.F('fobPrice')]];
-  if(r.maxTier===3)rows.push(['Large Hammer',WD.F('ham.l.price')]);
-  if(false){}
-  // follows the plan selected in "How to pack it"
-  else if(total&&selO){const o=selO,n=o.p.trips;rows.push([`Supplies (${o.v.name}, ${plu(n,'trip')})`,o.p.cost]);
-    if(o.spawn)rows.push([`${o.v.name}${n>1?' × '+n+' trips':''}`,o.spawn*n])}
-  else if(total&&cheapest)rows.push(['Supplies, cheapest pack plan',cheapest.cost]);
-  if(r.cash)rows.push(['Stingray shots',r.cash]);
-  for(const[k,v]of rows)cash.append(el('span',{},k),el('span',{class:'n'},money(v)));
-  cash.append(el('span',{class:'tot'},(selO||teamRes)&&total?'Total':'Total before vehicles'),el('span',{class:'n tot'},money(rows.reduce((a,x)=>a+x[1],0))));
+  for(const[k,v,head,sub]of cashRows)cash.append(el('span',{class:sub?'who-r':head?'who-h':''},k),el('span',{class:'n'+(sub?' muted':head?' who-h':'')},money(v)));
+  cash.append(el('span',{class:'tot'},useTeam&&T?'Team total':'Total'),el('span',{class:'n tot'},money(totalCash)));
+  if(c.stingray)cash.append(el('div',{style:'grid-column:1/-1;display:flex;justify-content:space-between;gap:10px;font-weight:600'},el('span',{},'+ Stingray, per shot'),el('span',{class:'n'},`+ ${money(stingCash)}`)),
+    el('div',{class:'hz-sub',style:'grid-column:1/-1'},`Paid at the emplacement, not in the total.${shots?` You haul enough mechanical for ${plu(shots,'shot')}.`:''}`));
+  haulSummary=players.length?`${plu(trips,'trip')} · ${useTeam?'team of '+teamN:sel.v.name} · ${money(totalCash)}`:'';renderProc();
   renderLevelNotes();
 }
 /* ---------- team haul ----------
@@ -5092,11 +5306,11 @@ function planTeam(r,team){const S=WD.F('stack'),F=WD.F,carriers=[],locked=[];
   const KIND={foot:{name:'On foot'},driver:{v:ground,name:ground?ground.name:'Driver'},lakota:{v:Haul.VEH.find(v=>v.id==='lakota')},mh6:{v:Haul.VEH.find(v=>v.id==='mh6')}};
   for(const[row,oneway]of[['oneway',true],['trans',false]])for(const k of TEAM_KINDS){const n=team[row][k]||0;if(!n)continue;const v=KIND[k].v;
     if(k!=='foot'&&(!v||!Haul.vehAvail(v,levels))){locked.push(`${n} ${k==='driver'?'driver':v.name}`);continue}
-    for(let i=1;i<=n;i++)carriers.push({k,v:k==='foot'?null:v,oneway,trunkCap:v&&k!=='foot'?F('v.'+v.id+'.trunk'):0,
-      dur:k==='foot'?1:(v.track==='pilot'?.1:1),free:0,trips:[],label:`${k==='foot'?'On foot':k==='driver'?'Driver':'Pilot'} ${i}${k==='foot'?'':' · '+v.name} · ${oneway?'one way':'transporter'}`})}
+    for(let i=1;i<=n;i++)carriers.push({k,v:k==='foot'?null:v,oneway,trunkCap:v&&k!=='foot'&&v.track!=='pilot'?(F('v.'+v.id+'.trunk')||0):0,
+      dur:k==='foot'?1:(v.track==='pilot'?.1:1),free:0,trips:[],label:`${k==='foot'?'On foot':k==='driver'?'Driver':'Pilot'} ${i}${k==='foot'?'':' · '+v.name} · ${oneway?'one way':'round trips'}`})}
   // what is left to bring, in stacks, and how much of it still counts as "first"
   const rem={};for(const t of Haul.ORDER)rem[t]=r.haul[t]/S;const first={...r.first};
-  const RANK={build:[1,6],ammo:[2,2],fuel:[3,5],mech:[4,4]};
+  const RANK=Haul.rankOf(plan.prio);
   const footLoad=()=>{let cap=Math.max(1,F('foot.stacks'));const segs=[];
     for(const t of Haul.ORDER){const f=t==='build'||t==='fuel'?Math.min(rem[t],first[t]||0):rem[t];if(f>0)segs.push([t,f,RANK[t][0]]);if(rem[t]-f>0)segs.push([t,rem[t]-f,RANK[t][1]])}
     segs.sort((a,b)=>a[2]-b[2]);const out=[];
@@ -5110,19 +5324,20 @@ function planTeam(r,team){const S=WD.F('stack'),F=WD.F,carriers=[],locked=[];
     let trip;
     if(c.k==='foot'){const f=footLoad();if(!f.length)break;trip={pallets:[],crates:[],foot:f}}
     else{const haul={};for(const t of Haul.ORDER)haul[t]=rem[t]*S;
-      const best=Haul.packFor(c.v,haul,levels,{palletPrio:plan.palletPrio,first})[0];if(!best){c.oneway=true;c.trips.push({pallets:[],crates:[],skip:true});continue}
+      const all=Haul.packFor(c.v,haul,levels,{palletPrio:plan.palletPrio,first,prio:plan.prio,trunk:c.trunkCap,trunk1:c.trunkCap-(items.length?items.filter(x=>!x[1]).length:0)}),
+        best=(plan.palletPrio!==false&&all.find(p=>p.pallets.length&&!p.crates.length))||all[0];if(!best){c.oneway=true;c.trips.push({pallets:[],crates:[],skip:true});continue}
       trip=best.tripList[0]}
     // take it off what is left
     const P=Math.round(F('palletSize')/S),got={};
-    for(const x of trip.pallets)got[x]=(got[x]||0)+P;for(const cr of trip.crates)for(const[x,n]of cr.fill)got[x]=(got[x]||0)+n;for(const[x,n]of trip.foot||[])got[x]=(got[x]||0)+n;
+    for(const x of trip.pallets)got[x]=(got[x]||0)+P;for(const cr of trip.crates)for(const[x,n]of cr.fill)got[x]=(got[x]||0)+n;for(const[x,n]of trip.trunk||[])got[x]=(got[x]||0)+n;for(const[x,n]of trip.foot||[])got[x]=(got[x]||0)+n;
     for(const[x,n]of Object.entries(got)){rem[x]=Math.max(0,rem[x]-n);if(first[x]!=null)first[x]=Math.max(0,first[x]-n)}
     if(items.length&&c.k!=='foot'){trip.items=items;items=[]}
     c.trips.push(trip);c.free+=c.dur}
   for(const c of carriers)c.trips=c.trips.filter(t=>!t.skip);
   if(items.length){const c=carriers.find(c=>c.trips.length);if(c)c.trips[0].items=items.map(([n])=>[n,true])}
   const all=carriers.flatMap(c=>c.trips),pPrice=F('palletPrice'),L=F('c.large.price'),Sm=F('c.small.price'),pack=F('packPrice');
-  const cost=all.reduce((a,t)=>a+t.pallets.length*pPrice+t.crates.reduce((b,cr)=>b+(cr.kind==='large'?L:Sm)+cr.fill.reduce((x,f)=>x+f[1],0)*pack,0)+(t.foot||[]).reduce((b,f)=>b+f[1]*pack,0),0);
-  const tripCost=t=>t.pallets.length*pPrice+t.crates.reduce((b,cr)=>b+(cr.kind==='large'?L:Sm)+cr.fill.reduce((x,f)=>x+f[1],0)*pack,0)+(t.foot||[]).reduce((b,f)=>b+f[1]*pack,0);
+  const tripCost=t=>t.pallets.length*pPrice+t.crates.reduce((b,cr)=>b+(cr.kind==='large'?L:Sm)+cr.fill.reduce((x,f)=>x+f[1],0)*pack,0)+(t.foot||[]).reduce((b,f)=>b+f[1]*pack,0)+(t.trunk||[]).reduce((b,f)=>b+f[1]*pack,0);
+  const cost=all.reduce((a,t)=>a+tripCost(t),0);
   // what each player pays: their vehicle, the supplies they load, and the FOB kit / hammer if they bring them
   for(const c of carriers){c.cash=[];if(!c.trips.length)continue;
     if(c.v){const sp=F('v.'+c.v.id+'.spawn')||0;if(sp)c.cash.push([c.v.name,sp])}
@@ -5140,16 +5355,17 @@ function planChanged(){ls.set('wd_design_draft',designDoc());later(()=>{renderHa
 $('optStock').onchange=e=>{plan.useFobStock=e.target.checked;planChanged()};
 for(const[id,k]of[['optFobPack','fobInPack'],['optFobPack2','fobInPack'],['optHamPack','hammerInPack'],['optHamPack2','hammerInPack']])
   $(id).onchange=e=>{plan[k]=e.target.checked;for(const[j,kk]of[['optFobPack','fobInPack'],['optFobPack2','fobInPack'],['optHamPack','hammerInPack'],['optHamPack2','hammerInPack']])$(j).checked=!!plan[kk];planChanged()};
-$('optReserve').onchange=e=>{plan.reserve=+e.target.value;planChanged()};
+$('optPalletPrio').onchange=e=>{plan.palletPrio=e.target.checked;planChanged()};
+$('optUseHeli').onchange=e=>{plan.noHeli=!e.target.checked;planChanged()};
 
 {const g=$('teamGrid'),COL={foot:'Foot',driver:'Drivers',lakota:'Z20 Lakota',mh6:'MH-6'};
   const ROWS=[['oneway','One way','One way: each makes one trip and leaves the vehicle at the FOB. On foot: one backpack load.'],
-    ['trans','Transporters','Transporters: as many trips as it takes, driving or flying back for the next load. On foot: walks back for more.']];
+    ['trans','Round trips','Round trips: as many trips as it takes, driving or flying back for the next load. On foot: walks back for more.']];
   g.append(el('span'),...TEAM_KINDS.map(k=>el('span',{class:'tg-h',title:k==='driver'?'Drives the biggest ground vehicle your levels allow (Ural, else Kodiak or Humvee)':k==='foot'?'Carries supplies in the backpack':`Flies a ${COL[k]}`},COL[k])));
   for(const[row,name,tip]of ROWS){g.append(el('span',{class:'tg-l',title:tip},name));
     for(const k of TEAM_KINDS){const sel=el('select',{id:`team_${row}_${k}`,'aria-label':`${name}: ${COL[k]}`,title:tip});
       for(let n=0;n<=9;n++)sel.append(el('option',{value:String(n)},String(n)));
-      sel.onchange=()=>{const t=teamOf();t[row][k]=+sel.value;plan.team=t;haulPick.i=0;planChanged()};g.append(sel)}}}
+      sel.onchange=()=>{const t=teamOf();t[row][k]=+sel.value;plan.team=t;planChanged()};g.append(sel)}}}
 $('planReset').onclick=()=>{plan={...Haul.PLAN_DEFAULT};planChanged()};
 /* Levels: empty = assume everything can be used. Saved to the user's account when logged in, else in this browser. */
 const LEVEL_LIMITS=[['driver','c.large.lvl','Cannot buy large crates'],['driver','v.ural.lvl','Cannot buy Ural'],['driver','v.kodiak.lvl','Cannot buy Kodiak'],['driver','v.humvee.lvl','Cannot buy Humvee'],
@@ -5888,5 +6104,4 @@ else if(S.fb)window.structListen();
 ST.s=fromData(EX.recon());ST.cur='xrecon';renderPick();
 })();
 </script>
-
 </body></html>
