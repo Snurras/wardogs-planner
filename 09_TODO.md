@@ -7,6 +7,7 @@ The Base Defender mini-game has its own doc: [10_BASE_DEFENDER.md](10_BASE_DEFEN
 Things that are wrong or broken and hurt the player directly.
 
 - [ ] **Modify Structure** Always show 3 Layers, Change to Ground, Rood, Floor 2. middle. To make it fast as middle is rarely used and Top, Bottom becomes most used for all.
+- [ ] **Modify Structure** Shows you can get in 2h hesco in bunker/recon top floor. You cant. 
 - [ ] *Claude QA* **Threat check: C4 blast and collapse.** One C4 charge takes every block in the 3×3 squares around it (your game test), and blowing enough ground HESCO brings a roof down. The threat check uses neither yet, so C4 counts for thick walls are too high and bases look safer than they are. (doc 03, doc 11 §6)
 - [ ] *Claude QA* **Side view: show Modify changes.** Blocks added with Modify structure and closed entrances aren't drawn in Side view yet (blocks taken off are). (doc 04)
 
@@ -22,7 +23,9 @@ Things that work but could be better: looks, ease of use, small annoyances.
 - [ ] *Claude QA* **Protection pictures ignore Modify changes**: an emplacement's hover picture still uses the structure as built.
 
 ## Add
-New things for the planner.
+- [ ] **bumber block** Let me do the 33% etc trick. Let me add bumber to a section if i forgot it. Make it work with brush
+- [ ] 
+
 
 ### Designs and templates
 - [ ] **Find template page**: a page for browsing templates.
