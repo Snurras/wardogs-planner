@@ -8,7 +8,7 @@
 ## Where things live
 | What | Where |
 |---|---|
-| Staging (Claude's workbench) | claude.ai artifact https://claude.ai/artifact/BeyFVpAnFDRbygmRGARv9Z (version 139, on test 11 Oct 2026: new login with Google or email; v138 Haul it redesign) |
+| Staging (Claude's workbench) | claude.ai artifact https://claude.ai/artifact/BeyFVpAnFDRbygmRGARv9Z (version 144, released 11 Oct 2026 b: Find designs, favourites, Tools row) |
 | Test version | `test.html` in the repo → https://snurras.github.io/wardogs-planner/test.html. Same code as `index.html`; the file name switches on test mode (tester login + `test_*` data, doc 06) |
 | Production | GitHub Pages https://snurras.github.io/wardogs-planner/ (repo `Snurras/wardogs-planner`, file `index.html`) |
 | Docs | the `0x_*.md` files in the repo root (these files) |
@@ -39,7 +39,8 @@
 | `wd-custom` | 4424 | structures as blocks: blueprints (`BUILTIN_BP`, `bpOf`), collapse (`bpState`, `pieceState`), `structGeo`, `registerCustom` for your own structures |
 | `wd-modify` | 4607 | Modify structure (M): the bar under the toolbar, Advanced panel, add/remove blocks, collapse warning, pieces that fall with a roof (`unheld`) |
 | `wd-app` | 4897 | tabs, tips, fact sheet UI, saving/opening designs (`load`, `designDoc`, Undo of Open), logins, comments, test gate, start-up |
-| `wd-structs` | 5686 | Structure designer (own tab) |
+| `wd-structs` | 5900 | Structure designer (Tools row); published structures kept on the device (`loadPub`) |
+| `wd-find` | 6340 | Find designs (Tools row): search cards, device cache, favourites, 3D previews (doc 06) |
 
 Section headings inside `wd-design` (grep `/* ---------- `): geometry · entrances · symbols · drawing · height checks · **Direct ground fire protection** · **hover picture** · **Side view tool** · **3D pieces for the side view** · Fact sheet pictures · legend · select tool · brush · interaction · build order + BOM · templates (the built-in list is empty: templates are designs the admin saves online).
 

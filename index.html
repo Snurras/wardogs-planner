@@ -224,7 +224,7 @@ ol.weak,ul.weak{margin:2px 0 0;padding:0;list-style:none;display:flex;flex-direc
 .picksel,.topbar input[type=text]{background:var(--panel);border:1px solid var(--line);border-radius:3px;padding:5px 8px;color:var(--ink);max-width:136px}
 .topbar input[type=text]{width:120px}
 #saveStatus:empty{display:none}
-#saveStatus{position:fixed;top:58px;right:16px;z-index:20;background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:5px 10px;box-shadow:0 2px 8px rgba(0,0,0,.15);color:var(--ink);max-width:min(420px,calc(100vw - 32px))}
+#saveStatus{position:absolute;top:calc(100% + 6px);right:0;z-index:20;background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:5px 10px;box-shadow:0 2px 8px rgba(0,0,0,.15);color:var(--ink);max-width:min(420px,calc(100vw - 32px))}
 #dVis{width:104px}
 #acctBtn{max-width:124px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 dialog#loginDlg{border:1px solid var(--line);border-radius:6px;background:var(--panel);color:var(--ink);padding:18px 20px;width:min(380px,calc(100vw - 32px));box-shadow:0 10px 30px rgba(0,0,0,.25)}
@@ -321,8 +321,40 @@ dialog#loginDlg::backdrop{background:rgba(20,25,15,.45)}
 .leftcol{gap:6px}
 .tabs button{border:0;background:none;padding:8px 14px;font:700 15px var(--f-head);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);border-bottom:3px solid transparent;margin-bottom:-2px;display:inline-flex;gap:8px;align-items:center}
 .tabs button.on{color:var(--ink);border-bottom-color:var(--accent)}
-.tabs button[data-tab=structs]{margin-left:28px;position:relative}
-.tabs button[data-tab=structs]::before{content:'';position:absolute;left:-15px;top:30%;bottom:30%;width:1px;background:var(--line)}   /* reference pages, apart from the Design → Haul → Build steps */
+/* Tools: pages of their own that help the Design → Haul → Build steps (Find designs, Structure designer), one level below the steps */
+.subbar{display:flex;flex-wrap:wrap;align-items:center;gap:4px 12px;margin:3px 0 4px}
+.subnav{display:flex;flex-wrap:wrap;align-items:center;gap:5px;margin-left:16px;padding-left:20px;position:relative}
+.subnav::before{content:'';position:absolute;left:0;top:-5px;height:calc(50% + 5px);width:13px;border-left:2px solid var(--line);border-bottom:2px solid var(--line);border-bottom-left-radius:5px}
+.subnav .sublbl{font:700 11px var(--f-head);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-right:4px}
+.subnav button{display:inline-flex;align-items:center;gap:6px;min-height:28px;padding:2px 10px 2px 7px;border:1px solid var(--line);border-radius:4px;background:var(--panel);color:var(--ink);cursor:pointer;text-align:left}
+.subnav button:hover{border-color:var(--accent);background:var(--hi)}
+.subnav button.on{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.subnav button:focus-visible{outline:3px solid var(--entry);outline-offset:1px}
+.subnav svg{width:15px;height:15px}
+.subnav .n{font:700 12px var(--f-head);letter-spacing:.08em;text-transform:uppercase}
+.subnav .d{font:500 11px var(--f-body);opacity:.8}
+.dfile{display:flex;align-items:center;gap:5px;margin-left:auto;position:relative}
+.dfile .btn{min-height:28px;padding:3px 11px}
+.dsave{display:flex;align-items:center;gap:5px}
+.dsave input[type=text]{width:180px;min-height:28px;box-sizing:border-box;background:var(--panel);border:1px solid var(--line);border-radius:3px;padding:3px 8px;color:var(--ink);font:500 14px var(--f-body)}
+.dsave .picksel{min-height:28px;padding:3px 6px}
+.dmore{font-size:16px!important;line-height:1;padding:3px 9px!important}
+.pop{position:relative}
+.popm{position:absolute;top:calc(100% + 4px);left:0;z-index:60;min-width:280px;max-width:min(380px,calc(100vw - 24px));max-height:70vh;overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:6px;box-shadow:0 8px 24px rgba(0,0,0,.18);padding:5px;display:flex;flex-direction:column}
+.popm.right{left:auto;right:0;min-width:220px}
+.pmh{font:700 11px var(--f-head);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding:9px 8px 3px;display:flex;justify-content:space-between;gap:8px}
+.pmh span{text-transform:none;letter-spacing:0;font:500 11px var(--f-body)}
+.pmi{display:flex;align-items:center;gap:8px;width:100%;min-height:34px;padding:4px 8px;border:0;border-radius:4px;background:none;color:var(--ink);text-align:left;cursor:pointer;font:500 14px var(--f-body)}
+.pmi:hover,.pmi:focus-visible{background:var(--hi);outline:none}
+.pmi.cur{font-weight:700}.pmi.cur::after{content:'✓';margin-left:auto;color:var(--accent)}
+.pmi .sub{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pmi .nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.pmi.find{background:var(--accent);color:var(--accent-ink);font:700 13px var(--f-head);letter-spacing:.08em;text-transform:uppercase;margin-bottom:2px}
+.pmi.find:hover{filter:brightness(1.1);background:var(--accent)}
+.pmi.bad{color:var(--bad)}
+.pmempty{font-size:12px;color:var(--muted);padding:2px 8px 6px}
+@media (max-width:1100px){.dsave input[type=text]{width:130px}}
+@media (max-width:900px){.subnav .d{display:none}}
 .tabs .badge{font:600 11px var(--f-mono);background:var(--hi);color:var(--ink);border-radius:8px;padding:1px 7px}
 .tabs .badge:empty{display:none}
 section.tab{display:flex;flex-direction:column;gap:16px}
@@ -660,26 +692,40 @@ a{color:var(--accent)}
 <div class="wrap">
   <header class="topbar">
     <h1 title="Design a base on the HESCO grid, check where it can be climbed or blown open, then see exactly what to haul and how to pack it.">WARDOGS BASE PLANNER</h1>
+    <span class="grow"></span>
     <nav class="tabs" id="tabs" aria-label="Sections">
-      <button type="button" data-tab="structs" title="Build structures block by block, layer by layer, as in the game">Structure designer</button>
       <button type="button" data-tab="facts">Fact sheet</button>
       <button type="button" data-tab="about">About</button>
     </nav>
-    <span class="grow"></span>
-    <select id="openSel" class="picksel" aria-label="Open a template or saved design"></select>
-    <button class="btn ghost" type="button" id="promoBtn" hidden>Make template</button>
-    <button class="btn ghost" type="button" id="delBtn" hidden>Delete</button>
-    <input type="file" id="importTxt" accept=".txt,.json,text/plain,application/json" hidden>
-    <form id="saveForm" style="display:flex;gap:6px;align-items:center">
-      <input type="text" id="dName" placeholder="Design name" maxlength="60" autocomplete="off" aria-label="Design name">
-      <select id="dVis" class="picksel" aria-label="Who can see it" title="Personal: only you. Shared: everyone with a login. Template: listed for everyone (admin only)." hidden>
+    <button class="btn ghost" type="button" id="acctBtn" hidden>Log in</button>
+  </header>
+  <nav class="proc" id="proc" aria-label="Steps: design, haul, build"><button type="button" class="st on" data-tab="design"><svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true" style="flex:none"><rect x="3" y="3" width="18" height="18" rx="1.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18" stroke="currentColor" stroke-width="1" opacity=".6"/><path d="M14 5l5 5-8 8H6v-5z" fill="currentColor" opacity=".9"/></svg><span class="sx"><span class="t">1 · Design it</span><span class="s" id="procS_design">Place pieces · check threats</span></span></button><button type="button" class="st" data-tab="haul"><svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true" style="flex:none"><path d="M2 6h11v9H2zM13 9h4l4 4v2h-8z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><circle cx="6" cy="17.5" r="2.2" fill="currentColor"/><circle cx="17" cy="17.5" r="2.2" fill="currentColor"/></svg><span class="sx"><span class="t">2 · Haul it</span><span class="s" id="procS_haul">What to bring · how to pack</span></span></button><button type="button" class="st" data-tab="build"><svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true" style="flex:none"><g transform="rotate(-40 12 12)"><rect x="10.5" y="9" width="3" height="13" rx="1" fill="currentColor"/><rect x="5" y="3" width="14" height="7" rx="1.5" fill="currentColor"/></g></svg><span class="sx"><span class="t">3 · Build it</span><span class="s" id="procS_build">The order to build in</span></span></button></nav>
+  <div class="subbar">
+  <nav class="subnav" id="subnav" aria-label="Tools"><span class="sublbl">Tools</span>
+    <button type="button" data-tab="find" title="Search shared designs and templates: by haul, what's in them and how well they hold"><svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5"/><path d="M13 13l4.5 4.5"/></svg><span class="n">Find designs</span><span class="d">search shared bases</span></button>
+    <button type="button" data-tab="structs" title="Build structures block by block, layer by layer, as in the game"><svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M3 15.5l7 3 7-3v-9l-7-3-7 3z"/><path d="M3 6.5l7 3 7-3M10 9.5v9"/></svg><span class="n">Structure designer</span><span class="d">make your own structures</span></button>
+  </nav>
+  <div class="dfile" id="dfile" aria-label="This design">
+    <div class="pop"><button class="btn ghost" type="button" id="openBtn" aria-haspopup="true" aria-expanded="false" aria-controls="openMenu" title="Open a favourite, a template or one of your designs">Open <span aria-hidden="true">▾</span></button>
+      <div class="popm" id="openMenu" hidden></div></div>
+    <form id="saveForm" class="dsave" autocomplete="off" data-form-type="other">
+      <input type="text" id="dTitle" placeholder="Title of this design" maxlength="60" autocomplete="wd-design-title" autocorrect="off" spellcheck="false" data-lpignore="true" data-1p-ignore data-form-type="other" aria-label="Design title">
+      <select id="dVis" class="picksel" aria-label="Who can see it" title="Personal: only you. Shared: everyone with a login, and in Find designs. Template: listed for everyone (admin only)." hidden>
         <option value="personal">Personal</option><option value="shared">Shared</option><option value="template">Template</option></select>
       <button class="btn" type="submit">Save</button>
     </form>
-    <button class="btn ghost" type="button" id="acctBtn" hidden>Log in</button>
+    <div class="pop"><button class="btn ghost dmore" type="button" id="moreBtn" aria-haspopup="true" aria-expanded="false" aria-controls="moreMenu" title="More: file on this device, delete" aria-label="More for this design">⋯</button>
+      <div class="popm right" id="moreMenu" hidden>
+        <button type="button" class="pmi" id="promoBtn" hidden>Make template</button>
+        <button type="button" class="pmi bad" id="delBtn" hidden>Delete</button>
+        <div class="pmh">File on this device</div>
+        <button type="button" class="pmi" id="saveTxtBtn">Save as .txt file</button>
+        <button type="button" class="pmi" id="importTxtBtn">Import .txt file…</button>
+        <input type="file" id="importTxt" accept=".txt,.json,text/plain,application/json" hidden>
+      </div></div>
     <span class="status" id="saveStatus" role="status"></span>
-  </header>
-  <nav class="proc" id="proc" aria-label="Steps: design, haul, build"><button type="button" class="st on" data-tab="design"><svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true" style="flex:none"><rect x="3" y="3" width="18" height="18" rx="1.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18" stroke="currentColor" stroke-width="1" opacity=".6"/><path d="M14 5l5 5-8 8H6v-5z" fill="currentColor" opacity=".9"/></svg><span class="sx"><span class="t">1 · Design it</span><span class="s" id="procS_design">Place pieces · check threats</span></span></button><button type="button" class="st" data-tab="haul"><svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true" style="flex:none"><path d="M2 6h11v9H2zM13 9h4l4 4v2h-8z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><circle cx="6" cy="17.5" r="2.2" fill="currentColor"/><circle cx="17" cy="17.5" r="2.2" fill="currentColor"/></svg><span class="sx"><span class="t">2 · Haul it</span><span class="s" id="procS_haul">What to bring · how to pack</span></span></button><button type="button" class="st" data-tab="build"><svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true" style="flex:none"><g transform="rotate(-40 12 12)"><rect x="10.5" y="9" width="3" height="13" rx="1" fill="currentColor"/><rect x="5" y="3" width="14" height="7" rx="1.5" fill="currentColor"/></g></svg><span class="sx"><span class="t">3 · Build it</span><span class="s" id="procS_build">The order to build in</span></span></button></nav>
+  </div>
+  </div>
 
   <dialog id="copyDesignDlg" aria-labelledby="copyDesignTitle"><form method="dialog" class="col" style="gap:8px;min-width:min(520px,86vw)">
     <h3 id="copyDesignTitle" style="margin:0">Design as text</h3><span class="status">Select all of it, copy, and paste it in the chat.</span>
@@ -737,6 +783,7 @@ a{color:var(--accent)}
   </dialog>
 
   <section class="tab" id="tab-design">
+  <div class="fd-backbar" id="fdBackBar" hidden><button class="btn ghost" type="button" id="fdBackBtn">← Back to search results</button><span id="fdBackTxt"></span></div>
   <div class="bar toolbar">
     <span class="build-only bt-title">Build view · numbers show the build order</span>
     <button class="edit-only btn ghost tool" type="button" id="selToolBtn" aria-pressed="false" title="Select, move and copy (V)"><span class="ti"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" style="flex:none"><path d="M5 3l14 8-6 1.5L10 19z" fill="#F4F6EF" stroke="#1F251B" stroke-width="1.6" stroke-linejoin="round"/></svg></span>Select (V)</button>
@@ -1065,6 +1112,13 @@ a{color:var(--accent)}
       </section>
     </div>
     <p class="status" id="fbOff" hidden>Feedback works on the online version of the planner.</p>
+  </section>
+
+  <section class="tab" id="tab-find" hidden>
+    <div class="fd-wrap">
+      <aside class="fd-rail" id="fdRail" aria-label="Search filters"></aside>
+      <div class="fd-main" id="fdMain" aria-live="polite"></div>
+    </div>
   </section>
 </div>
 
@@ -4968,9 +5022,9 @@ const IN_CLAUDE=!!window.claude;
    (test_designs, test_feedback, test_facts), so testing never touches the real planner.
    Release = copy test.html to index.html unchanged. Tester list: Firebase 'testers/{uid}'. */
 const TEST_MODE=/(^|\/)test\.html$/i.test(location.pathname);
-const FC=n=>TEST_MODE&&(n==='designs'||n==='feedback'||n==='facts')?'test_'+n:n;
+const FC=n=>TEST_MODE&&(n==='designs'||n==='feedback'||n==='facts'||n==='cards')?'test_'+n:n;
 window.docState=()=>({name:designName,cur:S.cur,onlyFob:$('onlyFob').checked,plan:{...plan}});
-window.restoreDoc=d=>{designName=d.name||'';$('dName').value=designName;S.cur=d.cur||null;$('onlyFob').checked=!!d.onlyFob;plan={...Haul.PLAN_DEFAULT,...(d.plan||{})};renderSaved()};
+window.restoreDoc=d=>{designName=d.name||'';$('dTitle').value=designName;S.cur=d.cur||null;$('onlyFob').checked=!!d.onlyFob;plan={...Haul.PLAN_DEFAULT,...(d.plan||{})};renderSaved()};
 const S={mode:IN_CLAUDE?'local':'firebase',fb:null,user:null,admin:false,remote:[],local:[],cur:null,pendDel:null,pendSave:null,pendOut:false,unsub:[]};
 let levels=ls.get('wd_levels')||{support:null,driver:null,pilot:null};
 const fmt=n=>Math.round(n).toLocaleString('en-US'),money=n=>'$'+fmt(n);
@@ -5018,15 +5072,15 @@ window.tipAfterPlace=np=>{
   if(entrancesOf(np).length)later(()=>showTip('entrances',np));
   else if(np.z>0&&tool!=='brush'){const k=np.t+'@'+np.z,n=(stackCount.get(k)||0)+1;stackCount.set(k,n);if(n>=3)later(()=>showTip('brush'))}};
 window.tipAfterStroke=()=>later(()=>{if(/GETS IN/i.test($('threat').textContent))showTip('play')});
-function showTab(t){tab=t;for(const b of document.querySelectorAll('#tabs button, #proc .st'))b.classList.toggle('on',b.dataset.tab===t);
-  const sec=t==='build'?'design':t;for(const id of['design','haul','facts','about','structs'])$('tab-'+id).hidden=id!==sec;if(t==='structs')window.renderStructs?.();
+function showTab(t){tab=t;for(const b of document.querySelectorAll('#tabs button, #proc .st, #subnav button'))b.classList.toggle('on',b.dataset.tab===t);
+  const sec=t==='build'?'design':t;for(const id of['design','haul','facts','about','structs','find'])$('tab-'+id).hidden=id!==sec;if(t==='structs')window.renderStructs?.();if(t==='find')window.FD?.show();
   if(t!=='build'&&ordEdit)endOrderEdit(false);
   $('tab-design').classList.toggle('buildmode',t==='build');
   $('steps').hidden=t==='build'?false:$('orderBtn').getAttribute('aria-expanded')!=='true';   // Build always shows the order
   if(sec==='design'){const m=t==='build'?'blue':'edit';if(m!==mode){window.stopAttack?.();mode=m;if(m==='blue'&&(tool==='select'||tool==='brush'||tool==='side'))setTool(lastPiece)}renderSide();requestAnimationFrame(()=>{fitLayout();draw()})}
   if(t==='haul')renderHaul();if(t==='facts')renderFacts();
   closeTip();later(()=>requestAnimationFrame(()=>{if(t==='build')showTip('order');if(t==='haul'&&document.querySelector('#hzPlan .hz-trip')){if(!showTip('packlist'))showTip('team')}}))}
-for(const b of document.querySelectorAll('#tabs button, #proc .st'))b.onclick=()=>showTab(b.dataset.tab);
+for(const b of document.querySelectorAll('#tabs button, #proc .st, #subnav button'))b.onclick=()=>showTab(b.dataset.tab);
 // the live line under each step: where you are in Design → Haul → Build
 let haulSummary='';
 function renderProc(){if(!$('procS_design'))return;const real=pieces.filter(p=>p.t!=='fob');
@@ -5540,7 +5594,7 @@ let db=null;   // the claude.ai page database, when running there
 S.local=ls.get('wd_designs')||[];
 let statusTimer=0;
 function status(t){const e=$('saveStatus');e.textContent=t;clearTimeout(statusTimer);if(t)statusTimer=setTimeout(()=>{e.textContent=''},7000)}
-function load(d){registerCustoms(d.customs);snapshotDoc();$('gapRule').checked=false;$('onlyFob').checked=!!d.onlyFob;pieces=rebuild(d.pieces||[],isLegacy(d));sel=new Set();updateSelBar();plan={...Haul.PLAN_DEFAULT,...(d.plan||{})};designName=d.name||'';$('dName').value=designName;changed();renderSaved();
+function load(d){registerCustoms(d.customs);snapshotDoc();$('gapRule').checked=false;$('onlyFob').checked=!!d.onlyFob;pieces=rebuild(d.pieces||[],isLegacy(d));sel=new Set();updateSelBar();plan={...Haul.PLAN_DEFAULT,...(d.plan||{})};designName=d.name||'';$('dTitle').value=designName;changed();renderSaved();window.FD?.loaded(S.cur);
   const r=flaggedText();flashMsg(r?`Loaded "${designName||'design'}". ${r}.`:'',!!r)}
 const userName=()=>{const u=S.user;if(!u)return'';const n=u.displayName||'Player';return n.charAt(0).toUpperCase()+n.slice(1)};   // never the email
 function parseDoc(r){try{return{...JSON.parse(r.data),name:r.name}}catch(e){return{name:r.name,pieces:[]}}}
@@ -5548,25 +5602,32 @@ function parseDoc(r){try{return{...JSON.parse(r.data),name:r.name}}catch(e){retu
 function entries(){
   const out=TEMPLATES.map((d,i)=>({key:'t'+i,group:'Templates',name:d.name,doc:d,builtin:true}));
   const uid=S.user&&S.user.uid;
-  if(S.mode==='firebase')for(const r of S.remote){const mine=r.owner===uid;
-    out.push({key:'f'+r.id,id:r.id,group:r.visibility==='template'?'Templates':mine?'My designs':'Shared by others',name:r.name,vis:r.visibility,ownerName:r.ownerName,mine,
-      canDelete:!!uid&&((mine&&r.visibility!=='template')||S.admin),get doc(){return parseDoc(r)}})}
+  const favs=window.FD?window.FD.favEntries():[];
+  if(S.mode==='firebase')for(const r of S.remote){const mine=r.owner===uid,tpl=r.visibility==='template';
+    if(!mine&&!tpl&&(S.cur!=='f'+r.id||favs.some(f=>f.id===r.id)))continue;   // someone else's shared design: only while it is open (favourites are listed below)
+    out.push({key:'f'+r.id,id:r.id,group:tpl?'Templates':mine?'My designs':'Open now',name:r.name,vis:r.visibility,ownerName:r.ownerName,mine,
+      canDelete:!!uid&&((mine&&!tpl)||S.admin),get doc(){return parseDoc(r)}})}
+  for(const f of favs){const r=S.remote.find(x=>x.id===f.id);out.push(r?{...f,lazy:false,canDelete:!!uid&&((f.mine&&f.vis!=='template')||S.admin),doc:parseDoc(r)}:f)}
   if(S.mode==='claude')for(const d of S.remote)out.push({key:'c'+d.id,id:d.id,group:'Saved with the page',name:d.name,doc:d,mine:true,canDelete:true});
   for(const d of S.local)out.push({key:'l'+d.id,id:d.id,group:S.mode==='local'?'My designs':'In this browser',name:d.name,doc:d,local:true,mine:S.mode==='local',canDelete:true});
   return out}
 function renderSaved(){
-  const sel=$('openSel'),list=entries(),groups={};sel.replaceChildren(el('option',{value:''},'Open…'));
+  const m=$('openMenu'),list=entries(),groups={};m.replaceChildren();
   for(const e of list)(groups[e.group]=groups[e.group]||[]).push(e);
-  sel.append(el('optgroup',{label:'File on this device'},el('option',{value:'__savetxt'},'Save .txt'),el('option',{value:'__importtxt'},'Import .txt…')));
-  for(const g of['Templates','My designs','Shared by others','Saved with the page','In this browser']){const L=groups[g];if(!L)continue;const og=el('optgroup',{label:g});
+  const find=el('button',{type:'button',class:'pmi find',onclick:()=>{closePops();showTab('find')}});find.innerHTML='<svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5"/><path d="M13 13l4.5 4.5"/></svg>';find.append('Find designs…');m.append(find);
+  const fb=S.mode==='firebase',HINT={'★ Favourites':fb?(S.user?'Star designs in Find designs to keep them here.':'Log in to keep favourites.'):null,'My designs':fb&&!S.user?'Log in to save designs online.':null};
+  for(const g of['★ Favourites','Templates','My designs','Open now','Saved with the page','In this browser']){const L=groups[g];
+    if(!L&&!HINT[g])continue;
+    m.append(el('div',{class:'pmh'},g,g==='My designs'&&fb&&S.user?el('span',{},`${(L||[]).length} of ${window.FD?FD.MAX_MINE:10}`):null));
+    if(!L){m.append(el('div',{class:'pmempty'},HINT[g]));continue}
     for(const e of L.sort((a,b)=>(b.builtin?1:0)-(a.builtin?1:0)||a.name.localeCompare(b.name))){
-      const label=e.name+((g==='Shared by others'||(g==='Templates'&&!e.builtin))&&e.ownerName?' · '+e.ownerName:'')+(g==='My designs'&&e.vis==='shared'?' · shared':'');
-      const o=el('option',{value:e.key},label);if(S.cur===e.key)o.selected=true;og.append(o)}
-    sel.append(og)}
-  const cur=list.find(e=>e.key===S.cur),x=$('delBtn');
+      const sub=[(g==='Open now'||g==='★ Favourites'||(g==='Templates'&&!e.builtin))&&e.ownerName?'by '+e.ownerName:'',g==='My designs'&&e.vis==='shared'?'shared':'',e.stars?'★'+e.stars:''].filter(Boolean).join(' · ');
+      m.append(el('button',{type:'button',class:'pmi'+(S.cur===e.key?' cur':''),role:'menuitem',onclick:()=>{closePops();openKey(e.key)}},el('span',{class:'nm'},e.name),sub?el('span',{class:'sub'},sub):null))}}
+  const cur=list.find(e=>e.key===S.cur&&!e.lazy)||list.find(e=>e.key===S.cur),x=$('delBtn');
   x.hidden=!(cur&&cur.canDelete);x.textContent=cur&&S.pendDel===cur.key?'Delete?':'Delete';
   x.title=cur&&cur.canDelete&&!cur.mine&&!cur.local?`Remove this design by ${cur.ownerName||'someone else'} (admin)`:'Delete this design';
-  x.onclick=()=>{if(!cur)return;if(S.pendDel===cur.key)del(cur);else{S.pendDel=cur.key;renderSaved()}};
+  x.textContent=cur&&S.pendDel===cur.key?`Delete "${cur.name}"? Click again`:'Delete this design';
+  x.onclick=e=>{e.stopPropagation();if(!cur)return;if(S.pendDel===cur.key){closePops();del(cur)}else{S.pendDel=cur.key;renderSaved()}};
   // admin: move someone else's design between Shared and Template; the maker stays credited
   const pb=$('promoBtn'),canPromo=S.admin&&cur&&cur.id&&!cur.local&&!cur.mine&&(cur.vis==='shared'||cur.vis==='template');
   pb.hidden=!canPromo;if(canPromo){const to=cur.vis==='shared'?'template':'shared';pb.textContent=to==='template'?'Make template':'Make shared';
@@ -5578,37 +5639,51 @@ function renderSaved(){
 function renderAcct(){const b=$('acctBtn');b.hidden=S.mode!=='firebase';
   if(!S.user){b.textContent='Log in';b.title='Log in or create an account to save designs online'}
   else{b.textContent=(S.admin?'★ ':'')+userName();b.title=`Logged in${S.admin?' as admin':''}. Your account: name, log out, delete account.`}}
-$('openSel').onchange=e=>{S.pendDel=null;S.pendSave=null;
-  if(e.target.value==='__savetxt'){renderSaved();saveTxt();return}
-  if(e.target.value==='__importtxt'){renderSaved();$('importTxt').value='';$('importTxt').click();return}
-  const en=entries().find(x=>x.key===e.target.value);if(!en){renderSaved();return}
-  S.cur=en.key;if(S.mode==='firebase')$('dVis').value=en.mine&&en.vis?en.vis:'personal';load(en.doc)};
+// the Open and ⋯ menus next to the design name (one open at a time; Esc or a click outside closes)
+function closePops(){for(const[b,m]of[['openBtn','openMenu'],['moreBtn','moreMenu']]){$(m).hidden=true;$(b).setAttribute('aria-expanded','false')}}
+for(const[b,m]of[['openBtn','openMenu'],['moreBtn','moreMenu']])$(b).onclick=e=>{e.stopPropagation();const open=$(m).hidden;closePops();S.pendDel=null;if(open){renderSaved();$(m).hidden=false;$(b).setAttribute('aria-expanded','true');$(m).querySelector('button:not([hidden])')?.focus()}};
+document.addEventListener('click',e=>{if(!e.target.closest('.pop'))closePops()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&(!$('openMenu').hidden||!$('moreMenu').hidden)){closePops();$('openBtn').focus()}});
+$('saveTxtBtn').onclick=()=>{closePops();saveTxt()};
+$('importTxtBtn').onclick=()=>{closePops();$('importTxt').value='';$('importTxt').click()};
+function openKey(key){S.pendDel=null;S.pendSave=null;
+  const en=entries().find(x=>x.key===key);if(!en){renderSaved();return}
+  if(en.lazy){renderSaved();window.FD.openDesign(en.id,false);return}   // a favourite: fetched when opened
+  S.cur=en.key;if(S.mode==='firebase')$('dVis').value=en.mine&&en.vis?en.vis:'personal';load(en.doc);if(tab==='find'||tab==='structs')showTab('design')}
 async function setVis(en,to){const F=S.fb;
-  try{await F.updateDoc(F.doc(F.db,FC('designs'),en.id),{visibility:to});status(to==='template'?`"${en.name}" is now a template (by ${en.ownerName||'its maker'}).`:`"${en.name}" is shared again.`)}
+  try{await F.updateDoc(F.doc(F.db,FC('designs'),en.id),{visibility:to});await window.FD?.cardVis(en.id,to);status(to==='template'?`"${en.name}" is now a template (by ${en.ownerName||'its maker'}).`:`"${en.name}" is shared again.`)}
   catch(e){status('Could not change it: '+errText(e))}}
 async function del(en){S.pendDel=null;
   try{if(en.local){S.local=S.local.filter(d=>d.id!==en.id);ls.set('wd_designs',S.local)}
-    else if(S.mode==='firebase'){const F=S.fb;await F.deleteDoc(F.doc(F.db,FC('designs'),en.id))}
+    else if(S.mode==='firebase'){const F=S.fb;await F.deleteDoc(F.doc(F.db,FC('designs'),en.id));
+      if(en.vis==='shared'||en.vis==='template')try{await window.FD?.tombstone(en.id)}catch(e){}}   // takes it out of Find designs
     else if(S.mode==='claude')await db.collection('designs').doc(en.id).delete();
     if(S.cur===en.key)S.cur=null;status(`Deleted "${en.name}".`)}
   catch(e){status('Could not delete: '+errText(e))}
   renderSaved()}
-$('saveForm').addEventListener('submit',async e=>{e.preventDefault();const name=$('dName').value.trim();
+$('saveForm').addEventListener('submit',async e=>{e.preventDefault();const name=$('dTitle').value.trim();
   if(!name){status('Name the design first.');return}if(pieces.length<=1){status('Nothing placed yet.');return}
   if(S.mode==='firebase'&&!S.user){openLogin('Log in to save designs online.');return}
   const vis=S.mode==='firebase'?$('dVis').value:null,ask=name.toLowerCase()+'|'+vis;
   const same=entries().find(en=>en.mine&&!en.builtin&&(en.vis!=='template'||S.admin)&&en.name.toLowerCase()===name.toLowerCase());
   if(same&&S.cur!==same.key&&S.pendSave!==ask){S.pendSave=ask;status(`You already have "${same.name}". Press Save again to replace it.`);return}
+  if(S.mode==='firebase'&&!same&&!S.admin&&window.FD){const n=entries().filter(en=>en.group==='My designs').length;
+    if(n>=FD.MAX_MINE){status(`You have ${n} designs saved online, the most there is room for. Delete one first, or keep this one as a file on your device (⋯ → Save as .txt file).`);return}}
   S.pendSave=null;designName=name;const body={...designDoc(),name},now=new Date().toISOString();
   try{
     if(S.mode==='firebase'){const F=S.fb,id=same?same.id:F.doc(F.collection(F.db,FC('designs'))).id;
       await F.setDoc(F.doc(F.db,FC('designs'),id),{owner:S.user.uid,ownerName:userName(),visibility:vis,name,data:JSON.stringify(body),updated:now});
-      S.cur='f'+id;status(`Saved "${name}" · ${VIS_LABEL[vis]}.`)}
+      S.cur='f'+id;status(`Saved "${name}" · ${VIS_LABEL[vis]}.`);
+      // the search card: written for shared designs and templates, taken out when a design goes back to Personal
+      try{if(vis==='shared'||vis==='template'){await window.FD?.writeCard(id,{owner:S.user.uid,ownerName:userName(),visibility:vis,name});
+          status(vis==='shared'?`Saved "${name}" · Shared: everyone with a login can now find it in Find designs.`:`Saved "${name}" · Template: listed for everyone.`)}
+        else if(same&&(same.vis==='shared'||same.vis==='template'))await window.FD?.tombstone(id)}
+      catch(err){status(`Saved "${name}", but it could not be added to Find designs: ${errText(err)}`)}}
     else if(S.mode==='claude'){const id=same?same.id:'d'+Date.now().toString(36);await db.collection('designs').doc(id).set({...body,updated:now});S.cur='c'+id;status(`Saved "${name}".`)}
     else{const id=same?same.id:'d'+Date.now().toString(36);S.local=S.local.filter(d=>d.id!==id);S.local.push({id,...body,updated:now});ls.set('wd_designs',S.local);S.cur='l'+id;status(`Saved "${name}" in this browser.`)}}
   catch(err){status('Could not save: '+errText(err))}
   changed();renderSaved()});
-$('clearBtn').onclick=()=>{snapshotDoc();pieces=rebuild([]);sel=new Set();designName='';S.cur=null;$('dName').value='';changed();renderSaved()};
+$('clearBtn').onclick=()=>{snapshotDoc();pieces=rebuild([]);sel=new Set();designName='';S.cur=null;$('dTitle').value='';changed();renderSaved()};
 
 /* ---------- logins (Firebase) ---------- */
 function errText(e){const c=(e&&e.code)||'';
@@ -5685,7 +5760,8 @@ $('acNameForm').addEventListener('submit',e=>{e.preventDefault();const n=$('acNa
   acBusy(e.submitter||$('acNameForm').querySelector('button'),async()=>{await S.fb.updateProfile(S.fb.auth.currentUser,{displayName:n});$('acNameIn').value='';acRefresh()})});
 $('acRename').onclick=()=>{const u=S.fb.auth.currentUser,n=prompt('New planner name (2–20 letters, digits, _ . -):',u.displayName||'');if(n==null)return;
   if(!acOk(n.trim())){acMsg('Planner name: 2–20 letters, digits, _ . - (no spaces, no å ä ö).');return}
-  acBusy($('acRename'),async()=>{await S.fb.updateProfile(u,{displayName:n.trim()});acShow();renderAcct();acMsg('Name changed. Designs and comments you save from now on show the new name.',true)})};
+  acBusy($('acRename'),async()=>{await S.fb.updateProfile(u,{displayName:n.trim()});acShow();renderAcct();const k=await window.FD?.renameMine(userName());
+    acMsg(`Name changed.${k?` Your ${k} shared design${k>1?'s':''} in Find designs show${k>1?'':'s'} it now.`:''} Comments keep the old name.`,true)})};
 $('acPw').onclick=()=>acBusy($('acPw'),async()=>{await S.fb.sendPasswordResetEmail(S.fb.auth,S.fb.auth.currentUser.email,acBack());acMsg('We emailed you a link to set a new password.',true)});
 $('acDelForm').addEventListener('submit',e=>{e.preventDefault();const F=S.fb,u=F.auth.currentUser;if(!u)return;
   if($('acDelWord').value.trim()!=='DELETE'){acMsg('Type DELETE (capital letters) to confirm.');return}
@@ -5697,18 +5773,23 @@ $('acDelForm').addEventListener('submit',e=>{e.preventDefault();const F=S.fb,u=F
     acMsg('Deleting…',true);let n=0;
     for(const col of['designs','test_designs']){let sn=null;
       try{sn=await F.getDocs(F.query(F.collection(F.db,col),F.where('owner','==',u.uid)))}catch(x){if(x.code!=='permission-denied')throw x}
-      if(sn)for(const d of sn.docs){await F.deleteDoc(d.ref);n++}}
+      if(sn)for(const d of sn.docs){const v=d.data().visibility;
+        if(v==='shared'||v==='template')try{await window.FD?.tombstone(d.id,col==='designs'?'cards':'test_cards')}catch(x){}
+        await F.deleteDoc(d.ref);n++}}
+    try{await window.FD?.dropMyStars(u.uid)}catch(x){}
     try{await F.deleteDoc(F.doc(F.db,'users',u.uid))}catch(x){if(x.code!=='permission-denied')throw x}
     await F.deleteUser(u);
     $('acDelWord').value='';$('acDelPw').value='';$('acDel').open=false;$('loginDlg').close();
     status(`Your account is deleted${n?` (and ${n} design${n>1?'s':''})`:''}. Thanks for planning with us.`)})});
-// three live lists: templates (anyone), my own, everyone's shared
-function listen(){S.unsub.forEach(f=>f());S.unsub=[];S.remote=[];const F=S.fb,col=F.collection(F.db,FC('designs')),parts={};
-  const merge=()=>{const m=new Map();for(const k in parts)for(const r of parts[k])m.set(r.id,r);S.remote=[...m.values()];
+// two live lists: templates (anyone) and my own (at most FD.MAX_MINE). Other players' shared designs are found with Find designs
+// (cards, read once and kept on the device); one opened from there is added with addRemote.
+function listen(){S.unsub.forEach(f=>f());S.unsub=[];S.remote=[];S.opened=[];const F=S.fb,col=F.collection(F.db,FC('designs')),parts={};
+  const merge=()=>{const m=new Map();for(const r of S.opened)m.set(r.id,r);for(const k in parts)for(const r of parts[k])m.set(r.id,r);S.remote=[...m.values()];
     if(S.cur&&S.cur[0]==='f'&&!m.has(S.cur.slice(1))&&Object.keys(parts).length===S.unsub.length)S.cur=null;renderSaved()};
   const watch=(k,q)=>S.unsub.push(F.onSnapshot(q,sn=>{parts[k]=sn.docs.map(d=>({id:d.id,...d.data()}));merge()},er=>{parts[k]=[];merge();if(k!=='tpl'||er.code!=='permission-denied')status('Could not load designs: '+errText(er))}));
+  window.addRemote=r=>{S.opened=[...S.opened.filter(x=>x.id!==r.id),r];merge()};
   watch('tpl',F.query(col,F.where('visibility','==','template')));
-  if(S.user){watch('mine',F.query(col,F.where('owner','==',S.user.uid)));watch('shared',F.query(col,F.where('visibility','==','shared')))}}
+  if(S.user)watch('mine',F.query(col,F.where('owner','==',S.user.uid)))}
 /* ---------- comment boards: design comments, and the four feedback boards on About ---------- */
 const THUMB='<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 7h2.6v7.5H2zM4.6 7.2 7.6 2c1 0 1.9.8 1.6 2L8.7 6.6h4c1 0 1.7.9 1.4 1.9l-1.1 4.6c-.2.8-.9 1.4-1.7 1.4H4.6"/></svg>';
 const fmtWhen=d=>{if(!d)return'';const now=new Date(),o={day:'numeric',month:'short',hour:'2-digit',minute:'2-digit',hour12:false};if(d.getFullYear()!==now.getFullYear())o.year='numeric';return d.toLocaleString('en-GB',o)};
@@ -5783,6 +5864,7 @@ async function startFirebase(){
   F.onAuthStateChanged(auth,u0=>{authChanged(u0);if(u0&&acStep(u0)!=='me'&&!$('loginDlg').open)openLogin('');else if($('loginDlg').open)acShow()})}
 // the logged-in start-up; a login that isn't complete yet (email not checked, no planner name, old login) counts as logged out
 function authChanged(u0){const F=S.fb,fdb=F.db,u=acStep(u0)==='me'?u0:null;S.user=u;S.admin=false;S.pendOut=false;listen();window.structListen?.();renderSaved();renderFacts();renderLevelNotes();if(u)loadLevels(u);
+    window.FD?.onAuth(u);if(!u&&!u0&&window.FD?.wantsLogin())openLogin('Log in to open the shared design.');
     if(u)F.getDoc(F.doc(fdb,'admins',u.uid)).then(()=>{if(S.user===u){S.admin=true;renderSaved();renderFacts()}},()=>{});
     if(TEST_MODE)testGate(u)}
 /* ---------- test version gate ---------- */
@@ -5801,7 +5883,7 @@ $('tgOut').onclick=()=>{if(S.fb)S.fb.signOut(S.fb.auth)};
 const draft=ls.get('wd_design_draft');
 const start=draft&&draft.pieces&&draft.pieces.filter(p=>p.t!=='fob').length?draft:{v:SAVE_V,pieces:[]};
 registerCustoms(start.customs);$('gapRule').checked=false;$('onlyFob').checked=!!start.onlyFob;pieces=rebuild(start.pieces,isLegacy(start));designName=start.name||'';plan={...Haul.PLAN_DEFAULT,...(start.plan||{})};
-$('dName').value=designName;
+$('dTitle').value=designName;
 renderPalette();renderLegend();renderThreat();draw();renderSide();renderSaved();updateTabBadge();
 {const r=flaggedText();if(r)flashMsg(r+'.',true)}
 requestAnimationFrame(()=>{fitLayout();fit25()});
@@ -6227,13 +6309,388 @@ $('stPickBtn').onclick=()=>{const id=$('stPickBtn').dataset.id;if(id)setTool(id)
 window.structListen=()=>{ST.unsub.forEach(f=>f());ST.unsub=[];ST.remote=[];const F=S.fb;if(!F)return;const col=F.collection(F.db,COL()),parts={};
   const merge=()=>{const m=new Map();for(const k in parts)for(const r of parts[k])m.set(r.id,r);ST.remote=[...m.values()];renderSavedSt();renderPick();renderPalette()};
   const watch=(k,q)=>ST.unsub.push(F.onSnapshot(q,sn=>{parts[k]=sn.docs.map(d=>({id:d.id,...d.data()}));merge()},()=>{parts[k]=[];merge()}));
-  watch('pub',F.query(col,F.where('visibility','==','published')));
+  loadPub().then(l=>{parts.pub=l;merge()},()=>{parts.pub=[];merge()});   // published: kept on this device, only changes fetched
   if(S.user)watch('mine',F.query(col,F.where('owner','==',S.user.uid)))};
+// Published structures are read once and kept on this device; a visit only asks for ones changed since (updated > newest seen).
+// That query needs the index visibility + updated (doc 06); without it the whole list is read. Full reload once a week.
+async function loadPub(){const F=S.fb,col=F.collection(F.db,COL()),key='wd_pub_'+COL();let c=ls.get(key);
+  const full=!c||!Array.isArray(c.list)||Date.now()-(c.full||0)>7*864e5;if(full)c={at:'',full:Date.now(),list:[]};
+  let sn;try{sn=await F.getDocs(full?F.query(col,F.where('visibility','==','published')):F.query(col,F.where('visibility','==','published'),F.where('updated','>',c.at)))}
+  catch(e){if(full)throw e;c={at:'',full:Date.now(),list:[]};sn=await F.getDocs(F.query(col,F.where('visibility','==','published')))}
+  const m=new Map(c.list.map(x=>[x.id,x]));for(const d of sn.docs){const x={id:d.id,...d.data()};m.set(d.id,x);if((x.updated||'')>c.at)c.at=x.updated||''}
+  c.list=[...m.values()];ls.set(key,c);return c.list}
 if(IN_CLAUDE)(async()=>{let d=null;try{d=await window.claude.use('db')}catch(e){}if(!d)return;
   d.collection('structures').onSnapshot(sn=>{ST.remote=sn.docs.map(x=>({id:x.id,...x.data()}));renderSavedSt();renderPick();renderPalette()},()=>{})})();
 else if(S.fb)window.structListen();
 
 ST.s=fromData(EX.recon());ST.cur='xrecon';renderPick();
+})();
+</script>
+<style id="wd-find-css">
+/* Find designs (doc 06) */
+.fd-wrap{display:flex;flex-wrap:wrap;gap:18px;align-items:flex-start;padding:4px 0 24px}
+.fd-rail{flex:1 1 280px;max-width:340px;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:16px;display:flex;flex-direction:column;gap:10px;box-sizing:border-box}
+.fd-main{flex:999 1 560px;min-width:0;display:flex;flex-direction:column;gap:12px}
+.fd-rh{display:flex;justify-content:space-between;align-items:baseline}.fd-rh h2{margin:0;font:700 22px var(--f-head)}
+.fd-h{margin:8px 0 0;font:700 12px var(--f-head);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.fd-h .fd-note{text-transform:none;letter-spacing:0;font-weight:500}
+.fd-note{font-size:12px;color:var(--muted);margin:0}
+.fd-sub{font-size:12px;font-weight:600;color:var(--muted)}
+.fd-q{width:100%;box-sizing:border-box;min-height:38px;padding:0 10px;border:1px solid var(--line);border-radius:4px;background:var(--bg);color:var(--ink);font:500 14px var(--f-body)}
+.fd-seg{display:flex;flex-wrap:wrap;gap:5px}
+.fd-sb{min-height:34px;padding:0 10px;border:1px solid var(--line);border-radius:4px;background:var(--bg);color:var(--ink);font:600 13px var(--f-body);cursor:pointer}
+.fd-sb:hover,.fd-chip:hover,.fd-ib:hover{border-color:var(--accent)}
+.fd-sb.on{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.fd-line{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.fd-line>span{font-size:13px;font-weight:600;min-width:84px}
+.fd-has{display:flex;flex-direction:column;gap:5px}
+.fd-chips{display:flex;flex-wrap:wrap;gap:5px}
+.fd-chip{min-height:32px;padding:0 11px;border:1px solid var(--line);border-radius:16px;background:var(--bg);color:var(--ink);font:500 13px var(--f-body);cursor:pointer}
+.fd-chip.must{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}.fd-chip.must::before{content:'✓ '}
+.fd-chip.not{border-color:var(--bad);color:var(--bad);text-decoration:line-through}.fd-chip.not::before{content:'– '}
+.fd-chk{display:flex;gap:8px;align-items:center;font-size:13px;cursor:pointer}.fd-chk input{width:18px;height:18px;accent-color:var(--accent)}
+.fd-foot{border-top:1px solid var(--line);padding-top:10px;margin-top:4px;display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;font-size:12px;color:var(--muted)}
+.fd-link{background:none;border:0;padding:4px 0;color:var(--accent);font:600 13px var(--f-body);cursor:pointer}
+.fd-top{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}.fd-top h2{margin:0;font:700 26px var(--f-head)}.fd-top .grow{flex:1}
+.fd-act{display:flex;flex-wrap:wrap;gap:5px}
+.fd-fchip{min-height:28px;padding:0 10px;border:0;border-radius:14px;background:var(--hi);color:var(--ink);font:500 12px var(--f-body);cursor:pointer}.fd-fchip.not{color:var(--bad)}
+.fd-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:14px}
+.fd-card{background:var(--panel);border:1px solid var(--line);border-radius:8px;overflow:hidden;display:flex;flex-direction:column}
+.fd-card:hover{border-color:var(--accent)}.fd-card.near{opacity:.92}
+.fd-pvw{position:relative}
+.fd-pv{display:block;width:100%;height:190px;padding:6px;border:0;background:var(--bg);cursor:pointer;box-sizing:border-box}
+.fd-pv:not(.done){background:repeating-linear-gradient(135deg,var(--bg) 0 10px,var(--grid) 10px 11px)}
+.fd-3d{display:block;width:100%;height:100%}
+.fd-tools{position:absolute;right:6px;top:6px;display:flex;gap:4px}
+.fd-ib{width:34px;height:34px;display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--line);border-radius:4px;background:var(--panel);color:var(--ink);cursor:pointer;padding:0}
+.fd-ib.fav svg path,.fd-favb svg path{fill:none}.fd-ib.fav.on svg path,.fd-favb.on svg path{fill:var(--ladder)}.fd-ib.fav.on{border-color:var(--entry)}
+.fd-favb{display:inline-flex;align-items:center;gap:6px}
+.fd-tag{position:absolute;left:6px;top:6px;font:700 10px var(--f-head);letter-spacing:.1em;text-transform:uppercase;background:var(--ink);color:var(--bg);padding:3px 6px;border-radius:3px}
+.fd-old,.fd-miss{position:absolute;left:6px;bottom:6px;font:600 11px var(--f-body);padding:3px 6px;border-radius:3px}
+.fd-old{background:var(--entry);color:#1F251B}.fd-miss{background:var(--ink);color:var(--bg)}
+.fd-body{padding:10px 12px 12px;display:flex;flex-direction:column;gap:7px}
+.fd-name{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
+.fd-title{background:none;border:0;padding:0;text-align:left;font:700 18px/1.1 var(--f-head);color:var(--ink);cursor:pointer}.fd-title:hover{text-decoration:underline}
+.fd-stars{font:600 12px var(--f-mono);white-space:nowrap;color:var(--muted)}
+.fd-by{font-size:12px;color:var(--muted)}
+.fd-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;font:600 12px/1.25 var(--f-mono)}
+.fd-stats span{display:flex;flex-direction:column}.fd-stats i{font:500 11px var(--f-body);font-style:normal;color:var(--muted)}
+.fd-thr{display:flex;gap:8px;align-items:center;font-size:13px}
+.fd-ins{display:flex;flex-wrap:wrap;gap:4px}
+.fd-emp{font-size:11px;padding:2px 6px;border-radius:3px;background:var(--bg);border:1px solid var(--line)}.fd-emp.hit{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.fd-login{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;background:var(--hi);border-radius:6px;padding:8px 10px;font-size:13px}
+.fd-empty{background:var(--panel);border:1px dashed var(--line);border-radius:8px;padding:20px;text-align:center;display:flex;flex-direction:column;gap:10px;align-items:center}.fd-empty p{margin:0}
+.fd-more{align-self:center}
+.fd-almost{margin:10px 0 0;font:700 20px var(--f-head)}.fd-almost .fd-note{font:500 13px var(--f-body)}
+.fd-back{display:flex;flex-wrap:wrap;gap:8px;align-items:center;background:var(--hi);border-radius:6px;padding:6px 8px}.fd-back .grow{flex:1 1 200px}
+.fd-pos{font:600 12px var(--f-mono);min-width:50px;text-align:center}
+.fd-det{display:flex;flex-wrap:wrap;gap:16px;align-items:flex-start}
+.fd-detl{flex:999 1 480px;min-width:0;background:var(--panel);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.fd-deth{display:flex;flex-wrap:wrap;gap:8px;align-items:baseline;padding:10px 12px;border-bottom:1px solid var(--line)}.fd-deth h2{margin:0;font:700 26px var(--f-head)}.fd-deth .grow{flex:1}
+.fd-deth .btn{display:inline-flex;align-items:center;gap:6px}
+.fd-big{height:min(560px,62vh);background:var(--bg);padding:8px;box-sizing:border-box}
+.fd-detl>.fd-note{padding:8px 12px}
+.fd-detr{flex:1 1 280px;max-width:400px;display:flex;flex-direction:column;gap:10px}
+.fd-openb{min-height:40px;font-size:15px}
+.fd-row{display:flex;gap:6px;flex-wrap:wrap}
+.fd-box{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:10px 12px;display:flex;flex-direction:column;gap:8px}.fd-box p{margin:0;font-size:13px}.fd-box .fd-h{margin:0}
+.fd-haul{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px;text-align:center}
+.fd-haul div{background:var(--bg);border-radius:4px;padding:6px 2px;display:flex;flex-direction:column}.fd-haul b{font:600 18px var(--f-mono)}.fd-haul span{font-size:11px}
+.fd-haul .on{background:var(--accent);color:var(--accent-ink)}
+.fd-backbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:var(--hi);border-radius:6px;padding:6px 8px;margin-bottom:8px;font-size:13px}
+</style>
+<script id="wd-find">
+/* =====================================================================
+   FIND DESIGNS — search shared designs and templates (doc 06 · "Find designs and cards").
+   Every shared design and template has a small CARD in FC('cards') (test: test_cards), written when it is saved:
+   name, maker, the pieces for the 3D preview (d) and a summary (s: trips per vehicle, what's in it, threat level,
+   C4, build time), facts = Fact sheet stamp, fav = {uid:true} (the ★ count = favourites).
+   The device keeps every card in IndexedDB and only asks Firebase for cards changed since last time
+   (touched > last seen), so a normal visit costs a handful of reads. Unshared / deleted designs leave a tombstone (gone).
+   Without Firebase (staging, local) the cards are made on the fly from the designs saved in this browser.
+   ===================================================================== */
+(()=>{
+const VEH=[['ural','Ural'],['kodiak','Kodiak'],['lakota','Z20 Lakota'],['mh6','MH-6'],['humvee','Humvee']];
+const HAS=[['Emplacements',['mortar','stingray','talon','ciws']],['Stations',['drill','refuel','repair']]];
+const SAME={recon_trim:'recon_tower',ifs_trim:'ifs'};
+const HOLD=[['High','Climbable on foot'],['Raised','A car gets in'],['Low','Only a Ural gets in'],['Holds','Only C4 gets in']];
+const HOLD_BTN=['Any','On foot','Car','Ural'];
+const PAGE=24,MAX_MINE=10;
+const LOCAL_FAV='wd_favs';let localFav=null;const getLocalFav=()=>localFav||(localFav=ls.get(LOCAL_FAV)||{});   // kept in memory too: some previews block browser storage
+
+/* ---------- the card of the design on the map ---------- */
+const factsStamp=()=>{const t=JSON.stringify(Object.entries(WD.all()).sort());let h=7;for(let i=0;i<t.length;i++)h=(h*31+t.charCodeAt(i))|0;return(h>>>0).toString(36)};
+function cardTrips(){const r=Haul.needs(counts(),plan),out={},total=Haul.ORDER.reduce((a,t)=>a+r.haul[t],0),L={support:null,driver:null,pilot:null};
+  for(const[id]of VEH){const v=Haul.VEH.find(x=>x.id===id);if(!v)continue;if(!total){out[id]=0;continue}
+    const tc=v.track==='pilot'?0:(WD.F('v.'+id+'.trunk')||0);
+    const ps=Haul.packFor(v,r.haul,L,{palletPrio:plan.palletPrio,first:r.first,prio:plan.prio,trunk:tc,trunk1:tc-(plan.fobInPack?0:1)-(r.maxTier===3&&plan.hammerInPack===false?1:0)});
+    out[id]=ps&&ps.length?Math.min(...ps.map(p=>p.trips)):null}
+  return{t:out,sup:Math.round(r.buildRaw||0)}}
+function cardSum(){const has={};for(const[k,n]of Object.entries(counts())){if(k==='fob'||!n)continue;const id=SAME[k]||k;has[id]=(has[id]||0)+n}
+  let h=null,c4=null;try{const T=analyse(),fc=T.ways&&T.ways.footC4;h=T.modeIndex;c4=fc&&!fc.incomplete&&fc.c4!=null?fc.c4:null}catch(e){}
+  const tr=cardTrips();let b=0;try{b=Math.round(buildTime().sec)}catch(e){}
+  return{t:tr.t,sup:tr.sup,has,h,c4,b,n:pieces.length}}
+function cardBody(){const d=designDoc();return{d:JSON.stringify({pieces:d.pieces,customs:d.customs}),s:cardSum(),facts:factsStamp()}}
+// run fn with another design on the map for a moment (nothing is drawn, the design on the map comes back)
+function withDesign(d,fn){const k={pieces,plan,ordEdit,rep:rebuild.report};
+  try{registerCustoms(d.customs);pieces=rebuild(d.pieces||[],isLegacy(d));plan={...Haul.PLAN_DEFAULT,...(d.plan||{})};ordEdit=null;layoutRev++;return fn()}
+  finally{pieces=k.pieces;plan=k.plan;ordEdit=k.ordEdit;rebuild.report=k.rep;layoutRev++}}
+
+/* ---------- the card list on this device ---------- */
+const C={cards:new Map(),at:0,full:0,checked:0,loaded:false,busy:null,err:''};
+const IDB={p:null,open(){return this.p||(this.p=new Promise((ok,no)=>{try{const r=indexedDB.open('wd_cards',1);r.onupgradeneeded=()=>r.result.createObjectStore('kv');r.onsuccess=()=>ok(r.result);r.onerror=()=>no(r.error)}catch(e){no(e)}}))},
+  async get(k){try{const d=await this.open();return await new Promise(ok=>{const q=d.transaction('kv').objectStore('kv').get(k);q.onsuccess=()=>ok(q.result||null);q.onerror=()=>ok(null)})}catch(e){return null}},
+  async set(k,v){try{const d=await this.open();await new Promise(ok=>{const t=d.transaction('kv','readwrite');t.objectStore('kv').put(v,k);t.oncomplete=ok;t.onerror=ok})}catch(e){}}};
+async function loadCache(){if(C.loaded)return;C.loaded=true;const v=await IDB.get(FC('cards'));
+  if(v&&Array.isArray(v.cards)){C.at=v.at||0;C.full=v.full||0;C.checked=v.checked||0;for(const c of v.cards)C.cards.set(c.id,c)}}
+const saveCache=()=>IDB.set(FC('cards'),{at:C.at,full:C.full,checked:C.checked,cards:[...C.cards.values()]});
+const ms=t=>t&&t.toMillis?t.toMillis():typeof t==='number'?t:0;
+function putCard(id,x){if(x.gone)C.cards.delete(id);else C.cards.set(id,{...x,id,touched:ms(x.touched)||Date.now()})}
+// ask Firebase only for cards changed since the newest one seen (a full reload once a week catches anything missed)
+function sync(force){if(S.mode!=='firebase'||!S.user)return Promise.resolve();if(C.busy)return C.busy;
+  C.busy=(async()=>{await loadCache();const F=S.fb,col=F.collection(F.db,FC('cards'));
+    const full=force||!C.at||Date.now()-C.full>7*864e5;
+    try{const sn=await F.getDocs(full?col:F.query(col,F.where('touched','>',new Date(C.at))));
+      if(full){C.cards.clear();C.at=0;C.full=Date.now()}
+      for(const d of sn.docs){const x=d.data(),t=ms(x.touched);if(t>C.at)C.at=t;putCard(d.id,x)}
+      C.checked=Date.now();C.err='';saveCache()}
+    catch(e){C.err=errText(e)}})().finally(()=>{C.busy=null;renderSaved();if(tab==='find')render()});
+  return C.busy}
+
+// without Firebase: cards from the designs kept here (staging / this browser), worked out once per version
+const localMade=new Map();
+function localCards(){const out=[],favs=getLocalFav();
+  const src=[...(S.mode==='claude'?S.remote.map(d=>({id:'c'+d.id,doc:d,vis:'shared'})):[]),...S.local.map(d=>({id:'l'+d.id,doc:d,vis:'personal'}))];
+  for(const x of src){const key=x.id+'|'+(x.doc.updated||'');let c=localMade.get(key);
+    if(!c){const doc=x.doc;try{c=withDesign(doc,()=>({...cardBody(),name:doc.name||'Untitled',ownerName:'You',visibility:x.vis,touched:Date.parse(doc.updated||'')||0}))}catch(e){continue}
+      localMade.set(key,c)}
+    out.push({...c,id:x.id,fav:favs[x.id]?{me:true}:{}})}
+  return out}
+// logged out: only the templates (few), fetched once per visit and not kept
+const T={cards:new Map(),at:0,busy:null};
+function syncTpl(){if(S.mode!=='firebase'||S.user)return Promise.resolve();if(T.busy)return T.busy;
+  T.busy=(async()=>{const F=S.fb;try{const sn=await F.getDocs(F.query(F.collection(F.db,FC('cards')),F.where('visibility','==','template')));
+      T.cards.clear();for(const d of sn.docs){const x=d.data();if(!x.gone)T.cards.set(d.id,{...x,id:d.id,touched:ms(x.touched)})}T.at=Date.now();C.err=''}
+    catch(e){C.err=errText(e)}})().finally(()=>{T.busy=null;if(tab==='find')render()});return T.busy}
+const allCards=()=>S.mode==='firebase'?[...(S.user?C.cards:T.cards).values()]:localCards();
+const me=()=>S.mode==='firebase'?(S.user&&S.user.uid):'me';
+const favN=c=>Object.keys(c.fav||{}).length;
+const isFav=c=>!!(c.fav&&me()&&c.fav[me()]);
+const isMine=c=>S.mode==='firebase'?!!(S.user&&c.owner===S.user.uid):true;   // offline: every design here is yours
+
+/* ---------- writing cards (called by Save, Delete, Make template, Delete my account) ---------- */
+async function writeCard(id,meta){if(S.mode!=='firebase')return;const F=S.fb,body=cardBody();
+  await F.setDoc(F.doc(F.db,FC('cards'),id),{...meta,...body,gone:false,touched:F.serverTimestamp()},{merge:true});
+  const old=C.cards.get(id);putCard(id,{...meta,...body,fav:old?old.fav:{},touched:Date.now()});saveCache()}
+async function tombstone(id,col){if(S.mode!=='firebase')return;const F=S.fb;
+  try{await F.updateDoc(F.doc(F.db,col||FC('cards'),id),{gone:true,d:F.deleteField(),s:F.deleteField(),touched:F.serverTimestamp()})}catch(e){if(e.code!=='not-found')throw e}
+  C.cards.delete(id);saveCache()}
+async function cardVis(id,to){if(S.mode!=='firebase')return;const F=S.fb;
+  try{await F.updateDoc(F.doc(F.db,FC('cards'),id),{visibility:to,touched:F.serverTimestamp()})}catch(e){if(e.code!=='not-found')throw e}
+  const c=C.cards.get(id);if(c){c.visibility=to;saveCache()}}
+async function toggleFav(c){
+  if(S.mode!=='firebase'){const f=getLocalFav();if(f[c.id])delete f[c.id];else f[c.id]=true;ls.set(LOCAL_FAV,f);render();renderSaved();return}
+  if(!S.user){openLogin('Log in to keep favourites.');return}
+  const F=S.fb,uid=S.user.uid,on=!isFav(c),x=C.cards.get(c.id)||c;x.fav={...(x.fav||{})};if(on)x.fav[uid]=true;else delete x.fav[uid];render();renderSaved();
+  try{await F.updateDoc(F.doc(F.db,FC('cards'),c.id),{['fav.'+uid]:on?true:F.deleteField(),touched:F.serverTimestamp()});saveCache()}
+  catch(e){if(on)delete x.fav[uid];else x.fav[uid]=true;render();renderSaved();status('Could not change the favourite: '+errText(e))}}
+
+/* ---------- search ---------- */
+const FS={q:'',veh:'ural',trips:0,has:{},holds:0,c4:0,build:0,src:'all',hideOld:false,sort:'fav',shown:PAGE,open:null,view:{},scroll:0};
+const FS_KEEP=['veh','trips','has','holds','c4','build','src','hideOld','sort'];   // remembered on this device (not the search text)
+{const v=ls.get('wd_find');if(v&&typeof v==='object')for(const k of FS_KEEP)if(v[k]!=null&&typeof v[k]===typeof FS[k])FS[k]=v[k]}
+function fails(c){const s=c.s||{},f=[],t=(s.t||{})[FS.veh],vn=VEH.find(v=>v[0]===FS.veh)[1];
+  if(FS.trips&&(t==null||t>FS.trips))f.push(t==null?`${vn} can't carry it`:`Needs ${t} ${vn} trips`);
+  for(const id in FS.has){const n=(s.has||{})[id]||0,nm=P[id]?P[id].n:id;if(FS.has[id]===1&&!n)f.push('No '+nm);if(FS.has[id]===-1&&n)f.push('Has '+nm)}
+  if(FS.holds&&(s.h==null||s.h<FS.holds))f.push(s.h==null?'Threat not checked':HOLD[s.h][1]);
+  if(FS.c4&&(s.c4==null||s.c4<FS.c4))f.push(s.c4==null?'C4 not checked':`Only ${s.c4} C4 to blow in`);
+  if(FS.build&&(s.b||0)>FS.build*60)f.push(`Builds in ${Math.round((s.b||0)/60)} min`);
+  if(FS.src==='tpl'&&c.visibility!=='template')f.push('Not a template');
+  if(FS.src==='shared'&&c.visibility==='template')f.push('A template');
+  if(FS.src==='fav'&&!isFav(c))f.push('Not a favourite');
+  if(FS.src==='mine'&&!isMine(c))f.push('Not yours');
+  if(FS.hideOld&&c.facts!==factsStamp())f.push('Old numbers');
+  if(FS.q){const hay=[c.name,c.ownerName,...Object.keys(s.has||{}).map(id=>P[id]?P[id].n:'')].join(' ').toLowerCase();
+    if(!FS.q.toLowerCase().split(/\s+/).filter(Boolean).every(w=>hay.includes(w)))f.push('Name doesn\'t match')}
+  return f}
+const SORTS={fav:(a,b)=>favN(b)-favN(a)||b.touched-a.touched,
+  trips:(a,b)=>((a.s.t||{})[FS.veh]??99)-((b.s.t||{})[FS.veh]??99)||favN(b)-favN(a),
+  build:(a,b)=>(a.s.b||0)-(b.s.b||0),
+  hard:(a,b)=>(b.s.h??-1)-(a.s.h??-1)||(b.s.c4??-1)-(a.s.c4??-1),
+  new:(a,b)=>b.touched-a.touched};
+function results(){const all=allCards().filter(c=>c.s).sort(SORTS[FS.sort]||SORTS.fav),hit=[],near=[];
+  for(const c of all){const f=fails(c);if(!f.length)hit.push(c);else if(f.length===1&&near.length<3)near.push({c,miss:f[0]})}
+  return{all,hit,near}}
+function activeChips(){const out=[],vn=VEH.find(v=>v[0]===FS.veh)[1];
+  if(FS.q)out.push([`"${FS.q}"`,()=>{FS.q='';$('fdQ').value=''}]);
+  if(FS.trips)out.push([`${vn} ≤ ${FS.trips} trip${FS.trips>1?'s':''}`,()=>{FS.trips=0}]);
+  for(const id in FS.has)out.push([(FS.has[id]<0?'No ':'')+(P[id]?P[id].n:id),()=>{delete FS.has[id]},FS.has[id]<0]);
+  if(FS.holds)out.push(['Holds vs '+HOLD_BTN[FS.holds].toLowerCase(),()=>{FS.holds=0}]);
+  if(FS.c4)out.push([FS.c4+'+ C4',()=>{FS.c4=0}]);
+  if(FS.build)out.push([`Build ≤ ${FS.build} min`,()=>{FS.build=0}]);
+  if(FS.src!=='all')out.push([{tpl:'Templates',shared:'Shared',fav:'★ Favourites',mine:'Mine'}[FS.src]+' only',()=>{FS.src='all'}]);
+  if(FS.hideOld)out.push(['No old numbers',()=>{FS.hideOld=false}]);
+  return out}
+
+/* ---------- 3D preview: the same picture as Side view (sv3dSvg), drawn on this device ---------- */
+const PV=new Map(),DIRS='NESW',LOOK={N:'north',E:'east',S:'south',W:'west'};
+function preview(c,view,cls){const k=c.id+'|'+c.touched+'|'+view;let hit=PV.get(k);
+  const svg=s('svg',{class:cls,role:'img','aria-label':`3D view of ${c.name}, looking ${LOOK[view]}`});
+  if(!hit){let doc;try{doc=JSON.parse(c.d||'{}')}catch(e){doc={}}
+    try{hit={svg:withDesign({v:SAVE_V,...doc},()=>{let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;for(const p of pieces){const r=rectOf(p);x0=Math.min(x0,r.x);y0=Math.min(y0,r.y);x1=Math.max(x1,r.x+r.w);y1=Math.max(y1,r.y+r.d)}
+      if(x0>x1)return'';return sv3dSvg({x:x0-1,y:y0-1,w:x1-x0+2,d:y1-y0+2},view,0,{})}),vb:null}}catch(e){hit={svg:'',vb:null}}
+    PV.set(k,hit);if(PV.size>300)PV.delete(PV.keys().next().value)}
+  svg.innerHTML=hit.svg;
+  const fit=()=>{if(hit.vb){svg.setAttribute('viewBox',hit.vb);return}try{const b=svg.getBBox();if(b.width>0){hit.vb=`${b.x-8} ${b.y-8} ${b.width+16} ${b.height+16}`;svg.setAttribute('viewBox',hit.vb)}}catch(e){}};
+  if(hit.vb)fit();else requestAnimationFrame(fit);
+  return svg}
+// draw a card's preview only when it scrolls into view
+const io='IntersectionObserver'in window?new IntersectionObserver(es=>{for(const e of es)if(e.isIntersecting){io.unobserve(e.target);e.target._draw?.()}},{rootMargin:'300px'}):null;
+function lazyPreview(box,c){const view=FS.view[c.id]||'N';box._draw=()=>{box.replaceChildren(preview(c,view,'fd-3d'));box.classList.add('done')};if(io)io.observe(box);else box._draw()}
+
+/* ---------- page ---------- */
+const STAR='<svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><path d="M10 2.8l2.2 4.6 5 .7-3.6 3.5.9 5L10 14.2 5.5 16.6l.9-5L2.8 8.1l5-.7z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>';
+const TURN='<svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M15.5 6.5A6.5 6.5 0 1 0 16.5 11"/><path d="M16 2.5v4.2h-4.2"/></svg>';
+const TRIPS_WHY="Trips with every vehicle unlocked, packed by the design's own Haul it plan. Haul it uses your own levels, so it may show more trips.";
+const ic=(html,cls,title,on)=>{const b=el('button',{type:'button',class:'fd-ib '+(cls||''),title,'aria-label':title});b.innerHTML=html;if(on)b.onclick=on;return b};
+const tripsTxt=(c,v)=>{const t=(c.s.t||{})[v||FS.veh],vn=VEH.find(x=>x[0]===(v||FS.veh))[1];return t==null?`${vn}: too much`:t===0?'Nothing to haul':`${t} ${vn} trip${t>1?'s':''}`};
+const sev=h=>h==null?el('span',{class:'sev'},'?'):el('span',{class:'sev s'+(3-h)},HOLD[h][0]);
+const whatsIn=c=>Object.keys(c.s.has||{}).filter(id=>P[id]&&/^(emp|station)$/.test(P[id].c)).map(id=>el('span',{class:'fd-emp'+(FS.has[id]===1?' hit':'')},(c.s.has[id]>1?c.s.has[id]+'× ':'')+P[id].n));
+let railBuilt=false;const railSync=[];
+function seg(label,opts,get,set,id){const g=el('div',{class:'fd-seg',role:'group','aria-label':label});
+  const bs=opts.map(([v,t])=>el('button',{type:'button',class:'fd-sb',onclick:()=>{set(v);FS.shown=PAGE;render()}},t));g.append(...bs);
+  railSync.push(()=>bs.forEach((b,i)=>{const on=get()===opts[i][0];b.classList.toggle('on',on);b.setAttribute('aria-pressed',on?'true':'false')}));return g}
+function buildRail(){const r=$('fdRail');r.replaceChildren();railSync.length=0;
+  const clear=el('button',{type:'button',class:'fd-link',onclick:()=>{Object.assign(FS,{q:'',trips:0,has:{},holds:0,c4:0,build:0,src:'all',hideOld:false,shown:PAGE});$('fdQ').value='';render()}},'Clear all');
+  const q=el('input',{type:'search',id:'fdQ',class:'fd-q',placeholder:'Name, maker or piece','aria-label':'Search by name, maker or piece',autocomplete:'off'});
+  let tq=0;q.addEventListener('input',()=>{clearTimeout(tq);tq=setTimeout(()=>{FS.q=q.value.trim();FS.shown=PAGE;render()},150)});
+  const hasBox=el('div',{class:'fd-has'});
+  for(const[g,ids]of HAS){const row=el('div',{class:'fd-chips'});
+    for(const id of ids){if(!P[id])continue;const b=el('button',{type:'button',class:'fd-chip',onclick:()=>{const v=FS.has[id]||0;if(!v)FS.has[id]=1;else if(v===1)FS.has[id]=-1;else delete FS.has[id];FS.shown=PAGE;render()}},P[id].n);
+      railSync.push(()=>{const v=FS.has[id]||0;b.className='fd-chip'+(v>0?' must':v<0?' not':'');b.setAttribute('aria-label',P[id].n+(v>0?': must have':v<0?': must not have':': any'))});row.append(b)}
+    hasBox.append(el('span',{class:'fd-sub'},g),row)}
+  const old=el('input',{type:'checkbox',id:'fdOld',onchange:e=>{FS.hideOld=e.target.checked;render()}});railSync.push(()=>{old.checked=FS.hideOld});
+  r.append(el('div',{class:'fd-rh'},el('h2',{},'Find a design'),clear),q,
+    el('h3',{class:'fd-h'},'Haul out'),seg('Vehicle',VEH,()=>FS.veh,v=>FS.veh=v),
+    el('div',{class:'fd-line'},el('span',{},'Max trips'),seg('Max trips',[[1,'1'],[2,'2'],[3,'3'],[0,'Any']],()=>FS.trips,v=>FS.trips=v)),
+    el('p',{class:'fd-note'},"From each design's own Haul it plan, with every vehicle unlocked. Haul it uses your levels, so it may show more."),
+    el('h3',{class:'fd-h'},'Must have ',el('span',{class:'fd-note'},'· tap again to exclude')),hasBox,
+    el('h3',{class:'fd-h'},'Protected against'),seg('Must hold against',HOLD_BTN.map((t,i)=>[i,t]),()=>FS.holds,v=>FS.holds=v),
+    el('p',{class:'fd-note'},'From the threat check. "Car" means no way in by climbing off a car roof.'),
+    el('div',{class:'fd-line'},el('span',{},'C4 to blow in'),seg('Least C4 to blow in',[[0,'Any'],[4,'4+'],[6,'6+'],[8,'8+']],()=>FS.c4,v=>FS.c4=v)),
+    el('h3',{class:'fd-h'},'Build time (1 builder)'),seg('Build time',[[0,'Any'],[20,'≤ 20 min'],[30,'≤ 30 min'],[45,'≤ 45 min']],()=>FS.build,v=>FS.build=v),
+    el('h3',{class:'fd-h'},'Show'),seg('Which designs',[['all','Everything'],['tpl','Templates'],['shared','Shared'],['fav','★ Favourites'],['mine','Mine']],()=>FS.src,v=>FS.src=v),
+    el('label',{class:'fd-chk'},old,'Hide designs saved before the last Fact sheet change'),
+    el('div',{class:'fd-foot',id:'fdFoot'}));
+  railBuilt=true}
+function renderFoot(){const f=$('fdFoot');if(!f)return;f.replaceChildren();
+  if(S.mode!=='firebase'){f.append(el('span',{},'Offline here: searching the designs saved in this browser.'));return}
+  if(!S.user){f.append(el('span',{},C.err?'Could not load the templates: '+C.err:'Templates only until you log in.'));return}
+  const ago=C.checked?Math.max(0,Math.round((Date.now()-C.checked)/60000)):null;
+  f.append(el('span',{},C.err?'Could not check for new designs: '+C.err:C.busy?'Checking for new designs…':ago==null?'':`List kept on this device. Checked ${ago<1?'just now':ago+' min ago'}.`),
+    el('button',{type:'button',class:'fd-link',onclick:()=>sync().then(render)},'Refresh'));
+  if(S.admin){const b=el('button',{type:'button',class:'fd-link',title:'Admin: make cards for shared designs and templates saved before cards existed'},'Make missing cards');
+    b.onclick=()=>{if(b.dataset.ask){backfill(b);return}b.dataset.ask='1';b.textContent='Reads every shared design once. Press again'};f.append(b)}}
+function render(){if(!$('tab-find')||$('tab-find').hidden)return;if(!railBuilt)buildRail();railSync.forEach(f=>f());renderFoot();ls.set('wd_find',Object.fromEntries(FS_KEEP.map(k=>[k,FS[k]])));
+  const m=$('fdMain');
+  if(FS.open){renderDetail(m);return}
+  const{all,hit,near}=results();m.replaceChildren();
+  const sort=el('select',{class:'picksel',id:'fdSort','aria-label':'Sort'},...[['fav','Most ★'],['trips','Fewest trips'],['build','Fastest build'],['hard','Hardest to get in'],['new','Newest']].map(([v,t])=>el('option',{value:v},t)));
+  sort.value=FS.sort;sort.onchange=()=>{FS.sort=sort.value;render()};
+  m.append(el('div',{class:'fd-top'},el('h2',{},`${hit.length} design${hit.length===1?'':'s'}`),el('span',{class:'fd-note'},`of ${all.length} ${S.mode!=='firebase'?'here':S.user?'shared':'templates'}`),el('span',{class:'grow'}),el('label',{for:'fdSort',class:'fd-note'},'Sort'),sort));
+  if(S.mode==='firebase'&&!S.user)m.append(el('div',{class:'fd-login'},el('span',{},'Showing templates. Log in to also search the designs other players share, and to keep favourites.'),el('button',{type:'button',class:'btn',onclick:()=>openLogin('Log in to search shared designs.')},'Log in')));
+  const act=activeChips();if(act.length)m.append(el('div',{class:'fd-act'},...act.map(([t,off,neg])=>el('button',{type:'button',class:'fd-fchip'+(neg?' not':''),'aria-label':'Remove filter '+t,onclick:()=>{off();FS.shown=PAGE;render()}},t,' ✕'))));
+  if(!all.length&&(C.busy||T.busy)){m.append(el('div',{class:'fd-empty'},'Loading the design list…'));return}
+  const grid=el('div',{class:'fd-grid'});for(const c of hit.slice(0,FS.shown))grid.append(cardEl(c));m.append(grid);
+  if(hit.length>FS.shown)m.append(el('button',{type:'button',class:'btn ghost fd-more',onclick:()=>{FS.shown+=PAGE;render()}},`Show more (${hit.length-FS.shown} left)`));
+  if(!hit.length)m.append(el('div',{class:'fd-empty'},all.length?'No design ticks every box.'+(near.length?' The closest ones are below.':''):S.mode==='firebase'?'No shared designs yet.':'No designs saved here yet. Save one and it shows up here.'));
+  if(near.length){m.append(el('h3',{class:'fd-almost'},'Almost ',el('span',{class:'fd-note'},'misses one filter')));const g2=el('div',{class:'fd-grid'});for(const{c,miss}of near)g2.append(cardEl(c,miss));m.append(g2)}
+  if(FS.scroll){const y=FS.scroll;FS.scroll=0;requestAnimationFrame(()=>window.scrollTo(0,y))}}
+function cardEl(c,miss){const box=el('button',{type:'button',class:'fd-pv','aria-label':'Open '+c.name,onclick:()=>openCard(c.id)});lazyPreview(box,c);
+  const fav=ic(STAR,'fav'+(isFav(c)?' on':''),isFav(c)?'Remove from favourites':'Add to favourites',()=>toggleFav(c));fav.setAttribute('aria-pressed',isFav(c)?'true':'false');
+  const turn=ic(TURN,'','Turn the preview',()=>{const v=FS.view[c.id]||'N';FS.view[c.id]=DIRS[(DIRS.indexOf(v)+1)%4];box.replaceChildren(preview(c,FS.view[c.id],'fd-3d'))});
+  const old=c.facts!==factsStamp();
+  return el('article',{class:'fd-card'+(miss?' near':'')},
+    el('div',{class:'fd-pvw'},box,el('div',{class:'fd-tools'},fav,turn),
+      c.visibility==='template'?el('span',{class:'fd-tag'},'Template'):null,
+      miss?el('span',{class:'fd-miss'},miss):old?el('span',{class:'fd-old',title:'Saved before the last Fact sheet change: trips and times may be a little off'},'Old numbers'):null),
+    el('div',{class:'fd-body'},
+      el('div',{class:'fd-name'},el('button',{type:'button',class:'fd-title',onclick:()=>openCard(c.id)},c.name),el('span',{class:'fd-stars',title:'Players who keep it as a favourite'},'★ '+favN(c))),
+      el('span',{class:'fd-by'},'by '+(c.ownerName||'someone')),
+      el('div',{class:'fd-stats'},el('span',{title:TRIPS_WHY},el('i',{},'Haul ⓘ'),tripsTxt(c)),el('span',{},el('i',{},'Build'),mmss(c.s.b||0)),el('span',{},el('i',{},'C4 to blow in'),c.s.c4==null?'–':String(c.s.c4))),
+      el('div',{class:'fd-thr'},sev(c.s.h),el('span',{},c.s.h==null?'Not checked':HOLD[c.s.h][1])),
+      el('div',{class:'fd-ins'},...whatsIn(c))))}
+function openCard(id){FS.open=id;FS.scroll=window.scrollY;try{history.pushState({wd:'fd',id},'')}catch(e){}render();window.scrollTo(0,0)}
+function closeDetail(){FS.open=null;render()}
+function renderDetail(m){const{hit,near}=results(),list=hit.length?hit:near.map(x=>x.c),c=allCards().find(x=>x.id===FS.open);
+  if(!c){FS.open=null;render();return}
+  const i=list.findIndex(x=>x.id===c.id),step=d=>{if(!list.length)return;const n=list[((i<0?0:i)+d+list.length)%list.length];FS.open=n.id;render()};
+  const view=FS.view[c.id]||'N',pic=el('div',{class:'fd-big'},preview(c,view,'fd-3d'));
+  const bar=el('div',{class:'fd-back'},el('button',{type:'button',class:'btn ghost',onclick:()=>{try{history.back()}catch(e){closeDetail()}}},'← Back to results'),
+    el('span',{class:'grow fd-note'},activeChips().map(a=>a[0]).join(' · ')||'All designs'),
+    ic('<svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12.5 4l-6 6 6 6"/></svg>','','Previous result',()=>step(-1)),
+    el('span',{class:'fd-pos'},i<0?'–':`${i+1} of ${list.length}`),
+    ic('<svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7.5 4l6 6-6 6"/></svg>','','Next result',()=>step(1)));
+  const turn=el('button',{type:'button',class:'btn ghost',onclick:()=>{FS.view[c.id]=DIRS[(DIRS.indexOf(view)+1)%4];render()}});turn.innerHTML=TURN+' Turn';
+  const fav=el('button',{type:'button',class:'btn ghost fd-favb'+(isFav(c)?' on':''),'aria-pressed':isFav(c)?'true':'false',onclick:()=>toggleFav(c)});fav.innerHTML=STAR;fav.append(` ${isFav(c)?'Favourite':'Add to favourites'} · ${favN(c)}`);
+  const haul=el('div',{class:'fd-haul'},...VEH.map(([id,n])=>{const t=(c.s.t||{})[id];return el('div',{class:id===FS.veh?'on':''},el('b',{},t==null?'–':String(t)),el('span',{},n))}));
+  const link=S.mode==='firebase'?el('button',{type:'button',class:'btn ghost',onclick:e=>copyText(location.href.split('#')[0]+'#d/'+c.id,e.currentTarget,'Copy link')},'Copy link'):null;
+  m.replaceChildren(bar,el('div',{class:'fd-det'},
+    el('div',{class:'fd-detl'},el('div',{class:'fd-deth'},el('h2',{},c.name),el('span',{class:'fd-by'},'by '+(c.ownerName||'someone')+(c.visibility==='template'?' · template':'')),el('span',{class:'grow'}),turn),pic,
+      el('p',{class:'fd-note'},`Looking ${LOOK[view]} · the same 3D look as Side view`)),
+    el('div',{class:'fd-detr'},
+      el('button',{type:'button',class:'btn fd-openb',onclick:()=>openDesign(c.id)},'Open in Design it'),
+      el('div',{class:'fd-row'},fav,link),
+      el('section',{class:'fd-box'},el('h3',{class:'fd-h'},'Haul out · trips'),haul,el('p',{class:'fd-note'},`${fmt(c.s.sup||0)} build supplies. ${TRIPS_WHY}`)),
+      el('section',{class:'fd-box'},el('h3',{class:'fd-h'},'Threat check'),el('div',{class:'fd-thr'},sev(c.s.h),el('span',{},c.s.h==null?'Not checked':HOLD[c.s.h][1])),el('p',{},'Least C4 to blow in: ',el('b',{},c.s.c4==null?'–':String(c.s.c4)))),
+      el('section',{class:'fd-box'},el('h3',{class:'fd-h'},"What's in it"),el('div',{class:'fd-ins'},...whatsIn(c)),el('p',{},`Build ${mmss(c.s.b||0)} with 1 builder · ${c.s.n||0} pieces`),
+        c.facts!==factsStamp()?el('p',{class:'fd-note'},'Saved before the last Fact sheet change: trips and times may be a little off.'):null))))}
+
+/* ---------- open a design from the search ---------- */
+let fromFind=null;
+async function openDesign(id,viaFind=true){
+  if(S.mode==='firebase'){const F=S.fb;let sn;
+    try{sn=await F.getDoc(F.doc(F.db,FC('designs'),id))}catch(e){status('Could not open it: '+errText(e));return}
+    if(!sn.exists()){status('That design is no longer shared.');C.cards.delete(id);saveCache();FS.open=null;render();return}
+    const r={id,...sn.data()};window.addRemote?.(r);S.cur='f'+id;$('dVis').value=r.owner===(S.user&&S.user.uid)?r.visibility:'personal';load(parseDoc(r))}
+  else{const en=entries().find(e=>e.key===id);if(!en)return;S.cur=en.key;load(en.doc)}
+  if(!viaFind){fromFind=null;backBar();if(tab==='find')showTab('design');return}
+  const c=allCards().find(x=>x.id===id);fromFind={key:S.cur,name:c?c.name:designName,by:c?c.ownerName:''};
+  try{history.pushState({wd:'fdd',id},'')}catch(e){}
+  showTab('design');backBar();requestAnimationFrame(()=>$('zoomFit')?.click())}
+function backBar(){const b=$('fdBackBar');if(!b)return;const on=!!fromFind&&S.cur===fromFind.key;b.hidden=!on;if(on)$('fdBackTxt').textContent=`${fromFind.name}${fromFind.by?' · by '+fromFind.by:''}`}
+function backToFind(){fromFind=null;backBar();FS.open=null;showTab('find')}
+$('fdBackBtn').onclick=()=>{try{history.back()}catch(e){backToFind()}};
+window.addEventListener('popstate',()=>{if(tab==='design'&&fromFind){backToFind();return}if(tab==='find'&&FS.open){closeDetail()}});
+
+/* ---------- admin: cards for designs saved before cards existed ---------- */
+async function backfill(btn){const F=S.fb,col=F.collection(F.db,FC('designs'));btn.disabled=true;let n=0,bad=0;
+  try{const docs=[];for(const v of['shared','template']){const sn=await F.getDocs(F.query(col,F.where('visibility','==',v)));docs.push(...sn.docs)}
+    for(const d of docs){const r={id:d.id,...d.data()};btn.textContent=`Making cards… ${n+bad+1}/${docs.length}`;
+      try{const doc=parseDoc(r),body=withDesign(doc,()=>cardBody());
+        await F.setDoc(F.doc(F.db,FC('cards'),r.id),{owner:r.owner,ownerName:r.ownerName||'',visibility:r.visibility,name:r.name,...body,gone:false,touched:F.serverTimestamp()},{merge:true});n++}
+      catch(e){bad++}}
+    status(`Made ${n} card${n===1?'':'s'}${bad?`, ${bad} failed`:''}.`);await sync(true)}
+  catch(e){status('Could not make cards: '+errText(e))}
+  btn.disabled=false;renderFoot()}
+
+/* ---------- hooks for the rest of the planner ---------- */
+window.FD={
+  show(){if(S.mode==='firebase'&&S.user&&Date.now()-C.checked>120000)sync();if(S.mode==='firebase'&&!S.user&&Date.now()-T.at>600000)syncTpl();render()},
+  render,writeCard,tombstone,cardVis,openDesign,MAX_MINE,
+  // Open menu: the favourites (firebase only)
+  favEntries(){if(S.mode!=='firebase'||!S.user)return[];
+    return[...C.cards.values()].filter(isFav).map(c=>({key:'f'+c.id,id:c.id,group:'★ Favourites',name:c.name,ownerName:c.ownerName,vis:c.visibility,stars:favN(c),lazy:true,mine:c.owner===S.user.uid,canDelete:false}))},
+  // Delete my account: take this player's ★ off every card
+  async dropMyStars(uid){if(S.mode!=='firebase')return;await sync();const F=S.fb;
+    for(const c of C.cards.values())if(c.fav&&c.fav[uid])try{await F.updateDoc(F.doc(F.db,FC('cards'),c.id),{['fav.'+uid]:F.deleteField(),touched:F.serverTimestamp()})}catch(e){}},
+  // a new planner name: show it on this player's cards in Find designs too
+  async renameMine(name){if(S.mode!=='firebase'||!S.user)return 0;await sync();const F=S.fb;let n=0;
+    for(const c of C.cards.values())if(c.owner===S.user.uid&&c.ownerName!==name)try{await F.updateDoc(F.doc(F.db,FC('cards'),c.id),{ownerName:name,touched:F.serverTimestamp()});c.ownerName=name;n++}catch(e){}
+    saveCache();return n},
+  isFavKey:k=>!!(k&&k[0]==='f'&&C.cards.get(k.slice(1))&&isFav(C.cards.get(k.slice(1)))),
+  onAuth(u){if(!u)return;sync().then(()=>{const m=/^#d\/([A-Za-z0-9_-]{1,64})$/.exec(location.hash);if(m){history.replaceState(null,'',location.pathname+location.search);openDesign(m[1])}});if(tab==='find')render()},
+  wantsLogin(){return /^#d\//.test(location.hash)},
+  loaded(key){if(fromFind&&key!==fromFind.key)fromFind=null;backBar()}};
 })();
 </script>
 </body></html>

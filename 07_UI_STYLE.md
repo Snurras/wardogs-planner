@@ -8,3 +8,4 @@ Use for: colours, fonts, icons, layout, mockups. Attach together with the featur
 - Side-view art: flat icon style with 3D boxes, sand-coloured HESCO with wire grid and corner posts, beige Bremer concrete, olive soldier.
 - Process for visual changes: Claude makes a mockup (image or a small private review page with zoom), Snurra comments, then it goes to staging. Ask for one batch of feedback per round.
 - Haul it icons: Supplies framed grid, Ammo three rounds, Fuel pump, Mechanical gear (as in game); pallet = angled pallet with slats, crate = toolbox outline.
+- Tools row: slim (28 px) boxy buttons with a bracket line and "TOOLS" label, one level below the arrow steps; menus are popovers (`.popm`, `.pmi`) in the panel colour.
