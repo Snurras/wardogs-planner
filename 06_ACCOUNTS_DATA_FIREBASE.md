@@ -11,6 +11,15 @@ Use for: logins, user settings, saved/shared designs, comments, the Fact sheet a
 | `testers/{uid}` | tester list (`{name}`) | added by hand in the Firebase console; a user can only read their own doc |
 | `test_designs/*`, `test_feedback/*`, `test_facts/main` | test version data | only used by `test.html`; testers only |
 
+## Logins (released 11 Oct 2026)
+- Google (popup) or email + password. Firebase keeps passwords and sends the verify / reset emails (Authentication → Templates; public name, sender name and support email set in the console).
+- A login counts (`S.user`) only when complete (`acStep`): email checked (Google already is) and a planner name (`displayName`) picked. New Google accounts get `displayName` cleared so the real name never shows.
+- Account dialog `#loginDlg` views: `acOut` · `acVerify` · `acName` · `acMe` (change name, change password, log out, Delete my account) · `acOld`. Code: `acStep`, `acShow`, `openLogin`, `authChanged`.
+- Delete my account: re-login, then deletes own `designs` + `test_designs` (owner = uid), `users/{uid}`, then the login. Comments stay.
+- Old name+password logins (`name@example.com`, `LOGIN_DOMAIN`) are retired: shown "Old login", counted as logged out.
+- Hidden form field `lgWeb` catches simple sign-up bots. Later: 1-year clean-up of inactive accounts (not built).
+- `account-lab.html`: the stand-alone test bench the login was built on.
+
 ## Test version (`test.html`)
 - Same file as `index.html`. `TEST_MODE` is on when the page's file name is `test.html`; `FC(name)` maps `designs`/`feedback`/`facts` to `test_…`. `users/*` and `admins/*` are shared with live.
 - Gate (`#testGate`, `testGate()`): covers the page until the user is logged in and `testers/{uid}` exists; shows the user id so a friend can send it. “TEST” badge in the top bar.
