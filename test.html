@@ -227,15 +227,35 @@ ol.weak,ul.weak{margin:2px 0 0;padding:0;list-style:none;display:flex;flex-direc
 #saveStatus{position:fixed;top:58px;right:16px;z-index:20;background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:5px 10px;box-shadow:0 2px 8px rgba(0,0,0,.15);color:var(--ink);max-width:min(420px,calc(100vw - 32px))}
 #dVis{width:104px}
 #acctBtn{max-width:124px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-dialog#loginDlg{border:1px solid var(--line);border-radius:6px;background:var(--panel);color:var(--ink);padding:18px 20px;width:min(360px,calc(100vw - 32px));box-shadow:0 10px 30px rgba(0,0,0,.25)}
+dialog#loginDlg{border:1px solid var(--line);border-radius:6px;background:var(--panel);color:var(--ink);padding:18px 20px;width:min(380px,calc(100vw - 32px));box-shadow:0 10px 30px rgba(0,0,0,.25)}
 dialog#loginDlg::backdrop{background:rgba(20,25,15,.45)}
-#loginForm{display:flex;flex-direction:column;gap:10px}
-#loginForm label{display:flex;flex-direction:column;gap:4px;font:600 13px var(--f-head);text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
-#loginForm input{font:15px var(--f-body);padding:7px 9px;border:1px solid var(--line);border-radius:3px;background:var(--bg);color:var(--ink)}
+#loginDlg h3{margin:0}
+#loginDlg .acv{display:flex;flex-direction:column;gap:10px}
+#loginDlg .acv[hidden]{display:none}
+#loginForm,#acNameForm,#acDelForm{display:flex;flex-direction:column;gap:10px}
+#loginDlg label{display:flex;flex-direction:column;gap:4px;font:600 13px var(--f-head);text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+#loginDlg label[hidden]{display:none}
+#loginDlg input{font:15px var(--f-body);padding:7px 9px;border:1px solid var(--line);border-radius:3px;background:var(--bg);color:var(--ink)}
 #loginWhy:empty{display:none}
 .lgerr{color:var(--bad);font-size:14px;margin:0}.lgerr:empty{display:none}
-.lgbtns{display:flex;gap:8px;flex-wrap:wrap}
+.lgerr.ok{color:var(--ok)}
+.lgbtns{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 .lgnote{margin:0;font-size:12px}
+.acg{display:flex;align-items:center;justify-content:center;gap:10px;background:#fff;color:#1F1F1F;border-color:#747775;padding:9px 12px}
+.acgi{width:20px;height:20px;border-radius:50%;border:1px solid #c7c7c7;display:inline-grid;place-items:center;font:700 13px var(--f-body);color:#444}
+.acor{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:12px}
+.acor::before,.acor::after{content:"";flex:1;border-top:1px solid var(--line)}
+.actabs{display:flex;border:1px solid var(--line);border-radius:3px;overflow:hidden}
+.actabs button{flex:1;border:none;background:transparent;color:var(--muted);padding:7px;font:700 13px var(--f-head);text-transform:uppercase;letter-spacing:.06em;cursor:pointer}
+.actabs button[aria-selected=true]{background:var(--hi);color:var(--ink)}
+.aclink{background:none;border:none;padding:0;margin-left:auto;color:var(--accent);text-decoration:underline;font:500 13px var(--f-body);cursor:pointer;white-space:nowrap}
+.aclink[hidden]{display:none}
+.achp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+#acMe dl{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;margin:0;font-size:14px}
+#acMe dt{color:var(--muted)}#acMe dd{margin:0;overflow-wrap:anywhere}
+#acMe details{border-top:1px solid var(--line);padding-top:10px}
+#acMe summary{cursor:pointer;font:700 13px var(--f-head);text-transform:uppercase;letter-spacing:.08em;color:var(--bad)}
+.btn.acdel{background:var(--bad);border-color:var(--bad);color:#fff}
 .ftable input:disabled{opacity:.7;cursor:not-allowed}
 .fval{font:600 14px var(--f-mono);font-variant-numeric:tabular-nums;padding-right:6px}
 .vsep{width:1px;align-self:stretch;background:var(--line);margin:2px 2px}
@@ -666,15 +686,54 @@ a{color:var(--accent)}
     <textarea id="copyDesignTa" readonly spellcheck="false" style="width:100%;min-height:180px;font:12px 'IBM Plex Mono',monospace"></textarea>
     <button class="btn" type="submit">Close</button></form></dialog>
   <dialog id="loginDlg" aria-labelledby="loginTitle">
-    <form id="loginForm" novalidate>
+    <div class="acv" id="acOut">
       <h3 id="loginTitle">Log in</h3>
       <p class="status" id="loginWhy"></p>
-      <label>Name <input id="lgName" type="text" autocomplete="username" maxlength="20" spellcheck="false"></label>
-      <label>Password <input id="lgPass" type="password" autocomplete="current-password"></label>
-      <p class="lgerr" id="lgErr" role="alert"></p>
-      <div class="lgbtns"><button class="btn" type="submit" value="in">Log in</button><button class="btn ghost" type="submit" value="up">Create account</button><button class="btn ghost" type="submit" value="cancel">Cancel</button></div>
-      <p class="status lgnote">New here? Pick a name and a password (at least 6 characters) and press Create account.<br>Your name, password and designs are stored with Google Firebase in the EU. Ask the admin to delete your account.</p>
-    </form>
+      <button class="btn acg" type="button" id="acGoogle"><span class="acgi" aria-hidden="true">G</span>Continue with Google</button>
+      <div class="acor">or with email</div>
+      <div class="actabs" role="tablist"><button type="button" role="tab" id="acTabIn" aria-selected="true">Log in</button><button type="button" role="tab" id="acTabUp" aria-selected="false">Create account</button></div>
+      <form id="loginForm" novalidate>
+        <label id="acNameL" hidden>Planner name <input id="lgName" type="text" autocomplete="nickname" maxlength="20" spellcheck="false"></label>
+        <label>Email <input id="lgMail" type="email" autocomplete="email" spellcheck="false"></label>
+        <label>Password <input id="lgPass" type="password" autocomplete="current-password"></label>
+        <span class="status" id="acPwHint" hidden>Planner name: shown on shared designs and comments. Password: at least 8 characters.</span>
+        <div class="achp" aria-hidden="true"><input id="lgWeb" type="text" tabindex="-1" autocomplete="off"></div>
+        <div class="lgbtns"><button class="btn" type="submit" id="acEmBtn">Log in</button><button class="btn ghost" type="button" data-acclose>Cancel</button><button type="button" class="aclink" id="acForgot">Forgot password?</button></div>
+      </form>
+      <p class="status lgnote">Your login is kept by Google Firebase (EU); the planner never sees your password. Forgot it? Firebase emails you a reset link.</p>
+    </div>
+    <div class="acv" id="acVerify" hidden>
+      <h3>Check your inbox</h3>
+      <p class="status" style="margin:0">We sent a link to <b id="acVfMail"></b>. Click it, then press the button below. Check the spam folder if it isn't there.</p>
+      <div class="lgbtns"><button class="btn" type="button" id="acVfDone">I've clicked the link</button><button class="btn ghost" type="button" id="acVfSend">Send again</button><button class="btn ghost" type="button" data-acout>Log out</button></div>
+    </div>
+    <div class="acv" id="acName" hidden>
+      <h3>Pick a planner name</h3>
+      <p class="status" style="margin:0">This is what others see on shared designs and comments. Your Google name stays private.</p>
+      <form id="acNameForm" novalidate>
+        <label>Planner name <input id="acNameIn" type="text" autocomplete="nickname" maxlength="20" spellcheck="false"></label>
+        <div class="lgbtns"><button class="btn" type="submit">Save name</button><button class="btn ghost" type="button" data-acout>Log out</button></div>
+      </form>
+    </div>
+    <div class="acv" id="acMe" hidden>
+      <h3 id="acMeName">Your account</h3>
+      <dl><dt>Signed in with</dt><dd id="acMeProv"></dd><dt>Email</dt><dd id="acMeMail"></dd><dt>Member since</dt><dd id="acMeSince"></dd></dl>
+      <div class="lgbtns"><button class="btn ghost" type="button" id="acRename">Change name</button><button class="btn ghost" type="button" id="acPw">Change password</button><button class="btn" type="button" data-acout>Log out</button><button class="btn ghost" type="button" data-acclose>Close</button></div>
+      <details id="acDel"><summary>Delete my account</summary>
+        <form id="acDelForm" novalidate style="margin-top:10px">
+          <p class="status" style="margin:0">Removes your login, your saved designs and your settings. Comments you wrote stay. This can't be undone.</p>
+          <label id="acDelPwL">Your password <input id="acDelPw" type="password" autocomplete="current-password"></label>
+          <label>Type DELETE to confirm <input id="acDelWord" type="text" autocomplete="off" spellcheck="false"></label>
+          <div class="lgbtns"><button class="btn acdel" type="submit" id="acDelBtn">Delete my account</button></div>
+        </form>
+      </details>
+    </div>
+    <div class="acv" id="acOld" hidden>
+      <h3>Old login</h3>
+      <p class="status" style="margin:0">Logins with a name and password are retired. Log out, then continue with Google or create an account with your email. Old designs stay on the old login.</p>
+      <div class="lgbtns"><button class="btn" type="button" data-acout>Log out</button><button class="btn ghost" type="button" data-acclose>Close</button></div>
+    </div>
+    <p class="lgerr" id="lgErr" role="alert"></p>
   </dialog>
 
   <section class="tab" id="tab-design">
@@ -5474,7 +5533,8 @@ $('copyFacts').onclick=async()=>{const lines=[];for(const g of WD.GROUPS){lines.
 const FB_VER='12.19.0';
 const FB_CONFIG={apiKey:'AIzaSyAZ7XTIbbfxZ-xsGySc1QdHfb-on_qtPPo',authDomain:'snurras-wardogs-base-planer.firebaseapp.com',projectId:'snurras-wardogs-base-planer',
   storageBucket:'snurras-wardogs-base-planer.firebasestorage.app',messagingSenderId:'246354521364',appId:'1:246354521364:web:64b00c1d8ccf687bd2a601'};
-const LOGIN_DOMAIN='example.com';   // a login name "Barba" is the Firebase account barba@example.com (never mailed)
+const LOGIN_DOMAIN='example.com';   // old name+password logins were name@example.com; retired
+const PW_MIN=8;
 const VIS_LABEL={personal:'Personal',shared:'Shared',template:'Template'};
 let db=null;   // the claude.ai page database, when running there
 S.local=ls.get('wd_designs')||[];
@@ -5482,7 +5542,7 @@ let statusTimer=0;
 function status(t){const e=$('saveStatus');e.textContent=t;clearTimeout(statusTimer);if(t)statusTimer=setTimeout(()=>{e.textContent=''},7000)}
 function load(d){registerCustoms(d.customs);snapshotDoc();$('gapRule').checked=false;$('onlyFob').checked=!!d.onlyFob;pieces=rebuild(d.pieces||[],isLegacy(d));sel=new Set();updateSelBar();plan={...Haul.PLAN_DEFAULT,...(d.plan||{})};designName=d.name||'';$('dName').value=designName;changed();renderSaved();
   const r=flaggedText();flashMsg(r?`Loaded "${designName||'design'}". ${r}.`:'',!!r)}
-const userName=()=>{const u=S.user;if(!u)return'';const n=u.displayName||(u.email||'').split('@')[0];return n.charAt(0).toUpperCase()+n.slice(1)};
+const userName=()=>{const u=S.user;if(!u)return'';const n=u.displayName||'Player';return n.charAt(0).toUpperCase()+n.slice(1)};   // never the email
 function parseDoc(r){try{return{...JSON.parse(r.data),name:r.name}}catch(e){return{name:r.name,pieces:[]}}}
 // everything the Open list can show
 function entries(){
@@ -5517,7 +5577,7 @@ function renderSaved(){
   renderAcct()}
 function renderAcct(){const b=$('acctBtn');b.hidden=S.mode!=='firebase';
   if(!S.user){b.textContent='Log in';b.title='Log in or create an account to save designs online'}
-  else{b.textContent=S.pendOut?'Log out?':(S.admin?'★ ':'')+userName();b.title=S.pendOut?'Click again to log out':`Logged in${S.admin?' as admin':''}. Click to log out.`}}
+  else{b.textContent=(S.admin?'★ ':'')+userName();b.title=`Logged in${S.admin?' as admin':''}. Your account: name, log out, delete account.`}}
 $('openSel').onchange=e=>{S.pendDel=null;S.pendSave=null;
   if(e.target.value==='__savetxt'){renderSaved();saveTxt();return}
   if(e.target.value==='__importtxt'){renderSaved();$('importTxt').value='';$('importTxt').click();return}
@@ -5552,28 +5612,96 @@ $('clearBtn').onclick=()=>{snapshotDoc();pieces=rebuild([]);sel=new Set();design
 
 /* ---------- logins (Firebase) ---------- */
 function errText(e){const c=(e&&e.code)||'';
-  const M={'auth/invalid-credential':'Wrong name or password.','auth/invalid-login-credentials':'Wrong name or password.','auth/wrong-password':'Wrong name or password.','auth/user-not-found':'Wrong name or password.',
-    'auth/email-already-in-use':'That name is taken. Pick another, or log in.','auth/weak-password':'The password needs at least 6 characters.',
-    'auth/too-many-requests':'Too many tries. Wait a minute and try again.','auth/network-request-failed':"Can't reach the server. Check your connection.",
-    'auth/user-disabled':'This account has been closed.','auth/operation-not-allowed':'Logins are switched off.','auth/admin-restricted-operation':'New accounts are switched off. Ask the admin for a login.',
+  const M={'auth/invalid-credential':'Wrong email or password.','auth/invalid-login-credentials':'Wrong email or password.','auth/wrong-password':'Wrong email or password.','auth/user-not-found':'Wrong email or password.',
+    'auth/invalid-email':"That doesn't look like an email address.",'auth/email-already-in-use':'There is already an account with that email. Log in, or use "Forgot password?".',
+    'auth/weak-password':`The password needs at least ${PW_MIN} characters.`,'auth/password-does-not-meet-requirements':'The password is too simple. Use a longer one.',
+    'auth/too-many-requests':'Too many tries. Wait a few minutes and try again.','auth/network-request-failed':"Can't reach the server. Check your connection.",
+    'auth/popup-closed-by-user':'The Google window was closed before signing in.','auth/cancelled-popup-request':'The Google window was closed before signing in.',
+    'auth/popup-blocked':'Your browser blocked the Google window. Allow pop-ups for this page and try again.',
+    'auth/account-exists-with-different-credential':'This email already has an account. Log in with email and password.',
+    'auth/unauthorized-domain':'This web address is not allowed to log in yet (Firebase: Authorized domains).',
+    'auth/requires-recent-login':'Please log in again first.','auth/user-mismatch':'That is a different account from the one you are logged in with.',
+    'auth/user-disabled':'This account has been closed.','auth/operation-not-allowed':'This way of logging in is switched off.','auth/admin-restricted-operation':'New accounts are switched off.',
     'permission-denied':'Not allowed.','unavailable':"Can't reach the server right now."};
   return M[c]||M[c.replace(/^firestore\//,'')]||(e&&e.message)||'Something went wrong.'}
-function openLogin(why){$('loginWhy').textContent=why||'';$('lgErr').textContent='';const d=$('loginDlg');if(!d.open)d.showModal();$('lgName').focus()}
-$('acctBtn').onclick=()=>{if(!S.user){openLogin('');return}
-  if(S.pendOut){S.pendOut=false;S.fb.signOut(S.fb.auth).then(()=>status('Logged out.'))}else{S.pendOut=true;renderAcct();setTimeout(()=>{S.pendOut=false;renderAcct()},3000)}};
-$('loginForm').addEventListener('submit',async e=>{e.preventDefault();const act=e.submitter?e.submitter.value:'in';
-  if(act==='cancel'){$('loginDlg').close();return}
-  const name=$('lgName').value.trim(),pw=$('lgPass').value,err=$('lgErr');err.textContent='';
-  if(!/^[A-Za-z0-9_.-]{2,20}$/.test(name)){err.textContent='Name: 2–20 letters or digits, no spaces (å, ä, ö not allowed).';return}
-  if(pw.length<6){err.textContent='The password needs at least 6 characters.';return}
-  const F=S.fb;if(!F){err.textContent="Online saving isn't available right now.";return}
-  const btns=[...$('loginForm').querySelectorAll('button')];btns.forEach(b=>b.disabled=true);
-  try{const email=name.toLowerCase()+'@'+LOGIN_DOMAIN;
-    if(act==='up'){const c=await F.createUserWithEmailAndPassword(F.auth,email,pw);await F.updateProfile(c.user,{displayName:name})}
+/* Account dialog: Google or email + password (Firebase keeps passwords and sends verify / reset emails).
+   A login only counts (S.user) once it's complete: email checked (Google ones already are) and a planner name picked.
+   Old name+password logins (…@example.com) are retired. */
+const acProv=u=>u.providerData.some(p=>p.providerId==='google.com')?'google':'password';
+const acStep=u=>!u?'out':(u.email||'').toLowerCase().endsWith('@'+LOGIN_DOMAIN)?'old':acProv(u)==='password'&&!u.emailVerified?'verify':!u.displayName?'name':'me';
+const acBack=()=>({url:location.origin+location.pathname});
+const acOk=t=>/^[A-Za-z0-9_.-]{2,20}$/.test(t);
+const acMailOk=t=>/^\S+@\S+\.\S+$/.test(t);
+function acMsg(t,ok){const e=$('lgErr');e.textContent=t||'';e.classList.toggle('ok',!!ok)}
+let acMode='in',acResendAt=0;
+function acShow(){const u=S.fb&&S.fb.auth.currentUser,v=acStep(u);
+  for(const [id,k] of [['acOut','out'],['acVerify','verify'],['acName','name'],['acMe','me'],['acOld','old']])$(id).hidden=v!==k;
+  if(v==='verify')$('acVfMail').textContent=u.email;
+  if(v==='me'){$('acMeName').textContent=(S.admin?'★ ':'')+u.displayName;$('acMeProv').textContent=acProv(u)==='google'?'Google':'Email and password';$('acMeMail').textContent=u.email||'—';
+    $('acMeSince').textContent=new Date(u.metadata.creationTime).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
+    $('acPw').hidden=$('acDelPwL').hidden=acProv(u)!=='password'}
+  return v}
+function openLogin(why){$('loginWhy').textContent=why||'';acMsg('');const d=$('loginDlg');const v=acShow();if(!d.open)d.showModal();
+  const f={out:'lgMail',name:'acNameIn'}[v];if(f)$(f).focus()}
+$('acctBtn').onclick=()=>openLogin('');
+function acSetMode(m){acMode=m;$('acTabIn').setAttribute('aria-selected',m==='in');$('acTabUp').setAttribute('aria-selected',m==='up');
+  $('acNameL').hidden=$('acPwHint').hidden=m!=='up';$('acForgot').hidden=m!=='in';$('lgPass').autocomplete=m==='up'?'new-password':'current-password';
+  $('acEmBtn').textContent=m==='up'?'Create account':'Log in';acMsg('')}
+$('acTabIn').onclick=()=>acSetMode('in');$('acTabUp').onclick=()=>acSetMode('up');
+$('loginDlg').addEventListener('click',e=>{const t=e.target.closest('button');if(!t)return;
+  if(t.hasAttribute('data-acclose'))$('loginDlg').close();
+  if(t.hasAttribute('data-acout')&&S.fb){S.fb.signOut(S.fb.auth).then(()=>{$('loginDlg').close();status('Logged out.')})}});
+async function acBusy(btn,fn){btn.disabled=true;acMsg('');try{await fn()}catch(x){acMsg(errText(x))}finally{btn.disabled=false}}
+// a login step finished without Firebase noticing (name saved, email checked): run the logged-in start-up again
+function acRefresh(){const F=S.fb,u=F.auth.currentUser;authChanged(u);const v=acShow();
+  if(v==='me'&&$('loginDlg').open&&!$('acMe').contains(document.activeElement)){$('loginDlg').close();status(`Logged in as ${userName()}.`)}}
+$('acGoogle').onclick=()=>acBusy($('acGoogle'),async()=>{const F=S.fb;if(!F){acMsg("Online saving isn't available right now.");return}
+  const r=await F.signInWithPopup(F.auth,F.google);
+  // new Google account: drop the real name so the player picks a planner name
+  if(F.getAdditionalUserInfo(r)?.isNewUser){await F.updateProfile(r.user,{displayName:null});await r.user.reload()}
+  acRefresh()});
+$('loginForm').addEventListener('submit',e=>{e.preventDefault();const F=S.fb;
+  const name=$('lgName').value.trim(),email=$('lgMail').value.trim(),pw=$('lgPass').value;acMsg('');
+  if(!F){acMsg("Online saving isn't available right now.");return}
+  if(!acMailOk(email)){acMsg("That doesn't look like an email address.");return}
+  if(acMode==='up'){if(!acOk(name)){acMsg('Planner name: 2–20 letters, digits, _ . - (no spaces, no å ä ö).');return}
+    if(pw.length<PW_MIN){acMsg(`The password needs at least ${PW_MIN} characters.`);return}
+    if($('lgWeb').value){acMsg('Account created. Check your inbox.',true);return}}   // hidden field: only bots fill it
+  else if(!pw){acMsg('Enter your password.');return}
+  acBusy($('acEmBtn'),async()=>{
+    if(acMode==='up'){const c=await F.createUserWithEmailAndPassword(F.auth,email,pw);await F.updateProfile(c.user,{displayName:name});await F.sendEmailVerification(c.user,acBack())}
     else await F.signInWithEmailAndPassword(F.auth,email,pw);
-    $('lgPass').value='';$('loginDlg').close();renderSaved();status(act==='up'?`Welcome, ${userName()}!`:`Logged in as ${userName()}.`)}
-  catch(x){err.textContent=errText(x)}
-  finally{btns.forEach(b=>b.disabled=false)}});
+    $('lgPass').value='';acRefresh()})});
+$('acForgot').onclick=()=>{const email=$('lgMail').value.trim();
+  if(!acMailOk(email)){acMsg('Type your email above first, then press "Forgot password?" again.');$('lgMail').focus();return}
+  acBusy($('acForgot'),async()=>{await S.fb.sendPasswordResetEmail(S.fb.auth,email,acBack());acMsg('If there is an account for that email, a reset link is on its way. Check the spam folder too.',true)})};
+$('acVfDone').onclick=()=>acBusy($('acVfDone'),async()=>{const u=S.fb.auth.currentUser;await u.reload();
+  if(!u.emailVerified){acMsg('Not checked yet. Click the link in the email first.');return}
+  await u.getIdToken(true);acRefresh()});
+$('acVfSend').onclick=()=>{const w=Math.ceil((acResendAt-Date.now())/1000);if(w>0){acMsg(`Wait ${w} s before sending again.`);return}
+  acBusy($('acVfSend'),async()=>{await S.fb.sendEmailVerification(S.fb.auth.currentUser,acBack());acResendAt=Date.now()+60000;acMsg('Sent again.',true)})};
+$('acNameForm').addEventListener('submit',e=>{e.preventDefault();const n=$('acNameIn').value.trim();
+  if(!acOk(n)){acMsg('Planner name: 2–20 letters, digits, _ . - (no spaces, no å ä ö).');return}
+  acBusy(e.submitter||$('acNameForm').querySelector('button'),async()=>{await S.fb.updateProfile(S.fb.auth.currentUser,{displayName:n});$('acNameIn').value='';acRefresh()})});
+$('acRename').onclick=()=>{const u=S.fb.auth.currentUser,n=prompt('New planner name (2–20 letters, digits, _ . -):',u.displayName||'');if(n==null)return;
+  if(!acOk(n.trim())){acMsg('Planner name: 2–20 letters, digits, _ . - (no spaces, no å ä ö).');return}
+  acBusy($('acRename'),async()=>{await S.fb.updateProfile(u,{displayName:n.trim()});acShow();renderAcct();acMsg('Name changed. Designs and comments you save from now on show the new name.',true)})};
+$('acPw').onclick=()=>acBusy($('acPw'),async()=>{await S.fb.sendPasswordResetEmail(S.fb.auth,S.fb.auth.currentUser.email,acBack());acMsg('We emailed you a link to set a new password.',true)});
+$('acDelForm').addEventListener('submit',e=>{e.preventDefault();const F=S.fb,u=F.auth.currentUser;if(!u)return;
+  if($('acDelWord').value.trim()!=='DELETE'){acMsg('Type DELETE (capital letters) to confirm.');return}
+  if(acProv(u)==='password'&&!$('acDelPw').value){acMsg('Enter your password.');return}
+  acBusy($('acDelBtn'),async()=>{
+    // Firebase only deletes a login used in the last few minutes, so confirm who it is first
+    if(acProv(u)==='google')await F.reauthenticateWithPopup(u,F.google);
+    else await F.reauthenticateWithCredential(u,F.EmailAuthProvider.credential(u.email,$('acDelPw').value));
+    acMsg('Deleting…',true);let n=0;
+    for(const col of['designs','test_designs']){let sn=null;
+      try{sn=await F.getDocs(F.query(F.collection(F.db,col),F.where('owner','==',u.uid)))}catch(x){if(x.code!=='permission-denied')throw x}
+      if(sn)for(const d of sn.docs){await F.deleteDoc(d.ref);n++}}
+    try{await F.deleteDoc(F.doc(F.db,'users',u.uid))}catch(x){if(x.code!=='permission-denied')throw x}
+    await F.deleteUser(u);
+    $('acDelWord').value='';$('acDelPw').value='';$('acDel').open=false;$('loginDlg').close();
+    status(`Your account is deleted${n?` (and ${n} design${n>1?'s':''})`:''}. Thanks for planning with us.`)})});
 // three live lists: templates (anyone), my own, everyone's shared
 function listen(){S.unsub.forEach(f=>f());S.unsub=[];S.remote=[];const F=S.fb,col=F.collection(F.db,FC('designs')),parts={};
   const merge=()=>{const m=new Map();for(const k in parts)for(const r of parts[k])m.set(r.id,r);S.remote=[...m.values()];
@@ -5642,17 +5770,21 @@ async function startFirebase(){
   try{[A,Au,Fs]=await Promise.all(['firebase-app.js','firebase-auth.js','firebase-firestore.js'].map(f=>import(base+f)))}
   catch(e){S.mode='local';renderSaved();status("Can't reach the online save. Designs are kept in this browser for now.");return}
   const app=A.initializeApp(FB_CONFIG),auth=Au.getAuth(app),fdb=Fs.getFirestore(app);
-  S.fb={auth,db:fdb};for(const k of['signInWithEmailAndPassword','createUserWithEmailAndPassword','updateProfile','signOut','onAuthStateChanged'])S.fb[k]=Au[k];
-  for(const k of['collection','doc','query','where','orderBy','onSnapshot','setDoc','addDoc','updateDoc','deleteDoc','getDoc','deleteField','serverTimestamp'])S.fb[k]=Fs[k];
+  S.fb={auth,db:fdb,google:new Au.GoogleAuthProvider()};S.fb.google.setCustomParameters({prompt:'select_account'});auth.useDeviceLanguage();
+  for(const k of['signInWithEmailAndPassword','createUserWithEmailAndPassword','updateProfile','signOut','onAuthStateChanged','signInWithPopup','getAdditionalUserInfo',
+    'sendEmailVerification','sendPasswordResetEmail','reauthenticateWithPopup','reauthenticateWithCredential','EmailAuthProvider','deleteUser'])S.fb[k]=Au[k];
+  for(const k of['collection','doc','query','where','orderBy','onSnapshot','setDoc','addDoc','updateDoc','deleteDoc','getDoc','deleteField','serverTimestamp','getDocs'])S.fb[k]=Fs[k];
   const F=S.fb;
   // the shared Fact sheet: everyone reads it, only the admin writes it
   if(!TEST_MODE)F.onSnapshot(F.doc(fdb,'facts','main'),sn=>{WD.load(sn.exists()?(sn.data().values||{}):{});factsApplied()},()=>{});
   else{const real=()=>F.getDoc(F.doc(fdb,'facts','main')).then(sn=>{WD.load(sn.exists()?(sn.data().values||{}):{});factsApplied()},()=>{});
     let unT=null;real();F.onAuthStateChanged(auth,u=>{if(unT){unT();unT=null}if(!u)return;
       unT=F.onSnapshot(F.doc(fdb,'test_facts','main'),sn=>{if(sn.exists()){WD.load(sn.data().values||{});factsApplied()}else real()},()=>{})})}
-  F.onAuthStateChanged(auth,u=>{S.user=u;S.admin=false;S.pendOut=false;listen();window.structListen?.();renderSaved();renderFacts();renderLevelNotes();if(u)loadLevels(u);
+  F.onAuthStateChanged(auth,u0=>{authChanged(u0);if(u0&&acStep(u0)!=='me'&&!$('loginDlg').open)openLogin('');else if($('loginDlg').open)acShow()})}
+// the logged-in start-up; a login that isn't complete yet (email not checked, no planner name, old login) counts as logged out
+function authChanged(u0){const F=S.fb,fdb=F.db,u=acStep(u0)==='me'?u0:null;S.user=u;S.admin=false;S.pendOut=false;listen();window.structListen?.();renderSaved();renderFacts();renderLevelNotes();if(u)loadLevels(u);
     if(u)F.getDoc(F.doc(fdb,'admins',u.uid)).then(()=>{if(S.user===u){S.admin=true;renderSaved();renderFacts()}},()=>{});
-    if(TEST_MODE)testGate(u)})}
+    if(TEST_MODE)testGate(u)}
 /* ---------- test version gate ---------- */
 function testGate(u,ok){const g=$('testGate');if(!TEST_MODE){g.hidden=true;return}
   if(ok){g.hidden=true;return}

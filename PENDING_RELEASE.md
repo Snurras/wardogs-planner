@@ -27,4 +27,16 @@
 - Free-room texts: "Please think of the environment - One tap fills it all…" and "Thank you for thinking about the environment - Every spot on the bed is filled."
 - Supplies, Ammo, Fuel and Mechanical icons look like the game's. "Minimal" on all four cards. Reset stands out (red) when there is something to reset.
 
+## New login (staging v139, on test 11 Oct 2026)
+- Log in with Google (one click), or with email and password.
+- New email accounts get a "check your inbox" link; the account counts once it's clicked. Google accounts are checked already.
+- "Forgot password?" emails a reset link (sent by Firebase). Nobody needs to ask the admin.
+- First Google login asks for a planner name; the real Google name is never shown.
+- Account button opens "Your account": name, email, Change name, Change password (email accounts), Log out.
+- "Delete my account": removes the login, your saved designs and settings. Comments stay.
+- Old name + password logins are retired: they see "Old login" and are asked to make a new account (fresh start). Their old designs stay on the old login.
+- Bots: a hidden form field catches simple sign-up bots; email accounts must click the inbox link.
+- Firebase console (before testers try it): Authentication → Sign-in method → enable Google; Settings → User actions → "Enable create (sign-up)" on; Authorized domains has snurras.github.io.
+- Testers need a new `testers` document for their new user id (the gate shows it).
+
 Rules: no change needed.
