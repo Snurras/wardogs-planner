@@ -39,6 +39,7 @@ New things for the planner.
 - [ ] **Auto-turn Bremers** when the line changes direction.
 
 ### Behind the scenes
+- [ ] **Find designs: full card reload once a month** instead of once a week. Today each player reloads every card weekly (about 500 reads per player per week with 500 shared designs). Monthly cuts that to a quarter; the catch is that a deleted design can linger on a device a bit longer.
 - [ ] *Claude QA* **One record per structure**: old Trimmed Recon / Shelter pieces and entrance seals are stored apart from Modify changes. Load them all as "structure + changes", so every tool reads one thing. Do this before more buildings arrive. (doc 11 §8)
 - [ ] *Claude QA* **Keys in one place**: R and E are handled in three places (map, Modify structure, Structure designer), which is how they drifted apart. Gather them.
 
