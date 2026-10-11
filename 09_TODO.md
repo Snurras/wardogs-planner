@@ -12,8 +12,7 @@ Things that are wrong or broken and hurt the player directly.
 
 - [x] **Ladder rule when placing structures** (done, test 10 Oct): a structure can't be placed with its ladder square on a HESCO, Bremer or anything else.
   Rule for how structures handles placement with ladders. As mentioned erlier a ladder can block a hesco or bremer from being built in the squeare. This is ignored when placing structure. You can place them directly adjacent and block the ladder. You can also have an existing wall/hesco and place a building so its ladder ends up inside the existing wall/hesco. 
-
-
+  [] **Modify Structure** Always show 3 Layers, Change to Ground, Rood, Floor 2. middle. To make it fast as middle is rarely used and Top, Bottom becomes most used for all.
 
 ## Polish
 Things that work but could be better: looks, ease of use, small annoyances.
