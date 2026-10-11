@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Wardogs Account Lab</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Saira+Condensed:wght@600;700&family=Saira+Stencil+One&display=swap" rel="stylesheet">
+<style>
+/* Account lab for the Wardogs Base Planner: login is built and tried here before it goes into the planner. */
+:root{
+  --bg:#E7EAE1;--panel:#F4F6EF;--ink:#1F251B;--muted:#5B6452;--line:#C9CFBE;--accent:#4D5C27;--accent-ink:#F4F6EF;--hi:#DDE3CC;
+  --bad:#A33A2A;--bad-bg:#F3DDD7;--ok:#3F6B2A;--ok-bg:#DDE9D2;--warn:#8A6A12;--warn-bg:#F2E8C8;
+  --f-head:'Saira Condensed',system-ui,sans-serif;--f-body:'Barlow',system-ui,sans-serif;--f-mono:'IBM Plex Mono',ui-monospace,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#151912;--panel:#1E2419;--ink:#E3E8D8;--muted:#9AA48C;--line:#343D2C;--accent:#A9BC6A;--accent-ink:#151912;--hi:#2A3322;
+  --bad:#E48A78;--bad-bg:#3A221D;--ok:#9CC27F;--ok-bg:#24301C;--warn:#DDBB5E;--warn-bg:#352D17;color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#151912;--panel:#1E2419;--ink:#E3E8D8;--muted:#9AA48C;--line:#343D2C;--accent:#A9BC6A;--accent-ink:#151912;--hi:#2A3322;
+  --bad:#E48A78;--bad-bg:#3A221D;--ok:#9CC27F;--ok-bg:#24301C;--warn:#DDBB5E;--warn-bg:#352D17;color-scheme:dark}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:15px/1.45 var(--f-body);padding:16px;min-height:100vh}
+main{max-width:440px;margin:0 auto}
+header{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin:8px 0 16px}
+h1{font:400 26px/1 'Saira Stencil One',var(--f-head);margin:0;letter-spacing:.5px}
+.tag{font:600 12px/1 var(--f-head);text-transform:uppercase;letter-spacing:1px;background:var(--accent);color:var(--accent-ink);padding:4px 7px;border-radius:3px}
+h2{font:700 20px/1.2 var(--f-head);margin:0 0 4px;text-transform:uppercase;letter-spacing:.5px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:18px}
+.card+.card{margin-top:12px}
+.sub{color:var(--muted);margin:0 0 14px}
+label{display:block;font-weight:600;margin:10px 0 4px}
+input[type=text],input[type=email],input[type=password]{width:100%;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:4px;padding:9px 10px}
+input:focus-visible,button:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.hint{color:var(--muted);font-size:13px;margin-top:3px}
+button{font:600 15px/1 var(--f-body);border-radius:4px;padding:11px 14px;cursor:pointer;border:1px solid var(--line);background:var(--bg);color:var(--ink)}
+button:disabled{opacity:.55;cursor:default}
+.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);width:100%;margin-top:14px}
+.google{width:100%;display:flex;align-items:center;justify-content:center;gap:10px;background:#fff;color:#1F1F1F;border-color:#747775}
+.google .g{font:700 16px/1 var(--f-body);width:22px;height:22px;border-radius:50%;border:1px solid #c7c7c7;display:inline-grid;place-items:center;color:#444}
+.link{white-space:nowrap;background:none;border:none;padding:0;color:var(--accent);text-decoration:underline;font-weight:500;cursor:pointer}
+.danger{background:var(--bad);border-color:var(--bad);color:#fff}
+.or{display:flex;align-items:center;gap:10px;color:var(--muted);margin:16px 0 6px;font-size:13px}
+.or::before,.or::after{content:"";flex:1;border-top:1px solid var(--line)}
+.tabs{display:flex;border:1px solid var(--line);border-radius:4px;overflow:hidden;margin-top:8px}
+.tabs button{flex:1;border:none;border-radius:0;background:transparent;color:var(--muted)}
+.tabs button[aria-selected=true]{background:var(--hi);color:var(--ink)}
+.msg{border-radius:4px;padding:9px 11px;margin-top:12px;font-size:14px}
+.msg:empty{display:none}
+.msg.err{background:var(--bad-bg);color:var(--bad)}
+.msg.ok{background:var(--ok-bg);color:var(--ok)}
+.msg.warn{background:var(--warn-bg);color:var(--warn)}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.row button{flex:1}
+dl{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;margin:12px 0 0}
+dt{color:var(--muted)}
+dd{margin:0;overflow-wrap:anywhere}
+.mono{font-family:var(--f-mono);font-size:13px}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+details summary{cursor:pointer;font-weight:600}
+details p,details li{color:var(--muted);font-size:14px}
+details ul{padding-left:18px;margin:6px 0}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<main>
+  <header><h1>Wardogs Planner</h1><span class="tag">Account lab</span></header>
+
+  <!-- signed out -->
+  <section class="card" id="vOut" hidden>
+    <h2>Sign in</h2>
+    <p class="sub">One account for the planner. No account needed to plan; it's for saving, sharing and comments.</p>
+    <button class="google" id="gBtn" type="button"><span class="g" aria-hidden="true">G</span>Continue with Google</button>
+    <div class="or">or with email</div>
+    <div class="tabs" role="tablist">
+      <button type="button" role="tab" id="tabIn" aria-selected="true">Log in</button>
+      <button type="button" role="tab" id="tabUp" aria-selected="false">Create account</button>
+    </div>
+    <form id="emForm" novalidate>
+      <div id="fName" hidden>
+        <label for="eName">Planner name</label>
+        <input type="text" id="eName" autocomplete="nickname" maxlength="20">
+        <div class="hint">Shown on shared designs and comments. 2–20 letters, digits, _ . -</div>
+      </div>
+      <label for="eMail">Email</label>
+      <input type="email" id="eMail" autocomplete="email" required>
+      <label for="ePass">Password</label>
+      <input type="password" id="ePass" autocomplete="current-password" required>
+      <div class="hint" id="pwHint" hidden>At least 8 characters.</div>
+      <div class="hp" aria-hidden="true"><label for="eWeb">Website</label><input type="text" id="eWeb" tabindex="-1" autocomplete="off"></div>
+      <button class="primary" type="submit" id="emBtn">Log in</button>
+      <div class="row" style="justify-content:flex-end"><button type="button" class="link" id="forgot" style="flex:0">Forgot password?</button></div>
+    </form>
+    <div class="msg" id="outMsg" role="status"></div>
+  </section>
+
+  <!-- email not verified yet -->
+  <section class="card" id="vVerify" hidden>
+    <h2>Check your inbox</h2>
+    <p class="sub">We sent a link to <b id="vfMail"></b>. Click it, then come back and press the button below. Check the spam folder if it isn't there.</p>
+    <button class="primary" type="button" id="vfDone">I've clicked the link</button>
+    <div class="row"><button type="button" id="vfResend">Send the link again</button><button type="button" id="vfOut">Sign out</button></div>
+    <div class="msg" id="vfMsg" role="status"></div>
+  </section>
+
+  <!-- pick a planner name (Google sign-ups) -->
+  <section class="card" id="vName" hidden>
+    <h2>Pick a planner name</h2>
+    <p class="sub">This is what others see. Your Google name stays private.</p>
+    <form id="nmForm" novalidate>
+      <label for="nmIn">Planner name</label>
+      <input type="text" id="nmIn" maxlength="20" autocomplete="nickname">
+      <div class="hint">2–20 letters, digits, _ . -</div>
+      <button class="primary" type="submit">Save name</button>
+    </form>
+    <div class="row"><button type="button" id="nmOut">Sign out</button></div>
+    <div class="msg" id="nmMsg" role="status"></div>
+  </section>
+
+  <!-- signed in -->
+  <section class="card" id="vIn" hidden>
+    <h2 id="hiName">Welcome</h2>
+    <p class="sub">You're signed in. In the planner this will be the account menu.</p>
+    <dl>
+      <dt>Planner name</dt><dd id="dName"></dd>
+      <dt>Signed in with</dt><dd id="dProv"></dd>
+      <dt>Email</dt><dd id="dMail"></dd>
+      <dt>Email checked</dt><dd id="dVer"></dd>
+      <dt>Member since</dt><dd id="dSince"></dd>
+      <dt>User id</dt><dd class="mono" id="dUid"></dd>
+    </dl>
+    <div class="row">
+      <button type="button" id="inRename">Change name</button>
+      <button type="button" id="inPw" hidden>Change password</button>
+      <button type="button" id="inOut">Sign out</button>
+    </div>
+    <div class="msg" id="inMsg" role="status"></div>
+  </section>
+
+  <section class="card" id="vDel" hidden>
+    <h2>Delete my account</h2>
+    <p class="sub">Removes your login and everything saved under it: designs, settings and your planner name. This can't be undone.</p>
+    <form id="delForm" novalidate>
+      <div id="delPwBox" hidden>
+        <label for="delPw">Your password</label>
+        <input type="password" id="delPw" autocomplete="current-password">
+      </div>
+      <label for="delWord">Type DELETE to confirm</label>
+      <input type="text" id="delWord" autocomplete="off">
+      <button class="primary danger" type="submit" id="delBtn">Delete my account</button>
+    </form>
+    <div class="msg" id="delMsg" role="status"></div>
+  </section>
+
+  <section class="card" id="vOld" hidden>
+    <h2>Old-style account</h2>
+    <p class="sub">You're signed in with a name + password account from the current planner. The new login starts fresh; sign out to try it.</p>
+    <dl><dt>Name</dt><dd id="oName"></dd><dt>User id</dt><dd class="mono" id="oUid"></dd></dl>
+    <div class="row"><button type="button" id="oOut">Sign out</button></div>
+  </section>
+
+  <section class="card" id="vLoad"><p class="sub" id="ldMsg" style="margin:0">Connecting…</p></section>
+
+  <section class="card">
+    <details>
+      <summary>About this page</summary>
+      <p>A test bench for the new planner login. It uses the planner's real Firebase project, so accounts made here are real and will work in the planner once the new login moves in.</p>
+      <ul>
+        <li>Passwords and emails are kept by Google's Firebase login service, never in the planner's database or this page.</li>
+        <li>Forgotten passwords: Firebase emails a reset link. Nobody needs to help.</li>
+        <li>Email accounts must click a link in their inbox before they count. Google accounts are already checked.</li>
+      </ul>
+    </details>
+  </section>
+</main>
+
+<script type="module">
+const FB_VER='12.19.0';
+const FB_CONFIG={apiKey:'AIzaSyAZ7XTIbbfxZ-xsGySc1QdHfb-on_qtPPo',authDomain:'snurras-wardogs-base-planer.firebaseapp.com',projectId:'snurras-wardogs-base-planer',
+  storageBucket:'snurras-wardogs-base-planer.firebasestorage.app',messagingSenderId:'246354521364',appId:'1:246354521364:web:64b00c1d8ccf687bd2a601'};
+const OLD_DOMAIN='@example.com';            // the current planner's fake-email logins
+const NAME_RE=/^[A-Za-z0-9_.-]{2,20}$/;
+const PW_MIN=8;
+const $=id=>document.getElementById(id);
+const VIEWS=['vOut','vVerify','vName','vIn','vDel','vOld','vLoad'];
+const show=(...ids)=>VIEWS.forEach(v=>$(v).hidden=!ids.includes(v));
+const say=(id,text,kind='err')=>{const e=$(id);e.textContent=text||'';e.className='msg '+kind};
+
+function errText(e){const c=(e&&e.code)||'';const M={
+  'auth/invalid-credential':'Wrong email or password.','auth/invalid-login-credentials':'Wrong email or password.',
+  'auth/wrong-password':'Wrong email or password.','auth/user-not-found':'Wrong email or password.',
+  'auth/invalid-email':"That doesn't look like an email address.",
+  'auth/email-already-in-use':'There is already an account with that email. Log in instead, or use "Forgot password?".',
+  'auth/weak-password':`The password needs at least ${PW_MIN} characters.`,
+  'auth/password-does-not-meet-requirements':'The password is too simple. Use a longer one.',
+  'auth/too-many-requests':'Too many tries. Wait a few minutes and try again.',
+  'auth/network-request-failed':"Can't reach the server. Check your connection.",
+  'auth/popup-closed-by-user':'The Google window was closed before signing in.',
+  'auth/cancelled-popup-request':'The Google window was closed before signing in.',
+  'auth/popup-blocked':'Your browser blocked the Google window. Allow pop-ups for this page and try again.',
+  'auth/account-exists-with-different-credential':'This email already has an account. Log in with email and password.',
+  'auth/user-disabled':'This account has been closed.',
+  'auth/operation-not-allowed':'This way of signing in is switched off in Firebase.',
+  'auth/admin-restricted-operation':'New accounts are switched off in Firebase.',
+  'auth/unauthorized-domain':'This web address is not allowed to sign in yet (Firebase: Authorized domains).',
+  'auth/requires-recent-login':'Please sign in again first.',
+  'auth/user-mismatch':'That is a different account from the one you are signed in with.',
+  'permission-denied':'Not allowed.'};
+  return M[c]||M[c.replace(/^firestore\//,'')]||(e&&e.message)||'Something went wrong.'}
+
+let A,Au,Fs;
+try{[A,Au,Fs]=await Promise.all(['firebase-app.js','firebase-auth.js','firebase-firestore.js'].map(f=>import(`https://www.gstatic.com/firebasejs/${FB_VER}/${f}`)))}
+catch(e){$('ldMsg').textContent="Can't reach Firebase. Check your connection and reload.";throw e}
+const app=A.initializeApp(FB_CONFIG),auth=Au.getAuth(app),db=Fs.getFirestore(app);
+auth.useDeviceLanguage();
+const google=new Au.GoogleAuthProvider();
+google.setCustomParameters({prompt:'select_account'});
+
+const busy=(on,...btns)=>btns.forEach(b=>b.disabled=on);
+const provOf=u=>u.providerData.some(p=>p.providerId==='google.com')?'google':'password';
+const isOld=u=>(u.email||'').toLowerCase().endsWith(OLD_DOMAIN);
+const back=()=>({url:location.origin+location.pathname});   // where the email links return to
+
+/* ---------- which screen ---------- */
+function render(){const u=auth.currentUser;
+  if(!u){show('vOut');return}
+  if(isOld(u)){$('oName').textContent=u.displayName||u.email.split('@')[0];$('oUid').textContent=u.uid;show('vOld');return}
+  if(provOf(u)==='password'&&!u.emailVerified){$('vfMail').textContent=u.email;show('vVerify');return}
+  if(!u.displayName){show('vName');$('nmIn').focus();return}
+  $('hiName').textContent='Welcome, '+u.displayName;
+  $('dName').textContent=u.displayName;
+  $('dProv').textContent=provOf(u)==='google'?'Google':'Email and password';
+  $('dMail').textContent=u.email||'—';
+  $('dVer').textContent=u.emailVerified?'Yes':'No';
+  $('dSince').textContent=new Date(u.metadata.creationTime).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
+  $('dUid').textContent=u.uid;
+  $('inPw').hidden=provOf(u)!=='password';
+  $('delPwBox').hidden=provOf(u)!=='password';
+  show('vIn','vDel')}
+let note=null;   // a message to show after the next sign-in change (e.g. "account deleted")
+Au.onAuthStateChanged(auth,()=>{['outMsg','vfMsg','nmMsg','inMsg','delMsg'].forEach(id=>say(id,''));render();if(note){say(note[0],note[1],'ok');note=null}});
+
+/* ---------- Google ---------- */
+$('gBtn').onclick=async()=>{say('outMsg','');busy(true,$('gBtn'));
+  try{const r=await Au.signInWithPopup(auth,google);
+    // a brand-new Google account: drop the real name, so the player picks a planner name
+    if(Au.getAdditionalUserInfo(r)?.isNewUser){await Au.updateProfile(r.user,{displayName:null});await r.user.reload();render()}}
+  catch(x){say('outMsg',errText(x))}
+  finally{busy(false,$('gBtn'))}};
+
+/* ---------- email: log in / create account ---------- */
+let mode='in';
+function setMode(m){mode=m;$('tabIn').setAttribute('aria-selected',m==='in');$('tabUp').setAttribute('aria-selected',m==='up');
+  $('fName').hidden=m!=='up';$('pwHint').hidden=m!=='up';$('forgot').hidden=m!=='in';
+  $('ePass').autocomplete=m==='up'?'new-password':'current-password';$('emBtn').textContent=m==='up'?'Create account':'Log in';say('outMsg','')}
+$('tabIn').onclick=()=>setMode('in');$('tabUp').onclick=()=>setMode('up');
+
+$('emForm').addEventListener('submit',async e=>{e.preventDefault();say('outMsg','');
+  const name=$('eName').value.trim(),email=$('eMail').value.trim(),pw=$('ePass').value;
+  if(!/^\S+@\S+\.\S+$/.test(email)){say('outMsg',"That doesn't look like an email address.");return}
+  if(mode==='up'){
+    if(!NAME_RE.test(name)){say('outMsg','Planner name: 2–20 letters, digits, _ . - (no spaces).');return}
+    if(pw.length<PW_MIN){say('outMsg',`The password needs at least ${PW_MIN} characters.`);return}
+    if($('eWeb').value){say('outMsg','Account created. Check your inbox.','ok');return}   // honeypot: only bots fill the hidden field
+  }else if(!pw){say('outMsg','Enter your password.');return}
+  busy(true,$('emBtn'));
+  try{
+    if(mode==='up'){const c=await Au.createUserWithEmailAndPassword(auth,email,pw);
+      await Au.updateProfile(c.user,{displayName:name});
+      await Au.sendEmailVerification(c.user,back());render()}
+    else await Au.signInWithEmailAndPassword(auth,email,pw);
+    $('ePass').value=''}
+  catch(x){say('outMsg',errText(x))}
+  finally{busy(false,$('emBtn'))}});
+
+$('forgot').onclick=async()=>{const email=$('eMail').value.trim();
+  if(!/^\S+@\S+\.\S+$/.test(email)){say('outMsg','Type your email above first, then press "Forgot password?" again.','warn');$('eMail').focus();return}
+  busy(true,$('forgot'));
+  try{await Au.sendPasswordResetEmail(auth,email,back());say('outMsg','If there is an account for that email, a reset link is on its way. Check the spam folder too.','ok')}
+  catch(x){say('outMsg',errText(x))}
+  finally{busy(false,$('forgot'))}};
+
+/* ---------- verify email ---------- */
+$('vfDone').onclick=async()=>{busy(true,$('vfDone'));
+  try{await auth.currentUser.reload();
+    if(auth.currentUser.emailVerified){await auth.currentUser.getIdToken(true);render()}
+    else say('vfMsg',"Not checked yet. Click the link in the email first.",'warn')}
+  catch(x){say('vfMsg',errText(x))}
+  finally{busy(false,$('vfDone'))}};
+let resendAt=0;
+$('vfResend').onclick=async()=>{const wait=Math.ceil((resendAt-Date.now())/1000);
+  if(wait>0){say('vfMsg',`Wait ${wait} s before sending again.`,'warn');return}
+  busy(true,$('vfResend'));
+  try{await Au.sendEmailVerification(auth.currentUser,back());resendAt=Date.now()+60000;say('vfMsg','Sent again.','ok')}
+  catch(x){say('vfMsg',errText(x))}
+  finally{busy(false,$('vfResend'))}};
+
+/* ---------- planner name ---------- */
+$('nmForm').addEventListener('submit',async e=>{e.preventDefault();const n=$('nmIn').value.trim();
+  if(!NAME_RE.test(n)){say('nmMsg','Planner name: 2–20 letters, digits, _ . - (no spaces).');return}
+  try{await Au.updateProfile(auth.currentUser,{displayName:n});$('nmIn').value='';render()}
+  catch(x){say('nmMsg',errText(x))}});
+$('inRename').onclick=async()=>{const n=prompt('New planner name (2–20 letters, digits, _ . -):',auth.currentUser.displayName||'');
+  if(n==null)return;
+  if(!NAME_RE.test(n.trim())){say('inMsg','Planner name: 2–20 letters, digits, _ . - (no spaces).');return}
+  try{await Au.updateProfile(auth.currentUser,{displayName:n.trim()});render();say('inMsg','Name changed.','ok')}
+  catch(x){say('inMsg',errText(x))}};
+$('inPw').onclick=async()=>{busy(true,$('inPw'));
+  try{await Au.sendPasswordResetEmail(auth,auth.currentUser.email,back());say('inMsg','We emailed you a link to set a new password.','ok')}
+  catch(x){say('inMsg',errText(x))}
+  finally{busy(false,$('inPw'))}};
+
+/* ---------- sign out ---------- */
+for(const id of['vfOut','nmOut','inOut','oOut'])$(id).onclick=()=>Au.signOut(auth);
+
+/* ---------- delete my account ---------- */
+async function deleteMyData(uid){
+  // everything stored under this user id. The planner's data paths; test_* is the test version.
+  const del=[];
+  for(const col of['designs','test_designs']){
+    try{const sn=await Fs.getDocs(Fs.query(Fs.collection(db,col),Fs.where('owner','==',uid)));sn.forEach(d=>del.push(d.ref))}
+    catch(x){if(x.code!=='permission-denied')throw x}}
+  del.push(Fs.doc(db,'users',uid));
+  for(const ref of del){try{await Fs.deleteDoc(ref)}catch(x){if(x.code!=='permission-denied'&&x.code!=='not-found')throw x}}
+  return del.length-1}   // number of designs
+$('delForm').addEventListener('submit',async e=>{e.preventDefault();say('delMsg','');
+  const u=auth.currentUser;if(!u)return;
+  if($('delWord').value.trim()!=='DELETE'){say('delMsg','Type DELETE (capital letters) to confirm.');return}
+  busy(true,$('delBtn'));
+  try{
+    // Firebase only deletes a login that was used in the last few minutes: confirm who it is first
+    if(provOf(u)==='google')await Au.reauthenticateWithPopup(u,google);
+    else{const pw=$('delPw').value;if(!pw){say('delMsg','Enter your password.');return}
+      await Au.reauthenticateWithCredential(u,Au.EmailAuthProvider.credential(u.email,pw))}
+    say('delMsg','Deleting…','warn');
+    const n=await deleteMyData(u.uid);
+    note=['outMsg',`Your account is deleted${n?` (and ${n} design${n>1?'s':''})`:''}. Thanks for planning with us.`];
+    await Au.deleteUser(u);
+    $('delWord').value='';$('delPw').value=''}
+  catch(x){say('delMsg',errText(x))}
+  finally{busy(false,$('delBtn'))}});
+</script>
+</body>
+</html>
