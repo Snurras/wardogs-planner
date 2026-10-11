@@ -5,7 +5,7 @@ Use for: toolbar tools, placing/stacking pieces, entrances, Wall Optimization, G
 Select (V) · Brush (B) · Undo · Rotate (R) · Erase (E) · Modify structure (M) · Wall Optimization · Side view (S) | Clear (IED icon) · Straight lines (checkbox) · Elevation Stacking (checkbox).
 - Coloured icons with text kept. Zoom (− size + Fit) and Grid labels sit **below** the map on the right.
 - Process bar above: **1 · Design it → 2 · Haul it → 3 · Build it** (arrow steps with live summaries). Fact sheet / About on the right of the header.
-- **Tools row** under the steps: Find designs, Structure designer (left); **Open ▾** (Find designs…, ★ Favourites, Templates, My designs), title field (`dTitle`, autofill off), Personal / Shared, **Save**, **⋯** (Delete, Make template, Save / Import .txt) on the right. Menus: `closePops`, `openKey`.
+- **Tools row** under the steps: Find designs, Structure designer (left); **Open ▾** (Find designs…, ★ Favourites, My designs), title field (`dTitle`, autofill off), Personal / Shared, **Save**, **⋯** (Delete, Save / Import .txt) on the right. Menus: `closePops`, `openKey`.
 - R priority: Side view open → turns the view; hovering an emplacement → turns the protection picture; Modify structure → turns sandbags (or a door in an open centre); Brush → turns brush; Select → turns selection/paste; else turns the piece to place.
 - E (key and button): Erase on; again → back to the piece you were using. In Modify structure, E switches to taking blocks off.
 - Undo: also undoes Open and Clear (brings back the previous design's pieces, name, Only FOB and haul plan).
@@ -54,4 +54,4 @@ Finds the most 4-in-a-row Large HESCO (any layer) and swaps each four for one HE
 - Select: pick, box-select, move, turn, delete, copy/paste (Ctrl+C/V); picking takes everything on top.
 - Brush: eyedropper picks a stack (one or more squares), paints copies; transparent preview; rotate with R.
 - Side view (S): see doc 04.
-- Templates: the built-in list is empty; templates are designs the admin saves online (Open → Templates). Heights are worked out on load.
+- Templates: removed (11 Oct 2026 c). Shared designs and Find designs do that job.

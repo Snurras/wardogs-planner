@@ -8,7 +8,7 @@
 ## Where things live
 | What | Where |
 |---|---|
-| Staging (Claude's workbench) | claude.ai artifact https://claude.ai/artifact/BeyFVpAnFDRbygmRGARv9Z (version 144, released 11 Oct 2026 b: Find designs, favourites, Tools row) |
+| Staging (Claude's workbench) | claude.ai artifact https://claude.ai/artifact/BeyFVpAnFDRbygmRGARv9Z (version 145, released 11 Oct 2026 c: templates removed; b: Find designs, favourites, Tools row) |
 | Test version | `test.html` in the repo → https://snurras.github.io/wardogs-planner/test.html. Same code as `index.html`; the file name switches on test mode (tester login + `test_*` data, doc 06) |
 | Production | GitHub Pages https://snurras.github.io/wardogs-planner/ (repo `Snurras/wardogs-planner`, file `index.html`) |
 | Docs | the `0x_*.md` files in the repo root (these files) |
@@ -42,7 +42,7 @@
 | `wd-structs` | 5900 | Structure designer (Tools row); published structures kept on the device (`loadPub`) |
 | `wd-find` | 6340 | Find designs (Tools row): search cards, device cache, favourites, 3D previews (doc 06) |
 
-Section headings inside `wd-design` (grep `/* ---------- `): geometry · entrances · symbols · drawing · height checks · **Direct ground fire protection** · **hover picture** · **Side view tool** · **3D pieces for the side view** · Fact sheet pictures · legend · select tool · brush · interaction · build order + BOM · templates (the built-in list is empty: templates are designs the admin saves online).
+Section headings inside `wd-design` (grep `/* ---------- `): geometry · entrances · symbols · drawing · height checks · **Direct ground fire protection** · **hover picture** · **Side view tool** · **3D pieces for the side view** · Fact sheet pictures · legend · select tool · brush · interaction · build order + BOM · templates (empty; templates removed 11 Oct 2026 c).
 
 Shared globals: `pieces` (the design), `P` (piece types), `mode`, `tool`, `C` (px per square), `M` (map margin), `N` (grid size), `$`, `el()`, `s()` (SVG element), `draw()`, `rectOf(p)`, `cellTop(p,x,y)`, `topOf(p)`, `R(p)` (rotation 0–3), `WD.F('key')`.
 

@@ -702,21 +702,20 @@ a{color:var(--accent)}
   <nav class="proc" id="proc" aria-label="Steps: design, haul, build"><button type="button" class="st on" data-tab="design"><svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true" style="flex:none"><rect x="3" y="3" width="18" height="18" rx="1.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18" stroke="currentColor" stroke-width="1" opacity=".6"/><path d="M14 5l5 5-8 8H6v-5z" fill="currentColor" opacity=".9"/></svg><span class="sx"><span class="t">1 · Design it</span><span class="s" id="procS_design">Place pieces · check threats</span></span></button><button type="button" class="st" data-tab="haul"><svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true" style="flex:none"><path d="M2 6h11v9H2zM13 9h4l4 4v2h-8z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><circle cx="6" cy="17.5" r="2.2" fill="currentColor"/><circle cx="17" cy="17.5" r="2.2" fill="currentColor"/></svg><span class="sx"><span class="t">2 · Haul it</span><span class="s" id="procS_haul">What to bring · how to pack</span></span></button><button type="button" class="st" data-tab="build"><svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true" style="flex:none"><g transform="rotate(-40 12 12)"><rect x="10.5" y="9" width="3" height="13" rx="1" fill="currentColor"/><rect x="5" y="3" width="14" height="7" rx="1.5" fill="currentColor"/></g></svg><span class="sx"><span class="t">3 · Build it</span><span class="s" id="procS_build">The order to build in</span></span></button></nav>
   <div class="subbar">
   <nav class="subnav" id="subnav" aria-label="Tools"><span class="sublbl">Tools</span>
-    <button type="button" data-tab="find" title="Search shared designs and templates: by haul, what's in them and how well they hold"><svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5"/><path d="M13 13l4.5 4.5"/></svg><span class="n">Find designs</span><span class="d">search shared bases</span></button>
+    <button type="button" data-tab="find" title="Search shared designs: by haul, what's in them and how well they hold"><svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5"/><path d="M13 13l4.5 4.5"/></svg><span class="n">Find designs</span><span class="d">search shared bases</span></button>
     <button type="button" data-tab="structs" title="Build structures block by block, layer by layer, as in the game"><svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M3 15.5l7 3 7-3v-9l-7-3-7 3z"/><path d="M3 6.5l7 3 7-3M10 9.5v9"/></svg><span class="n">Structure designer</span><span class="d">make your own structures</span></button>
   </nav>
   <div class="dfile" id="dfile" aria-label="This design">
-    <div class="pop"><button class="btn ghost" type="button" id="openBtn" aria-haspopup="true" aria-expanded="false" aria-controls="openMenu" title="Open a favourite, a template or one of your designs">Open <span aria-hidden="true">▾</span></button>
+    <div class="pop"><button class="btn ghost" type="button" id="openBtn" aria-haspopup="true" aria-expanded="false" aria-controls="openMenu" title="Open a favourite or one of your designs">Open <span aria-hidden="true">▾</span></button>
       <div class="popm" id="openMenu" hidden></div></div>
     <form id="saveForm" class="dsave" autocomplete="off" data-form-type="other">
       <input type="text" id="dTitle" placeholder="Title of this design" maxlength="60" autocomplete="wd-design-title" autocorrect="off" spellcheck="false" data-lpignore="true" data-1p-ignore data-form-type="other" aria-label="Design title">
-      <select id="dVis" class="picksel" aria-label="Who can see it" title="Personal: only you. Shared: everyone with a login, and in Find designs. Template: listed for everyone (admin only)." hidden>
-        <option value="personal">Personal</option><option value="shared">Shared</option><option value="template">Template</option></select>
+      <select id="dVis" class="picksel" aria-label="Who can see it" title="Personal: only you. Shared: everyone with a login, and in Find designs." hidden>
+        <option value="personal">Personal</option><option value="shared">Shared</option></select>
       <button class="btn" type="submit">Save</button>
     </form>
     <div class="pop"><button class="btn ghost dmore" type="button" id="moreBtn" aria-haspopup="true" aria-expanded="false" aria-controls="moreMenu" title="More: file on this device, delete" aria-label="More for this design">⋯</button>
       <div class="popm right" id="moreMenu" hidden>
-        <button type="button" class="pmi" id="promoBtn" hidden>Make template</button>
         <button type="button" class="pmi bad" id="delBtn" hidden>Delete</button>
         <div class="pmh">File on this device</div>
         <button type="button" class="pmi" id="saveTxtBtn">Save as .txt file</button>
@@ -1064,7 +1063,7 @@ a{color:var(--accent)}
           <dt>Haul</dt><dd>Build, ammo, fuel and mechanical supplies, cash cost and the fewest trips per vehicle.</dd>
           <dt>Fact sheet</dt><dd>Every game number and most rules the planner uses, kept true and up to date after my best efforts.</dd>
           <dt>Build</dt><dd>The build order step by step on the map, with layers you can hide to see what goes first.</dd>
-          <dt>Save &amp; share</dt><dd>Personal, shared and template designs, with comments and thumbs.</dd>
+          <dt>Save &amp; share</dt><dd>Personal and shared designs, Find designs with favourites, and comments.</dd>
         </dl>
       </section>
       <section class="card about-side">
@@ -5589,7 +5588,8 @@ const FB_CONFIG={apiKey:'AIzaSyAZ7XTIbbfxZ-xsGySc1QdHfb-on_qtPPo',authDomain:'sn
   storageBucket:'snurras-wardogs-base-planer.firebasestorage.app',messagingSenderId:'246354521364',appId:'1:246354521364:web:64b00c1d8ccf687bd2a601'};
 const LOGIN_DOMAIN='example.com';   // old name+password logins were name@example.com; retired
 const PW_MIN=8;
-const VIS_LABEL={personal:'Personal',shared:'Shared',template:'Template'};
+const VIS_LABEL={personal:'Personal',shared:'Shared',template:'Shared'};
+const visOf=v=>v==='template'?'shared':v;   // templates are gone: an old template counts as a shared design
 let db=null;   // the claude.ai page database, when running there
 S.local=ls.get('wd_designs')||[];
 let statusTimer=0;
@@ -5603,11 +5603,11 @@ function entries(){
   const out=TEMPLATES.map((d,i)=>({key:'t'+i,group:'Templates',name:d.name,doc:d,builtin:true}));
   const uid=S.user&&S.user.uid;
   const favs=window.FD?window.FD.favEntries():[];
-  if(S.mode==='firebase')for(const r of S.remote){const mine=r.owner===uid,tpl=r.visibility==='template';
-    if(!mine&&!tpl&&(S.cur!=='f'+r.id||favs.some(f=>f.id===r.id)))continue;   // someone else's shared design: only while it is open (favourites are listed below)
-    out.push({key:'f'+r.id,id:r.id,group:tpl?'Templates':mine?'My designs':'Open now',name:r.name,vis:r.visibility,ownerName:r.ownerName,mine,
-      canDelete:!!uid&&((mine&&!tpl)||S.admin),get doc(){return parseDoc(r)}})}
-  for(const f of favs){const r=S.remote.find(x=>x.id===f.id);out.push(r?{...f,lazy:false,canDelete:!!uid&&((f.mine&&f.vis!=='template')||S.admin),doc:parseDoc(r)}:f)}
+  if(S.mode==='firebase')for(const r of S.remote){const mine=r.owner===uid;
+    if(!mine&&(S.cur!=='f'+r.id||favs.some(f=>f.id===r.id)))continue;   // someone else's shared design: only while it is open (favourites are listed below)
+    out.push({key:'f'+r.id,id:r.id,group:mine?'My designs':'Open now',name:r.name,vis:visOf(r.visibility),ownerName:r.ownerName,mine,
+      canDelete:!!uid&&(mine||S.admin),get doc(){return parseDoc(r)}})}
+  for(const f of favs){if(f.mine)continue;const r=S.remote.find(x=>x.id===f.id);out.push(r?{...f,lazy:false,canDelete:!!S.admin,doc:parseDoc(r)}:f)}   // your own are in My designs
   if(S.mode==='claude')for(const d of S.remote)out.push({key:'c'+d.id,id:d.id,group:'Saved with the page',name:d.name,doc:d,mine:true,canDelete:true});
   for(const d of S.local)out.push({key:'l'+d.id,id:d.id,group:S.mode==='local'?'My designs':'In this browser',name:d.name,doc:d,local:true,mine:S.mode==='local',canDelete:true});
   return out}
@@ -5616,25 +5616,20 @@ function renderSaved(){
   for(const e of list)(groups[e.group]=groups[e.group]||[]).push(e);
   const find=el('button',{type:'button',class:'pmi find',onclick:()=>{closePops();showTab('find')}});find.innerHTML='<svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5"/><path d="M13 13l4.5 4.5"/></svg>';find.append('Find designs…');m.append(find);
   const fb=S.mode==='firebase',HINT={'★ Favourites':fb?(S.user?'Star designs in Find designs to keep them here.':'Log in to keep favourites.'):null,'My designs':fb&&!S.user?'Log in to save designs online.':null};
-  for(const g of['★ Favourites','Templates','My designs','Open now','Saved with the page','In this browser']){const L=groups[g];
+  for(const g of['★ Favourites','My designs','Open now','Saved with the page','In this browser']){const L=groups[g];
     if(!L&&!HINT[g])continue;
     m.append(el('div',{class:'pmh'},g,g==='My designs'&&fb&&S.user?el('span',{},`${(L||[]).length} of ${window.FD?FD.MAX_MINE:10}`):null));
     if(!L){m.append(el('div',{class:'pmempty'},HINT[g]));continue}
     for(const e of L.sort((a,b)=>(b.builtin?1:0)-(a.builtin?1:0)||a.name.localeCompare(b.name))){
-      const sub=[(g==='Open now'||g==='★ Favourites'||(g==='Templates'&&!e.builtin))&&e.ownerName?'by '+e.ownerName:'',g==='My designs'&&e.vis==='shared'?'shared':'',e.stars?'★'+e.stars:''].filter(Boolean).join(' · ');
+      const sub=[(g==='Open now'||g==='★ Favourites')&&e.ownerName?'by '+e.ownerName:'',g==='My designs'&&e.vis==='shared'?'shared':'',e.stars?'★'+e.stars:''].filter(Boolean).join(' · ');
       m.append(el('button',{type:'button',class:'pmi'+(S.cur===e.key?' cur':''),role:'menuitem',onclick:()=>{closePops();openKey(e.key)}},el('span',{class:'nm'},e.name),sub?el('span',{class:'sub'},sub):null))}}
   const cur=list.find(e=>e.key===S.cur&&!e.lazy)||list.find(e=>e.key===S.cur),x=$('delBtn');
   x.hidden=!(cur&&cur.canDelete);x.textContent=cur&&S.pendDel===cur.key?'Delete?':'Delete';
   x.title=cur&&cur.canDelete&&!cur.mine&&!cur.local?`Remove this design by ${cur.ownerName||'someone else'} (admin)`:'Delete this design';
   x.textContent=cur&&S.pendDel===cur.key?`Delete "${cur.name}"? Click again`:'Delete this design';
   x.onclick=e=>{e.stopPropagation();if(!cur)return;if(S.pendDel===cur.key){closePops();del(cur)}else{S.pendDel=cur.key;renderSaved()}};
-  // admin: move someone else's design between Shared and Template; the maker stays credited
-  const pb=$('promoBtn'),canPromo=S.admin&&cur&&cur.id&&!cur.local&&!cur.mine&&(cur.vis==='shared'||cur.vis==='template');
-  pb.hidden=!canPromo;if(canPromo){const to=cur.vis==='shared'?'template':'shared';pb.textContent=to==='template'?'Make template':'Make shared';
-    pb.title=`${to==='template'?'List it under Templates for everyone':'Move it back to Shared'}. ${cur.ownerName||'The maker'} stays credited as the maker.`;
-    pb.onclick=()=>setVis(cur,to)}
   syncComments();window.structSaved?.();
-  const v=$('dVis'),t=v.querySelector('[value=template]');v.hidden=S.mode!=='firebase';t.hidden=t.disabled=!S.admin;if(!S.admin&&v.value==='template')v.value='personal';
+  const v=$('dVis');v.hidden=S.mode!=='firebase';if(v.value!=='shared')v.value='personal';
   renderAcct()}
 function renderAcct(){const b=$('acctBtn');b.hidden=S.mode!=='firebase';
   if(!S.user){b.textContent='Log in';b.title='Log in or create an account to save designs online'}
@@ -5649,7 +5644,7 @@ $('importTxtBtn').onclick=()=>{closePops();$('importTxt').value='';$('importTxt'
 function openKey(key){S.pendDel=null;S.pendSave=null;
   const en=entries().find(x=>x.key===key);if(!en){renderSaved();return}
   if(en.lazy){renderSaved();window.FD.openDesign(en.id,false);return}   // a favourite: fetched when opened
-  S.cur=en.key;if(S.mode==='firebase')$('dVis').value=en.mine&&en.vis?en.vis:'personal';load(en.doc);if(tab==='find'||tab==='structs')showTab('design')}
+  S.cur=en.key;if(S.mode==='firebase')$('dVis').value=en.mine&&en.vis?visOf(en.vis):'personal';load(en.doc);if(tab==='find'||tab==='structs')showTab('design')}
 async function setVis(en,to){const F=S.fb;
   try{await F.updateDoc(F.doc(F.db,FC('designs'),en.id),{visibility:to});await window.FD?.cardVis(en.id,to);status(to==='template'?`"${en.name}" is now a template (by ${en.ownerName||'its maker'}).`:`"${en.name}" is shared again.`)}
   catch(e){status('Could not change it: '+errText(e))}}
@@ -5665,7 +5660,7 @@ $('saveForm').addEventListener('submit',async e=>{e.preventDefault();const name=
   if(!name){status('Name the design first.');return}if(pieces.length<=1){status('Nothing placed yet.');return}
   if(S.mode==='firebase'&&!S.user){openLogin('Log in to save designs online.');return}
   const vis=S.mode==='firebase'?$('dVis').value:null,ask=name.toLowerCase()+'|'+vis;
-  const same=entries().find(en=>en.mine&&!en.builtin&&(en.vis!=='template'||S.admin)&&en.name.toLowerCase()===name.toLowerCase());
+  const same=entries().find(en=>en.mine&&!en.builtin&&en.name.toLowerCase()===name.toLowerCase());
   if(same&&S.cur!==same.key&&S.pendSave!==ask){S.pendSave=ask;status(`You already have "${same.name}". Press Save again to replace it.`);return}
   if(S.mode==='firebase'&&!same&&!S.admin&&window.FD){const n=entries().filter(en=>en.group==='My designs').length;
     if(n>=FD.MAX_MINE){status(`You have ${n} designs saved online, the most there is room for. Delete one first, or keep this one as a file on your device (⋯ → Save as .txt file).`);return}}
@@ -5674,10 +5669,10 @@ $('saveForm').addEventListener('submit',async e=>{e.preventDefault();const name=
     if(S.mode==='firebase'){const F=S.fb,id=same?same.id:F.doc(F.collection(F.db,FC('designs'))).id;
       await F.setDoc(F.doc(F.db,FC('designs'),id),{owner:S.user.uid,ownerName:userName(),visibility:vis,name,data:JSON.stringify(body),updated:now});
       S.cur='f'+id;status(`Saved "${name}" · ${VIS_LABEL[vis]}.`);
-      // the search card: written for shared designs and templates, taken out when a design goes back to Personal
-      try{if(vis==='shared'||vis==='template'){await window.FD?.writeCard(id,{owner:S.user.uid,ownerName:userName(),visibility:vis,name});
-          status(vis==='shared'?`Saved "${name}" · Shared: everyone with a login can now find it in Find designs.`:`Saved "${name}" · Template: listed for everyone.`)}
-        else if(same&&(same.vis==='shared'||same.vis==='template'))await window.FD?.tombstone(id)}
+      // the search card: written for shared designs, taken out when a design goes back to Personal
+      try{if(vis==='shared'){await window.FD?.writeCard(id,{owner:S.user.uid,ownerName:userName(),visibility:vis,name});
+          status(`Saved "${name}" · Shared: everyone with a login can now find it in Find designs.`)}
+        else if(same&&same.vis==='shared')await window.FD?.tombstone(id)}
       catch(err){status(`Saved "${name}", but it could not be added to Find designs: ${errText(err)}`)}}
     else if(S.mode==='claude'){const id=same?same.id:'d'+Date.now().toString(36);await db.collection('designs').doc(id).set({...body,updated:now});S.cur='c'+id;status(`Saved "${name}".`)}
     else{const id=same?same.id:'d'+Date.now().toString(36);S.local=S.local.filter(d=>d.id!==id);S.local.push({id,...body,updated:now});ls.set('wd_designs',S.local);S.cur='l'+id;status(`Saved "${name}" in this browser.`)}}
@@ -5781,14 +5776,13 @@ $('acDelForm').addEventListener('submit',e=>{e.preventDefault();const F=S.fb,u=F
     await F.deleteUser(u);
     $('acDelWord').value='';$('acDelPw').value='';$('acDel').open=false;$('loginDlg').close();
     status(`Your account is deleted${n?` (and ${n} design${n>1?'s':''})`:''}. Thanks for planning with us.`)})});
-// two live lists: templates (anyone) and my own (at most FD.MAX_MINE). Other players' shared designs are found with Find designs
+// one live list: my own designs (at most FD.MAX_MINE). Other players' shared designs are found with Find designs
 // (cards, read once and kept on the device); one opened from there is added with addRemote.
 function listen(){S.unsub.forEach(f=>f());S.unsub=[];S.remote=[];S.opened=[];const F=S.fb,col=F.collection(F.db,FC('designs')),parts={};
   const merge=()=>{const m=new Map();for(const r of S.opened)m.set(r.id,r);for(const k in parts)for(const r of parts[k])m.set(r.id,r);S.remote=[...m.values()];
     if(S.cur&&S.cur[0]==='f'&&!m.has(S.cur.slice(1))&&Object.keys(parts).length===S.unsub.length)S.cur=null;renderSaved()};
-  const watch=(k,q)=>S.unsub.push(F.onSnapshot(q,sn=>{parts[k]=sn.docs.map(d=>({id:d.id,...d.data()}));merge()},er=>{parts[k]=[];merge();if(k!=='tpl'||er.code!=='permission-denied')status('Could not load designs: '+errText(er))}));
+  const watch=(k,q)=>S.unsub.push(F.onSnapshot(q,sn=>{parts[k]=sn.docs.map(d=>({id:d.id,...d.data()}));merge()},er=>{parts[k]=[];merge();if(er.code!=='permission-denied')status('Could not load designs: '+errText(er))}));
   window.addRemote=r=>{S.opened=[...S.opened.filter(x=>x.id!==r.id),r];merge()};
-  watch('tpl',F.query(col,F.where('visibility','==','template')));
   if(S.user)watch('mine',F.query(col,F.where('owner','==',S.user.uid)))}
 /* ---------- comment boards: design comments, and the four feedback boards on About ---------- */
 const THUMB='<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 7h2.6v7.5H2zM4.6 7.2 7.6 2c1 0 1.9.8 1.6 2L8.7 6.6h4c1 0 1.7.9 1.4 1.9l-1.1 4.6c-.2.8-.9 1.4-1.7 1.4H4.6"/></svg>';
@@ -5834,10 +5828,10 @@ function commentBoard(o){
       o.text.value='';o.counter.textContent='0/500';B.stick=true;B.render()}
     catch(x){status('Could not send: '+errText(x))}finally{btn.disabled=false}});
   return B}
-// comments on the open Shared design or online Template
+// comments on the open Shared design (old templates count as shared)
 function cmTarget(){if(S.mode!=='firebase'||!S.cur||S.cur[0]!=='f')return null;const r=S.remote.find(x=>'f'+x.id===S.cur);return r&&(r.visibility==='shared'||r.visibility==='template')?r:null}
 const designBoard=commentBoard({list:$('cmList'),form:$('cmForm'),text:$('cmText'),counter:$('cmCount'),
-  path:()=>{const r=cmTarget();return r?[FC('designs'),r.id,'comments']:null},none:'Open a Shared design or an online Template to see its comments.',
+  path:()=>{const r=cmTarget();return r?[FC('designs'),r.id,'comments']:null},none:'Open a Shared design to see its comments.',
   onCount:n=>{$('cmTitle').textContent=n?`Comments (${n})`:'Comments';const r=S.user?cmTarget():null;$('cmFor').textContent=r?`On "${r.name}"${r.ownerName?' by '+r.ownerName:''}`:''}});
 $('cmBtn').onopen=()=>{designBoard.stick=true;designBoard.render()};
 // the four feedback boards on About
@@ -6400,8 +6394,8 @@ ST.s=fromData(EX.recon());ST.cur='xrecon';renderPick();
 </style>
 <script id="wd-find">
 /* =====================================================================
-   FIND DESIGNS — search shared designs and templates (doc 06 · "Find designs and cards").
-   Every shared design and template has a small CARD in FC('cards') (test: test_cards), written when it is saved:
+   FIND DESIGNS — search shared designs (doc 06 · "Find designs and cards").
+   Every shared design has a small CARD in FC('cards') (test: test_cards), written when it is saved:
    name, maker, the pieces for the 3D preview (d) and a summary (s: trips per vehicle, what's in it, threat level,
    C4, build time), facts = Fact sheet stamp, fav = {uid:true} (the ★ count = favourites).
    The device keeps every card in IndexedDB and only asks Firebase for cards changed since last time
@@ -6465,13 +6459,7 @@ function localCards(){const out=[],favs=getLocalFav();
       localMade.set(key,c)}
     out.push({...c,id:x.id,fav:favs[x.id]?{me:true}:{}})}
   return out}
-// logged out: only the templates (few), fetched once per visit and not kept
-const T={cards:new Map(),at:0,busy:null};
-function syncTpl(){if(S.mode!=='firebase'||S.user)return Promise.resolve();if(T.busy)return T.busy;
-  T.busy=(async()=>{const F=S.fb;try{const sn=await F.getDocs(F.query(F.collection(F.db,FC('cards')),F.where('visibility','==','template')));
-      T.cards.clear();for(const d of sn.docs){const x=d.data();if(!x.gone)T.cards.set(d.id,{...x,id:d.id,touched:ms(x.touched)})}T.at=Date.now();C.err=''}
-    catch(e){C.err=errText(e)}})().finally(()=>{T.busy=null;if(tab==='find')render()});return T.busy}
-const allCards=()=>S.mode==='firebase'?[...(S.user?C.cards:T.cards).values()]:localCards();
+const allCards=()=>S.mode==='firebase'?(S.user?[...C.cards.values()]:[]):localCards();
 const me=()=>S.mode==='firebase'?(S.user&&S.user.uid):'me';
 const favN=c=>Object.keys(c.fav||{}).length;
 const isFav=c=>!!(c.fav&&me()&&c.fav[me()]);
@@ -6497,15 +6485,13 @@ async function toggleFav(c){
 /* ---------- search ---------- */
 const FS={q:'',veh:'ural',trips:0,has:{},holds:0,c4:0,build:0,src:'all',hideOld:false,sort:'fav',shown:PAGE,open:null,view:{},scroll:0};
 const FS_KEEP=['veh','trips','has','holds','c4','build','src','hideOld','sort'];   // remembered on this device (not the search text)
-{const v=ls.get('wd_find');if(v&&typeof v==='object')for(const k of FS_KEEP)if(v[k]!=null&&typeof v[k]===typeof FS[k])FS[k]=v[k]}
+{const v=ls.get('wd_find');if(v&&typeof v==='object')for(const k of FS_KEEP)if(v[k]!=null&&typeof v[k]===typeof FS[k])FS[k]=v[k];if(!['all','fav','mine'].includes(FS.src))FS.src='all'}
 function fails(c){const s=c.s||{},f=[],t=(s.t||{})[FS.veh],vn=VEH.find(v=>v[0]===FS.veh)[1];
   if(FS.trips&&(t==null||t>FS.trips))f.push(t==null?`${vn} can't carry it`:`Needs ${t} ${vn} trips`);
   for(const id in FS.has){const n=(s.has||{})[id]||0,nm=P[id]?P[id].n:id;if(FS.has[id]===1&&!n)f.push('No '+nm);if(FS.has[id]===-1&&n)f.push('Has '+nm)}
   if(FS.holds&&(s.h==null||s.h<FS.holds))f.push(s.h==null?'Threat not checked':HOLD[s.h][1]);
   if(FS.c4&&(s.c4==null||s.c4<FS.c4))f.push(s.c4==null?'C4 not checked':`Only ${s.c4} C4 to blow in`);
   if(FS.build&&(s.b||0)>FS.build*60)f.push(`Builds in ${Math.round((s.b||0)/60)} min`);
-  if(FS.src==='tpl'&&c.visibility!=='template')f.push('Not a template');
-  if(FS.src==='shared'&&c.visibility==='template')f.push('A template');
   if(FS.src==='fav'&&!isFav(c))f.push('Not a favourite');
   if(FS.src==='mine'&&!isMine(c))f.push('Not yours');
   if(FS.hideOld&&c.facts!==factsStamp())f.push('Old numbers');
@@ -6527,7 +6513,7 @@ function activeChips(){const out=[],vn=VEH.find(v=>v[0]===FS.veh)[1];
   if(FS.holds)out.push(['Holds vs '+HOLD_BTN[FS.holds].toLowerCase(),()=>{FS.holds=0}]);
   if(FS.c4)out.push([FS.c4+'+ C4',()=>{FS.c4=0}]);
   if(FS.build)out.push([`Build ≤ ${FS.build} min`,()=>{FS.build=0}]);
-  if(FS.src!=='all')out.push([{tpl:'Templates',shared:'Shared',fav:'★ Favourites',mine:'Mine'}[FS.src]+' only',()=>{FS.src='all'}]);
+  if(FS.src!=='all')out.push([{fav:'★ Favourites',mine:'Mine'}[FS.src]+' only',()=>{FS.src='all'}]);
   if(FS.hideOld)out.push(['No old numbers',()=>{FS.hideOld=false}]);
   return out}
 
@@ -6578,28 +6564,28 @@ function buildRail(){const r=$('fdRail');r.replaceChildren();railSync.length=0;
     el('p',{class:'fd-note'},'From the threat check. "Car" means no way in by climbing off a car roof.'),
     el('div',{class:'fd-line'},el('span',{},'C4 to blow in'),seg('Least C4 to blow in',[[0,'Any'],[4,'4+'],[6,'6+'],[8,'8+']],()=>FS.c4,v=>FS.c4=v)),
     el('h3',{class:'fd-h'},'Build time (1 builder)'),seg('Build time',[[0,'Any'],[20,'≤ 20 min'],[30,'≤ 30 min'],[45,'≤ 45 min']],()=>FS.build,v=>FS.build=v),
-    el('h3',{class:'fd-h'},'Show'),seg('Which designs',[['all','Everything'],['tpl','Templates'],['shared','Shared'],['fav','★ Favourites'],['mine','Mine']],()=>FS.src,v=>FS.src=v),
+    el('h3',{class:'fd-h'},'Show'),seg('Which designs',[['all','Everything'],['fav','★ Favourites'],['mine','Mine']],()=>FS.src,v=>FS.src=v),
     el('label',{class:'fd-chk'},old,'Hide designs saved before the last Fact sheet change'),
     el('div',{class:'fd-foot',id:'fdFoot'}));
   railBuilt=true}
 function renderFoot(){const f=$('fdFoot');if(!f)return;f.replaceChildren();
   if(S.mode!=='firebase'){f.append(el('span',{},'Offline here: searching the designs saved in this browser.'));return}
-  if(!S.user){f.append(el('span',{},C.err?'Could not load the templates: '+C.err:'Templates only until you log in.'));return}
+  if(!S.user)return;
   const ago=C.checked?Math.max(0,Math.round((Date.now()-C.checked)/60000)):null;
   f.append(el('span',{},C.err?'Could not check for new designs: '+C.err:C.busy?'Checking for new designs…':ago==null?'':`List kept on this device. Checked ${ago<1?'just now':ago+' min ago'}.`),
     el('button',{type:'button',class:'fd-link',onclick:()=>sync().then(render)},'Refresh'));
-  if(S.admin){const b=el('button',{type:'button',class:'fd-link',title:'Admin: make cards for shared designs and templates saved before cards existed'},'Make missing cards');
+  if(S.admin){const b=el('button',{type:'button',class:'fd-link',title:'Admin: make cards for shared designs saved before cards existed, and turn old templates into shared designs'},'Make missing cards');
     b.onclick=()=>{if(b.dataset.ask){backfill(b);return}b.dataset.ask='1';b.textContent='Reads every shared design once. Press again'};f.append(b)}}
 function render(){if(!$('tab-find')||$('tab-find').hidden)return;if(!railBuilt)buildRail();railSync.forEach(f=>f());renderFoot();ls.set('wd_find',Object.fromEntries(FS_KEEP.map(k=>[k,FS[k]])));
   const m=$('fdMain');
   if(FS.open){renderDetail(m);return}
+  if(S.mode==='firebase'&&!S.user){m.replaceChildren(el('div',{class:'fd-empty'},el('p',{},'Log in to search the designs other players share, and to keep favourites.'),el('button',{type:'button',class:'btn',onclick:()=>openLogin('Log in to search shared designs.')},'Log in')));return}
   const{all,hit,near}=results();m.replaceChildren();
   const sort=el('select',{class:'picksel',id:'fdSort','aria-label':'Sort'},...[['fav','Most ★'],['trips','Fewest trips'],['build','Fastest build'],['hard','Hardest to get in'],['new','Newest']].map(([v,t])=>el('option',{value:v},t)));
   sort.value=FS.sort;sort.onchange=()=>{FS.sort=sort.value;render()};
-  m.append(el('div',{class:'fd-top'},el('h2',{},`${hit.length} design${hit.length===1?'':'s'}`),el('span',{class:'fd-note'},`of ${all.length} ${S.mode!=='firebase'?'here':S.user?'shared':'templates'}`),el('span',{class:'grow'}),el('label',{for:'fdSort',class:'fd-note'},'Sort'),sort));
-  if(S.mode==='firebase'&&!S.user)m.append(el('div',{class:'fd-login'},el('span',{},'Showing templates. Log in to also search the designs other players share, and to keep favourites.'),el('button',{type:'button',class:'btn',onclick:()=>openLogin('Log in to search shared designs.')},'Log in')));
+  m.append(el('div',{class:'fd-top'},el('h2',{},`${hit.length} design${hit.length===1?'':'s'}`),el('span',{class:'fd-note'},`of ${all.length} ${S.mode!=='firebase'?'here':'shared'}`),el('span',{class:'grow'}),el('label',{for:'fdSort',class:'fd-note'},'Sort'),sort));
   const act=activeChips();if(act.length)m.append(el('div',{class:'fd-act'},...act.map(([t,off,neg])=>el('button',{type:'button',class:'fd-fchip'+(neg?' not':''),'aria-label':'Remove filter '+t,onclick:()=>{off();FS.shown=PAGE;render()}},t,' ✕'))));
-  if(!all.length&&(C.busy||T.busy)){m.append(el('div',{class:'fd-empty'},'Loading the design list…'));return}
+  if(!all.length&&C.busy){m.append(el('div',{class:'fd-empty'},'Loading the design list…'));return}
   const grid=el('div',{class:'fd-grid'});for(const c of hit.slice(0,FS.shown))grid.append(cardEl(c));m.append(grid);
   if(hit.length>FS.shown)m.append(el('button',{type:'button',class:'btn ghost fd-more',onclick:()=>{FS.shown+=PAGE;render()}},`Show more (${hit.length-FS.shown} left)`));
   if(!hit.length)m.append(el('div',{class:'fd-empty'},all.length?'No design ticks every box.'+(near.length?' The closest ones are below.':''):S.mode==='firebase'?'No shared designs yet.':'No designs saved here yet. Save one and it shows up here.'));
@@ -6611,7 +6597,6 @@ function cardEl(c,miss){const box=el('button',{type:'button',class:'fd-pv','aria
   const old=c.facts!==factsStamp();
   return el('article',{class:'fd-card'+(miss?' near':'')},
     el('div',{class:'fd-pvw'},box,el('div',{class:'fd-tools'},fav,turn),
-      c.visibility==='template'?el('span',{class:'fd-tag'},'Template'):null,
       miss?el('span',{class:'fd-miss'},miss):old?el('span',{class:'fd-old',title:'Saved before the last Fact sheet change: trips and times may be a little off'},'Old numbers'):null),
     el('div',{class:'fd-body'},
       el('div',{class:'fd-name'},el('button',{type:'button',class:'fd-title',onclick:()=>openCard(c.id)},c.name),el('span',{class:'fd-stars',title:'Players who keep it as a favourite'},'★ '+favN(c))),
@@ -6635,7 +6620,7 @@ function renderDetail(m){const{hit,near}=results(),list=hit.length?hit:near.map(
   const haul=el('div',{class:'fd-haul'},...VEH.map(([id,n])=>{const t=(c.s.t||{})[id];return el('div',{class:id===FS.veh?'on':''},el('b',{},t==null?'–':String(t)),el('span',{},n))}));
   const link=S.mode==='firebase'?el('button',{type:'button',class:'btn ghost',onclick:e=>copyText(location.href.split('#')[0]+'#d/'+c.id,e.currentTarget,'Copy link')},'Copy link'):null;
   m.replaceChildren(bar,el('div',{class:'fd-det'},
-    el('div',{class:'fd-detl'},el('div',{class:'fd-deth'},el('h2',{},c.name),el('span',{class:'fd-by'},'by '+(c.ownerName||'someone')+(c.visibility==='template'?' · template':'')),el('span',{class:'grow'}),turn),pic,
+    el('div',{class:'fd-detl'},el('div',{class:'fd-deth'},el('h2',{},c.name),el('span',{class:'fd-by'},'by '+(c.ownerName||'someone')),el('span',{class:'grow'}),turn),pic,
       el('p',{class:'fd-note'},`Looking ${LOOK[view]} · the same 3D look as Side view`)),
     el('div',{class:'fd-detr'},
       el('button',{type:'button',class:'btn fd-openb',onclick:()=>openDesign(c.id)},'Open in Design it'),
@@ -6651,7 +6636,7 @@ async function openDesign(id,viaFind=true){
   if(S.mode==='firebase'){const F=S.fb;let sn;
     try{sn=await F.getDoc(F.doc(F.db,FC('designs'),id))}catch(e){status('Could not open it: '+errText(e));return}
     if(!sn.exists()){status('That design is no longer shared.');C.cards.delete(id);saveCache();FS.open=null;render();return}
-    const r={id,...sn.data()};window.addRemote?.(r);S.cur='f'+id;$('dVis').value=r.owner===(S.user&&S.user.uid)?r.visibility:'personal';load(parseDoc(r))}
+    const r={id,...sn.data()};window.addRemote?.(r);S.cur='f'+id;$('dVis').value=r.owner===(S.user&&S.user.uid)?visOf(r.visibility):'personal';load(parseDoc(r))}
   else{const en=entries().find(e=>e.key===id);if(!en)return;S.cur=en.key;load(en.doc)}
   if(!viaFind){fromFind=null;backBar();if(tab==='find')showTab('design');return}
   const c=allCards().find(x=>x.id===id);fromFind={key:S.cur,name:c?c.name:designName,by:c?c.ownerName:''};
@@ -6667,7 +6652,8 @@ async function backfill(btn){const F=S.fb,col=F.collection(F.db,FC('designs'));b
   try{const docs=[];for(const v of['shared','template']){const sn=await F.getDocs(F.query(col,F.where('visibility','==',v)));docs.push(...sn.docs)}
     for(const d of docs){const r={id:d.id,...d.data()};btn.textContent=`Making cards… ${n+bad+1}/${docs.length}`;
       try{const doc=parseDoc(r),body=withDesign(doc,()=>cardBody());
-        await F.setDoc(F.doc(F.db,FC('cards'),r.id),{owner:r.owner,ownerName:r.ownerName||'',visibility:r.visibility,name:r.name,...body,gone:false,touched:F.serverTimestamp()},{merge:true});n++}
+        if(r.visibility==='template')await F.updateDoc(d.ref,{visibility:'shared'});   // templates are gone: an old one becomes a normal shared design
+        await F.setDoc(F.doc(F.db,FC('cards'),r.id),{owner:r.owner,ownerName:r.ownerName||'',visibility:'shared',name:r.name,...body,gone:false,touched:F.serverTimestamp()},{merge:true});n++}
       catch(e){bad++}}
     status(`Made ${n} card${n===1?'':'s'}${bad?`, ${bad} failed`:''}.`);await sync(true)}
   catch(e){status('Could not make cards: '+errText(e))}
@@ -6675,7 +6661,7 @@ async function backfill(btn){const F=S.fb,col=F.collection(F.db,FC('designs'));b
 
 /* ---------- hooks for the rest of the planner ---------- */
 window.FD={
-  show(){if(S.mode==='firebase'&&S.user&&Date.now()-C.checked>120000)sync();if(S.mode==='firebase'&&!S.user&&Date.now()-T.at>600000)syncTpl();render()},
+  show(){if(S.mode==='firebase'&&S.user&&Date.now()-C.checked>120000)sync();render()},
   render,writeCard,tombstone,cardVis,openDesign,MAX_MINE,
   // Open menu: the favourites (firebase only)
   favEntries(){if(S.mode!=='firebase'||!S.user)return[];
