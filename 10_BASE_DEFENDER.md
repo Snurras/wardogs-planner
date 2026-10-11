@@ -9,9 +9,10 @@ A mini-game where you man your planned base with soldiers and defend it against 
 - Attacks come from a random direction, but the vehicles/unit types per level are fixed.
 - 3 attempts per level; fail all three and you drop back to the first (see open questions).
 - Higher levels unlock different weapons, meds, etc.
+- Should be based on threat assesment, meaning that improvement in logic could improve that as well.
 
 ## 2. Economy
-- The base budget is set by the level, measured in number of Ural trucks carrying pallets.
+- The base budget is set by the level, measured in number of Ural trucks carrying pallets. FOB is for free. Should trunk space be used?
 
 ## 3. Damage, cover and armour
 
@@ -101,11 +102,13 @@ Design decisions still to make, plus notes that were ambiguous when translated.
 
 ### Design decisions
 - [ ] How should build time affect the game?
-- [ ] Size classes (small / medium / large) where build time is regulated – larger classes are more complex. Worth doing?
+- [ ] How to instruct defender to go on top of building when bottom floor is accessible on the same grid? Maybe single click, lowest available floor, double one up and so forth?
+- [ ] Size classes (small / medium / large) where build time or hauling load is regulated – larger classes are more complex. Worth doing? I think that pallet only Urals can be a decisive factor.
 - [ ] Completing a level gives more resources – can players save them for later?
-- [ ] Drill: does it only shorten the match, or also make the fight more intense?
+- [ ] Drill: does it only shorten the match, or also make the fight more intense? Should it be removed?
 - [ ] Gepard: include it, and with what role?
 - [ ] Stingray: how many extra seconds does a vehicle survive if you fire too late?
+- [ ] Zombie mode?
 
 ### Clarify from original notes
 - [ ] "3 attempts per level, otherwise back to the previously level.
