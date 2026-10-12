@@ -12,6 +12,10 @@
 - **Modify structure: Doors and Sandbags** look right on the map (a Door symbol, a row of bags). **R** turns a new Door before you place it, or the Door you point at.
 - **Modify structure: Sandbags in an entrance.** Take a block off next to an entrance to make it wider, then put Sandbags across it (they used to be refused or turned into a HESCO).
 - **Modify structure: Floor 2 / Roof on the map.** With Floor 2 or Roof chosen, the map shows that floor over the structure: its blocks (e.g. the Shelter's centre 3×3), what was taken off, added or fell.
+- **Modify structure: restore.** Erase (E) or right-click on a block you took off puts it back as built, any block, Corner HESCO (1.65) included. What fell with it comes back too.
+- **Modify structure: new entrances.** A block taken off shows as a red square (no arrow); the red arrows stay on the original entrances. Any block can go in that square, and a Door there shows its preview and turns with R.
+- **Modify structure: Doors on Floor 2 / Roof** show the Door symbol, not "D+".
+- **Ladders and structures** (game quirk): a structure can be placed so it blocks its own ladder or another structure's ladder. Other pieces still can't go in front of a ladder. Fact sheet: *Structures may block a ladder* (set it to 0 if the game fixes it).
 - **Side view** (3D look) draws blocks added with Modify structure and closed entrances and centre squares.
 
 Rules: no change needed.
