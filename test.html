@@ -47,6 +47,7 @@ button{cursor:pointer}
 .seg button{border:0;background:none;padding:5px 10px;font:600 13px var(--f-head);letter-spacing:.06em;text-transform:uppercase}
 .seg button+button{border-left:1px solid var(--line)}
 .seg button.on{background:var(--accent);color:var(--accent-ink)}
+.seg button:disabled{opacity:.38;cursor:not-allowed;background:none}
 .btn{border:1px solid var(--accent);background:var(--accent);color:var(--accent-ink);border-radius:3px;padding:5px 12px;font:700 13px var(--f-head);letter-spacing:.08em;text-transform:uppercase}
 .btn.ghost{background:transparent;color:var(--ink);border-color:var(--line)}
 .chk{display:inline-flex;gap:6px;align-items:center;font-size:14px}
@@ -790,7 +791,7 @@ a{color:var(--accent)}
     <button class="edit-only btn ghost" type="button" id="undoBtn" title="Undo the last change (Ctrl+Z)"><span class="ti"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" style="flex:none"><circle cx="12" cy="12" r="10" fill="#5B6452"/><path d="M10 8l-4 4 4 4M6 12h8a3 3 0 010 6h-1" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Undo</button>
     <button class="edit-only btn ghost" type="button" id="rotBtn"><span class="ti"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" style="flex:none"><circle cx="12" cy="12" r="10" fill="#4D5C27"/><path d="M17 12a5 5 0 11-1.5-3.6" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"/><path d="M16 5v4h-4" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Rotate (R)</button>
     <button class="edit-only btn ghost tool" type="button" id="eraseBtn" aria-pressed="false" title="Erase the top piece where you click (E)"><span class="ti"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" style="flex:none"><path d="M14 3l7 7-10 10H6l-3.5-3.5z" fill="#E8A0A0" stroke="#1F251B" stroke-width="1.4" stroke-linejoin="round"/><path d="M8.5 8.5l7 7" stroke="#1F251B" stroke-width="1.4"/><path d="M2.5 16.5L6 20h5l2.5-2.5-7-7z" fill="#F4F6EF" stroke="#1F251B" stroke-width="1.4" stroke-linejoin="round"/></svg></span>Erase (E)</button>
-    <button class="edit-only btn ghost tool" type="button" id="sealToolBtn" aria-pressed="false" title="Modify structure (M): click a structure on the map, then remove blocks from it or add HESCO, Doors and Sandbags, one layer (floor) at a time"><span class="ti"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" style="flex:none"><rect x="1.5" y="12" width="15" height="9" rx=".8" fill="#C9A86A" stroke="#8A6A35" stroke-width="1"/><rect x=".8" y="10" width="16.4" height="2.4" rx=".6" fill="#7A7F72" stroke="#3E4238" stroke-width=".8"/><rect x="7" y="15.5" width="4" height="5.5" fill="#3E4238"/><path d="M5.5 12v9M12.5 12v9" stroke="#8A6A35" stroke-width=".7"/><path d="M14 10.5L20.5 3.5" stroke="#6B4A2A" stroke-width="2" stroke-linecap="round"/><rect x="17.2" y="0.8" width="6" height="3.6" rx=".8" transform="rotate(45 20.2 2.6)" fill="#5B6063" stroke="#1F251B" stroke-width=".8"/></svg></span>Modify structure (M)</button>
+    <button class="edit-only btn ghost tool" type="button" id="sealToolBtn" aria-pressed="false" title="Modify structure (M): click a structure on the map, then remove blocks from it or add HESCO, Doors and Sandbags, one floor at a time (Ground, Floor 2, Roof)"><span class="ti"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" style="flex:none"><rect x="1.5" y="12" width="15" height="9" rx=".8" fill="#C9A86A" stroke="#8A6A35" stroke-width="1"/><rect x=".8" y="10" width="16.4" height="2.4" rx=".6" fill="#7A7F72" stroke="#3E4238" stroke-width=".8"/><rect x="7" y="15.5" width="4" height="5.5" fill="#3E4238"/><path d="M5.5 12v9M12.5 12v9" stroke="#8A6A35" stroke-width=".7"/><path d="M14 10.5L20.5 3.5" stroke="#6B4A2A" stroke-width="2" stroke-linecap="round"/><rect x="17.2" y="0.8" width="6" height="3.6" rx=".8" transform="rotate(45 20.2 2.6)" fill="#5B6063" stroke="#1F251B" stroke-width=".8"/></svg></span>Modify structure (M)</button>
     <button class="edit-only btn ghost" type="button" id="wallOptBtn" title="Wall Optimization: every 4 large HESCO (H2) standing in a straight row become one HESCO Wall, which is cheaper and quicker to build. Same height and shape, so the base holds the same. Undo takes it back."><span class="ti"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" style="flex:none"><rect x="1" y="12" width="22" height="8" rx=".8" fill="#C9A86A" stroke="#8A6A35" stroke-width="1"/><path d="M6.5 12v8M12 12v8M17.5 12v8" stroke="#8A6A35" stroke-width=".7"/><path d="M6 17.5L16.5 4" stroke="#1F251B" stroke-width="2.6" stroke-linecap="round"/><path d="M15 6L17 3.5" stroke="#F4F6EF" stroke-width="2.6" stroke-linecap="round"/><path d="M19.5 1.5l.7 1.6 1.6.7-1.6.7-.7 1.6-.7-1.6-1.6-.7 1.6-.7z" fill="#F2C230" stroke="#1F251B" stroke-width=".5"/><path d="M21 8l.45 1 1 .45-1 .45-.45 1-.45-1-1-.45 1-.45z" fill="#F2C230"/><path d="M12 2.3l.4.9.9.4-.9.4-.4.9-.4-.9-.9-.4.9-.4z" fill="#F2C230"/></svg></span>Wall Optimization</button>
     <button class="edit-only btn ghost tool" type="button" id="sideBtn" aria-pressed="false" title="Side view (S): drag over part of the design to see it from the side. R turns the view. Click Side view again to go back to the map with the area still marked, and again to see the view. ✕ closes it and clears the area."><span class="ti"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" style="flex:none"><path d="M1 21.5h22" stroke="#5B6452" stroke-width="1.2"/><rect x="3" y="13" width="6" height="8.5" fill="#C9A86A" stroke="#8A6A35"/><rect x="9" y="9" width="6" height="12.5" fill="#B8B8B4" stroke="#7B7E79"/><rect x="15" y="15" width="6" height="6.5" fill="#C9A86A" stroke="#8A6A35"/><path d="M1.5 5.5c2.6-3.3 7.9-3.3 10.5 0c-2.6 3.3-7.9 3.3-10.5 0z" fill="#fff" stroke="#1F251B"/><circle cx="6.75" cy="5.5" r="1.7" fill="#2C6894"/><circle cx="6.75" cy="5.5" r=".6" fill="#111"/></svg></span>Side view (S)</button>
     <span class="vsep edit-only"></span>
@@ -801,10 +802,10 @@ a{color:var(--accent)}
   </div>
   <div class="bar toolbar modbar edit-only" id="modBar" hidden role="toolbar" aria-label="Modify structure">
     <span class="mbt"><b>Modify structure</b><span class="status" id="modWhat"></span></span>
-    <span class="seg" id="modLayers" role="group" aria-label="Layer"></span>
+    <span class="seg" id="modLayers" role="group" aria-label="Floor"></span>
     <span class="seg mblk" id="modAdd" role="group" aria-label="Block to add"></span>
     <span class="status mbhint" id="modBarHint"></span>
-    <span class="mbr"><button class="btn ghost tool" type="button" id="modAdv" aria-pressed="false" title="Advanced: work on one layer of the structure as a grid, with the collapse rules and the list of changes">Advanced</button><button class="mini svx" type="button" id="modClose" aria-label="Close Modify structure" title="Close Modify structure (Esc)">✕</button></span>
+    <span class="mbr"><button class="btn ghost tool" type="button" id="modAdv" aria-pressed="false" title="Advanced: work on one floor of the structure as a grid, with the collapse rules and the list of changes">Advanced</button><button class="mini svx" type="button" id="modClose" aria-label="Close Modify structure" title="Close Modify structure (Esc)">✕</button></span>
   </div>
   <div class="grid3" id="designGrid">
     <section class="col leftcol">
@@ -858,7 +859,7 @@ a{color:var(--accent)}
           <div class="modbody"><div class="modleft"><svg id="modSvg" role="img" aria-label="Blocks on this layer"></svg>
             <p class="status" id="modHint" style="margin:0"></p></div>
           <div class="modright"><div id="modRules"></div><dl class="kv" id="modList"></dl>
-            <p class="status">Blocks you add or put back stand, but hold nothing up: in the game a rebuilt HESCO doesn't count, so the structure is as weak as before. Corner HESCO, floors, roofs, windows and ladders can't be put back.</p>
+            <p class="status">Blocks you add or put back stand, but hold nothing up: in the game a rebuilt HESCO doesn't count, so the structure is as weak as before. HESCO X Size, floors, roofs, windows and ladders can't be put back.</p>
             <button class="btn ghost" type="button" id="modReset" style="align-self:flex-start">Undo all changes to this structure</button></div></div></div>
         <div class="svpanel" id="svPanel" hidden role="dialog" aria-label="Side view"><div class="svhead"><b class="svt">Side view</b><span id="svCompass"></span><span class="status" id="svDir"></span><button class="mini" type="button" id="svRotate">Press R to rotate view</button><span class="svlay" id="svLay" hidden><span class="svlt">Layer</span><button class="mini" type="button" id="svLayDn" aria-label="Layer down" title="Layer down ( [ )">▼</button><b id="svLayN">H0</b><button class="mini" type="button" id="svLayUp" aria-label="Layer up" title="Layer up ( ] )">▲</button><label class="svcut"><input type="checkbox" id="svCut"> Hide above</label></span><span class="svctl"><button class="mini" type="button" id="svLook" aria-pressed="true" title="3D look on; press for the old flat side view">3D</button><button class="mini" type="button" id="svZoomOut" aria-label="Zoom out">−</button><button class="mini" type="button" id="svFitBtn">Fit</button><button class="mini" type="button" id="svZoomIn" aria-label="Zoom in">+</button><button class="mini svx" type="button" id="svClose" aria-label="Close side view">✕</button></span></div><div class="svbody" id="svBody"><svg id="svSvg" role="img" aria-label="Side view of the marked area"></svg></div></div></div>
         <div class="maprow"><div class="msg" id="msg"></div><div class="mapctl" aria-label="Map view"><button class="mini" type="button" id="zoomOut" aria-label="Zoom out">−</button><span class="mono status" id="zoomLbl">25×25</span><button class="mini" type="button" id="zoomIn" aria-label="Zoom in">+</button><button class="mini" type="button" id="zoomFit" title="Zoom to show the whole design">Fit</button><label class="chk"><input type="checkbox" id="gridLbl"> Grid labels</label></div></div>
@@ -1234,6 +1235,7 @@ a{color:var(--accent)}
       ['stack.hesco','HESCO and doors stacked on HESCO / doors · max height',7],
       ['stack.total','Anything on top of a building · max height',10],
       ['stack.bunker','Bunker · highest base it can stand on',2],
+      ['rule.ladderStruct','Structures may block a ladder (1 = yes, 0 = no). Game quirk, likely a bug: a structure can be placed so its own ladder, or the ladder of a structure already there, is blocked. Other pieces still can\'t go on the square in front of a ladder',1,'Tested in game, 12 Oct 2026 · set to 0 if the game fixes it'],
       ['fob.area','FOB build area (metres, square)',60]]},
     {name:'Hammers',rows:[
       ['ham.m.lvl','Medium Hammer · Support level',3],
@@ -1460,10 +1462,11 @@ function place(np,list=pieces){
   if(r.x<0||r.y<0||r.x+r.w>N||r.y+r.d>N)return{err:'Off the map'};
   if(needsFob(np.t)&&!inside(r,areaRect(fobOf(list))))return{err:'Outside the FOB build area'};
   if(ONE_PER_FOB.has(np.t)&&list.some(q=>q.t===np.t&&q!==np))return{err:`Only one ${t.n} per FOB`};
-  // the square in front of a structure's ladder is taken by the ladder: nothing can be built there (game rule)
+  // the square in front of a structure's ladder is taken by the ladder: nothing can be built there (game rule).
+  // Except structures: the game lets you place one that blocks its own ladder or another one's (fact rule.ladderStruct, a likely bug).
   const feet=q=>ladderSpots(q).map(l=>({x:l.x+l.out[0],y:l.y+l.out[1]}));
-  const myFeet=t.sym?feet(np):[];
-  for(const q of list){if(q===np)continue;
+  const free=t.sym&&WD.F('rule.ladderStruct'),myFeet=t.sym&&!free?feet(np):[];
+  for(const q of list){if(q===np||free)continue;
     if(P[q.t].sym&&feet(q).some(f=>hit(r,{...f,w:1,d:1})))return{err:`The ladder of the ${P[q.t].n} needs the square in front of it free`};
     if(myFeet.some(f=>hit(rectOf(q),{...f,w:1,d:1})))return{err:`This ${t.n}'s ladder needs the square in front of it free: the ${P[q.t].n} is in the way`}}
   let z=null;
@@ -1511,8 +1514,9 @@ function toWorld(p,lx,ly){const t=P[p.t];let ox,oy;
 function turnDir([dx,dy],r){for(let k=0;k<r;k++)[dx,dy]=[-dy,dx];return[dx,dy]}
 const OUT={S:[0,1],N:[0,-1],W:[-1,0],E:[1,0]};
 function entrancesOf(p){const t=TT(p);if(!t.sym)return[];const list=[...(t.sym.door||[]),...(t.sym.arrow||[])];
+  const S0=P[p.t].sym||{},orig=(S0.door||[]).length+(S0.arrow||[]).length;   // after these come holes: blocks taken off with Modify structure
   return list.map(([side,i],k)=>{const[lx,ly]=side==='S'?[i,t.d-1]:side==='N'?[i,0]:side==='W'?[0,i]:[t.w-1,i];
-    const[x,y]=toWorld(p,lx,ly);const st=sealOf(p,k);return{k,x,y,out:turnDir(OUT[side],R(p)),seal:st||SEAL_WITH(p.t),sealType:st,closed:!!st}})}
+    const[x,y]=toWorld(p,lx,ly);const st=sealOf(p,k);return{k,x,y,out:turnDir(OUT[side],R(p)),seal:st||SEAL_WITH(p.t),sealType:st,closed:!!st,hole:k>=orig}})}
 // Recon Tower / Shelter (full or trimmed): the centre of the bottom floor is open space. Each centre square can be closed like an entrance,
 // with a Large HESCO or a Door. Keys 100+. Drawn and counted (supplies, time, steps); the threat check reads them as blocks (structParts).
 const CENTRE_K=100;
@@ -1548,6 +1552,23 @@ function bremerGaps(){const out=[],at=new Map();for(const p of pieces)if(p.t==='
     if(perp&&opposite)out.push({a:p,b:q,dx,dy})}
   return out}
 // piece counts including the HESCO used to seal entrances
+// a block added with Modify structure, drawn in the structure's own squares (X, Y = its top-left corner):
+// Door = wall-coloured square with its leaf on the side it faces (r: 0 S, 1 W, 2 N, 3 E); Sandbags = a row of bags over its two
+// squares (r: 0 across, 1 down); HESCO = a block. Dashed when it stands on a floor above the ground.
+// Sandbags as in the Structure designer: a row of bags half a square deep against one side. rect = {x,y,w,h} in pixels
+function bagsMark(r,ok=true,rim){const v=r.h>r.w,long=v?r.h:r.w,deep=v?r.w:r.h,gg=s('g',{transform:`translate(${r.x+r.w/2},${r.y+r.h/2}) rotate(${v?90:0}) translate(${-long/2},${-deep/2})`});
+  if(ok){gg.append(s('rect',{x:0,y:0,width:long,height:deep,fill:'var(--sand)','fill-opacity':.25}));const ig=s('g',{transform:`translate(0,${-deep/2})`});drawIcon(ig,'sandbags',long,deep*2);gg.append(ig)}
+  else gg.append(s('rect',{x:1,y:1,width:long-2,height:deep-2,rx:2,fill:'var(--bad)','fill-opacity':.1,stroke:'var(--bad)','stroke-width':1.2,'stroke-dasharray':'3 2'}));
+  if(rim)gg.append(s('rect',{x:-1,y:-1,width:long+2,height:deep+2,rx:3,fill:'none',stroke:rim,'stroke-width':1.6}));return gg}
+// the side of its two squares a Sandbags row stands against (r: 0 N, 1 E, 2 S, 3 W, in the squares' own turn). X,Y = top-left square
+const bagsRect=(X,Y,r,e=.5)=>[{x:X,y:Y,w:2*C,h:e*C},{x:X+(1-e)*C,y:Y,w:e*C,h:2*C},{x:X,y:Y+(1-e)*C,w:2*C,h:e*C},{x:X,y:Y,w:e*C,h:2*C}][r%4];
+function addedMark(t,X,Y,r,up){const g=s('g',{opacity:.97}),dash=up?'2.5 2':'none';
+  if(t==='sandbags'){g.append(bagsMark(bagsRect(X,Y,r)));return g}
+  if(t==='door'){const dg=s('g',{transform:`translate(${X},${Y}) rotate(${(r%4)*90} ${C/2} ${C/2})`});   // the same symbol as Doors in an entrance or centre square
+    dg.append(s('rect',{x:1.5,y:1.5,width:C-3,height:C-3,rx:2,fill:'var(--panel)',stroke:'var(--ink)','stroke-width':1.2,'stroke-dasharray':dash}));drawIcon(dg,'door',C,C);g.append(dg);return g}
+  g.append(s('rect',{x:X+2.5,y:Y+2.5,width:C-5,height:C-5,rx:2,fill:'var(--entry)',stroke:'var(--ink)','stroke-width':1.1,'stroke-dasharray':dash}));
+  if(t==='hesco_s')g.append(s('rect',{x:X+C*.3,y:Y+C*.3,width:C*.4,height:C*.4,rx:1,fill:'none',stroke:'var(--ink)','stroke-width':.8,opacity:.6}));
+  return g}
 const addsOf=p=>(p.mod&&Array.isArray(p.mod.add))?p.mod.add:[];   // blocks added to a structure with Modify structure: [type,x,y,z,r] in blueprint squares
 function pieceCounts(){const c={};for(const p of pieces){c[p.t]=(c[p.t]||0)+1;for(const e of openingsOf(p))if(e.sealType)c[e.sealType]=(c[e.sealType]||0)+1;
   for(const a of addsOf(p))c[a[0]]=(c[a[0]]||0)+1}return c}
@@ -1692,7 +1713,8 @@ function drawPiece(p,{ghost=false,num=null,covered=false}={}){
   const g=s('g',{transform:`translate(${(r.x+r.w/2)*C+ox},${(r.y+r.d/2)*C+oy}) rotate(${rr*90}) scale(1,${sy}) translate(${-w/2},${-d/2})`});
   const inset=t.sym?1:1.5+Math.min(p.z,3)*1.5;
   const op=t.low?.35:Math.min(.95,.6+topOf(p)*.06);
-  if(t.icon)drawIcon(g,t.icon,w,d);
+  if(t.icon==='sandbags'&&!p.z){const ig=s('g',{transform:`translate(0,${-d*.25})`});drawIcon(ig,'sandbags',w,d);g.append(ig)}   // on the ground: against one side (R turns it); on a block: centred (tested for protection)
+  else if(t.icon)drawIcon(g,t.icon,w,d);
   if(!t.bremer&&!t.icon)g.append(s('rect',{x:inset,y:inset,width:w-inset*2,height:d-inset*2,rx:t.sym?1:2,fill:`var(--${t.c})`,'fill-opacity':ghost?.35:t.glyph?.85:op,
     stroke:p.z&&!t.sym?'var(--ink)':(t.sym?'var(--ink)':`var(--${t.c})`),'stroke-width':t.sym?2.2:(p.z?1.6:1)}));
   if(t.ladderEdge){const u=w/100,x0=42*u,x1=58*u;   // ladder at the middle of the south side, turns with the piece
@@ -1742,7 +1764,10 @@ function drawPiece(p,{ghost=false,num=null,covered=false}={}){
       g.append(s('line',{x1,y1,x2,y2,stroke:'var(--door)','stroke-width':4}));
       g.append(arrow(side,i,t.w,t.d));}
     // entrance arrows from the outer wall into the raised core
-    for(const[side,i]of S.arrow||[]){const k=ek++;g.append(doors.includes(k)?doorMark(side,i,t.w,t.d):closed.includes(k)?sealMark(side,i,t.w,t.d,'H2'):arrow(side,i,t.w,t.d))}
+    const orig=((P[p.t].sym||{}).door||[]).length+((P[p.t].sym||{}).arrow||[]).length;   // holes (blocks taken off) get the red square below, no arrow
+    const filled=(side,i)=>{const[lx,ly]=side==='S'?[i,t.d-1]:side==='N'?[i,0]:side==='W'?[0,i]:[t.w-1,i];   // a block added with Modify stands in it
+      return((p.mod&&p.mod.add)||[]).some(a=>!a[3]&&bpCells({t:a[0],x:a[1],y:a[2],r:a[4]||0}).some(([u,v])=>u===lx&&v===ly))};
+    for(const[side,i]of S.arrow||[]){const k=ek++;g.append(doors.includes(k)?doorMark(side,i,t.w,t.d):closed.includes(k)?sealMark(side,i,t.w,t.d,'H2'):k>=orig||filled(side,i)?s('g'):arrow(side,i,t.w,t.d))}
     for(const[lx,ly]of S.ladder||[]){const x=lx*C,y=ly*C;
       for(const fx of[.3,.7])g.append(s('line',{x1:x+fx*C,y1:y+3,x2:x+fx*C,y2:y+C-3,stroke:'var(--ladder)','stroke-width':2}));
       for(const fy of[.28,.5,.72])g.append(s('line',{x1:x+.3*C,y1:y+fy*C,x2:x+.7*C,y2:y+fy*C,stroke:'var(--ladder)','stroke-width':1.6}));}
@@ -1750,10 +1775,10 @@ function drawPiece(p,{ghost=false,num=null,covered=false}={}){
   if(t.mod&&!ghost){   // a modified structure (Modify structure): dashed red outline; removed ground blocks get a red cross
     g.append(s('rect',{x:.5,y:.5,width:w-1,height:d-1,fill:'none',stroke:'var(--bad)','stroke-width':1.6,'stroke-dasharray':'5 3'}));
     const d0=bpOf(p.t),bl=bpBlocks(d0),fl=bl.filter(b=>b.t==='floor'),x0=Math.min(...fl.map(b=>b.x)),y0=Math.min(...fl.map(b=>b.y));
-    for(const b of bl)if(b.z===0&&CB[b.t]&&b.t!=='window'&&!t.st.present(b.i))for(const[cx,cy]of bpCells(b)){const X=(cx-x0)*C,Y=(cy-y0)*C;
-      g.append(s('path',{d:`M${X+C*.25} ${Y+C*.25}L${X+C*.75} ${Y+C*.75}M${X+C*.75} ${Y+C*.25}L${X+C*.25} ${Y+C*.75}`,stroke:'var(--bad)','stroke-width':2,'stroke-linecap':'round'}))}
-    for(const a of(p.mod&&p.mod.add)||[])for(const[cx,cy]of bpCells({t:a[0],x:a[1],y:a[2],r:a[4]||0})){const X=(cx-x0)*C,Y=(cy-y0)*C;
-      g.append(s('rect',{x:X+2.5,y:Y+2.5,width:C-5,height:C-5,rx:2,fill:a[0]==='door'?'var(--panel)':a[0]==='sandbags'?'#C9A86A':'var(--entry)',stroke:'var(--ink)','stroke-width':1.1,'stroke-dasharray':a[3]?'2.5 2':'none',opacity:.95}));}}
+    const addedAt=(cx,cy)=>((p.mod&&p.mod.add)||[]).some(a=>!a[3]&&bpCells({t:a[0],x:a[1],y:a[2],r:a[4]||0}).some(([u,v])=>u===cx&&v===cy));
+    for(const b of bl)if(b.z===0&&CB[b.t]&&b.t!=='window'&&!t.st.present(b.i))for(const[cx,cy]of bpCells(b)){if(addedAt(cx,cy))continue;const X=(cx-x0)*C,Y=(cy-y0)*C;
+      g.append(s('rect',{x:X+2.5,y:Y+2.5,width:C-5,height:C-5,rx:2,fill:'var(--bad)','fill-opacity':.12,stroke:'var(--bad)','stroke-width':1.4,'stroke-dasharray':'3 2'}))}   // taken off: a red square (same look as on Floor 2 / Roof)
+    for(const a of(p.mod&&p.mod.add)||[])g.append(addedMark(a[0],(a[1]-x0)*C,(a[2]-y0)*C,a[4]||0,!!a[3]))}   // Sandbags against their side (in a window: its outer side)
   outer.append(g);
   // text stays upright
   const cx=(r.x+r.w/2)*C,cy=(r.y+r.d/2)*C;
@@ -2579,6 +2604,17 @@ window.sv3dSvg=function(a,view,L=0,opt={}){
         if(b.t==='roof'){push({...w,z0:zz-.3,z1:zz+.04,zk:zz,c:ROOF,net:(p.t==='bunker'||/recon/.test(p.t)||/^cs_/.test(p.t))&&isTopRoof(bp,b)});continue}
         if(b.t==='window'){winFrame(w,zz,b,R0);continue}
         const h=b.t==='corner'?1.65:CB[b.t]||1;push({...w,z0:zz,z1:zz+h,c:BC[b.t]||HC,mesh:/hesco|corner/.test(b.t)})}
+      // blocks added with Modify structure (those whose floor still stands), then closed entrances and centre squares
+      const all=bpBlocks(bp);
+      const pres=all.filter(o=>!st||st.present(o.i));
+      for(const b of addsStanding(p,pres)){const{t,z:bz}=b,cs=bpCells(b);
+        if(t==='sandbags'){const er=bEdge({t:'sandbags',x:b.x,y:b.y,r:b.r}),w=local(p,{x0:er.x,x1:er.x+er.w,y0:er.y,y1:er.y+er.d});box({...w,z0:z+bz,z1:z+bz+1,c:SAND,det:'bags',det2:1,raw:{}});continue}   // against their side, as in the designer
+        const zz=z+bz,x0=Math.min(...cs.map(c=>c[0])),y0=Math.min(...cs.map(c=>c[1])),x1=Math.max(...cs.map(c=>c[0]))+1,y1=Math.max(...cs.map(c=>c[1]))+1;
+        if(t==='door'){const w=local(p,{x0,x1,y0,y1});door3d(w.x0,w.y0,zz,(b.r+R0)%4);continue}
+        push({...local(p,{x0,x1,y0,y1}),z0:zz,z1:zz+(CB[t]||1),c:HC,mesh:1})}
+      for(const e of openingsOf(p)){if(!e.sealType)continue;
+        if(e.sealType==='door'){const r=e.centre?((p.doorR&&p.doorR[e.k])||0)+R0:[[0,1],[-1,0],[0,-1],[1,0]].findIndex(([dx,dy])=>dx===e.out[0]&&dy===e.out[1]);door3d(e.x,e.y,z,((r%4)+4)%4);continue}
+        push({x0:e.x,x1:e.x+1,y0:e.y,y1:e.y+1,z0:z,z1:z+(CB[e.sealType]||P[e.sealType].h||1),c:HC,mesh:1})}
       continue}
     if(/^hesco/.test(p.t)){for(let x=r.x;x<r.x+r.w;x++)for(let y=r.y;y<r.y+r.d;y++)push(B(x,x+1,y,y+1,z,z+t.h,HC,{mesh:1}));continue}
     if(t.c==='emp'){push({x0:r.x,x1:r.x+r.w,y0:r.y,y1:r.y+r.d,z0:z,z1:z+.04,c:['#9AA08C','#A9AF9A','#8A907C','#7B8471']});
@@ -2588,7 +2624,7 @@ window.sv3dSvg=function(a,view,L=0,opt={}){
         if(b.z1b!=null){const zf=z+b.z1,zb=z+b.z1b;o.hz=(wx,wy)=>{const[lx,ly]=w2l(p,wx,wy);return Math.abs(ly-b.y0)<.01?zf:zb}}
         if(b.det==='flag'){const q=local(p,b);card(q.x1,(q.y0+q.y1)/2,z+b.z1,(x,y,g)=>`<path d="M${x} ${y} q${.25*g} ${.05*g} ${.55*g} 0 v${.9*g} q${-.3*g} ${.08*g} ${-.55*g} 0 Z" fill="#2E3F82" stroke="#1A2550"/>`,.5);continue}
         push(o)}continue}
-    if(p.t==='sandbags'){const w=local(p,{x0:.03,x1:1.97,y0:.22,y1:.78});box({...w,z0:z,z1:z+dgfSB(),c:SAND,det:'bags',det2:1,raw:{}});continue}
+    if(p.t==='sandbags'){const w=local(p,z?{x0:.03,x1:1.97,y0:.22,y1:.78}:{x0:.03,x1:1.97,y0:.02,y1:.5});box({...w,z0:z,z1:z+dgfSB(),c:SAND,det:'bags',det2:1,raw:{}});continue}
     if(!inA(r.x+r.w/2-.01,r.y+r.d/2-.01)&&/barbed|hedgehog|recon_tent/.test(p.t))continue;
     if(p.t==='barbed'){wire(p,z);continue}
     if(p.t==='hedgehog'){hedgehog(p,z);continue}
@@ -2638,6 +2674,9 @@ window.sv3dSvg=function(a,view,L=0,opt={}){
     card(cx,cy,z,(x,y,g)=>{const e=w==='sting'?1.5:sp.e;let wp='';if(w!=='talon')wp+=svgSoldier(w==='ciws'?x-1.72*g:w==='sting'?x-1.32*g:x-(e-.35)*g,y,g,1);
       wp+=svgWeapon(w,x,y,y-Hp*g,g,aim);return worseL?`<g transform="translate(${2*x},0) scale(-1,1)">${wp}</g>`:wp},.01)}
   function isTopRoof(bp,b){return!bpBlocks(bp).some(o=>o.t==='roof'&&o.z>b.z)}
+  // a Door standing in one square of a structure (added, or closing an entrance): the Door piece's boxes, turned r (leaf on its local south side)
+  function door3d(wx,wy,z,r){const q={t:'door',x:Math.round(wx),y:Math.round(wy),z,r};for(const b of svPieceBoxes(q)){const w=local(q,b);
+    push({...w,z0:z+b.z0,z1:z+b.z1,c:b.c,det:b.det,raw:b,frame:b.det==='frame',post:b.post,step:b.step,col:b.col,frontFill:b.frontFill,topFill:b.topFill})}}
   function w2l(p,wx,wy){const t=P[p.t];switch(R(p)){case 1:return[wy-p.y,p.x+t.d-wx];case 2:return[p.x+t.w-wx,p.y+t.d-wy];case 3:return[p.y+t.w-wy,wx-p.x];default:return[wx-p.x,wy-p.y]}}
   function bEdge(b){const two=b.t==='sandbags'||b.t==='window',e=b.t==='sandbags'?.5:b.t==='window'?.2:0;
     const cs=two?(b.r%2?[[b.x,b.y],[b.x,b.y+1]]:[[b.x,b.y],[b.x+1,b.y]]):[[b.x,b.y]],x0=Math.min(...cs.map(c=>c[0])),y0=Math.min(...cs.map(c=>c[1]));
@@ -3522,7 +3561,7 @@ function renderSide(){
     seals.forEach(({p,e},k)=>st.append(el('li',{class:'stp'},el('span',{class:'no'},'S'+(k+1)),el('span',{},P[e.sealType].n,' ',el('span',{class:'where'},`${COLS(e.x)}${e.y+1} · ${e.sealType==='door'?'door in':'closes'} the ${P[p.t].n} ${e.centre?'centre':'entrance'}`)))))}
   const adds=[];for(const p of buildOrder())for(const a of addsOf(p))adds.push({p,a});
   if(adds.length){st.append(el('li',{class:'phase'},'Add to structures'));
-    adds.forEach(({p,a},k)=>{const at=window.addedWorld?.(p,a)||{x:p.x,y:p.y,layer:1};st.append(el('li',{class:'stp'},el('span',{class:'no'},'A'+(k+1)),el('span',{},P[a[0]].n,' ',el('span',{class:'where'},`${COLS(at.x)}${at.y+1} · layer ${at.layer} of the ${P[p.t].n} at ${where(p)}`))))})}
+    adds.forEach(({p,a},k)=>{const at=window.addedWorld?.(p,a)||{x:p.x,y:p.y,layer:1};st.append(el('li',{class:'stp'},el('span',{class:'no'},'A'+(k+1)),el('span',{},P[a[0]].n,' ',el('span',{class:'where'},`${COLS(at.x)}${at.y+1} · ${at.floor||'Ground'} of the ${P[p.t].n} at ${where(p)}`))))})}
 }
 
 /* ---------- templates (heights are worked out on load) ---------- */
@@ -3606,9 +3645,9 @@ function setBounds(){if(!pieces.length){BX0=BY0=0;BX1=BY1=N-1;return}const b=bbo
 // one block of a structure, shaped like a piece so the C4 lists, the map and the attack animation can use it
 const BLOCK_T={corner:'hesco_l',window:'door'};
 function vBlock(p,b){const xs=b.cells.map(c=>c[0]),ys=b.cells.map(c=>c[1]);
-  const q={t:BLOCK_T[b.bt]||b.bt,bt:b.bt,x:Math.min(...xs),y:Math.min(...ys),r:b.cells.length>1&&xs[0]===xs[1]?1:0,z:b.z,h:b.h,of:p,blk:true};
+  const q={t:BLOCK_T[b.bt]||b.bt,bt:b.bt,x:Math.min(...xs),y:Math.min(...ys),r:b.cells.length>1&&xs[0]===xs[1]?1:0,z:b.z,h:b.h,of:p,blk:true,i:b.i??-1,cells:b.cells};
   if(b.seal){q.seal=true;q.centre=b.centre;q.k=b.k}if(b.add)q.add=true;return q}
-const blockName=q=>q.blk?(q.seal?`${q.t==='door'?'Door':P[q.t].n+' seal'} in the ${P[q.of.t].n} ${q.centre?'centre':'entrance'}`:`${q.add?'added ':''}${q.bt==='corner'?'Corner HESCO':P[q.t].n} of the ${P[q.of.t].n}`):P[q.t].n;
+const blockName=q=>q.blk?(q.seal?`${q.t==='door'?'Door':P[q.t].n+' seal'} in the ${P[q.of.t].n} ${q.centre?'centre':'entrance'}`:`${q.add?'added ':''}${q.bt==='corner'?'HESCO X Size':P[q.t].n} of the ${P[q.of.t].n}`):P[q.t].n;
 const isBanned=(banned,q)=>banned.has(q)||!!(q&&q.of&&banned.has(q.of));
 // a cell's shape: the surface you stand on (h) and the rooms under roofs. sol = [[bottom, top], …], slabs = roof heights.
 function cellShape(sol,slabs){let h=0;for(const[,t]of sol)if(t>h)h=t;for(const z of slabs)if(z>h)h=z;
@@ -3619,11 +3658,12 @@ function cellShape(sol,slabs){let h=0;for(const[,t]of sol)if(t>h)h=t;for(const z
 function threatGrid(){setBounds();
   const H=new Array(NN).fill(0),col=Array.from({length:NN},()=>[]),hang=Array.from({length:NN},()=>[]),slab=Array.from({length:NN},()=>[]),
     vehBlock=new Array(NN).fill(false),top=new Array(NN).fill(null),target=new Array(NN).fill(false),sp=new Array(NN).fill(null);
-  const parts=[];
+  const parts=[],slabI=Array.from({length:NN},()=>[]),vbs=new Map(),slabsOf=new Map();   // per structure: its blocks and roof slabs (for collapse)
   for(const p of pieces){const t=P[p.t],r=rectOf(p),sb=t.sym&&window.structParts?structParts(p):null;
     if(sb){parts.push([p,sb]);for(const c of pieceCells(p))sp[c]=p;   // a structure: its blocks, one by one
-      for(const b of sb.solids){const q=vBlock(p,b);for(const[x,y]of b.cells)if(IB(x,y))(b.bt==='window'?hang:col)[idx(x,y)].push(q)}   // windows hang from the roof: not blown with the column under them
-      for(const z of sb.slabs)if(IB(z.x,z.y))slab[idx(z.x,z.y)].push(z.z);continue}
+      const vb=[],sl=[];vbs.set(p,vb);slabsOf.set(p,sl);
+      for(const b of sb.solids){const q=vBlock(p,b);vb.push(q);for(const[x,y]of b.cells)if(IB(x,y))(b.bt==='window'?hang:col)[idx(x,y)].push(q)}   // windows hang from the roof: not blown with the column under them
+      for(const z of sb.slabs)if(IB(z.x,z.y)){const o={z:z.z,i:z.i,p,c:idx(z.x,z.y)};sl.push(o);slab[o.c].push(z.z);slabI[o.c].push(o)}continue}
     for(let x=r.x;x<r.x+r.w;x++)for(let y=r.y;y<r.y+r.d;y++){const i=idx(x,y);
       if(PROTECTED.has(t.cat)){if(p.t==='fob'||!$('onlyFob').checked)target[i]=true;continue}   // "Only FOB": the rest is just walked past
       if(p.t==='hedgehog'||p.t==='loudspeaker'||p.t==='radio'){vehBlock[i]=true;continue}   // infantry passes, vehicles don't
@@ -3656,13 +3696,13 @@ function threatGrid(){setBounds();
   const wins=[],winsOut=Array.from({length:NN},()=>[]),winsIn=Array.from({length:NN},()=>[]),lads=[],ladFoot=Array.from({length:NN},()=>[]),ladAt=Array.from({length:NN},()=>[]);
   for(const[p,sb]of parts){
     for(const w of sb.wins){const o=[w.x+w.out[0],w.y+w.out[1]],n=[w.x-w.out[0],w.y-w.out[1]];if(!IB(...o)||!IB(...n))continue;
-      const oi=idx(...o),ni=idx(...n),c4=WD.F('c4.window'),it={o:oi,w:idx(w.x,w.y),n:ni,need:w.need,p,c4,cov:cover(idx(w.x,w.y),oi,w.need),
+      const oi=idx(...o),ni=idx(...n),c4=WD.F('c4.window'),it={o:oi,w:idx(w.x,w.y),n:ni,need:w.need,p,c4,cov:cover(idx(w.x,w.y),oi,w.need),q:hang[idx(w.x,w.y)].find(q=>q.of===p&&q.bt==='window'),
         info:{t:'door',x:w.x,y:w.y,r:0,z:p.z,window:true,of:p,c4,need:w.need}};
       wins.push(it);winsOut[oi].push(it);winsIn[ni].push(it)}
     for(const l of sb.lads){const f=[l.x+l.out[0],l.y+l.out[1]];if(!IB(...f))continue;const cell=idx(l.x,l.y),foot=idx(...f);
-      const it={cell,foot,top:l.z,p,x:l.x,y:l.y,out:l.out,cov:cover(cell,foot,p.z)};   // a Bremer at its foot, face toward the structure, blocks the ladder
+      const it={cell,foot,top:l.z,p,x:l.x,y:l.y,out:l.out,cov:cover(cell,foot,p.z),i:l.i};   // a Bremer at its foot, face toward the structure, blocks the ladder
       lads.push(it);ladFoot[foot].push(it);ladAt[cell].push(it)}}
-  return{H,col,hang,slab,shape,vehBlock,top,target,sp,rooms,roomAt,wins,winsOut,winsIn,lads,ladFoot,ladAt,cover,edge,gaps,brem,wired};
+  return{H,col,hang,slab,slabI,vbs,slabsOf,topAt,shape,vehBlock,top,target,sp,rooms,roomAt,wins,winsOut,winsIn,lads,ladFoot,ladAt,cover,edge,gaps,brem,wired};
 }
 // cells a vehicle can drive to from outside the area
 function vehicleZone(G){
@@ -3759,76 +3799,137 @@ function climbRoute(G,cap,banned,collect,seeds){
 // Per cell the attacker can blow the top piece(s) of a stack (what's below stays) or the bottom piece (clears the column).
 // A structure is blown block by block the same way; its roofs stay up, so a blown wall block under a roof becomes a way in.
 // A piece is paid for once along a route; moving on through the same piece is free.
-const EMPTY_OPT=[{h:0,rm:[],rooms:[]}];
-function cellOptions(G,i,banned,fixed){
-  const col=G.col[i];if(!col.length&&!G.hang[i].length&&!G.slab[i].length)return EMPTY_OPT;
-  const mk=(keep,rm,no)=>{const sh=G.shape(i,keep);return{h:no?99:sh.h,rm,rooms:sh.rooms}};
-  const opts=[mk(col,[],fixed&&fixed.has(i))];   // a fixed climb spot can't be climbed, only blown
+const EMPTY_OPT=[{h:0,rm:[],rooms:[],col:[]}];
+// w = a world after charges (null = as built): its blown pieces, blocks and slabs are left out
+function cellOptions(G,i,banned,fixed,w){
+  const gone=w&&w.d,col=gone?G.col[i].filter(q=>!gone.has(q)):G.col[i];
+  const hang=gone?G.hang[i].filter(q=>!gone.has(q)):G.hang[i],sl=gone?G.slabI[i].filter(o=>!gone.has(o)).map(o=>o.z):G.slab[i];
+  if(!col.length&&!hang.length&&!sl.length)return EMPTY_OPT;
+  const mk=(keep,rm,no)=>{const sh=cellShape([...keep,...hang].map(q=>[q.z,G.topAt(q,i)]),sl);return{h:no?99:sh.h,rm,rooms:sh.rooms,col}};
+  const touched=gone&&col.length<G.col[i].length;
+  const opts=[mk(col,[],fixed&&fixed.has(i)&&!touched)];   // a fixed climb spot can't be climbed, only blown (unless a blast already took part of it)
   for(let k=1;k<col.length;k++){const rm=col.slice(col.length-k);if(rm.some(q=>isBanned(banned,q)))break;opts.push(mk(col.slice(0,col.length-k),rm))}
   if(col.length&&!isBanned(banned,col[0]))opts.push(mk([],[col[0]]));
   return opts;
 }
+/* ---------- C4 charges (doc 11 §6.2) ----------
+   A charge is placed on the face of the block in front of the attacker, at the height they stand at, so it sits in the attacker's
+   square. It costs that block's C4 and takes every block in the 3×3 squares around the charge whose base is at the level of the
+   block it was put on, however few C4 that block needs: 1 C4 on Sandbags takes the HESCO next to them too (Snurra, game test 12 Oct 2026).
+   Sandbags take two squares: a charge on each half sits in front of that half, as if on a HESCO in that square.
+   What stood on a blown piece falls with it. Structures then follow their collapse rules (bpState): a roof or floor that falls
+   takes what rests on it. The result is a new "world"; a route remembers it while it stays near the blast (its zone). */
+let BLAST_UID=new WeakMap(),BLAST_N=0;const uidOf=q=>{let u=BLAST_UID.get(q);if(!u){u=++BLAST_N;BLAST_UID.set(q,u)}return u};
+const qCells=q=>q.cells?q.cells.map(([x,y])=>idx(x,y)):pieceCells(q);
+function blastFrom(G,banned,i,j,z,gone0,budget){
+  const tgt=G.col[j].find(q=>!gone0.has(q)&&q.z<=z&&z<G.topAt(q,j));
+  if(!tgt||isBanned(banned,tgt))return null;const k=WD.c4(tgt.t);if(!(k>0)||k>budget)return null;
+  const zt=tgt.z,hit=new Set([tgt]),zone=new Set();
+  for(const c of near(i,1)){zone.add(c);for(const q of G.col[c])if(!gone0.has(q)&&!isBanned(banned,q)&&q.z<=zt&&zt<G.topAt(q,c))hit.add(q)}
+  const gone=new Set([...gone0,...hit]);
+  // what stood on a blown piece falls (structure blocks follow their own rules below)
+  let grew=true;while(grew){grew=false;for(const q of[...hit])for(const c of qCells(q)){zone.add(c);
+      for(const q2 of G.col[c])if(!gone.has(q2)&&!q2.blk&&q2.z>q.z){gone.add(q2);hit.add(q2);grew=true}}}
+  // collapse: the structures that lost original blocks
+  const fell=[];
+  for(const p of new Set([...gone].filter(q=>q.blk&&q.of).map(q=>q.of))){const d=bpOf(p.t);if(!d)continue;
+    const idxs=[...gone].filter(q=>q.blk&&q.of===p&&q.i>=0).map(q=>q.i);if(!idxs.length)continue;
+    const st0=pieceState(p),rm=new Set([...st0.rm,...idxs]),back=[...st0.back].filter(x=>!idxs.includes(x)),st=bpState(d,rm,back);
+    const now=new Set([...st.fallen].filter(x=>!st0.fallen.has(x)));if(!now.size)continue;
+    const downZ=new Set(),cellsP=new Set(pieceCells(p));
+    for(const o of G.slabsOf.get(p)||[])if(now.has(o.i)&&!gone.has(o)){gone.add(o);downZ.add(o.c+':'+o.z)}
+    for(const q of G.vbs.get(p)||[])if(!gone.has(q)&&(now.has(q.i)||q.i<0&&!q.seal&&q.z>p.z&&qCells(q).some(c=>downZ.has(c+':'+q.z)))){gone.add(q);hit.add(q)}
+    for(const l of G.lads)if(l.p===p&&now.has(l.i))gone.add(l);
+    for(const c of cellsP){zone.add(c);for(const q2 of G.col[c])if(!gone.has(q2)&&!q2.blk&&q2.z>p.z&&[...downZ].some(k=>+k.split(':')[0]===c&&q2.z>=+k.split(':')[1])){gone.add(q2);hit.add(q2)}}
+    const rules=st.rules.filter(r=>r.down&&!(st0.rules.find(q=>q.z===r.z)||{}).down);
+    fell.push({p,what:rules.map(r=>(r.kind==='corners'?'roof':'floor')+' at H'+r.z)})}
+  return{tgt,k,gone,hit,zone,fell,x:cx_(j),y:cy_(j)}}
 // vmode: null = on foot only; 'car' / 'ural' = that vehicle may be driven up and climbed off (its reach) or stood on (next to a window)
 // shut = structures whose open ways in are taken as closed (the on-foot walk-throughs, fixed first)
-function c4Route(G,banned,fixed,shut,vmode){fixed=fixed||new Set();shut=shut||new Set();
+// First without charges (block by block, as before); then with charges, only looking for something cheaper than that.
+function c4Route(G,banned,fixed,shut,vmode){const r0=c4Search(G,banned,fixed,shut,vmode,false,Infinity);if(!r0)return null;   // charges can't blow what blocks can't
+  const r1=r0.c4>0?c4Search(G,banned,fixed,shut,vmode,true,r0.c4):null;
+  return r1&&(!r0||r1.c4<r0.c4)?r1:r0}
+function c4Search(G,banned,fixed,shut,vmode,charges,U){fixed=fixed||new Set();shut=shut||new Set();
   const veh=vehicleZone(G),vcap=vmode?CAPS.find(m=>m.id===vmode).cap:0;
   const roofs=vmode?[{id:vmode,h:WD.F(vmode==='ural'?'climb.ural.roof':'climb.car.roof')}]:[];
-  const opts=[];for(let i=0;i<NN;i++)opts.push(cellOptions(G,i,banned,fixed));
-  const K=Math.max(...opts.map(o=>o.length)),RL=Math.max(1,...opts.flatMap(os=>os.map(o=>o.rooms.length)));
-  // states: standing on cell i with option o (key) · in room l of cell i with option o (RS)
-  const key=(i,o)=>i*K+o,RS=(i,o,l)=>K*NN+(i*K+o)*RL+l,dist=new Map(),prev=new Map();
-  const dec=s=>s<K*NN?{i:Math.floor(s/K),o:s%K,l:-1}:(t=>({i:Math.floor(Math.floor(t/RL)/K),o:Math.floor(t/RL)%K,l:t%RL}))(s-K*NN);
+  const base=[];for(let i=0;i<NN;i++)base.push(cellOptions(G,i,banned,fixed));
+  let K=2,RL=1;for(let i=0;i<NN;i++){K=Math.max(K,G.col[i].length+2,base[i].length);RL=Math.max(RL,G.slab[i].length,...base[i].map(o=>o.rooms.length))}
+  const SPAN=K*NN*(1+RL);
+  // worlds: 0 = as built; the others come after one or more charges. A state remembers its world while it stays in that world's zone.
+  const W=[null],sig=new Map(),MAXW=4000;
+  const O=(t,i)=>{if(!t||!W[t].zone.has(i))return base[i];const w=W[t];let o=w.cache.get(i);if(!o){o=cellOptions(G,i,banned,fixed,w);w.cache.set(i,o)}return o};
+  const tagAt=(t,j)=>t&&W[t].zone.has(j)?t:0,goneIn=(t,q)=>!!(t&&W[t].d.has(q));
+  // states: standing on cell i with option o (key) · in room l of cell i with option o (RS), each in world t
+  const key=(t,i,o)=>t*SPAN+i*K+o,RS=(t,i,o,l)=>t*SPAN+K*NN+(i*K+o)*RL+l,dist=new Map(),prev=new Map();
+  const dec=s=>{const t=Math.floor(s/SPAN),r=s-t*SPAN;if(r<K*NN)return{t,i:Math.floor(r/K),o:r%K,l:-1};const u=r-K*NN;return{t,i:Math.floor(Math.floor(u/RL)/K),o:Math.floor(u/RL)%K,l:u%RL}};
   const heap=[];const push=(d,k)=>{heap.push([d,k]);let n=heap.length-1;while(n){const p=(n-1)>>1;if(heap[p][0]<=heap[n][0])break;[heap[p],heap[n]]=[heap[n],heap[p]];n=p}};
   const pop=()=>{const top=heap[0],last=heap.pop();if(heap.length){heap[0]=last;let n=0;for(;;){const l=2*n+1,r=l+1;let m=n;if(l<heap.length&&heap[l][0]<heap[m][0])m=l;if(r<heap.length&&heap[r][0]<heap[m][0])m=r;if(m===n)break;[heap[m],heap[n]]=[heap[n],heap[m]];n=m}}return top};
   const meta=new Map();
-  const relax=(k,d0,from,info)=>{const d=d0+1e-6;   // a hair per move: equal-C4 routes prefer the shortest walk
+  const relax=(k,d0,from,info)=>{if(d0>U-.5)return;const d=d0+1e-6;   // a hair per move: equal-C4 routes prefer the shortest walk; nothing as dear as the route found without charges
     if(d<(dist.get(k)??Infinity)){dist.set(k,d);prev.set(k,from);if(info)meta.set(k,info);else meta.delete(k);push(d,k)}};
   const c4of=(rm,already)=>rm.reduce((a,p)=>a+(already.includes(p)?0:(WD.c4(p.t))),0);
-  for(let i=0;i<NN;i++)if(onEdge(i))opts[i].forEach((o,oi)=>{if(o.h<=STEP)relax(key(i,oi),c4of(o.rm,[]),-1)});
+  // a charge from cell i (standing at z, or in a room with floor z) on the block in front of it, toward each side
+  const charge=(s,t,i,cur,z,l,d)=>{if(!charges||W.length>=MAXW)return;const Rm=l>=0?cur.rooms[l]:null;
+    const gone0=new Set([...(t?W[t].d:[]),...cur.rm]);   // already blown: this world, and what the last few steps of the route took
+    for(let q=prev.get(s),n=0;q!=null&&q>=0&&n<6;q=prev.get(q),n++){const dq=dec(q);for(const p of O(dq.t,dq.i)[dq.o].rm)gone0.add(p)}
+    for(const[dx,dy]of DIRS){const x1=cx_(i)+dx,y1=cy_(i)+dy;if(!IB(x1,y1))continue;const j=idx(x1,y1);
+      const b=blastFrom(G,banned,i,j,z,gone0,U-.5-d);if(!b||b.hit.size<2&&!b.fell.length)continue;   // only the block itself: no better than blowing it alone
+      const ids=[...b.gone].map(uidOf).sort((a,c)=>a-c).join(',');let nt=sig.get(ids);
+      if(nt==null){if(t)for(const c of W[t].zone)b.zone.add(c);nt=W.length;W.push({d:b.gone,zone:b.zone,cache:new Map()});sig.set(ids,nt)}
+      const o0=O(nt,i)[0],info={charge:true,c4:b.k,tgt:b.tgt,x:b.x,y:b.y,takes:[...b.hit],fell:b.fell};
+      if(Rm){const l2=o0.rooms.findIndex(R=>R.z===Rm.z);if(l2>=0){relax(RS(nt,i,0,l2),d+b.k,s,info);continue}}
+      if(o0.h===z)relax(key(nt,i,0),d+b.k,s,info)}};   // the attacker's own square must stay as it was
+  for(let i=0;i<NN;i++)if(onEdge(i))base[i].forEach((o,oi)=>{if(o.h<=STEP)relax(key(0,i,oi),c4of(o.rm,[]),-1)});
   while(heap.length){const[d,k]=pop();if(d>(dist.get(k)??Infinity))continue;
-    const{i,o:oi,l}=dec(k),cur=opts[i][oi],x=cx_(i),y=cy_(i);
-    if(l>=0){const Rm=cur.rooms[l],z=Rm.z;   // in a room: to the next room or square (blowing what's in the way), out a window, down a ladder
-      for(const[dx,dy]of DIRS){const x1=x+dx,y1=y+dy;if(!IB(x1,y1))continue;const j=idx(x1,y1);
-        opts[j].forEach((o,oj)=>{const rmv=[...cur.rm,...o.rm],c=d+c4of(o.rm,cur.rm);
-          if(passOK(z,Rm.top,o.h,Infinity)&&!covered({cov:G.cover(i,j,z)},rmv))relax(key(j,oj),c,k);
-          o.rooms.forEach((R2,l2)=>{if(passOK(z,Rm.top,R2.z,R2.top))relax(RS(j,oj,l2),c,k)})})}
-      for(const w of G.winsIn[i])if(w.need===z&&!isBanned(banned,w.p))opts[w.o].forEach((op,oj)=>{if(op.h<=w.need&&!covered(w,op.rm))relax(key(w.o,oj),d+c4of(op.rm,[])+w.c4,k,{...w.info,out:true})});
-      for(const L of G.ladAt[i])if(L.top===z)opts[L.foot].forEach((op,oj)=>{if(op.h<=z+STEP&&!covered(L,op.rm))relax(key(L.foot,oj),d+c4of(op.rm,[]),k,{ladder:true,down:true,of:L.p,x:L.x,y:L.y})});
+    const{t,i,o:oi,l}=dec(k),cur=O(t,i)[oi],x=cx_(i),y=cy_(i);
+    if(l>=0){const Rm=cur.rooms[l],z=Rm.z;   // in a room: to the next room or square (blowing what's in the way), out a window, down a ladder, or a charge
+      for(const[dx,dy]of DIRS){const x1=x+dx,y1=y+dy;if(!IB(x1,y1))continue;const j=idx(x1,y1),tj=tagAt(t,j);
+        O(tj,j).forEach((o,oj)=>{const rmv=[...cur.rm,...o.rm],c=d+c4of(o.rm,cur.rm);
+          if(passOK(z,Rm.top,o.h,Infinity)&&!covered({cov:G.cover(i,j,z)},rmv))relax(key(tj,j,oj),c,k);
+          o.rooms.forEach((R2,l2)=>{if(passOK(z,Rm.top,R2.z,R2.top))relax(RS(tj,j,oj,l2),c,k)})})}
+      for(const w of G.winsIn[i])if(w.need===z&&!isBanned(banned,w.p)&&!goneIn(t,w.q)){const tw=tagAt(t,w.o);O(tw,w.o).forEach((op,oj)=>{if(op.h<=w.need&&!covered(w,op.rm))relax(key(tw,w.o,oj),d+c4of(op.rm,[])+w.c4,k,{...w.info,out:true})})}
+      for(const L of G.ladAt[i])if(L.top===z&&!goneIn(t,L)){const tf=tagAt(t,L.foot);O(tf,L.foot).forEach((op,oj)=>{if(op.h<=z+STEP&&!covered(L,op.rm))relax(key(tf,L.foot,oj),d+c4of(op.rm,[]),k,{ladder:true,down:true,of:L.p,x:L.x,y:L.y})})}
+      charge(k,t,i,cur,z,l,d);
       continue}
     const hi=cur.h;
     if(G.target[i]){const states=[];for(let s=k;s!==-1;s=prev.get(s))states.unshift(s);
       const path=states.map(s=>dec(s).i),blown=[],ladders=[];let first=null;
-      for(const s of states){const sl=meta.get(s),ds=dec(s);if(sl&&(sl.ladder||sl.vehicle)){if(sl.ladder)ladders.push(sl)}else if(sl){if(first==null)first=ds.i;if(!blown.includes(sl))blown.push(sl)}
-        const o=opts[ds.i][ds.o];if(o.rm.length&&first==null)first=ds.i;for(const p of o.rm)if(!blown.includes(p))blown.push(p)}
-      const steps=states.map(s=>{const info=meta.get(s),ds=dec(s),o=opts[ds.i][ds.o];   // per step: cell, standing height, floor, what is blown (for the attack animation)
-        if(ds.l>=0){const Rm=o.rooms[ds.l],sp=G.sp[ds.i];return{c:ds.i,h:Rm.z,fl:sp&&Rm.z>sp.z?2:1,rm:o.rm,info}}
-        return{c:ds.i,h:o.h,fl:0,rm:o.rm,info}});
+      for(const s of states){const sl=meta.get(s),ds=dec(s);
+        if(sl&&sl.charge){if(first==null)first=ds.i;blown.push(Object.assign(Object.create(sl.tgt),{c4:sl.c4,charge:true,takes:sl.takes,fell:sl.fell}))}
+        else if(sl&&(sl.ladder||sl.vehicle)){if(sl.ladder)ladders.push(sl)}else if(sl){if(first==null)first=ds.i;if(!blown.includes(sl))blown.push(sl)}
+        const o=O(ds.t,ds.i)[ds.o];if(o.rm.length&&first==null)first=ds.i;for(const p of o.rm)if(!blown.includes(p))blown.push(p)}
+      const steps=states.map(s=>{const info=meta.get(s),ds=dec(s),o=O(ds.t,ds.i)[ds.o];   // per step: cell, standing height, floor, what is blown (for the attack animation)
+        const rm=info&&info.charge?[...o.rm,...info.takes]:o.rm;
+        if(ds.l>=0){const Rm=o.rooms[ds.l],sp=G.sp[ds.i];return{c:ds.i,h:Rm.z,fl:sp&&Rm.z>sp.z?2:1,rm,info}}
+        return{c:ds.i,h:o.h,fl:0,rm,info}});
       return{c4:Math.round(d),path,blown,first,ladders,steps}}
     // into a room next to this square (blowing what fills it, if needed)
-    for(const[dx,dy]of DIRS){const x1=x+dx,y1=y+dy;if(!IB(x1,y1))continue;const j=idx(x1,y1);
-      opts[j].forEach((o,oj)=>{if(!o.rooms.length)return;if(shut.has(G.sp[j])&&!o.rm.length)return;   // a walk-through way in, taken as closed
-        const rmv=[...cur.rm,...o.rm];o.rooms.forEach((R2,l2)=>{if(passOK(hi,Infinity,R2.z,R2.top)&&!covered({cov:G.cover(i,j,R2.z)},rmv))relax(RS(j,oj,l2),d+c4of(o.rm,cur.rm),k)})})}
+    for(const[dx,dy]of DIRS){const x1=x+dx,y1=y+dy;if(!IB(x1,y1))continue;const j=idx(x1,y1),tj=tagAt(t,j),blasted=tj&&O(tj,j)[0].col.length<G.col[j].length;
+      O(tj,j).forEach((o,oj)=>{if(!o.rooms.length)return;if(shut.has(G.sp[j])&&!o.rm.length&&!blasted)return;   // a walk-through way in, taken as closed
+        const rmv=[...cur.rm,...o.rm];o.rooms.forEach((R2,l2)=>{if(passOK(hi,Infinity,R2.z,R2.top)&&!covered({cov:G.cover(i,j,R2.z)},rmv))relax(RS(tj,j,oj,l2),d+c4of(o.rm,cur.rm),k)})})}
     // window: no jumping up into it; stand level with its floor on the next cell (ground, a block, or a vehicle roof)
-    for(const w of G.winsOut[i]){if(isBanned(banned,w.p)||covered(w,cur.rm))continue;const l2=opts[w.n][0].rooms.findIndex(R=>R.z===w.need);if(l2<0)continue;
-      if(hi===w.need)relax(RS(w.n,0,l2),d+w.c4,k,w.info);
-      else if(hi===0&&veh[i]){const rf=roofs.find(r=>r.h===w.need);if(rf)relax(RS(w.n,0,l2),d+w.c4+0.01,k,{...w.info,from:rf.id})}}   // tiny extra: on-foot routes win ties
+    for(const w of G.winsOut[i]){if(isBanned(banned,w.p)||covered(w,cur.rm)||goneIn(t,w.q))continue;const tn=tagAt(t,w.n),l2=O(tn,w.n)[0].rooms.findIndex(R=>R.z===w.need);if(l2<0)continue;
+      if(hi===w.need)relax(RS(tn,w.n,0,l2),d+w.c4,k,w.info);
+      else if(hi===0&&veh[i]){const rf=roofs.find(r=>r.h===w.need);if(rf)relax(RS(tn,w.n,0,l2),d+w.c4+0.01,k,{...w.info,from:rf.id})}}   // tiny extra: on-foot routes win ties
     // up a ladder: into the floor at its top, or onto an open top
-    for(const L of G.ladFoot[i]){if(isBanned(banned,L.p)||covered(L,cur.rm)||hi>L.top+STEP)continue;const lt={ladder:true,of:L.p,x:L.x,y:L.y};
-      const l2=opts[L.cell][0].rooms.findIndex(R=>R.z===L.top);if(l2>=0){relax(RS(L.cell,0,l2),d,k,lt);continue}
-      if(!fixed.has(L.cell)&&opts[L.cell][0].h===L.top)relax(key(L.cell,0),d,k,lt)}
-    const h0=c=>opts[c][0].h;
+    for(const L of G.ladFoot[i]){if(isBanned(banned,L.p)||covered(L,cur.rm)||hi>L.top+STEP||goneIn(t,L))continue;const lt={ladder:true,of:L.p,x:L.x,y:L.y},tc=tagAt(t,L.cell),oc=O(tc,L.cell)[0];
+      const l2=oc.rooms.findIndex(R=>R.z===L.top);if(l2>=0){relax(RS(tc,L.cell,0,l2),d,k,lt);continue}
+      if(!fixed.has(L.cell)&&oc.h===L.top)relax(key(tc,L.cell,0),d,k,lt)}
+    const h0=c=>O(tagAt(t,c),c)[0].h;
     const vc=vcap&&hi===0&&!cur.rm.length&&veh[i]?vcap:0;   // a vehicle parked here: climb off its roof
-    for(const[dx,dy]of DIR8){const x1=x+dx,y1=y+dy;if(!IB(x1,y1))continue;const j=idx(x1,y1),diag=dx&&dy;
-      opts[j].forEach((o,oj)=>{const rmv=[...cur.rm,...o.rm];
-        if(o.h<=hi+STEP&&(diag?diagOK(G,i,j,hi,c=>c===j?o.h:h0(c),rmv):crossOK(G,i,j,hi,0,rmv)))relax(key(j,oj),d+c4of(o.rm,cur.rm),k);
-        else if(vc&&!diag&&o.h<=vc&&crossOK(G,i,j,hi,vc,rmv))relax(key(j,oj),d+c4of(o.rm,cur.rm)+0.01,k,{vehicle:vmode})})}
+    for(const[dx,dy]of DIR8){const x1=x+dx,y1=y+dy;if(!IB(x1,y1))continue;const j=idx(x1,y1),diag=dx&&dy,tj=tagAt(t,j);
+      O(tj,j).forEach((o,oj)=>{const rmv=[...cur.rm,...o.rm];
+        if(o.h<=hi+STEP&&(diag?diagOK(G,i,j,hi,c=>c===j?o.h:h0(c),rmv):crossOK(G,i,j,hi,0,rmv)))relax(key(tj,j,oj),d+c4of(o.rm,cur.rm),k);
+        else if(vc&&!diag&&o.h<=vc&&crossOK(G,i,j,hi,vc,rmv))relax(key(tj,j,oj),d+c4of(o.rm,cur.rm)+0.01,k,{vehicle:vmode})})}
     const onFoot=G.brem[i]&&!cur.rm.includes(G.brem[i])&&hi===G.brem[i].z+FOOT;
     for(const J of JUMPS){const x2=x+J.dx,y2=y+J.dy;if(!IB(x2,y2))continue;      // jumps over untouched cells
       if(!footingJumpOK(G,i,J,onFoot))continue;
       if(J.btw.some(([bx,by])=>h0(idx(x+bx,y+by))>hi))continue;
       if(J.corners.some(([[ax,ay],[bx,by]])=>{const ok=(u,v)=>IB(u,v);return!ok(x+ax,y+ay)||!ok(x+bx,y+by)||Math.min(h0(idx(x+ax,y+ay)),h0(idx(x+bx,y+by)))>hi}))continue;
       if(J.straight?!jumpOK(G,x,y,Math.sign(J.dx),Math.sign(J.dy),Math.max(Math.abs(J.dx),Math.abs(J.dy)),hi):!arcOK(G,x,y,J,hi))continue;
-      const j2=idx(x2,y2);if(h0(j2)<=hi+J.up)relax(key(j2,0),d,k)}
+      const j2=idx(x2,y2),t2=tagAt(t,j2);if(h0(j2)<=hi+J.up)relax(key(t2,j2,0),d,k)}
+    if(hi<99)charge(k,t,i,cur,hi,-1,d);
   }
   return null;
 }
@@ -3921,6 +4022,9 @@ function altWays(T,p){for(const b of T.weak||[])for(const it of b.items)if(it.ki
     const other=it.ways.map(w=>w.txt).filter(t=>t!==used&&!(used==null&&it.ways.find(w=>w.foot)?.txt===t));
     return other.length?` [also ${other.join(' or ')}]`:''}
   return''}
+// one C4 charge in a route: the block it is put on, and what the blast and any collapse take with it
+function chargeText(p){const n=p.takes.filter(q=>q!==Object.getPrototypeOf(p)).length,fell=p.fell.filter(f=>f.what.length);
+  return`${blockName(p)}${p.z&&!p.seal?' on H'+p.z:''} at ${where(p)} (${p.c4}${n?`, the blast takes ${n} more block${n>1?'s':''}`:''}${fell.length?': '+fell.map(f=>`the ${P[f.p.t].n} ${f.what.join(' and ')} falls`).join(', '):''})`}
 function sevChip(level,text){return el('span',{class:'sev s'+level},text)}
 /* ---------- threat summary: six rows, each with a route to show and an attack to play ---------- */
 let threatSel=null,detailsOpen=false;
@@ -3994,10 +4098,10 @@ function renderThreat(){
   if(T.fixedSpots)cb.append(el('div',{class:'status'},`Assuming the ${T.fixedSpots} wall${T.fixedSpots>1?'s':''} climbed over on foot ${T.fixedSpots>1?'are':'is'} made unclimbable first. Blocks used to get up there stay usable.`));
   if(T.breaches.length){const lst=el('ol',{class:'weak'});
     T.breaches.forEach((b,k)=>lst.append(el('li',{},el('span',{class:'wk',style:'--c:var(--bad)'},'C'+(k+1)),' ',
-      b.blown.length?`${b.c4} C4: `+b.blown.map(p=>p.window&&p.out?`Window of the ${P[p.of.t].n} at ${where(p)}, blown from inside and climbed out (${p.c4})`:p.window?`Window of the ${P[p.of.t].n} at ${where(p)}, crawled into level with its floor at H${p.need}${p.from==='car'?' from a car roof':p.from==='ural'?' from a Ural roof':''} (${p.c4})${altWays(T,p)}`:`${blockName(p)}${p.z&&!p.seal?' on H'+p.z:''} at ${where(p)} (${WD.c4(p.t)})`).join(' then ')+(b.blown.some(p=>p.z)?', then climb what is left':'')+(b.ladders&&b.ladders.length?` · uses the ${P[b.ladders[0].of.t].n} ladder at ${COLS(b.ladders[0].x)}${b.ladders[0].y+1} to floor 2`:''):(T.modeIndex===0?'No C4 needed: it can be climbed on foot (see J1)':'No wall to blow: there is an open way in'))));
+      b.blown.length?`${b.c4} C4: `+b.blown.map(p=>p.charge?chargeText(p):p.window&&p.out?`Window of the ${P[p.of.t].n} at ${where(p)}, blown from inside and climbed out (${p.c4})`:p.window?`Window of the ${P[p.of.t].n} at ${where(p)}, crawled into level with its floor at H${p.need}${p.from==='car'?' from a car roof':p.from==='ural'?' from a Ural roof':''} (${p.c4})${altWays(T,p)}`:`${blockName(p)}${p.z&&!p.seal?' on H'+p.z:''} at ${where(p)} (${WD.c4(p.t)})`).join(' then ')+(b.blown.some(p=>p.z)?', then climb what is left':'')+(b.ladders&&b.ladders.length?` · uses the ${P[b.ladders[0].of.t].n} ladder at ${COLS(b.ladders[0].x)}${b.ladders[0].y+1} to floor 2`:''):(T.modeIndex===0?'No C4 needed: it can be climbed on foot (see J1)':'No wall to blow: there is an open way in'))));
     cb.append(lst)}
   for(const[v,n]of[['carC4','a car'],['uralC4','a Ural Defender']]){const b=T.ways[v];if(!b)continue;
-    cb.append(el('div',{class:'status'},el('b',{},`With ${n}: ${b.c4} C4`),' — '+(b.blown.map(p=>p.window?`window of the ${P[p.of.t].n} at ${where(p)}`:`${blockName(p)}${p.z&&!p.seal?' on H'+p.z:''} at ${where(p)}`).join(', ')||'nothing to blow')+', using the vehicle to get up.'))}
+    cb.append(el('div',{class:'status'},el('b',{},`With ${n}: ${b.c4} C4`),' — '+(b.blown.map(p=>p.charge?chargeText(p):p.window?`window of the ${P[p.of.t].n} at ${where(p)}`:`${blockName(p)}${p.z&&!p.seal?' on H'+p.z:''} at ${where(p)}`).join(', ')||'nothing to blow')+', using the vehicle to get up.'))}
   root.append(cb);
   // building weak points (as built)
   const wb=el('div',{class:'tblock'},el('div',{class:'thead'},el('b',{},'Building weak points'),
@@ -4030,7 +4134,9 @@ function drawThreat(g){
   const trim=(path,first)=>{const k=path.indexOf(first);return k<0?path:path.slice(Math.max(0,k-2))};
   const b0=T.breaches[0];
   if(b0&&b0.blown.length)line(trim(b0.path,b0.first),'bad','2 4');
-  T.breaches.forEach((b,k)=>b.blown.forEach(p=>{const r=rectOf(p);
+  T.breaches.forEach((b,k)=>b.blown.forEach(p=>{const r=p.blk?{x:p.x,y:p.y,w:p.cells?Math.max(...p.cells.map(c=>c[0]))-p.x+1:1,d:p.cells?Math.max(...p.cells.map(c=>c[1]))-p.y+1:1}:rectOf(p);
+    if(p.charge)for(const q of p.takes){if(q===Object.getPrototypeOf(p))continue;const cs=q.cells||pieceCells(q).map(c=>[cx_(c),cy_(c)]);
+      for(const[x,y]of cs)g.append(s('rect',{x:x*C+3,y:y*C+3,width:C-6,height:C-6,fill:'var(--bad)','fill-opacity':.14,stroke:'var(--bad)','stroke-width':1.2,'stroke-dasharray':'3 2'}))}
     g.append(s('rect',{x:r.x*C+1,y:r.y*C+1,width:r.w*C-2,height:r.d*C-2,fill:'none',stroke:'var(--bad)','stroke-width':2.5}));
     badge((r.x+r.w/2)*C,(r.y+r.d/2)*C-8,`C${k+1}·${p.c4??WD.c4(p.t)}`,'bad')}));
   if(T.climbs[0]&&(T.climbs[0].entry!=null||T.climbs[0].via))line(trim(T.climbs[0].path,T.climbs[0].via?T.climbs[0].via.inAt:T.climbs[0].entry),T.mode.col,'7 4');
@@ -4161,13 +4267,14 @@ applyRules();
       const ax=cx_(a.c)+.5,ay=cy_(a.c)+.5,bx=cx_(b.c)+.5,by=cy_(b.c)+.5,dist=Math.max(Math.abs(bx-ax),Math.abs(by-ay));
       // C4 first: everything blown to get onto / through this cell; one charge per C4, all go off together
       const blow=[];for(const p of b.rm||[])if(!blownSeen.has(p)){blownSeen.add(p);blow.push({piece:p})}
-      if(b.info&&!b.info.ladder&&(b.info.c4||b.info.seal))blow.push({info:b.info,cell:{x:b.info.x,y:b.info.y}});
-      if(blow.length){const n=Math.max(1,blow.reduce((s,x)=>s+c4For(x),0)),shown=Math.min(n,12);
-        const cx=ax+(bx-ax)*.55,cy=ay+(by-ay)*.55,ang=Math.atan2(by-ay,bx-ax),px=-Math.sin(ang),py=Math.cos(ang);
+      if(b.info&&!b.info.ladder&&!b.info.charge&&(b.info.c4||b.info.seal))blow.push({info:b.info,cell:{x:b.info.x,y:b.info.y}});
+      if(blow.length){const n=Math.max(1,b.info&&b.info.charge?b.info.c4:blow.reduce((s,x)=>s+c4For(x),0)),shown=Math.min(n,12);
+        const ch=b.info&&b.info.charge,tx=ch?b.info.x+.5:bx,ty=ch?b.info.y+.5:by;   // a charge goes on the face of the block in front
+        const cx=ax+(tx-ax)*.55,cy=ay+(ty-ay)*.55,ang=Math.atan2(ty-ay,tx-ax),px=-Math.sin(ang),py=Math.cos(ang);
         const spots=[...Array(shown)].map((_,i)=>{const off=(i-(shown-1)/2)*.17,row=(i%2)*.1;return{x:cx+px*off+Math.cos(ang)*row,y:cy+py*off+Math.sin(ang)*row}});
         const place=.22*shown;
-        const dl=Math.hypot(bx-ax,by-ay)||1,rx=ax-(bx-ax)/dl*.95,ry=ay-(by-ay)/dl*.95;   // back away from the charges before they go off
-        segs.push({kind:'c4',x:cx,y:cy,sx:ax,sy:ay,rx,ry,h:Math.max(a.h,0),fl:a.fl,blow,spots,n,place,count:1.5,boom:.75,dur:place+1.5+.75,face:Math.atan2(bx-ax,-(by-ay))*180/Math.PI});
+        const dl=Math.hypot(tx-ax,ty-ay)||1,rx=ax-(tx-ax)/dl*.95,ry=ay-(ty-ay)/dl*.95;   // back away from the charges before they go off
+        segs.push({kind:'c4',x:cx,y:cy,sx:ax,sy:ay,rx,ry,h:Math.max(a.h,0),fl:a.fl,blow,spots,n,place,count:1.5,boom:.75,dur:place+1.5+.75,face:Math.atan2(tx-ax,-(ty-ay))*180/Math.PI});
         segs.push({kind:'back',ax:rx,ay:ry,bx:ax,by:ay,ha:a.h,hb:a.h,fla:a.fl,flb:a.fl,dist:1,dur:.4})}
       let kind='walk';
       if(b.info&&b.info.window||a.fl&&b.fl===0&&b.info&&b.info.out)kind='crawl';
@@ -4662,13 +4769,13 @@ const CB={hesco_s:1,hesco_l:2,sandbags:1,door:2,window:1,corner:2};   // block h
    Blocks are indexed by their place in the blueprint list. A structure's state = which blocks the player removed (rm,
    with the hammer or C4) and which of those were built back (back). Built-back blocks stand, but never count as support.
    Rules, per floor or roof slab (level z > 0):
-   · corner rule: the slab rests on Corner HESCO (special, 1.65 high, players can't build them). It falls when `fall` of them are gone (default 2).
+   · corner rule: the slab rests on HESCO X Size (special, 1.65 high, players can't build them). It falls when `fall` of them are gone (default 2).
    · count rule: otherwise the slab rests on the ground ring. It falls when `fall` of the original ground blocks of the
      counted type are gone (default: half of them). Recon floor 2: 5 of 10; Shelter roof: 6 of 12.
    A falling slab takes everything resting on that level (sandbags, Small HESCO, ladder up to it) except corners;
    windows hang from the roof above them and only go with it. A HESCO or corner that stood on a block that is gone falls,
    with its square of the slab under it. Ground blocks never fall. */
-const BT=t=>({hesco_s:'HESCO Small',hesco_l:'HESCO Large',sandbags:'Sandbags',door:'Door',window:'Window',corner:'Corner HESCO',floor:'Floor',roof:'Roof / middle floor',ladder:'Ladder'}[t]||t);
+const BT=t=>({hesco_s:'HESCO Small',hesco_l:'HESCO Large',sandbags:'Sandbags',door:'Door',window:'Window',corner:'HESCO X Size',floor:'Floor',roof:'Roof / middle floor',ladder:'Ladder'}[t]||t);
 const HEAVY=new Set(['hesco_s','hesco_l','corner','door']);
 const bpCells=b=>(b.t==='sandbags'||b.t==='window')?(b.r%2?[[b.x,b.y],[b.x,b.y+1]]:[[b.x,b.y],[b.x+1,b.y]]):[[b.x,b.y]];
 function bpBlocks(d){return(d&&Array.isArray(d.blocks)?d.blocks:[]).map(([t,x,y,z,r,tr],i)=>({i,t,x,y,z,r:r||0,tr:!!tr}))}
@@ -4694,6 +4801,14 @@ function bpState(d,rm,back,bl=bpBlocks(d),rules=bpRules(d,bl)){rm=new Set(rm||[]
       for(const b of bl){const on=(b.t==='roof'&&b.z===r.z)||(b.t==='ladder'&&b.z===r.z)||(b.t==='window'&&b.z+CB.window===r.z)||(b.z===r.z&&CB[b.t]&&b.t!=='corner'&&b.t!=='window');
         if(on)fall(b,'the '+lbl+' fell')}}}
   return{rm,back,fallen,why,rules:status,present:i=>!absent(i)}}
+// blocks added with Modify that stand: on the ground, on a floor / roof still there, or on top of a block still there
+// (Sandbags on the sandbags under a window). bl0 = the blueprint blocks still standing. In order, so adds can stand on adds.
+function addsStanding(p,bl0){const out=[];
+  for(const[t,x,y,z,r]of(p.mod&&p.mod.add)||[]){const a={t,x,y,z,r:r||0,i:-1,add:1};
+    if(!z||bpCells(a).every(([cx,cy])=>[...bl0,...out].some(b=>b.t==='roof'&&b.z===z&&b.x===cx&&b.y===cy||CB[b.t]&&b.t!=='window'&&b.z+CB[b.t]===z&&bpCells(b).some(([u,v])=>u===cx&&v===cy))))out.push(a)}
+  return out}
+// a window is blocked when a block (Sandbags put in it) fills its squares at its height: no crawling through
+const winBlocked=(w,list)=>list.some(o=>o!==w&&CB[o.t]&&o.t!=='window'&&o.z<=w.z&&w.z<o.z+CB[o.t]&&bpCells(o).some(([x,y])=>bpCells(w).some(([u,v])=>u===x&&v===y)));
 // state of a placed piece (p.mod = {rm:[…], back:[…]}); null if it has no blueprint
 function pieceState(p){const d=bpOf(p.t);if(!d)return null;const m=p.mod||{},rm=new Set(m.rm||[]);
   if(TRIM_BASE[p.t])for(const b of bpBlocks(d))if(b.tr)rm.add(b.i);   // trimmed: the trim blocks are gone (taken off with the hammer, nothing falls)
@@ -4732,7 +4847,7 @@ function structGeo(p){const base=P[p.t],d=bpOf(p.t);if(!base||!d||!p.mod)return 
   const key=p.t+'|'+JSON.stringify(p.mod);if(GEO_CACHE.has(key))return GEO_CACHE.get(key);
   const st=pieceState(p),bl0=bpBlocks(d).filter(b=>st.present(b.i));
   // added blocks stand when they are on the ground or on a slab that is still there; they never hold anything up
-  const adds=(p.mod.add||[]).map(([t,x,y,z,r])=>({t,x,y,z,r:r||0,i:-1,add:1})).filter(a=>!a.z||bpCells(a).every(([x,y])=>bl0.some(b=>b.t==='roof'&&b.z===a.z&&b.x===x&&b.y===y)));
+  const adds=addsStanding(p,bl0);
   const bl=[...bl0,...adds];
   const fl=bpBlocks(d).filter(b=>b.t==='floor'),x0=Math.min(...fl.map(b=>b.x)),y0=Math.min(...fl.map(b=>b.y)),w=base.w,dd=base.d;
   const top=new Array(w*dd).fill(0);
@@ -4744,7 +4859,7 @@ function structGeo(p){const base=P[p.t],d=bpOf(p.t);if(!base||!d||!p.mod)return 
   const nowGround=new Set(bl.filter(b=>CB[b.t]&&b.t!=='window'&&b.z===0).flatMap(bpCells).map(([x,y])=>(x-x0)+','+(y-y0)));
   const holes=[];for(const k of wasGround){if(nowGround.has(k))continue;const[lx,ly]=k.split(',').map(Number),s=sideOf(lx,ly);if(s&&!orig.includes(s+idxOn(s,lx,ly)))holes.push([s,idxOn(s,lx,ly)])}
   const win={};let winZ=null;
-  for(const b of bl.filter(b=>b.t==='window'))for(const[x,y]of bpCells(b)){const lx=x-x0,ly=y-y0,s=SIDES[b.r%4];(win[s]=win[s]||[]).push(idxOn(s,lx,ly));
+  for(const b of bl.filter(b=>b.t==='window'&&!winBlocked(b,bl)))for(const[x,y]of bpCells(b)){const lx=x-x0,ly=y-y0,s=SIDES[b.r%4];(win[s]=win[s]||[]).push(idxOn(s,lx,ly));
     const f=Math.max(0,...bl.filter(q=>(q.t==='roof'||q.t==='floor')&&q.x===x&&q.y===y&&q.z<=b.z).map(q=>q.z));if(winZ===null)winZ=f}
   const ladder=bl.filter(b=>b.t==='ladder').map(b=>[b.x-x0,b.y-y0]);
   const mid=bpBlocks(d).find(b=>b.t==='ladder');   // floor 2 = the level the ladder (or a window floor) leads to
@@ -4767,20 +4882,19 @@ function structParts(p){const d=bpOf(p.t);if(!d||!P[p.t])return null;
   const key=[p.t,p.x,p.y,R(p),p.z,JSON.stringify(p.mod||0),(p.closed||[]).join(),(p.doors||[]).join()].join('|');
   if(PARTS_CACHE.has(key))return PARTS_CACHE.get(key);
   const st=pieceState(p),all=bpBlocks(d),bl=all.filter(b=>st.present(b.i));
-  const adds=((p.mod&&p.mod.add)||[]).map(([t,x,y,z,r])=>({t,x,y,z,r:r||0,add:1}))
-    .filter(a=>CB[a.t]&&(!a.z||bpCells(a).every(([x,y])=>bl.some(b=>b.t==='roof'&&b.z===a.z&&b.x===x&&b.y===y))));   // stands on the ground or on a slab still there
+  const adds=addsStanding(p,bl).filter(a=>CB[a.t]);   // on the ground, a slab or a block still there
   const fl=all.filter(b=>b.t==='floor'),ref0=fl.length?fl:all,x0=Math.min(...ref0.map(b=>b.x)),y0=Math.min(...ref0.map(b=>b.y));
   const t=P[p.t],w=t.w,dd=t.d,W=(x,y)=>toWorld(p,x-x0,y-y0);
   const edgeSide=(x,y)=>{const lx=x-x0,ly=y-y0;return ly===0?'N':ly===dd-1?'S':lx===0?'W':lx===w-1?'E':null};
   const solids=[],slabs=[],wins=[],lads=[];
   const floorUnder=(x,y,z)=>Math.max(0,...bl.filter(q=>(q.t==='roof'||q.t==='floor')&&q.x===x&&q.y===y&&q.z<=z).map(q=>q.z));
   for(const b of[...bl,...adds]){
-    if(b.t==='roof'){if(b.z>0)slabs.push({x:W(b.x,b.y)[0],y:W(b.x,b.y)[1],z:p.z+b.z});continue}
-    if(b.t==='ladder'){const s=edgeSide(b.x,b.y)||'NESW'[b.r%4],[x,y]=W(b.x,b.y);lads.push({x,y,out:turnDir(OUT[s],R(p)),z:p.z+b.z});continue}
+    if(b.t==='roof'){if(b.z>0)slabs.push({x:W(b.x,b.y)[0],y:W(b.x,b.y)[1],z:p.z+b.z,i:b.i});continue}
+    if(b.t==='ladder'){const s=edgeSide(b.x,b.y)||'NESW'[b.r%4],[x,y]=W(b.x,b.y);lads.push({x,y,out:turnDir(OUT[s],R(p)),z:p.z+b.z,i:b.i});continue}
     if(!CB[b.t])continue;
     const cells=bpCells(b).map(([x,y])=>W(x,y));
-    solids.push({bt:b.t,cells,z:p.z+b.z,h:CB[b.t],add:!!b.add,i:b.i});
-    if(b.t==='window')for(const[k,[x,y]]of bpCells(b).entries()){const s='NESW'[b.r%4];wins.push({x:cells[k][0],y:cells[k][1],out:turnDir(OUT[s],R(p)),need:p.z+floorUnder(x,y,b.z)})}}
+    solids.push({bt:b.t,cells,z:p.z+b.z,h:CB[b.t],add:!!b.add,i:b.add?-1:b.i,lz:b.z});
+    if(b.t==='window'&&!winBlocked(b,[...bl,...adds]))for(const[k,[x,y]]of bpCells(b).entries()){const s='NESW'[b.r%4];wins.push({x:cells[k][0],y:cells[k][1],out:turnDir(OUT[s],R(p)),need:p.z+floorUnder(x,y,b.z)})}}
   for(const e of openingsOf(p))if(e.sealType)solids.push({bt:e.sealType,cells:[[e.x,e.y]],z:p.z,h:(P[e.sealType]&&P[e.sealType].h)||CB[e.sealType],seal:true,centre:!!e.centre,k:e.k});
   const out={solids,slabs,wins,lads};
   if(PARTS_CACHE.size>300)PARTS_CACHE.clear();PARTS_CACHE.set(key,out);return out}
@@ -4817,7 +4931,7 @@ function registerCustom(id,d){d=cleanBlueprint(d);if(!d)return null;
   const idxOn=(s,lx,ly)=>s==='N'||s==='S'?lx:ly;
   const arrow=[];for(const k of floor){const[lx,ly]=k.split(',').map(Number);if(ground.has(k))continue;const s=sideOf(lx,ly);if(s)arrow.push([s,idxOn(s,lx,ly)])}
   const win={};let winZ=null;const SIDES='NESW';
-  for(const b of bl.filter(b=>b.t==='window'))for(const[x,y]of cells(b)){const lx=x-x0,ly=y-y0,s=SIDES[b.r%4];
+  for(const b of bl.filter(b=>b.t==='window'&&!winBlocked(b,bl)))for(const[x,y]of cells(b)){const lx=x-x0,ly=y-y0,s=SIDES[b.r%4];
     if(sideOf(lx,ly)!==s&&!((s==='N'&&ly===0)||(s==='S'&&ly===dd-1)||(s==='W'&&lx===0)||(s==='E'&&lx===w-1)))continue;
     (win[s]=win[s]||[]).push(idxOn(s,lx,ly));
     const fl=Math.max(0,...slab.filter(q=>q.x===x&&q.y===y&&q.z<=b.z).map(q=>q.z));if(winZ===null)winZ=fl}
@@ -4835,12 +4949,13 @@ function customsUsed(){const o={};for(const p of pieces)if(CUSTOM_DATA[p.t])o[p.
 
 <script id="wd-modify">
 /* ---------- Modify structure (M) ----------
-   A row of tools opens under the toolbar: Layer (Layer 1 = the ground floor, then one per floor / roof slab of the blueprint:
-   Recon Tower 3, Shelter and Bunker 2), the block to add (HESCO Large, HESCO Small, Door, Sandbags) and Advanced.
+   A row of tools opens under the toolbar: the floor (always Ground · Floor 2 · Roof; Floor 2 greyed out on a structure without a
+   middle floor, so Bunker and Shelter have Ground and Roof), the block to add (HESCO Large, HESCO Small, Door, Sandbags) and Advanced.
+   Under a roof that rests on HESCO X Size (inside the Bunker, Recon floor 2) there is only 1.65 of headroom: no HESCO Large or Door.
    · Normal: the map stays as it is. Click a square of any structure (no selecting first) to add the chosen block on the chosen
      layer, or to put back a removed block of that kind. Erase (E) or right-click takes a block off. Entrances and the open centre
      on Layer 1 close with the chosen block; erasing them opens them again.
-   · Advanced: the panel over the map, as before: the chosen layer as a grid, the collapse rules and the list of changes.
+   · Advanced: the panel over the map, as before: the chosen floor as a grid, the collapse rules and the list of changes.
      Same clicks as on the map (left adds / puts back, E or right-click takes off).
    · Toolbar while modifying: Rotate (R) turns the sandbags (or a door in an open centre), Erase (E) takes off, Undo, Side view (S)
      shows the structure being modified. Brush and Wall Optimization are greyed out.
@@ -4848,8 +4963,8 @@ function customsUsed(){const o={};for(const p of pieces)if(CUSTOM_DATA[p.t])o[p.
    Data (unchanged): p.mod.rm / p.mod.back = blueprint block numbers (wd-custom); p.mod.add = [[type,x,y,z,r],…] in blueprint squares,
    z = the layer's height; entrances on Layer 1 use the existing seals (p.closed / p.doors). */
 (()=>{
-const MC=52,MM=24,LOOK={hesco_l:['HL','var(--entry)'],hesco_s:['HS','var(--entry)'],corner:['CO','var(--entry)'],door:['D','var(--wall)'],sandbags:['SB','var(--field)'],window:['W','var(--win)'],ladder:['L','var(--ladder)']};
-const MS={p:null,n:1,ask:null,add:'hesco_l',ar:0,erase:false,adv:false};   // n = layer number (1 = ground floor); ar = sandbags across (0) or down (1) on the map
+const MC=52,MM=24,LOOK={hesco_l:['H2','var(--entry)'],hesco_s:['H1','var(--entry)'],corner:['HX','var(--entry)'],door:['D','var(--wall)'],sandbags:['SB','var(--field)'],window:['W','var(--win)'],ladder:['L','var(--ladder)']};
+const MS={p:null,lv:'g',ask:null,add:'hesco_l',ar:0,dr:0,erase:false,adv:false};   // dr = quarter turns of a new Door on the map   // lv = the floor: 'g' ground, 'r' roof, 'm2' floor 2 (… 'm3' on taller structures); ar = sandbags across (0) or down (1) on the map
 const CAN_RM=t=>t==='hesco_l'||t==='hesco_s'||t==='door'||t==='sandbags'||t==='corner';
 const CAN_BACK=t=>t==='hesco_l'||t==='hesco_s'||t==='door'||t==='sandbags';
 const ADDS=[['hesco_l','HESCO Large'],['hesco_s','HESCO Small'],['door','Door'],['sandbags','Sandbags']];
@@ -4884,6 +4999,11 @@ const dropText=list=>{const n={};for(const q of list)n[P[q.t].n]=(n[P[q.t].n]||0
 const dropNote=()=>MS.dropped&&MS.dropped.length?` · fell with it: ${dropText(MS.dropped)}`:'';
 const name=b=>BT(b.t);
 const layersOf=I=>[...new Set([0,...I.bl.filter(b=>b.t==='roof').map(b=>b.z)])].sort((a,b)=>a-b);
+// floors of a structure, bottom up: Ground, Floor 2 (the middle floor, Recon Tower), Roof. n = 1 … Ls.length
+const floorName=(Ls,n)=>n<=1?'Ground':n>=Ls.length?'Roof':'Floor '+n;
+const onFloor=fn=>fn==='Ground'?'on the ground floor':fn==='Roof'?'on the roof':'on '+fn;
+const lvOf=(Ls,n)=>n<=1?'g':n>=Ls.length?'r':'m'+n;
+function nOf(Ls){if(MS.lv==='g'||Ls.length<2)return 1;if(MS.lv==='r')return Ls.length;const k=+MS.lv.slice(1);return k<Ls.length?k:1}   // a floor the structure doesn't have: Ground
 const lvl=(Ls,z)=>{let r=Ls[0];for(const L of Ls)if(L<=z)r=L;return r};
 function groupText(list,I){const n={},top=Math.max(0,...((I||{}).bl||list).filter(b=>b.t==='roof').map(b=>b.z));
   for(const b of list){const k=b.t==='roof'?(b.z<top?'floor H'+b.z:'roof H'+b.z):name(b);n[k]=(n[k]||0)+1}
@@ -4902,7 +5022,7 @@ function act(i){const p=MS.p;if(!p)return;const I=info(p),b=I.bl[i],rm=userRm(p)
     const st=bpState(I.d,[...rm],[...back,i],I.bl);
     if(b.z>0&&!I.bl.some(o=>CB[o.t]&&o.t!=='window'&&o.z+CB[o.t]===b.z&&bpCells(o).some(([x,y])=>bpCells(b).some(([u,v])=>u===x&&v===y))&&st.present(o.i))
       &&!I.bl.some(o=>o.t==='roof'&&o.z===b.z&&st.present(o.i)&&bpCells(b).some(([x,y])=>x===o.x&&y===o.y))){flashMsg('Nothing left to stand it on',true);return}
-    back.add(i);MS.ask=null;setMod(p,rm,back);flashMsg(`Put back the ${name(b)}. It stands, but doesn't hold anything up any more`);return}
+    back.add(i);MS.ask=null;setMod(p,rm,back);flashMsg(`Put back the ${name(b)}: ${b.t==='sandbags'?'they stand':'it stands'}, but ${b.t==='sandbags'?'don\'t':'doesn\'t'} hold anything up any more`);return}
   if(!CAN_RM(b.t)){flashMsg(`${name(b)} has no C4 and no hammer removal of its own: it goes when what holds it falls`,true);return}
   if(back.has(i)){back.delete(i);MS.ask=null;setMod(p,rm,back);flashMsg(`Removed the ${name(b)} again`);return}
   const after=bpState(I.d,[...rm,i],[...back],I.bl),extra=[...after.fallen].filter(k=>!I.st.fallen.has(k)).map(k=>I.bl[k]),
@@ -4911,78 +5031,96 @@ function act(i){const p=MS.p;if(!p)return;const I=info(p),b=I.bl[i],rm=userRm(p)
     flashMsg(`Taking off the ${name(b)} brings more down: answer the warning above the map`,true);return}
   rm.add(i);MS.ask=null;setMod(p,rm,back);flashMsg(`Removed the ${name(b)}${extra.length?': '+groupText(extra,I)+' fell':''}${dropNote()}`,!!(extra.length||on.length))}
 
+// Erase / right-click on a block you took off: it is as built again (any block, HESCO X Size too), and what fell with it comes back
+function restore(p,i){const I=info(p),b=I.bl[i],rm=userRm(p),back=userBack(p);
+  const clash=userAdd(p).find(a=>a[3]===b.z&&bpCells({t:a[0],x:a[1],y:a[2],r:a[4]||0}).some(([x,y])=>covers(b,x,y)));
+  if(clash){flashMsg(`Take the added ${P[clash[0]].n} off first: it stands where the ${name(b)} was`,true);return}
+  rm.delete(i);back.delete(i);MS.ask=null;setMod(p,rm,back);flashMsg(`Restored the ${name(b)}: as built again`)}
 /* ----- adding blocks ----- */
 const slabAt=(I,z,x,y)=>z===0?I.foot.some(([u,v])=>u===x&&v===y):I.bl.some(b=>b.t==='roof'&&b.z===z&&b.x===x&&b.y===y&&I.st.present(b.i));
 const covers=(b,x,y)=>bpCells(b).some(([u,v])=>u===x&&v===y);
 // blueprint blocks on this layer that cover a square, topmost first
 const blocksAt=(I,Ls,L,x,y)=>I.bl.filter(b=>LOOK[b.t]&&lvl(Ls,b.z)===L&&covers(b,x,y)).sort((a,b)=>b.z-a.z);
-const addAt=(p,L,x,y)=>userAdd(p).findIndex(a=>a[3]===L&&covers({t:a[0],x:a[1],y:a[2],r:a[4]||0},x,y));
+const onL=(p,a,L)=>{const Ls=layersOf(info(p));return lvl(Ls,a[3])===L};   // an added block belongs to the floor it stands on (Sandbags in a window: the floor under them)
+const addAt=(p,L,x,y)=>{const A=userAdd(p);let k=-1;A.forEach((a,i)=>{if(onL(p,a,L)&&covers({t:a[0],x:a[1],y:a[2],r:a[4]||0},x,y)&&(k<0||a[3]>=A[k][3]))k=i});return k};   // topmost first
 // what already takes this square on this layer (a block of the blueprint, an added one, or a ladder)
 function takenAt(p,I,Ls,L,x,y){
   for(const b of I.bl)if(LOOK[b.t]&&I.st.present(b.i)&&lvl(Ls,b.z)===L&&covers(b,x,y))return name(b);
-  for(const a of userAdd(p))if(a[3]===L&&covers({t:a[0],x:a[1],y:a[2],r:a[4]||0},x,y))return P[a[0]].n+' (added)';
+  for(const a of userAdd(p))if(a[3]===L&&covers({t:a[0],x:a[1],y:a[2],r:a[4]||0},x,y))return P[a[0]].n+' (added)';   // at floor level only: Sandbags in a window sit higher
   return null}
 // why a block can't go here (or null)
-function addErr(p,I,Ls,L,blk){const t=blk.t,n=Ls.indexOf(L)+1;
+function addErr(p,I,Ls,L,blk){const t=blk.t,n=Ls.indexOf(L)+1,rules=bpRules(I.d,I.bl);
   for(const[x,y]of bpCells(blk)){
     if(!I.foot.some(([u,v])=>u===x&&v===y))return'Sandbags need two squares inside the structure: turn them (R) or pick another square';
-    if(!slabAt(I,L,x,y))return`No floor here on layer ${n}: there's nothing to stand the ${P[t].n} on`;
+    if(!slabAt(I,L,x,y))return`No floor here ${onFloor(floorName(Ls,n))}: there's nothing to stand the ${P[t].n} on`;
     const tk=takenAt(p,I,Ls,L,x,y);if(tk)return`That square already has a ${tk}. Erase (E) or right-click takes it off`;
-    if(L===0&&openingsOf(p).some(e=>{const[qx,qy]=at(p,I,x,y);return e.x-p.x===qx&&e.y-p.y===qy}))return'Sandbags can\'t go on an entrance';
+    if(L===0){const[qx,qy]=at(p,I,x,y),e=openingsOf(p).find(e=>e.x-p.x===qx&&e.y-p.y===qy);if(e&&e.sealType)return`That ${e.centre?'centre square':'entrance'} is closed with a ${P[e.sealType].n}. Erase (E) or right-click opens it`}
     const above=I.bl.filter(b=>b.t==='roof'&&b.z>L&&b.x===x&&b.y===y&&I.st.present(b.i)).map(b=>b.z);
-    if(above.length&&L+CB[t]>Math.min(...above))return`No room: a ${P[t].n} (H${CB[t]}) doesn't fit under the roof at H${Math.min(...above)}`}
+    if(above.length){const z=Math.min(...above),low=rules.some(r=>r.z===z&&r.kind==='corners');   // a roof on HESCO X Size leaves 1.65 of headroom (the slab is 0.35 thick)
+      if(L+CB[t]>z-(low?2-1.65:0))return`No room: a ${P[t].n} (H${CB[t]}) doesn't fit under the roof${low?`: there is only 1.65 of headroom (the roof rests on the 1.65-high HESCO X Size)`:` at H${z}`}`}}
   const lim=WD.F('stack.total');if(p.z+L+CB[t]>lim)return`Too high: this would reach H${p.z+L+CB[t]}, the limit is H${lim}`;
   return null}
-function doAdd(p,blk,L,n){const add=userAdd(p);add.push([blk.t,blk.x,blk.y,L,blk.r]);MS.ask=null;setMod(p,userRm(p),userBack(p),add);
-  flashMsg(`Added a ${P[blk.t].n} on layer ${n} (${WD.build(blk.t)} supplies). Erase (E) or right-click takes it off again`)}
+function doAdd(p,blk,L,fn){const add=userAdd(p);add.push([blk.t,blk.x,blk.y,L,blk.r]);MS.ask=null;setMod(p,userRm(p),userBack(p),add);
+  flashMsg(`Added ${blk.t==='sandbags'?'':'a '}${P[blk.t].n} ${onFloor(fn)} (${WD.build(blk.t)} supplies). Erase (E) or right-click takes it off again`)}
 function dropAdd(p,k){const add=userAdd(p),a=add[k];if(!a)return;add.splice(k,1);MS.ask=null;setMod(p,userRm(p),userBack(p),add);flashMsg(`Took off the added ${P[a[0]].n}${dropNote()}`)}
-// entrances and the open centre on Layer 1: closed with the chosen block, opened with Erase
-function sealErr(p){if(MS.add==='sandbags')return"Sandbags don't close an entrance: pick a HESCO or a Door";
-  const sw=SEAL_WITH(p.t);
-  if(MS.add==='door'&&!DOOR_OK(p.t))return`Entrances of the ${P[p.t].n} take a ${P[sw].n}, not a Door: pick ${P[sw].n} in the bar above`;
-  if(MS.add!=='door'&&MS.add!==sw&&!(P[p.t]&&P[p.t].seal==='any'))return`Entrances of the ${P[p.t].n} take a ${P[sw].n}${DOOR_OK(p.t)?' or a Door':''}: pick it in the bar above`;
-  return null}
+// entrances and the open centre on the Ground floor: closed with the chosen block if it fits, otherwise with the one that does; opened with Erase
+// (Bunker: HESCO Small only; Recon Tower, Shelter: HESCO Large or a Door; your own structures: what their designer set)
+function sealPick(p){const sw=SEAL_WITH(p.t),any=P[p.t]&&P[p.t].seal==='any';
+  if(MS.add==='door')return DOOR_OK(p.t)?'door':sw;
+  if(MS.add==='sandbags')return sw;
+  return MS.add===sw||any?MS.add:sw}
+const sealWhy=(p,t)=>t===MS.add?'':` (the ${P[p.t].n} ${p.t==='bunker'||SEAL_WITH(p.t)==='hesco_s'?'only takes a HESCO Small there':'takes a HESCO Large'+(DOOR_OK(p.t)?' or a Door':'')+' there'})`;
 function toggleOpening(p,e){const c=new Set(p.closed||[]),d=new Set(p.doors||[]);
   if(e.sealType){c.delete(e.k);d.delete(e.k);if(p.doorR){delete p.doorR[e.k];if(!Object.keys(p.doorR).length)delete p.doorR}snapshot();flashMsg('Opened the '+(e.centre?'centre square':'entrance'))}
-  else{const err=sealErr(p);if(err){flashMsg(err,true);return}
-    snapshot();if(MS.add==='door')d.add(e.k);else c.add(e.k);
-    flashMsg(MS.add==='door'?'Closed with a Door':`Closed with a ${P[MS.add].n}`)}
+  else{const t=sealPick(p);
+    snapshot();if(t==='door')d.add(e.k);else c.add(e.k);
+    flashMsg(`Closed with a ${P[t].n}${sealWhy(p,t)}`)}
   p.closed=[...c].sort((a,b)=>a-b);p.doors=[...d].sort((a,b)=>a-b);if(!p.closed.length)delete p.closed;if(!p.doors.length)delete p.doors;
   MS.ask=null;changed();render()}
 
 /* ----- one square of a structure: what a click (or an erase) does there ----- */
-function planAt(p,bx,by,erase){const I=info(p),Ls=layersOf(I),n=MS.n;
+function planAt(p,bx,by,erase){const I=info(p),Ls=layersOf(I),n=nOf(Ls),fn=floorName(Ls,n);
   const[ox,oy]=at(p,I,bx,by),wx=p.x+ox,wy=p.y+oy,me=[[wx,wy]];
-  if(n>Ls.length)return{bad:true,cells:me,text:`The ${P[p.t].n} has ${Ls.length} layers: pick Layer ${Ls.length} or lower`};
-  const L=Ls[n-1],pre=`${P[p.t].n} · layer ${n} · ${COLS(wx)}${wy+1}: `,st=I.st;
+  const L=Ls[n-1],pre=`${P[p.t].n} · ${fn} · ${COLS(wx)}${wy+1}: `,st=I.st;
   const W=blk=>bpCells(blk).map(([x,y])=>{const[a,b]=at(p,I,x,y);return[p.x+a,p.y+b]});
-  const op=L===0?openingsOf(p).find(e=>e.x===wx&&e.y===wy):null,k=addAt(p,L,bx,by),here=blocksAt(I,Ls,L,bx,by);
+  const op=L===0?openingsOf(p).find(e=>e.x===wx&&e.y===wy&&(!e.hole||e.sealType)):null,k=addAt(p,L,bx,by),here=blocksAt(I,Ls,L,bx,by);   // a hole (block taken off) is a plain square: add any block there
   if(erase){
     if(k>=0){const a=userAdd(p)[k];return{erase:1,cells:W({t:a[0],x:a[1],y:a[2],r:a[4]||0}),text:pre+`take off the added ${P[a[0]].n}`,run:()=>dropAdd(p,k)}}
     if(op&&op.sealType)return{erase:1,cells:me,text:pre+`open the ${op.centre?'centre square':'entrance'} (take off its ${P[op.sealType].n})`,run:()=>toggleOpening(p,op)};
     const b=here.find(b=>st.present(b.i)&&CAN_RM(b.t)&&!(TRIM_BASE[p.t]&&b.tr));
     if(b)return{erase:1,cells:W(b),text:pre+`take off the ${name(b)} with the hammer`+(userBack(p).has(b.i)?' (put back earlier)':''),run:()=>act(b.i)};
+    const gone=here.find(b=>!st.present(b.i)&&userRm(p).has(b.i)&&!userBack(p).has(b.i));
+    if(gone&&!here.some(b=>st.present(b.i)&&covers(b,bx,by)&&b.z>=gone.z))return{cells:W(gone),text:pre+`restore the ${name(gone)} (undo taking it off)`,run:()=>restore(p,gone.i)};
     const sp=here.find(b=>st.present(b.i));
     if(sp)return{bad:true,cells:me,text:pre+`the ${name(sp)} is a structure part: it goes only when what holds it falls`};
     return{bad:true,cells:me,text:pre+(op?'an open entrance: nothing to take off':'nothing to take off here')}}
   const gone=here.find(b=>!st.present(b.i)&&userRm(p).has(b.i)&&b.t===MS.add&&CAN_BACK(b.t));
   if(gone)return{cells:W(gone),text:pre+`put the ${name(gone)} back`,run:()=>act(gone.i)};
-  if(op){const what=op.centre?'centre square':'entrance';
+  const small=SEAL_WITH(p.t)==='hesco_s',asSeal=MS.add===SEAL_WITH(p.t)||MS.add==='door'&&DOOR_OK(p.t)||small&&MS.add!=='sandbags';
+  if(op&&(op.sealType||asSeal)){const what=op.centre?'centre square':'entrance';   // the usual seal (or the Bunker's HESCO Small, picked for you); any other block goes in as a block
     if(op.sealType)return{bad:true,cells:me,text:pre+`the ${what} is closed with a ${P[op.sealType].n}. Erase (E) or right-click opens it`};
-    const err=sealErr(p);if(err)return{bad:true,cells:me,text:pre+err};
-    return{cells:me,text:pre+`close the ${what} with a ${P[MS.add].n}`,run:()=>toggleOpening(p,op)}}
-  let blk={t:MS.add,x:bx,y:by,r:0};
-  if(MS.add==='sandbags'){   // the second square is always to the right (↔) or below (↕) on the map
-    const o=bpOfCell(p,I,wx+(MS.ar?0:1),wy+(MS.ar?1:0));
-    if(!o)return{bad:true,cells:[[wx,wy],[wx+(MS.ar?0:1),wy+(MS.ar?1:0)]],text:pre+'Sandbags need two squares inside the structure: turn them (R) or pick another square'};
-    blk={t:'sandbags',x:Math.min(bx,o[0]),y:Math.min(by,o[1]),r:o[0]!==bx?0:1}}
+    const t=sealPick(p);
+    return{cells:me,text:pre+`close the ${what} with a ${P[t].n}${sealWhy(p,t)}`,run:()=>toggleOpening(p,op)}}
+  // Sandbags on a window square: they fill the window (on the sandbags under it) and block it
+  const win=MS.add==='sandbags'&&here.find(b=>b.t==='window'&&st.present(b.i));
+  if(win){const bk={t:'sandbags',x:win.x,y:win.y,r:win.r},cs=W(bk),z=win.z;
+    if(userAdd(p).some(a=>a[0]==='sandbags'&&a[3]===z&&bpCells({t:a[0],x:a[1],y:a[2],r:a[4]||0}).some(([x,y])=>covers(win,x,y))))return{bad:true,cells:cs,text:pre+'this window is already blocked with Sandbags. Erase (E) or right-click takes them off'};
+    const pres=I.bl.filter(b=>st.present(b.i));
+    if(!addsStanding({mod:{add:[...userAdd(p),['sandbags',win.x,win.y,z,win.r]]}},pres).some(a=>a.t==='sandbags'&&a.z===z&&a.x===win.x&&a.y===win.y))
+      return{bad:true,cells:cs,text:pre+'Sandbags in a window stand on the sandbags under it: put those back first (pick Sandbags and click, or right-click to restore)'};
+    return{cells:cs,text:pre+`block the window with Sandbags (${WD.build('sandbags')} supplies): no crawling through it`,run:()=>{const add=userAdd(p);add.push(['sandbags',win.x,win.y,z,win.r]);MS.ask=null;setMod(p,userRm(p),userBack(p),add);flashMsg('Window blocked with Sandbags. Erase (E) or right-click takes them off again')}}}
+  let blk={t:MS.add,x:bx,y:by,r:MS.add==='door'?(MS.dr-R(p)+8)%4:0};
+  if(MS.add==='sandbags'){   // the second square is always to the right (↔) or below (↕) on the map; the bags stand against the side MS.ar (0 N, 1 E, 2 S, 3 W)
+    const dn=MS.ar%2,o=bpOfCell(p,I,wx+(dn?0:1),wy+(dn?1:0));
+    if(!o)return{bad:true,cells:[[wx,wy],[wx+(dn?0:1),wy+(dn?1:0)]],text:pre+'Sandbags need two squares inside the structure: turn them (R) or pick another square'};
+    blk={t:'sandbags',x:Math.min(bx,o[0]),y:Math.min(by,o[1]),r:(MS.ar-R(p)+8)%4}}
   const err=addErr(p,I,Ls,L,blk);
-  return{bad:!!err,cells:W(blk),text:pre+(err||`add a ${P[MS.add].n} (${WD.build(MS.add)} supplies)`),run:err?null:()=>doAdd(p,blk,L,n)}}
+  return{bad:!!err,cells:W(blk),leaf:MS.add==='door'?MS.dr:null,sb:MS.add==='sandbags'?MS.ar:null,text:pre+(err||`add ${MS.add==='sandbags'?'':'a '}${P[MS.add].n}${MS.add==='door'?' (R turns it)':''} (${WD.build(MS.add)} supplies)`),run:err?null:()=>doAdd(p,blk,L,fn)}}
+
 function runPlan(pl){if(pl.run)pl.run();else{flashMsg(pl.text,true);render()}}
-// make a structure the one being modified; a smaller one moves the layer down to its top layer
-function pick(p){if(target()===p)return true;MS.p=p;MS.ask=null;const Ls=layersOf(info(p));
-  if(MS.n>Ls.length)MS.n=Ls.length;
-  render();draw();flashMsg(`Modifying the ${P[p.t].n} at ${where(p)} (Layer ${MS.n}). Now click its squares to add or take off blocks`);return false}
+// make a structure the one being modified; a floor it doesn't have (Floor 2 on a Bunker or Shelter) goes back to Ground
+function pick(p){if(target()===p)return true;MS.p=p;MS.ask=null;const Ls=layersOf(info(p));MS.lv=lvOf(Ls,nOf(Ls));
+  render();draw();flashMsg(`Modifying the ${P[p.t].n} at ${where(p)} (${floorName(Ls,nOf(Ls))}). Now click its squares to add or take off blocks`);return false}
 
 /* ----- on the map ----- */
 window.modMapClick=(cx,cy,erase)=>{const p=modPieceAt(cx,cy);
@@ -5003,27 +5141,73 @@ window.drawModHover=(g,h)=>{const q=modPieceAt(h.cx,h.cy),p=target();
   const pl=planAt(q,b[0],b[1],MS.erase);
   const col=pl.bad?'var(--bad)':pl.erase?'var(--bad)':'var(--ok)';
   for(const[x,y]of pl.cells)g.append(s('rect',{x:x*C+1.5,y:y*C+1.5,width:C-3,height:C-3,rx:2,fill:pl.bad?'var(--bad)':pl.erase?'none':'var(--ok)','fill-opacity':pl.bad?.22:.18,stroke:col,'stroke-width':2,'stroke-dasharray':pl.erase&&!pl.bad?'3 2':'none'}));
+  if(pl.sb!=null&&!pl.bad){const X=Math.min(...pl.cells.map(c=>c[0]))*C,Y=Math.min(...pl.cells.map(c=>c[1]))*C,gg=bagsMark(bagsRect(X,Y,pl.sb));gg.setAttribute('opacity','.75');g.append(gg)}   // where the bags will stand
+  if(pl.leaf!=null&&!pl.bad){const[x,y]=pl.cells[0],dg=s('g',{transform:`translate(${x*C},${y*C}) rotate(${pl.leaf*90} ${C/2} ${C/2})`,opacity:.75});drawIcon(dg,'door',C,C);g.append(dg)}   // how the new Door will stand
   $('msg').textContent=pl.text;$('msg').className='msg'+(pl.bad?' bad':'')};
 window.drawModTarget=g=>{const p=on()&&target();if(!p)return;const r=rectOf(p);
-  g.append(s('rect',{x:r.x*C-3,y:r.y*C-3,width:r.w*C+6,height:r.d*C+6,fill:'none',stroke:'var(--accent)','stroke-width':3,rx:3}))};
+  g.append(s('rect',{x:r.x*C-3,y:r.y*C-3,width:r.w*C+6,height:r.d*C+6,fill:'none',stroke:'var(--accent)','stroke-width':3,rx:3}));
+  if(!MS.adv)drawFloor(g,p)};
+// The chosen floor drawn over the structure on the map (every floor, Ground too), in the Structure designer's look:
+// HESCO as blocks, Sandbags as bags on the edge, Windows as a wooden frame on the edge (on their sandbags), Doors as the door symbol.
+// Taken off: red dashed; fell: dashed; added: green rim. Ground: entrances (ENTRY), closed entrances and centre squares.
+function drawFloor(g,p){const I=info(p),Ls=layersOf(I),n=nOf(Ls),L=Ls[n-1],st=I.st,rm=userRm(p),back=userBack(p);
+  const og=s('g',{'pointer-events':'none'}),XY=(bx,by)=>{const[ox,oy]=at(p,I,bx,by);return[(p.x+ox)*C,(p.y+oy)*C]};
+  // a rectangle in the structure's own squares (fractions allowed) → map pixels
+  const RW=(x,y,w,d)=>{const a=svLocalToWorld(p,x-I.x0,y-I.y0),b=svLocalToWorld(p,x+w-I.x0,y+d-I.y0);return{x:Math.min(a[0],b[0])*C,y:Math.min(a[1],b[1])*C,w:Math.abs(b[0]-a[0])*C,h:Math.abs(b[1]-a[1])*C}};
+  const edge=(b,e)=>{const cs=bpCells(b),x0=Math.min(...cs.map(c=>c[0])),y0=Math.min(...cs.map(c=>c[1]));
+    switch(b.r%4){case 0:return RW(x0,y0,2,e);case 2:return RW(x0,y0+1-e,2,e);case 1:return RW(x0+1-e,y0,e,2);default:return RW(x0,y0,e,2)}};
+  const tx=(X,Y,t,fill,stroke)=>og.append(s('text',{x:X+C/2,y:Y+C/2+3,'text-anchor':'middle','font-size':Math.max(7,C*.38),'font-weight':700,fill,stroke:stroke||'none','stroke-width':2,'paint-order':'stroke','font-family':'IBM Plex Mono, monospace'},t));
+  const tile=(X,Y,col,label,ok,plus)=>{og.append(s('rect',{x:X+2.5,y:Y+2.5,width:C-5,height:C-5,rx:2,fill:ok?col:'var(--panel)','fill-opacity':ok?.92:.5,stroke:ok?(plus?'var(--ok)':'var(--ink)'):'var(--bad)','stroke-width':ok&&plus?2:1.1,'stroke-dasharray':ok?'none':'3 2'}));
+    tx(X,Y,label,ok?'var(--panel)':'var(--bad)',ok?'var(--ink)':null)};
+  const bags=(r,ok,plus)=>og.append(bagsMark(r,ok,plus?'var(--ok)':null));
+  const frame=(r,ok)=>{const gg=s('g',{opacity:ok?1:.55});og.append(gg);
+    gg.append(s('rect',{x:r.x+1,y:r.y+1,width:Math.max(1,r.w-2),height:Math.max(1,r.h-2),fill:'none',stroke:ok?'var(--wood)':'var(--bad)','stroke-width':2.4,'stroke-dasharray':ok?'none':'3 2'}));
+    if(ok)for(const k of[0,.5,1]){const v=r.h>r.w,px=v?r.x+r.w/2:r.x+1+k*(r.w-2),py=v?r.y+1+k*(r.h-2):r.y+r.h/2;gg.append(s('rect',{x:px-3,y:py-3,width:6,height:6,fill:'var(--wood)',stroke:'var(--wood-e)','stroke-width':.8}))}};
+  for(const[bx,by]of I.foot){const[X,Y]=XY(bx,by),slab=L?I.bl.find(b=>b.t==='roof'&&b.z===L&&b.x===bx&&b.y===by):true,up=L?slab&&st.present(slab.i):true;
+    og.append(s('rect',{x:X+.5,y:Y+.5,width:C-1,height:C-1,fill:up?'var(--panel)':'var(--grid)','fill-opacity':up?.86:.6,stroke:up?'var(--line)':'var(--bad)','stroke-width':up?.6:1,'stroke-dasharray':up?'none':'3 2'}))}
+  // blueprint blocks on this floor, bottom up (the sandbags first, then the window on them)
+  const mine=I.bl.filter(b=>LOOK[b.t]&&b.t!=='ladder'&&lvl(Ls,b.z)===L).sort((a,b)=>a.z-b.z||(a.t==='window')-(b.t==='window'));
+  for(const b of mine){const ok=st.present(b.i),gone=rm.has(b.i)&&!back.has(b.i),trim=TRIM_BASE[p.t]&&b.tr;
+    if(b.t==='sandbags'){bags(edge(b,.5),ok&&!trim,false);continue}
+    if(b.t==='window'){frame(edge(b,.2),ok);continue}
+    const[l,col]=LOOK[b.t];for(const[cx,cy]of bpCells(b)){const[X,Y]=XY(cx,cy);tile(X,Y,col,trim?'–':ok?l:gone?'✕':'fell',ok&&!trim)}}
+  // ground: entrances and the open centre
+  if(!L)for(const e of openingsOf(p)){if(e.hole&&!e.sealType)continue;const X=e.x*C,Y=e.y*C,b=bpOfCell(p,I,e.x,e.y);if(!e.sealType&&b&&addAt(p,0,b[0],b[1])>=0)continue;   // a block added in it is drawn below
+    if(e.sealType==='door'){const r=e.centre?((p.doorR&&p.doorR[e.k])||0)+R(p):[[0,-1],[1,0],[0,1],[-1,0]].findIndex(([dx,dy])=>dx===e.out[0]&&dy===e.out[1]);og.append(addedMark('door',X,Y,(r+4)%4,false));continue}   // the frame on the outside edge
+    if(e.sealType){const[l,col]=LOOK[e.sealType]||['H','var(--entry)'];tile(X,Y,col,l,true);continue}
+    og.append(s('rect',{x:X+2.5,y:Y+2.5,width:C-5,height:C-5,rx:2,fill:'var(--door)','fill-opacity':.14,stroke:'var(--door)','stroke-width':1.4,'stroke-dasharray':'3 2'}));
+    og.append(s('text',{x:X+C/2,y:Y+C/2+3,'text-anchor':'middle','font-size':Math.max(6,C*.27),'font-weight':700,fill:'var(--door)','font-family':'IBM Plex Mono, monospace'},e.centre?'open':'ENTRY'))}
+  // added blocks on this floor (Sandbags filling a window: on its edge, over the frame)
+  for(const a of userAdd(p)){if(!onL(p,a,L))continue;const b={t:a[0],x:a[1],y:a[2],z:a[3],r:a[4]||0},[l,col]=LOOK[b.t];
+    if(b.t==='sandbags'){bags(edge(b,.5),true,true);continue}   // against their side (in a window: its outer side)
+    if(b.t==='door'){const ws=bpCells(b).map(([cx,cy])=>XY(cx,cy)),X=Math.min(...ws.map(w=>w[0])),Y=Math.min(...ws.map(w=>w[1]));
+      og.append(addedMark(b.t,X,Y,b.t==='door'?(b.r+R(p))%4:ws.length>1&&ws[0][1]===ws[1][1]?0:1,false));continue}
+    for(const[cx,cy]of bpCells(b)){const[X,Y]=XY(cx,cy);tile(X,Y,col,l+'+',true,true)}}
+  const[X0,Y0]=[rectOf(p).x*C,rectOf(p).y*C];
+  og.append(s('text',{x:X0+2,y:Y0-6,'font-size':10,'font-weight':700,fill:'var(--accent)',stroke:'var(--panel)','stroke-width':3,'paint-order':'stroke','font-family':'Saira Condensed, Arial Narrow, sans-serif'},`${floorName(Ls,n).toUpperCase()} · H${p.z+L}`));
+  g.append(og)}
 
 /* ----- the row under the toolbar ----- */
 const SW={hesco_l:'<rect x="3" y="3" width="14" height="14" rx="1.5"/>',hesco_s:'<rect x="5" y="7" width="10" height="10" rx="1.5"/>',
   door:'<rect x="5" y="2.5" width="10" height="15" rx="1"/><circle cx="12.3" cy="10.5" r="1" fill="var(--panel)" stroke="none"/>',sandbags:'<rect x="1.5" y="6" width="8" height="8" rx="3"/><rect x="10.5" y="6" width="8" height="8" rx="3"/>'};
 function swatch(t){const sp=el('span',{class:'mbsw','aria-hidden':'true'});
-  sp.innerHTML=`<svg viewBox="0 0 20 20" width="16" height="16" style="${t==='sandbags'&&MS.ar?'transform:rotate(90deg)':''}"><g fill="var(--${P[t].c})" stroke="var(--ink)" stroke-width="1.2">${SW[t]}</g></svg>`;return sp}
+  sp.innerHTML=`<svg viewBox="0 0 20 20" width="16" height="16" style="${t==='sandbags'&&MS.ar%2?'transform:rotate(90deg)':''}"><g fill="var(--${P[t].c})" stroke="var(--ink)" stroke-width="1.2">${SW[t]}</g></svg>`;return sp}
 function renderBar(){const bar=$('modBar');if(!bar)return;const show=on();$('clearBtn').disabled=show&&MS.adv;   // no Clear in the Advanced view
   if(bar.hidden===show){bar.hidden=!show;if(typeof fitLayout==='function')fitLayout()}   // the map keeps fitting the window
   $('eraseBtn').setAttribute('aria-pressed',tool==='erase'||show&&MS.erase?'true':'false');
   if(show)$('sideBtn').setAttribute('aria-pressed',svIsOpen()?'true':'false');
   if(!show)return;
-  const p=target(),Ls=p?layersOf(info(p)):[0,null,null];
-  if(MS.n>Ls.length)MS.n=Ls.length;
+  const p=target(),Ls=p?layersOf(info(p)):null,cur=Ls?nOf(Ls):null;
   $('modWhat').textContent=p?`${P[p.t].n} at ${where(p)}`:'click a structure on the map';
+  // always Ground · Floor 2 · Roof (taller structures of your own: Floor 3 …); Floor 2 is greyed out on a structure without one
   const seg=$('modLayers');seg.replaceChildren();
-  Ls.forEach((z,k)=>{const n=k+1,bt=el('button',{type:'button',class:n===MS.n?'on':'','aria-pressed':n===MS.n?'true':'false',
-      title:(k===0?'Bottom floor':p&&k===Ls.length-1?'Roof':'Floor '+n)+' · [ and ] change the layer'},`Layer ${n}`,el('small',{},z===0?'ground':z?'H'+z:''));
-    bt.onclick=()=>{MS.n=n;MS.ask=null;render();draw()};seg.append(bt)});
+  const mids=Ls?Math.max(1,Ls.length-2):1,list=[['g',1],...Array.from({length:mids},(_,k)=>['m'+(k+2),k+2]),['r',Ls?Ls.length:3]];
+  for(const[lv,n]of list){const has=!Ls||lv[0]!=='m'||Ls.length>2,on=Ls?has&&cur===n&&(lv!=='g'||n===1):MS.lv===lv,z=Ls&&has?Ls[n-1]:null;
+    const nm=lv==='g'?'Ground':lv==='r'?'Roof':'Floor '+n;
+    const bt=el('button',{type:'button',class:on?'on':'','aria-pressed':on?'true':'false',
+      title:(has?`${nm}${z!=null?' (H'+z+')':''}`:`The ${P[p.t].n} has no ${nm}`)+' · [ and ] change the floor'},nm,el('small',{},z==null||z===0?'':'H'+z));
+    if(!has)bt.disabled=true;
+    bt.onclick=()=>{MS.lv=lv;MS.ask=null;render();draw()};seg.append(bt)}
   const ad=$('modAdd');ad.replaceChildren();
   for(const[t,nm]of ADDS){const pr=MS.add===t&&!MS.erase,b=el('button',{type:'button',class:pr?'on':'','aria-pressed':pr?'true':'false',
       title:`${nm}: H${CB[t]}, ${WD.build(t)} supplies`+(t==='sandbags'?' · R turns them':'')},swatch(t),nm);
@@ -5041,8 +5225,8 @@ function renderBar(){const bar=$('modBar');if(!bar)return;const show=on();$('cle
 
 /* ----- the Advanced panel ----- */
 function renderPanel(){const pan=$('modPanel'),p=target(),show=on()&&MS.adv&&p&&!svIsOpen();pan.hidden=!show;if(!show)return;
-  const I=info(p),st=I.st,rm=userRm(p),back=userBack(p),adds=userAdd(p),{w,d}=dims(p),Ls=layersOf(I),n=Math.min(MS.n,Ls.length),L=Ls[n-1];
-  $('modHint').textContent=`Layer ${n}: click an empty square to add the chosen block, or a removed one of the same kind to put it back. Erase (E) or right-click takes a block off.`+(L===0?' Click an entrance (red) to close it with the chosen block; erase it to open it.':'');
+  const I=info(p),st=I.st,rm=userRm(p),back=userBack(p),adds=userAdd(p),{w,d}=dims(p),Ls=layersOf(I),n=nOf(Ls),L=Ls[n-1];
+  $('modHint').textContent=`${floorName(Ls,n)}: click an empty square to add the chosen block, or a removed one of the same kind to put it back. Erase (E) or right-click takes a block off.`+(L===0?' Click an entrance (red) to close it with the chosen block; erase it to open it.':'');
   const svg=$('modSvg');svg.replaceChildren();svg.setAttribute('viewBox',`0 0 ${MM+w*MC+4} ${MM+d*MC+4}`);svg.setAttribute('width',MM+w*MC+4);svg.classList.toggle('erasing',MS.erase);
   const g=s('g',{transform:`translate(${MM},${MM})`});svg.append(g);
   // every click goes through the same plan as on the map
@@ -5054,7 +5238,7 @@ function renderPanel(){const pan=$('modPanel'),p=target(),show=on()&&MS.adv&&p&&
   for(const b of I.bl)if(b.t==='roof'&&b.z===L||b.t==='floor'&&L===0){const[x,y]=at(p,I,b.x,b.y),ok=st.present(b.i);
     g.append(s('rect',{x:x*MC+2,y:y*MC+2,width:MC-4,height:MC-4,fill:ok?'var(--slab)':'none',opacity:ok?.45:1,stroke:ok?'none':'var(--bad)','stroke-dasharray':'3 3'}))}
   // empty squares you can build on
-  const ops=L===0?openingsOf(p):[],opAt=(x,y)=>ops.find(e=>e.x-p.x===x&&e.y-p.y===y);
+  const ops=L===0?openingsOf(p).filter(e=>!e.hole||e.sealType):[],opAt=(x,y)=>ops.find(e=>e.x-p.x===x&&e.y-p.y===y);
   for(const[bx,by]of I.foot){const[x,y]=at(p,I,bx,by);if(opAt(x,y)||!slabAt(I,L,bx,by)||takenAt(p,I,Ls,L,bx,by)||blocksAt(I,Ls,L,bx,by).length)continue;
     const gg=s('g',{class:'cell'});hook(gg,bx,by);const tt=s('title');tt.textContent=`${COLS(p.x+x)}${p.y+y+1}: click to add a ${P[MS.add].n}`;gg.append(tt);
     gg.append(s('rect',{x:x*MC+5,y:y*MC+5,width:MC-10,height:MC-10,rx:3,fill:'transparent',stroke:'var(--muted)','stroke-opacity':.45,'stroke-dasharray':'4 3'}));g.append(gg)}
@@ -5075,7 +5259,7 @@ function renderPanel(){const pan=$('modPanel'),p=target(),show=on()&&MS.adv&&p&&
       gg.append(lb(x,y,trim?'–':ok?(bk?l+'↺':l):mine?'✕':'fell',ok?'var(--panel)':'var(--bad)',ok?'var(--ink)':null));
       g.append(gg)}}
   // added blocks on this layer: drawn like the blueprint's own blocks, with a green rim and a +
-  adds.forEach((a,k)=>{if(a[3]!==L)return;const b={t:a[0],x:a[1],y:a[2],z:a[3],r:a[4]||0},stands=!L||bpCells(b).every(([x,y])=>slabAt(I,L,x,y)),[l,col]=LOOK[b.t];
+  adds.forEach((a,k)=>{if(!onL(p,a,L))return;const b={t:a[0],x:a[1],y:a[2],z:a[3],r:a[4]||0},stands=!L||bpCells(b).every(([x,y])=>slabAt(I,L,x,y)),[l,col]=LOOK[b.t];
     for(const[cx,cy]of bpCells(b)){const[x,y]=at(p,I,cx,cy),gg=s('g',{class:'blk'});hook(gg,cx,cy);
       const tt=s('title');tt.textContent=`${P[b.t].n} (added) at ${COLS(p.x+x)}${p.y+y+1} H${b.z}: `+(stands?'Erase or right-click takes it off':'fell with the floor under it · Erase or right-click takes it off the list');gg.append(tt);
       gg.append(s('rect',{class:'b',x:x*MC+5,y:y*MC+5,width:MC-10,height:MC-10,rx:3,fill:stands?col:'var(--panel)','fill-opacity':stands?.9:.4,stroke:stands?'var(--ink)':'var(--bad)','stroke-width':1.2,'stroke-dasharray':stands?'none':'4 3'}));
@@ -5099,7 +5283,14 @@ $('modClose').onclick=close;
 $('modAdv').onclick=()=>{MS.adv=!MS.adv;MS.ask=null;if(MS.adv&&svIsOpen())svClose();render();draw();
   if(MS.adv&&!target())flashMsg('Advanced: click the structure you want to modify')};
 $('modReset').onclick=()=>{const p=target();if(!p||!p.mod)return;snapshot();delete p.mod;MS.ask=null;changed();render();flashMsg('The structure is as built again (in the planner)')};
-window.modTurn=()=>{if(MS.add==='sandbags'&&!MS.erase){MS.ar=MS.ar?0:1;render();draw();flashMsg(`Sandbags ${MS.ar?'run down the map (↕)':'run across the map (↔)'}`);return}
+window.modTurn=()=>{if(MS.add==='sandbags'&&!MS.erase){MS.ar=(MS.ar+1)%4;render();draw();flashMsg(`Sandbags against the ${['north','east','south','west'][MS.ar]} side of their two squares`);return}
+  // a Door under the pointer turns: one added with Modify on this floor, or one closing an open centre square
+  const p=target(),h=hover;
+  if(p&&h){const I=info(p),b=bpOfCell(p,I,h.cx,h.cy),Ls=layersOf(I),L=Ls[nOf(Ls)-1];
+    if(b){const add=userAdd(p),k=add.findIndex(a=>a[0]==='door'&&a[3]===L&&a[1]===b[0]&&a[2]===b[1]);
+      if(k>=0){add[k][4]=((add[k][4]||0)+1)%4;MS.ask=null;setMod(p,userRm(p),userBack(p),add);flashMsg('Door turned 90°');draw();return}}
+    const e=entranceAt(h.cx,h.cy);if(e&&e.p===p&&e.e.centre&&e.e.sealType==='door'){turnCentreDoor();return}}
+  if(MS.add==='door'&&!MS.erase){MS.dr=(MS.dr+1)%4;render();draw();flashMsg('New Doors turned 90°. Point at a Door you placed and press R to turn that one');return}
   turnCentreDoor()};
 window.modErase=()=>{MS.erase=!MS.erase;MS.ask=null;render();draw();flashMsg(MS.erase?'Erase: click a block of the structure to take it off. E again to add blocks':'')};
 // Side view (S): shows the structure being modified, nothing to drag
@@ -5115,11 +5306,11 @@ document.addEventListener('keydown',e=>{if(!on()||$('modBar').offsetParent===nul
   if(e.key==='Escape'){if(MS.ask){MS.ask=null;render();flashMsg('')}else if(MS.adv){MS.adv=false;render();draw()}else if(MS.erase)window.modErase();else close();stop()}
   else if(e.key==='e'||e.key==='E'){window.modErase();stop()}
   else if(e.key==='r'||e.key==='R'){window.modTurn();stop()}
-  else if(e.key==='['||e.key===']'){const p=target(),max=p?layersOf(info(p)).length:3;MS.n=Math.max(1,Math.min(max,MS.n+(e.key===']'?1:-1)));MS.ask=null;render();draw();stop()}
+  else if(e.key==='['||e.key===']'){const p=target(),Ls=p?layersOf(info(p)):[0,1,2],n=Math.max(1,Math.min(Ls.length,nOf(Ls)+(e.key===']'?1:-1)));MS.lv=lvOf(Ls,n);MS.ask=null;render();draw();stop()}
   else if(e.key==='b'||e.key==='B'){flashMsg('Brush doesn\'t work while modifying a structure',true);stop()}},true);
 window.renderModify=render;window.openModify=p=>{setTool('seal');MS.p=p;MS.ask=null;render();draw()};
 // where an added block stands, for the build order
-window.addedWorld=(p,a)=>{const I=info(p),[x,y]=toWorld(p,a[1]-I.x0,a[2]-I.y0);return{x,y,layer:layersOf(I).indexOf(lvl(layersOf(I),a[3]))+1}};
+window.addedWorld=(p,a)=>{const I=info(p),Ls=layersOf(I),[x,y]=toWorld(p,a[1]-I.x0,a[2]-I.y0),n=Ls.indexOf(lvl(Ls,a[3]))+1;return{x,y,layer:n,floor:floorName(Ls,n)}};
 })();
 </script>
 
@@ -5670,7 +5861,7 @@ function renderFacts(){
       `A Recon Tower has two floors that are not connected inside. Floor 1 is the ground floor, reached through the entrances. Floor 2 is at H${F('ht.recon.window')} and has the windows; the ladder leads up to its opening (no C4).`,
       `Windows (Bunker, and Recon Tower floor 2) can be blown with ${F('c4.window')} C4 to make a small hole you crawl through. You can't jump up into it: stand level with that floor on the cell next to the window, on the ground, a block, or a vehicle roof.`]],
     ['C4',[
-      WD.GROUPS.find(g=>g.name==='C4 to breach').rows.map(([k,l])=>`${l} ${F(k)}`).join(' · ')+'. Structures: per block (Corner HESCO as a Large HESCO); the roof stays up over a blown block.',
+      WD.GROUPS.find(g=>g.name==='C4 to breach').rows.map(([k,l])=>`${l} ${F(k)}`).join(' · ')+'. Structures: per block (HESCO X Size as a Large HESCO); the roof stays up over a blown block.',
       `Blowing the top of a stack leaves what is below it; blowing the bottom piece clears the whole column. Each piece is paid for once along a route.`,
       `The C4 check assumes on-foot climb spots are fixed first.`]],
     ['Building rules',[
@@ -6023,7 +6214,7 @@ const ref=(x,y)=>COLS(x)+(y+1);
 const T={
   hesco_s:{n:'HESCO Small',kind:'solid',h:1,w:1,normal:1,look:'hesco'},
   hesco_l:{n:'HESCO Large',kind:'solid',h:2,w:1,normal:1,look:'hesco'},
-  corner:{n:'Corner HESCO',kind:'solid',h:2,w:1,special:1,corner:1,look:'hesco',note:'Structure only: 1.65 high, a roof on top makes 2. Carries the roof; players can\'t build it'},
+  corner:{n:'HESCO X Size',kind:'solid',h:2,w:1,special:1,corner:1,look:'hesco',note:'Structure only: 1.65 high, a roof on top makes 2. Carries the roof; players can\'t build it'},
   sandbags:{n:'Sandbags',kind:'solid',h:1,w:2,normal:1,edge:.5,look:'bags'},
   door:{n:'Door',kind:'solid',h:2,w:1,normal:1,look:'door'},
   floor:{n:'Floor',kind:'slab',special:1,note:'Ground floor, H0 only'},
@@ -6061,7 +6252,7 @@ function check(t,x,y,r,z){const k=T[t].kind;
   const b={t,x,y,r,z},h=T[t].h;
   for(const[cx,cy]of cellsOf(b)){
     if(!inB(cx,cy))return'Outside the area';
-    if(solidsAt(cx,cy).some(o=>o.z<z+h&&z<o.z+H(o)))return'Space taken at '+ref(cx,cy);
+    if(solidsAt(cx,cy).some(o=>o.z<z+h&&z<o.z+H(o)&&!(t==='sandbags'&&T[o.t].look==='window'&&o.z===z)))return'Space taken at '+ref(cx,cy);   // Sandbags may fill a window (blocks it)
     if(live().some(q=>T[q.t].kind==='slab'&&q.x===cx&&q.y===cy&&q.z>z&&q.z<z+h))return'A floor or roof is in the way at '+ref(cx,cy);
     if(!supported(cx,cy,z))return'Nothing to stand on at '+ref(cx,cy)+' H'+z}
   return null}
@@ -6114,7 +6305,8 @@ function drawLadder2d(g,b,op,col){const[dx,dy]=DV[b.r],cx=(b.x+.5+dx*.5)*SC,cy=(
 function drawBlock2d(g,b,thru,ghost){const t=T[b.t],e=edgeRect(b),x=e.x*SC,y=e.y*SC,w=e.w*SC,d=e.d*SC;
   if(t.look==='hesco'){const top=b.z+H(b),inset=1.5+Math.min(b.z,3)*1.5;
     g.append(s('rect',{x:x+inset,y:y+inset,width:w-inset*2,height:d-inset*2,rx:2,fill:'var(--entry)','fill-opacity':ghost?.35:Math.min(.95,.6+top*.06),stroke:b.z?'var(--ink)':'var(--entry)','stroke-width':b.z?1.6:1}));
-    if(t.corner)g.append(s('path',{d:`M${x+inset} ${y+inset}h${w*.45}L${x+inset} ${y+inset+d*.45}z`,fill:'var(--ink)',opacity:ghost?.3:.75}))}
+    if(t.corner)g.append(s('path',{d:`M${x+inset} ${y+inset}h${w*.45}L${x+inset} ${y+inset+d*.45}z`,fill:'var(--ink)',opacity:ghost?.3:.75}));
+    g.append(s('text',{x:x+w/2,y:y+d/2+4.5,'text-anchor':'middle','font-size':13,'font-weight':700,fill:'var(--panel)',stroke:'var(--ink)','stroke-width':2.4,'paint-order':'stroke','font-family':'IBM Plex Mono, monospace',opacity:ghost?.5:1},t.corner?'HX':b.t==='hesco_s'?'H1':'H2'))}   // same labels as Modify structure
   else if(t.look==='bags'){const long=b.r%2?d:w,deep=b.r%2?w:d,gg=s('g',{transform:`translate(${x+w/2},${y+d/2}) rotate(${b.r%2?90:0}) translate(${-long/2},${-deep/2})`,opacity:ghost?.5:1});
     gg.append(s('rect',{x:0,y:0,width:long,height:deep,fill:'var(--sand)','fill-opacity':.25}));const ig=s('g',{transform:`translate(0,${-deep/2})`});drawIcon(ig,'sandbags',long,deep*2);gg.append(ig);g.append(gg)}
   else if(t.look==='window'){const gg=s('g',{opacity:ghost?.5:1});g.append(gg);
@@ -6165,15 +6357,15 @@ const A=24,B=12,HZ=24;
 function rotP(px,py){switch(ST.view){case 1:return[SN-py,px];case 2:return[SN-px,SN-py];case 3:return[py,SN-px];default:return[px,py]}}
 const Pj=(u,w,z)=>[(u-w)*A,(u+w)*B-z*HZ];
 const pts=a=>a.map(p=>p.join(',')).join(' ');
-const FILL={hesco:['var(--entry)','var(--ink)'],bags:['var(--sand)','var(--sand-edge)'],door:['var(--door-g)','var(--door-edge)'],window:['var(--wood)','var(--wood-e)'],floor:['var(--concrete)','var(--concrete-edge)'],roof:['var(--slab)','var(--slab)']};
+const FILL={hesco:['var(--entry)','var(--ink)'],corner:['#8C6E44','var(--ink)'],bags:['var(--sand)','var(--sand-edge)'],door:['var(--door-g)','var(--door-edge)'],window:['var(--wood)','var(--wood-e)'],floor:['var(--concrete)','var(--concrete-edge)'],roof:['var(--slab)','var(--slab)']};
 function boxesOf(b){const t=T[b.t],out=[];
-  if(t.kind==='slab'){out.push({x:b.x,y:b.y,w:1,d:1,z0:b.z,z1:b.z+.12,c:FILL[b.t],b});return out}
+  if(t.kind==='slab'){out.push({x:b.x,y:b.y,w:1,d:1,z0:b.z>0?b.z-.3:b.z,z1:b.z+(b.z>0?.04:.12),c:FILL[b.t],b});return out}   // a roof is 0.35 thick: it rests on the 1.65 HESCO X Size, its top at the layer
   if(t.look==='window'){const e=edgeRect(b),along=b.r%2?'y':'x',L=2,p=.14,h=H(b);   // frame: three posts, a sill and a top beam
     for(const k of[0,.5,1]){const o=k*(L-p);out.push(along==='x'?{x:e.x+o,y:e.y,w:p,d:e.d,z0:b.z,z1:b.z+h,c:FILL.window,b}:{x:e.x,y:e.y+o,w:e.w,d:p,z0:b.z,z1:b.z+h,c:FILL.window,b})}
     out.push({...e,z0:b.z+h-.14,z1:b.z+h,c:FILL.window,b},{...e,z0:b.z,z1:b.z+.08,c:FILL.window,b});return out}
   const e=edgeRect(b);
   if(e.w>1||e.d>1){for(let i=0;i<Math.max(e.w,e.d);i++)out.push(e.w>e.d?{x:e.x+i,y:e.y,w:1,d:e.d,z0:b.z,z1:b.z+H(b),c:FILL[t.look],b}:{x:e.x,y:e.y+i,w:e.w,d:1,z0:b.z,z1:b.z+H(b),c:FILL[t.look],b})}
-  else out.push({...e,z0:b.z,z1:b.z+H(b),c:FILL[t.look],b});return out}
+  else out.push({...e,z0:b.z,z1:b.z+(t.corner?1.65:H(b)),c:t.corner?FILL.corner:FILL[t.look],b});return out}   // HESCO X Size: 1.65 high, a darker brown
 function viewBox(bx){const c=[rotP(bx.x,bx.y),rotP(bx.x+bx.w,bx.y),rotP(bx.x,bx.y+bx.d),rotP(bx.x+bx.w,bx.y+bx.d)];
   const u0=Math.min(...c.map(p=>p[0])),w0=Math.min(...c.map(p=>p[1])),u1=Math.max(...c.map(p=>p[0])),w1=Math.max(...c.map(p=>p[1]));return{...bx,u0,w0,u1,w1}}
 function drawBox(g,bx){const{u0,w0,u1,w1,z0,z1}=bx,[f,e]=bx.c;
@@ -6233,7 +6425,7 @@ function swatch(t){const sv=s('svg',{viewBox:'0 0 14 14',width:14,height:14});
 function renderPal(){const root=$('stPal');root.replaceChildren();
   const grp=(name,ids,first)=>{root.append(el('h4',{},name,...(first?[el('span',{class:'phl',title:'Footprint and height'},'Space'),el('span',{class:'phl c',title:'Build supplies'},'Supply')]:[])));
     for(const id of ids){const t=T[id],on=ST.tool===id&&!ST.testing;
-      const size=t.kind==='slab'?'1×1 · thin':t.kind==='ladder'?'edge':`${t.w}×1 · H${t.h}`+(t.edge?` · ${Math.round(t.edge*100)}%`:'');
+      const size=t.kind==='slab'?'1×1 · thin':t.kind==='ladder'?'edge':`${t.w}×1 · H${t.corner?'1.65':t.h}`+(t.edge?` · ${Math.round(t.edge*100)}%`:'');
       const row=el('div',{class:'pc'+(on?' on':''),title:t.n+(t.note?': '+t.note:'')+(t.normal?` · C4 ${c4Of(id)}`:' · no C4 of its own')});
       row.addEventListener('click',()=>{ST.tool=id;if(ST.testing)endTest();renderAll()});
       const sw=el('span',{class:'sw',style:'background:none;display:grid;place-items:center'});sw.append(swatch(id));
@@ -6274,7 +6466,7 @@ function renderProps(){for(const id in PROPS)if(document.activeElement!==$(id))$
   for(const r of rules){const inp=el('input',{type:'number',min:1,max:r.total,value:r.fall,style:'width:56px'});
     inp.addEventListener('change',()=>{const v=Math.max(1,Math.min(r.total,+inp.value|0));ST.s.fall={...ST.s.fall};
       const def=r.kind==='corners'?Math.min(2,r.total):Math.ceil(r.total/2);if(v===def)delete ST.s.fall[r.z];else ST.s.fall[r.z]=v;renderAll()});
-    box.append(el('label',{},r.kind==='corners'?`Roof at H${r.z} (on ${r.total} Corner HESCO) falls when this many corners are gone`:`Floor at H${r.z} (on the ground ring, ${r.total} ${$('stp_ctype').selectedOptions[0].text}) falls when this many are gone`,inp))}}
+    box.append(el('label',{},r.kind==='corners'?`Roof at H${r.z} (on ${r.total} HESCO X Size) falls when this many corners are gone`:`Floor at H${r.z} (on the ground ring, ${r.total} ${$('stp_ctype').selectedOptions[0].text}) falls when this many are gone`,inp))}}
 for(const id in PROPS)$(id).addEventListener('input',()=>{const k=PROPS[id],v=$(id).value;ST.s[k]=NUMP.has(k)?+v||0:v;renderAll()});
 $('stp_ground').addEventListener('change',()=>{ST.s.ground=$('stp_ground').checked;renderAll()});
 function renderTools(){$('stErase').setAttribute('aria-pressed',ST.tool==='erase'&&!ST.testing);$('stTrim').setAttribute('aria-pressed',ST.tool==='trim'&&!ST.testing);
