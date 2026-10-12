@@ -16,6 +16,8 @@
 - **Modify structure: new entrances.** A block taken off shows as a red square (no arrow); the red arrows stay on the original entrances. Any block can go in that square, and a Door there shows its preview and turns with R.
 - **Modify structure: Doors on Floor 2 / Roof** show the Door symbol, not "D+".
 - **Ladders and structures** (game quirk): a structure can be placed so it blocks its own ladder or another structure's ladder. Other pieces still can't go in front of a ladder. Fact sheet: *Structures may block a ladder* (set it to 0 if the game fixes it).
+- **Modify structure: every floor on the map.** The chosen floor (Ground too) is drawn over the structure in the Structure designer's look: Sandbags as bags on the edge, Windows as a wooden frame on their sandbags, entrances marked ENTRY. Bunker and Recon floor 2 now look the same.
+- **Block a window with Sandbags.** Pick Sandbags and click a window: they go on the sandbags under it and fill it, so no one crawls through (threat check too). Erase takes them off; erase again takes off the sandbags under the window; pick Sandbags and click to put them back. Works in the Structure designer too (Sandbags on the window's layer, H3 on the Recon).
 - **Side view** (3D look) draws blocks added with Modify structure and closed entrances and centre squares.
 
 Rules: no change needed.
