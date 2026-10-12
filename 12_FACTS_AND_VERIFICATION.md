@@ -281,11 +281,13 @@ Write both numbers down here. Same in both → the Range is trusted for everythi
 Costs follow *datamine × multiplier + 1*, so compare two pieces (Bunker and HESCO Small) to get the multiplier, not just a ratio.
 Redo it after every season or big patch, and when a test result looks odd.
 
-| Date | Patch | Measure | Range | Official | Factor |
-|---|---|---|---|---|---|
-| | | Bunker cost | | 61? | |
-| | | HESCO Small cost | | 10? | |
-| | | HESCO Small build time, Large Hammer (s) | | 3 | |
-| | | C4 for a Large HESCO | | 4 | |
+| Date | Patch | Measure | Planner now | Range | Official | Factor |
+|---|---|---|---|---|---|---|
+| | | Bunker cost | 61 | | | |
+| | | HESCO Small cost | 10 | | | |
+| | | HESCO Small build time, Large Hammer (s) | 3 | | | |
+| | | C4 for a Large HESCO | 4 | | | |
+
+"Planner now" may itself come from Range tests: note where each was measured when you fill this in.
 
 **Code** (small, later): one "Range factor" fact per kind, so you can type Range results straight into the sheet.
