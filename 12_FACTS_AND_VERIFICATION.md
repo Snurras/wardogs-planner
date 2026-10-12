@@ -253,3 +253,39 @@ When a patch really changes an answer (e.g. C4 per HESCO goes up), update the ex
 - The page keeps one current value per fact (+ its date).
 - History comes from the repo: at each release, Claude saves the "Copy sheet as text" output as `facts_<date>.txt` (needs a small addition to doc 08; ask first). Comparing two of those shows what changed between patches.
 - Patch files stay in the repo after "Done".
+
+---
+
+## 8. Shooting Range vs official servers
+Testing in the Range is quick and free, but it may not be tuned like an official server. Nobody has published how they differ (searched 12 Oct 2026). We do know the game has at least one **server setting**: build costs are the datamined value × a multiplier (0.8 before launch, 0.6 now; see the 12 Oct review). The Range, community servers and official servers can each have their own.
+
+### What can differ, and what can't
+| Kind of fact | Can the Range differ? | Range test counts as |
+|---|---|---|
+| Shapes, footprints, heights, roof shapes, windows, ladders | No: same models everywhere | 100 |
+| Movement, jumps, climbing, vehicle reach | No: same engine | 100 |
+| What falls when (collapse rules), what the hammer can take off | Very unlikely | 100 |
+| Bed sizes, crate slots, trunk slots | Very unlikely | 100 |
+| **Build costs** | **Yes** (known multiplier) | after calibration: 90 |
+| **Build times** | Possibly (build speed setting) | after calibration: 90 |
+| **C4 per piece, health, damage** | Possibly (damage / health setting) | after calibration: 90 |
+| Prices, spawn costs, unlock levels, rewards | Likely (economy settings) | don't use the Range |
+
+### Calibrate once per season (~15 min)
+Measure the same three things in the Range and on an official server:
+1. **Cost:** build menu cost of a Bunker (and of a HESCO Small).
+2. **Time:** build one HESCO Small with the Large Hammer, from first hit to done, hitting the yellow X.
+3. **Damage:** C4 to blow a Large HESCO, one charge at a time.
+
+Write both numbers down here. Same in both → the Range is trusted for everything above (except prices). Different → the gap is the **Range factor** for that kind (cost, time, damage): use Range tests × factor, at 90.
+Costs follow *datamine × multiplier + 1*, so compare two pieces (Bunker and HESCO Small) to get the multiplier, not just a ratio.
+Redo it after every season or big patch, and when a test result looks odd.
+
+| Date | Patch | Measure | Range | Official | Factor |
+|---|---|---|---|---|---|
+| | | Bunker cost | | 61? | |
+| | | HESCO Small cost | | 10? | |
+| | | HESCO Small build time, Large Hammer (s) | | 3 | |
+| | | C4 for a Large HESCO | | 4 | |
+
+**Code** (small, later): one "Range factor" fact per kind, so you can type Range results straight into the sheet.

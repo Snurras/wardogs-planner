@@ -47,14 +47,34 @@ Things that work but could be better: looks, ease of use, small annoyances.
 - [ ] *Claude QA* **Keys in one place**: R and E are handled in three places (map, Modify structure, Structure designer), which is how they drifted apart. Gather them.
 
 ### Check in the game
-*Claude QA* Answers fix guesses the planner makes today. Send as a short text list + 1–2 photos (doc 11 §10).
-- [ ] What can be added to a structure: HESCO inside the room, on the roof, on floor 2? What can the hammer take off?
-- [ ] Do pieces you built on a roof fall when the roof falls? (The planner now says yes.)
-- [ ] Windows: blow them with C4 (planner says 1), or do they only go when the roof falls?
-- [ ] How many C4 does a Corner HESCO take? (Planner guesses 4, like a Large HESCO.)
-- [ ] C4 blast: does it reach blocks stacked on top (H2+)? (Planner: only blocks at the level of the one it was put on; what stood on them falls.) *1 C4 on sandbags takes the HESCO next to them: answered 12 Oct, in the planner.*
-- [ ] Entrance opening height: H2 (planner's rule) or about 1.4 (Side view picture)?
-- [ ] Does the floor raise the inside at all? Any windows or slits in the Shelter?
+Answers fix guesses the planner makes today. Send as a short text list + 1–2 photos: "fact · planner says · you saw · Range or official".
+**Where:** *Range* = Shooting Range is fine (shapes, heights, movement, what falls; the engine is the same everywhere). *Official* = do it on an official server, or in the Range only once the Range is calibrated (doc 12 §8): costs, build times, C4 and damage can be server settings.
+Sorted: quick looks first, then the test session. Doc 12 has the confidence scale; doc 11 §10 has the structure questions.
+
+**Quick looks (seconds each, any official server, no test needed)**
+- [ ] *Official* **Build cost of a Bunker** in the build menu. Planner 61. If it's 61, all build costs are right (doc 12 review: game cost = datamine × 0.6 + 1). Note the number in the Range too: that is the first calibration point.
+- [ ] *Official* **Unlock menu: Ural and Kodiak Driver level.** Planner 0 for both; guides say Ural Driver 3, Kodiak Driver 10. Easiest right after the Season 02 wipe (15 Oct), when nothing is unlocked.
+- [ ] *Official* **Spawn screen: Kodiak and Humvee cost.** Planner $2,500 and $3,000; one guide says Kodiak $3,000.
+- [ ] *Range* **Write down where these came from** (no source recorded, doc 12 review "?" list): jump and climb heights, stacking limits, FOB area 60 m, unloading times, vehicle trunks, Humvee bed, MH-6 level, Stingray angle.
+
+**Calibrate the Range (once per season, ~15 min, doc 12 §8)**
+- [ ] Same three measurements in the Range and on an official server: Bunker cost (build menu), time to build one HESCO Small with the Large Hammer, C4 to blow a Large HESCO. Same in both → the Range can be trusted for everything.
+
+**Test session (Range is fine unless marked)**
+- [ ] *Range* What can be added to a structure: HESCO inside the room, on the roof, on floor 2? What can the hammer take off? *How:* build each, try the hammer on each block, photo of what's left.
+- [ ] *Range* Do pieces you built on a roof fall when the roof falls? (Planner: yes.) *How:* 2 HESCO on a Bunker roof, blow 2 corners, photo.
+- [ ] *Official or calibrated* Windows: blow them with C4 (planner: 1), or do they only go when the roof falls? *How:* 1 C4 on a Bunker window, count charges until you can crawl in.
+- [ ] *Official or calibrated* How many C4 does a Corner HESCO take? (Planner guesses 4, like a Large HESCO.) *How:* charges one at a time on a Bunker corner, count.
+- [ ] *Range* C4 blast: does it reach blocks stacked on top (H2+)? (Planner: only blocks at the level of the one it was put on; what stood on them falls.) *How:* a 3-high column next to a 1-high one, 1 C4 at the base, photo. *1 C4 on sandbags takes the HESCO next to them: answered 12 Oct, in the planner.*
+- [ ] *Range* Entrance opening height: H2 (planner's rule) or about 1.4 (Side view picture)? *How:* put a Small HESCO, then a Large, right outside a Recon entrance; can you still walk in?
+- [ ] *Range* Does the floor raise the inside at all? Any windows or slits in the Shelter? *How:* stand inside next to a ground HESCO, photo from the side.
+
+**Season 02 (from 15 Oct): new buildables** — for each of MG Nest, Large Shelter, Wooden Step (doc 11 §10 Q11):
+- [ ] *Official* Build cost and hammer (build menu).
+- [ ] *Range* Footprint in grids, height in HESCO units, which way it faces; 1–2 photos from above and the side.
+- [ ] *Range* Can you stand on it, climb it, walk under it? Does it block a vehicle? Can it go on HESCO or next to a structure?
+- [ ] *Official or calibrated* C4 to destroy; does it collapse in parts (like a structure) or all at once?
+- [ ] *Range* MG Nest only: gun height and lowest angle, like the Mortar / CIWS tests (doc 04).
 
 ### Attack and other
 - [ ] **Fields of fire on hover**: hovering over a firing port or window shows its shooting angles. (doc 04)
