@@ -220,7 +220,7 @@ If the rules already have an `isAdmin()` function, keep the existing one and ski
 - `TT(p)` (wd-design) = the piece type as it stands (`structGeo`, cached): heights, holes added after the original entrances (seal keys unchanged), windows/ladder that still stand, `two` only while floor 2 stands (windows of a fallen floor 2 are dropped). Used by `cellTop`, `topOf`, `entrancesOf`, `windowsOf`, `ladderSpots`, `drawPiece`, `heightText` and the threat check. Unmodified pieces use their type as before.
 - `<script id="wd-modify">`: Modify structure (M), how it works for players is in doc 02. Warns before a removal that brings down more than the block, including pieces placed on the falling part (they are removed with it: `unheld`, `dropsIf`). Adds: `p.mod.add=[[type,x,y,z,r],…]`.
 - Designer: Test collapse with Hammer / C4 (3×3 blast at the block's level, charge on the outside face).
-- The Corner HESCO is shown as **HESCO X Size** (label HX) since v153; the code still calls it `corner`.
+- The Corner HESCO is shown as **HESCO X Size** (label HX) since v153; the code still calls it `corner`. Designer 3D (v154): drawn 1.65 high in a darker brown; roofs above the ground are drawn 0.35 thick under their layer height (as in Side view).
 - Windows filled with Sandbags (Modify or designer) are blocked: `winBlocked` in wd-custom, used by `structGeo`, `structParts` and `registerCustom` (v151).
 - Removals cost 7 s each in the build time (since v130). Since v148: Side view draws added blocks and seals; the threat check plans the 3×3 blast and collapses (doc 03); Modify shows Ground · Floor 2 · Roof and refuses HESCO Large / Door under a corner roof (1.65 headroom).
 

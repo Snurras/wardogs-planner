@@ -20,7 +20,7 @@
 - **Block a window with Sandbags.** Pick Sandbags and click a window: they go on the sandbags under it and fill it, so no one crawls through (threat check too). Erase takes them off; erase again takes off the sandbags under the window; pick Sandbags and click to put them back. Works in the Structure designer too (Sandbags on the window's layer, H3 on the Recon).
 - **Sandbags against a side.** Sandbags on the ground stand against one side of their two squares, as in the Structure designer (R turns them through all four sides): on the map, in Side view and in Modify structure. Sandbags on top of a block stay centred (that is what the protection test measured).
 - **Labels H1, H2, HX** on HESCO Small, HESCO Large and the 1.65-high block, in Modify structure and in the Structure designer.
-- **Corner HESCO is now called HESCO X Size** everywhere in the planner.
+- **Corner HESCO is now called HESCO X Size** everywhere in the planner. In the Structure designer's 3D view it is 1.65 high and darker, with the 0.35 roof resting on it; the block list says H1.65.
 - **Side view** (3D look) draws blocks added with Modify structure and closed entrances and centre squares.
 
 Rules: no change needed.
