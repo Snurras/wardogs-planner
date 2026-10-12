@@ -8,7 +8,7 @@
 - **Threat check: C4 blast and collapse.** One charge now takes every block in the 3×3 squares around it (the charge sits in the square in front of the block it is put on), however few C4 it is: 1 C4 on Sandbags takes the HESCO next to them too. Blowing enough of a structure brings its roof down, by the same rules as Modify structure. The C4 list says what each charge takes and what falls.
 - **Modify structure: floors.** The bar shows **Ground · Floor 2 · Roof** instead of Layer 1, 2, 3. Floor 2 is greyed out on a Bunker or Shelter.
 - **Modify structure: headroom.** No HESCO Large or Door inside the Bunker or on Recon floor 2: the roof rests on 1.65-high corner HESCO.
-- **Modify structure: entrances.** Clicking an entrance with the wrong block closes it with the right one (Bunker: HESCO Small; Recon, Shelter: HESCO Large, or the Door if you picked Door) and says so.
+- **Modify structure: entrances.** Recon and Shelter entrances take the block you pick (HESCO Small, HESCO Large, Door or Sandbags). The Bunker entrance only fits a HESCO Small, so it picks that for you and says so.
 - **Modify structure: Doors and Sandbags** look right on the map (a Door symbol, a row of bags). **R** turns a new Door before you place it, or the Door you point at.
 - **Modify structure: Sandbags in an entrance.** Take a block off next to an entrance to make it wider, then put Sandbags across it (they used to be refused or turned into a HESCO).
 - **Modify structure: Floor 2 / Roof on the map.** With Floor 2 or Roof chosen, the map shows that floor over the structure: its blocks (e.g. the Shelter's centre 3×3), what was taken off, added or fell.
@@ -18,6 +18,8 @@
 - **Ladders and structures** (game quirk): a structure can be placed so it blocks its own ladder or another structure's ladder. Other pieces still can't go in front of a ladder. Fact sheet: *Structures may block a ladder* (set it to 0 if the game fixes it).
 - **Modify structure: every floor on the map.** The chosen floor (Ground too) is drawn over the structure in the Structure designer's look: Sandbags as bags on the edge, Windows as a wooden frame on their sandbags, entrances marked ENTRY. Bunker and Recon floor 2 now look the same.
 - **Block a window with Sandbags.** Pick Sandbags and click a window: they go on the sandbags under it and fill it, so no one crawls through (threat check too). Erase takes them off; erase again takes off the sandbags under the window; pick Sandbags and click to put them back. Works in the Structure designer too (Sandbags on the window's layer, H3 on the Recon).
+- **Sandbags against a side.** Sandbags on the ground stand against one side of their two squares, as in the Structure designer (R turns them through all four sides): on the map, in Side view and in Modify structure. Sandbags on top of a block stay centred (that is what the protection test measured).
+- **Modify labels**: H1 (HESCO Small), H2 (HESCO Large), HX (Corner HESCO, 1.65), as in the Structure designer.
 - **Side view** (3D look) draws blocks added with Modify structure and closed entrances and centre squares.
 
 Rules: no change needed.
