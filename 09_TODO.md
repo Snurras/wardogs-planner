@@ -52,7 +52,7 @@ Things that work but could be better: looks, ease of use, small annoyances.
 - [ ] Do pieces you built on a roof fall when the roof falls? (The planner now says yes.)
 - [ ] Windows: blow them with C4 (planner says 1), or do they only go when the roof falls?
 - [ ] How many C4 does a Corner HESCO take? (Planner guesses 4, like a Large HESCO.)
-- [ ] C4 blast: does 1 C4 on sandbags also take the HESCO next to them? (Planner says no: a charge only takes blocks that need no more C4 than the one it was put on.) Does the blast reach blocks stacked on top (H2+)? (Planner: only blocks at the level of the one it was put on; what stood on them falls.)
+- [ ] C4 blast: does it reach blocks stacked on top (H2+)? (Planner: only blocks at the level of the one it was put on; what stood on them falls.) *1 C4 on sandbags takes the HESCO next to them: answered 12 Oct, in the planner.*
 - [ ] Entrance opening height: H2 (planner's rule) or about 1.4 (Side view picture)?
 - [ ] Does the floor raise the inside at all? Any windows or slits in the Shelter?
 
