@@ -19,6 +19,8 @@ Every message in a long chat re-sends the whole history (hundreds of screenshots
 | Fix a typo, change a number/fact, rename a label, quick question | 01 only | Sonnet (cheaper) |
 | Add to or sort the to-do list, Base Defender ideas | 01 + 09 (+10) | Sonnet |
 | Put staging on the test version / release test to everyone | 01 + 08 | Sonnet |
+| A game update came out: what changed for the planner, fill the patch file | 01 + 12 | Sonnet |
+| Confidence on facts, rule IDs, reference designs (code) | 01 + 12 + 06 (+03/11 for rules) | Opus |
 
 ## Starter prompt (copy, fill in)
 ```
@@ -36,6 +38,12 @@ Mockup first: <yes/no>.  Put it on staging when done: <yes/no>.
 5. When a chat goes off-topic, **start a new one** with the matching doc.
 6. At the end of a chat, ask: **“Update the docs for what changed”** — Claude updates them in the repo.
 7. Measurements from the game: send them as a filled-in text list (like the questionnaire), plus 1–2 photos.
+
+## After a game update (doc 12)
+1. Paste the patch notes in a new chat with 01 + 12: "Fill the patch file for patch X".
+2. Numbers the notes state → Fact sheet at confidence 70. Vague ones → "Check".
+3. Test in game only what is High importance **and** below 90, in one session with the questionnaire.
+4. Open the reference designs (doc 12 §6) before "Release".
 
 ## Three versions
 | Version | Address | Who sees it |
