@@ -38,12 +38,13 @@ Select (V) · Brush (B) · Undo · Rotate (R) · Erase (E) · Modify structure (
 - **Guide blocks (GB) / Bumper blocks (BB)**: helper blocks for stacking; placed only (1 s, 1 supply). “Show Guide and Bumper blocks” checkbox under the notices hides their markers on the map (build steps keep them).
 
 ## Modify structure (M) — also closes entrances
-- Toolbar button or M (or Select one structure → Modify in the selection bar). A bar opens under the toolbar: **Layer 1, 2, 3…** (one per floor/roof of that structure: Bunker and Shelter 2, Recon Tower 3), the block to add (HESCO Large, HESCO Small, Door, Sandbags) and **Advanced**.
-- **First click on a structure only picks it** (thick outline). Then: click a square = add the chosen block on that layer, or put back a removed block of that kind. E or right-click = take a block off with the hammer.
-- Entrances (red arrows) and the open centre of Recon (2×2) / Shelter (3×3) are on Layer 1: click closes them with the chosen block, E / right-click opens them. **Only the right block closes them**: Bunker HESCO Small; Recon / Shelter HESCO Large or Door (your own structures: what their designer set). A wrong choice is refused with a message, never swapped.
+- Toolbar button or M (or Select one structure → Modify in the selection bar). A bar opens under the toolbar: **Ground · Floor 2 · Roof** (always shown; Floor 2 greyed out on Bunker and Shelter, which have no middle floor; your own taller structures get Floor 3 …; [ ] change floor), the block to add (HESCO Large, HESCO Small, Door, Sandbags) and **Advanced**.
+- **First click on a structure only picks it** (thick outline). Then: click a square = add the chosen block on that floor, or put back a removed block of that kind. E or right-click = take a block off with the hammer.
+- Entrances (red arrows) and the open centre of Recon (2×2) / Shelter (3×3) are on the Ground floor: click closes them, E / right-click opens them. **The right block is picked for you**: Bunker HESCO Small; Recon / Shelter HESCO Large, or a Door if Door is chosen (your own structures: what their designer set); the message says when it swapped (`sealPick`).
+- **Headroom**: under a roof resting on Corner HESCO (inside the Bunker, Recon floor 2) there is 1.65 of room, so no HESCO Large or Door there (`addErr`).
 - Taking off a block that brings more down (collapse rules, doc 11 §6) asks first. Pieces you placed normally on a part that falls go with it, and are listed in the warning. Undo brings it all back.
 - Put-back blocks hold nothing up. Added blocks cost their normal supplies and build time; blocks taken off cost 7 s each (`t.remove`).
-- Advanced: the chosen layer as a grid over the map, with the collapse rules and the list of changes.
+- Advanced: the chosen floor as a grid over the map, with the collapse rules and the list of changes.
 - Side view (S) while modifying shows that structure. Brush and Wall Optimization are greyed out.
 - Data: `p.mod = {rm, back, add}` (doc 11), entrance/centre seals in `p.closed`, `p.doors`, `p.doorR` (centre keys 100+). Sealed centres **do** block the threat check (doc 03). Helpers `entrancesOf`, `centreOf`, `windowsOf`, `ladderSpots`, `openingsOf`.
 

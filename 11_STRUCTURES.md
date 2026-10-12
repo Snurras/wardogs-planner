@@ -1,6 +1,6 @@
 # 11 · Structures built from blocks + Structure designer
 Use for: rebuilding Bunker, Recon Tower and Indirect Fire Shelter as real blocks; the Structure designer; modifying structures in a design; new structures from game updates.
-**Status (10 Oct 2026, v130): released. Structure designer, your own structures on the map, Modify structure and the block-based threat check are all live (sections 11–). Collapse rules for Recon, Shelter and Bunker confirmed in game (section 6). Still to do: one record per structure (old Trimmed pieces and seals, §8), the 3×3 blast and collapse in the threat check.** Read with 01 (+ 03 for the threat check, + 04 for Side view).
+**Status (10 Oct 2026, v130): released. Structure designer, your own structures on the map, Modify structure and the block-based threat check are all live (sections 11–). Collapse rules for Recon, Shelter and Bunker confirmed in game (section 6). Still to do: one record per structure (old Trimmed pieces and seals, §8). 3×3 blast and collapse in the threat check on staging v148 (doc 03).** Read with 01 (+ 03 for the threat check, + 04 for Side view).
 
 **How to read this doc:** everything ending in **?** is an assumption. Snurra checks it in the game and deletes the ? (true) or corrects it. Section 10 has the questions that can't be guessed.
 
@@ -220,7 +220,7 @@ If the rules already have an `isAdmin()` function, keep the existing one and ski
 - `TT(p)` (wd-design) = the piece type as it stands (`structGeo`, cached): heights, holes added after the original entrances (seal keys unchanged), windows/ladder that still stand, `two` only while floor 2 stands (windows of a fallen floor 2 are dropped). Used by `cellTop`, `topOf`, `entrancesOf`, `windowsOf`, `ladderSpots`, `drawPiece`, `heightText` and the threat check. Unmodified pieces use their type as before.
 - `<script id="wd-modify">`: Modify structure (M), how it works for players is in doc 02. Warns before a removal that brings down more than the block, including pieces placed on the falling part (they are removed with it: `unheld`, `dropsIf`). Adds: `p.mod.add=[[type,x,y,z,r],…]`.
 - Designer: Test collapse with Hammer / C4 (3×3 blast at the block's level, charge on the outside face).
-- Known gaps: Side view doesn't draw added blocks or seals; protection pictures don't show changes; the threat check doesn't plan collapses or the 3×3 blast itself. Removals cost 7 s each in the build time (since v130).
+- Removals cost 7 s each in the build time (since v130). Since v148: Side view draws added blocks and seals; the threat check plans the 3×3 blast and collapses (doc 03); Modify shows Ground · Floor 2 · Roof and refuses HESCO Large / Door under a corner roof (1.65 headroom).
 
 ### Threat check on blocks (staging v123, 10 Oct 2026)
 - Step 1 of section 9 done: the threat check reads every structure as its blocks (doc 03). Whole-structure C4 facts removed.
@@ -228,5 +228,4 @@ If the rules already have an `isAdmin()` function, keep the existing one and ski
 
 ### Next
 - Remove the old height maps / `raised` / `trimmed` and load old Trimmed pieces + seals as structure + changes (step 2, §8).
-- Threat check: 3×3 blast and collapse (doc 03).
 - Game questions still open: 4, 5, 6, 7, 8, 10, 11, and whether pieces built on a roof fall with it (the planner assumes they do).

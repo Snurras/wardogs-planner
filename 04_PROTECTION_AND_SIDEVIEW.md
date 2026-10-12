@@ -11,6 +11,7 @@ Use for: Direct ground fire protection rules, the emplacement hover picture, the
 - Angle = line from the pivot over the cover's top corners (Bremer: its real outline). Bands under 3° ignored.
 - CIWS: ≤0° “some low angles blocked”, ≤15° limited, steeper poor. Talon: ≤5° all free, ≤20° limited, steeper poor.
 - Mortar range: 700 m at 45°, −6 m per degree steeper (2h adjacent → 590 m; 2h+SB 1 out → 685 m). Game quirk: sandbags on a block right next to the mortar never stop it.
+- Modify changes count: heights come from `cellTop` → `TT(p)` (blocks added, taken off or fallen). Gap: a hole under a roof still counts as cover up to the roof.
 - Protection = lowest side's cover at any distance: <1h none, 1h low, 1h+SB or 2h good, 2h+SB or 3h+ strong. Open side → “Partly missing …”. Sandbags: 0.65h high, 20% of a grid wide, centred on the block.
 - Bremer: wall 45% deep on its face side, footing 70% → 30% of 1h; seen end-on it's a full 3h block.
 - Mixed cover on one side: all drawn (others faded); maths uses the worst.
@@ -29,7 +30,7 @@ Use for: Direct ground fire protection rules, the emplacement hover picture, the
 - **Layer ▼ ▲** (or [ ]): everything under that height under a grey veil; blocks crossing the layer are cut at it. **Hide above**: hides what is over the layer. A new area starts at H0.
 - **3D** button: back to the old flat side view (remembered in this browser, `wd_sv3d`).
 - Clicking Side view (or S) again → back to the map with the area kept as a dashed outline; again → same view. Esc = back to map. ✕, a new area, or another tool clears it. Zoom − / Fit / +.
-- Structures (built-in and your own) are drawn from their blueprint blocks: corner HESCO 1.65, roof slab resting on it, windows as wooden frames, ladders, camo net on the top roof. Blocks taken off or fallen in Modify structure are left out. **Not drawn yet**: blocks added in Modify structure and entrance/centre seals.
+- Structures (built-in and your own) are drawn from their blueprint blocks: corner HESCO 1.65, roof slab resting on it, windows as wooden frames, ladders, camo net on the top roof. Blocks taken off or fallen in Modify structure are left out; blocks added in Modify structure (while their floor stands) and closed entrances / centre squares are drawn (HESCO, Sandbags, Door with its leaf facing out, `door3d`). The old flat look still draws structures as built.
 - Emplacements: weapon + soldier are the old 2D drawings standing upright, aimed at the worse of the left/right sides. Protection in the **real direction for all four sides**: faint blue fan per side; a limited side gets a dashed ground line out to the checked distance (red poor / orange limited) and its blocked angle (CIWS, Talon) or mortar range standing up in that direction. Stingray: one dashed 80° line.
 - Field pieces in the 3D look: Sandbags (bags on both visible faces), Barbed wire (posts, strands, coil rings), Hedgehog (three beams), Recon tent (camo net on four poles). In the old flat look they stay flat icons (see the end of this doc).
 - Code: `sv3dSvg(a,view,L,{cut})` (projection `YAW` 22°, `EL` 30°, `KZ`), `svRender3d`, `sv3dOn`, `svLayer`; the old picture is `svRender` below it. Prototype + review page: private artifact "Side View 3D Mockup".
