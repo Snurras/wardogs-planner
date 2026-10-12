@@ -797,7 +797,7 @@ a{color:var(--accent)}
     <button class="edit-only btn ghost" type="button" id="clearBtn" title="Start a new, empty design"><span class="ti"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" style="flex:none"><g transform="rotate(-12 12 14)"><rect x="1.5" y="12" width="21" height="5" rx="2.5" fill="#7A5236" stroke="#2A1B10" stroke-width=".9"/><rect x="1.5" y="16" width="21" height="5" rx="2.5" fill="#6A4630" stroke="#2A1B10" stroke-width=".9"/><rect x="4" y="11.3" width="3" height="10.4" fill="#8E969A" stroke="#4A5054" stroke-width=".6"/><rect x="17" y="11.3" width="3" height="10.4" fill="#8E969A" stroke="#4A5054" stroke-width=".6"/><rect x="8" y="6.5" width="8.5" height="9" rx="1.2" fill="#2E3438" stroke="#111" stroke-width=".9"/><rect x="9.5" y="7.8" width="5.5" height="3.6" fill="#9BC48A"/><circle cx="10.5" cy="13.3" r=".6" fill="#ccc"/><circle cx="12.25" cy="13.3" r=".6" fill="#ccc"/><circle cx="14" cy="13.3" r=".6" fill="#ccc"/><path d="M8 8C4 7 3 4 6 3s5 1 4 4M16.5 8c3-2 6-1 5.5 2" fill="none" stroke="#2F6FD1" stroke-width="1.1" stroke-linecap="round"/><path d="M14 15.5c0 3 2 4 3.5 5" fill="none" stroke="#D9A400" stroke-width="1"/></g></svg></span>Clear</button>
     <input type="checkbox" id="gapRule" hidden>
     <label class="chk edit-only" title="Straight lines: hold the mouse button on a piece and drag to lay out a row of them, along a row or a column (never diagonal). See-through pieces show where they go; they are placed when you let go. Untick to paint freely by dragging."><input type="checkbox" id="lineMode" checked> Straight lines</label>
-    <label class="chk edit-only" title="Elevation Stacking: build a Bumper block (a small HESCO with a large HESCO or Bremer on top). Anything you place touching it side to side is built one level up on a free foundation, at no extra cost, and the next piece touching that one too, so it chains. Works for walls, Recon Towers, Shelters and the rest; not for barbed wire, recon tents, hedgehogs or sandbags. The raised pieces stay when the Bumper block is removed, and the build order tells you when to build and remove it. Untick to place on the ground next to raised pieces."><input type="checkbox" id="fndMode" checked> Elevation Stacking</label>
+    <label class="chk edit-only" title="Auto elevation: anything you place touching a raised piece side to side is built one level up, on a free foundation, at no extra cost. A raised piece is one standing on a small HESCO (a Bumper block: small HESCO with a large HESCO or Bremer on top), or one raised this way, so it chains. Works for walls, Recon Towers, Shelters and the rest; not for barbed wire, recon tents, hedgehogs or sandbags. The raised pieces stay when the Bumper block is removed, and the build order tells you when to build and remove it. Untick to place on the ground next to raised pieces. To raise or lower pieces already placed: Select them, then Add elevation or Remove elevation."><input type="checkbox" id="fndMode" checked> Auto elevation</label>
   </div>
   <div class="bar toolbar modbar edit-only" id="modBar" hidden role="toolbar" aria-label="Modify structure">
     <span class="mbt"><b>Modify structure</b><span class="status" id="modWhat"></span></span>
@@ -811,14 +811,14 @@ a{color:var(--accent)}
       <div class="card build-only" id="layersCard">
         <h3>Layers</h3>
         <div class="col" id="layersList" style="gap:4px;margin-top:8px"></div>
-        <p class="status" style="margin:8px 0 0">A layer counts the pieces standing under a piece, not its height. Pieces raised with Elevation Stacking count as Ground.</p>
+        <p class="status" style="margin:8px 0 0">A layer counts the pieces standing under a piece, not its height. Pieces raised with elevation count as Ground.</p>
       </div>
       <div class="pal edit-only" id="palette"></div>
       <div class="card" id="aidCard" hidden>
         <div class="aid" id="aidGB" hidden title="Guide block: a small HESCO laid on the ground and not hammered (1 supply). The game has no grid: pieces only line up by snapping to what is already built, starting at the FOB. Part of this design touches neither the FOB nor anything linked to it, so guide blocks are added along the shortest free line from the FOB. Build them first (they are in the build order) and erase them afterwards if you like. Placing a real piece there makes them unnecessary.">
           <svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2" y="2" width="16" height="16" rx="2" fill="var(--entry)" fill-opacity=".22" stroke="var(--entry)" stroke-width="1.6" stroke-dasharray="3 2"/><text x="10" y="13.5" text-anchor="middle" font-size="7.5" font-weight="700" fill="var(--ink)" font-family="var(--f-mono)">GB</text></svg>
           <span>A Guide block was added to help you align the build</span></div>
-        <div class="aid" id="aidBB" hidden title="Bumper block: a small HESCO with a large HESCO (or Bremer) on top. A piece snapped side to side to it is built one level up on a free foundation (Elevation Stacking), and the next piece snapped to that one too. The build order says when to build it, right before the first raised piece, and when to remove it, right after. The raised pieces stay.">
+        <div class="aid" id="aidBB" hidden title="Bumper block: a small HESCO with a large HESCO (or Bremer) on top. A piece snapped side to side to it is built one level up on a free foundation (elevation), and the next piece snapped to that one too. The build order says when to build it, right before the first raised piece, and when to remove it, right after. The raised pieces stay.">
           <svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2" y="2" width="16" height="16" rx="2" fill="var(--fnd)" fill-opacity=".35" stroke="var(--fnd)" stroke-width="1.6" stroke-dasharray="3 2"/><text x="10" y="13.5" text-anchor="middle" font-size="7.5" font-weight="700" fill="var(--ink)" font-family="var(--f-mono)">BB</text></svg>
           <span>A Bumper Block was added to get free elevation</span></div>
         <label class="gbchk">Show Guide and Bumper blocks <input type="checkbox" id="showGB" checked></label>
@@ -850,7 +850,7 @@ a{color:var(--accent)}
       <div class="board">
         <div class="selbar" id="selBar" hidden><b id="selCount"></b>
           <button class="mini" type="button" id="selTurn">Turn 90° (R)</button><button class="mini" type="button" id="selCopy">Copy (Ctrl+C)</button>
-          <button class="mini" type="button" id="selPaste">Paste (Ctrl+V)</button><button class="mini" type="button" id="selDel">Delete</button><button class="mini" type="button" id="selBrush">Use as brush (B)</button><button class="mini" type="button" id="selMod" hidden title="Remove blocks from this structure with the hammer, or put them back">Modify structure</button>
+          <button class="mini" type="button" id="selPaste">Paste (Ctrl+V)</button><button class="mini" type="button" id="selDel">Delete</button><button class="mini" type="button" id="selBrush">Use as brush (B)</button><button class="mini" type="button" id="selBump" hidden title="Raise the selected pieces one level, on a free foundation. Pieces next to a raised piece snap to it. Other groups get a Bumper block in the build order (as few as possible).">Add elevation</button><button class="mini" type="button" id="selLow" hidden title="Put the selected raised pieces back on the ground. What stands on them comes down too.">Remove elevation</button><button class="mini" type="button" id="selMod" hidden title="Remove blocks from this structure with the hammer, or put them back">Modify structure</button>
           <span class="status">Drag or use arrow keys to move · Shift+arrows moves 4 · Esc clears</span></div>
         <div class="vpwrap"><div class="emptyhint" id="emptyHint" hidden><b>Start here</b>Pick a piece on the left, then click the map.<br>R turns it · E erases · drag to place a row.</div><span class="ref" id="refCol" hidden></span><span class="ref row" id="refRow" hidden></span>
         <div class="vp" id="vp"><svg id="svg" role="img" aria-label="Base layout grid"></svg></div><div id="modAsk"></div>
@@ -1441,6 +1441,18 @@ function withFnd(gp,list=pieces){if(!$('fndMode')||!$('fndMode').checked||NO_FND
   const side=[];for(let x=r.x;x<r.x+r.w;x++){side.push([x,r.y-1],[x,r.y+r.d])}for(let y=r.y;y<r.y+r.d;y++){side.push([r.x-1,y],[r.x+r.w,y])}
   for(const[x,y]of side)if(raisedAt(x,y,list))return{...gp,fnd:{dx:x-gp.x,dy:y-gp.y}};
   return gp}   // nothing raised to snap to: an ordinary piece on the ground
+// the squares touching a piece side to side (no corners)
+function sideCells(p){const r=rectOf(p),out=[];for(let x=r.x;x<r.x+r.w;x++){out.push({x,y:r.y-1},{x,y:r.y+r.d})}for(let y=r.y;y<r.y+r.d;y++){out.push({x:r.x-1,y},{x:r.x+r.w,y})}return out}
+// a ground piece that can be given a free foundation (a small HESCO holding something up is a Bumper block itself: left alone)
+const canRaise=(p,list=pieces)=>!p.z&&!p.fnd&&!p.bad&&!NO_FND.has(p.t)&&!(p.t==='hesco_s'&&list.some(q=>q!==p&&q.z>0&&hit(rectOf(q),rectOf(p))));
+/* Free foundation through a group of ground pieces: a piece touching a raised piece side to side (one in `list`, one in
+   `seeds`, or one of the group raised just before it) snaps to it; it chains through the group. Returns Map piece → fnd. */
+function chainFnd(group,list=pieces,seeds=new Map()){const out=new Map(seeds),extra=[...seeds.keys()];
+  const raisedNew=(x,y)=>extra.some(q=>hit(rectOf(q),{x,y,w:1,d:1}));
+  let grew=true;while(grew){grew=false;
+    for(const p of group){if(out.has(p))continue;
+      for(const c of sideCells(p))if(raisedAt(c.x,c.y,list)||raisedNew(c.x,c.y)){out.set(p,{dx:c.x-p.x,dy:c.y-p.y});extra.push(p);grew=true;break}}}
+  return out}
 const ONE_PER_FOB=new Set(['refuel','repair']);   // a FOB takes one of each, never two
 function place(np,list=pieces){
   const r=rectOf(np),t=P[np.t];
@@ -2858,9 +2870,102 @@ function copySel(){const list=[...sel].filter(p=>!P[p.t].fixed);if(!list.length)
 function startPaste(){if(!clip){flashMsg('Copy something first',true);return}setTool('select');pasting=true;flashMsg('Click to place the copy · R turns it · Esc cancels');draw()}
 function turnClip(){const b=bbox(clip.map(p=>({...p})));clip=clip.map(p=>turnCW(p,{...b,x:0,y:0}))}
 function pasteAt(c){if(!clip||!c)return null;return settle(pieces,clip.map(p=>({...p,x:p.x+c.cx,y:p.y+c.cy})))}
+/* Add elevation / Remove elevation (selection bar).
+   Add: every selected piece on the ground gets a free foundation, one level up. A group of touching pieces snaps to the
+   earliest-built raised piece next to it; a group with none gets a Bumper block. Bumper blocks are as few as possible:
+   one free square can serve several groups. Each group is put in the build order as a chain from its raised neighbour
+   or Bumper block, so the build order needs no extra Bumper blocks. What stands on the pieces goes up too.
+   Remove: the selected raised pieces go back to the ground, with what stands on them. */
+const elevCands=()=>[...sel].filter(p=>canRaise(p));
+const lowerCands=()=>[...sel].filter(p=>p.fnd);
+// side-to-side groups of `list`, each sorted in build order
+function sideGroups(list,order){const left=new Set(list),out=[];
+  while(left.size){const s0=[...left].sort((a,b)=>order.get(a)-order.get(b))[0],g=[s0];left.delete(s0);
+    for(let i=0;i<g.length;i++)for(const q of[...left])if(sideBySide(g[i],q)){left.delete(q);g.push(q)}
+    out.push(g.sort((a,b)=>order.get(a)-order.get(b)))}
+  return out}
+// a square of `a` touching `b` side to side
+function touchCell(b,a){const r=rectOf(a);return sideCells(b).find(c=>hit(r,{...c,w:1,d:1}))}
+// free squares where a Bumper block could stand, best first: inside the FOB area, nothing on it, not a ladder's foot
+function bumperScore(c){const fob=fobOf(),fc=fob?ctr(fob):{x:N/2,y:N/2},a=areaRect(fob);
+  const used=(x,y)=>pieces.some(q=>hit(rectOf(q),{x,y,w:1,d:1}));
+  const feet=bumperScore.feet||(bumperScore.feet=new Set(pieces.filter(q=>P[q.t].sym).flatMap(q=>ladderSpots(q).map(l=>(l.x+l.out[0])+','+(l.y+l.out[1])))));
+  if(c.x<0||c.y<0||c.x>=N||c.y>=N)return null;
+  const busy=[[1,0],[-1,0],[0,1],[0,-1]].filter(([dx,dy])=>used(c.x+dx,c.y+dy)).length;   // fewer neighbours = less in the way
+  return{free:!used(c.x,c.y)&&!feet.has(c.x+','+c.y)&&inside({...c,w:1,d:1},a),s:dist2({x:c.x+.5,y:c.y+.5},fc)-busy*100}}
+// as few Bumper blocks as possible for the groups with nothing raised next to them (greedy: the square touching most groups)
+function bumperPlan(groups,order){bumperScore.feet=null;const cells=new Map();
+  groups.forEach((g,gi)=>{for(const p of g)for(const c of sideCells(p)){const sc=bumperScore(c);if(!sc||!sc.free)continue;
+    const k=c.x+','+c.y;if(!cells.has(k))cells.set(k,{c,s:sc.s,by:new Map()});const e=cells.get(k);
+    if(!e.by.has(gi)||order.get(p)<order.get(e.by.get(gi)))e.by.set(gi,p)}});
+  const plan=new Map(),open=new Set(groups.map((g,i)=>i));
+  while(open.size){let best=null,bn=0;
+    for(const e of cells.values()){const n=[...e.by.keys()].filter(i=>open.has(i)).length;if(n>bn||n===bn&&n&&e.s>best.s){best=e;bn=n}}
+    if(!best)break;
+    for(const[gi,p]of best.by)if(open.has(gi)){plan.set(gi,{root:p,c:best.c});open.delete(gi)}}
+  for(const gi of open){const p=groups[gi][0];let bc=null,bs=-1e9;   // no free square: the best square next to its first piece
+    for(const c of sideCells(p)){const sc=bumperScore(c);if(sc&&sc.s>bs){bs=sc.s;bc=c}}if(bc)plan.set(gi,{root:p,c:bc})}
+  return plan}
+// the group as a chain: from the root outwards, each piece snapped to one before it. Returns [[piece, fnd], ...] in build order
+function chainFrom(g,root,c){const out=[[root,{dx:c.x-root.x,dy:c.y-root.y}]],done=new Set([root]);
+  for(let i=0;i<out.length;i++){const a=out[i][0];
+    for(const q of g)if(!done.has(q)&&sideBySide(a,q)){const t=touchCell(q,a);done.add(q);out.push([q,{dx:t.x-q.x,dy:t.y-q.y}])}}
+  return out}
+// heights again, bottom up, on copies; the first piece that would break a rule, or null
+function reseat(list){const fob=fobOf(list),done=fob?[fob]:[],saved=stroke;stroke=new Set();
+  try{for(const p of[...list].sort((a,b)=>(a.z||0)-(b.z||0))){if(p===fob)continue;
+    const res=place({t:p.t,x:p.x,y:p.y,r:p.r,fnd:p.fnd},done);
+    if(res.err){if(!p.bad)return{p,err:res.err}}else p.z=res.z;done.push(p)}
+    return null}finally{stroke=saved}}
+// move a chain (and what stands on it) in the build order: right after its raised neighbour, and after anything the moved pieces stand on
+function orderChain(list,chain,anchor){const M=new Set(chain);
+  let grew=true;while(grew){grew=false;for(const q of list){if(M.has(q)||!q.z)continue;
+    for(const p of M)if(q.z>p.z&&hit(rectOf(q),rectOf(p))){M.add(q);grew=true;break}}}
+  const rest=list.filter(p=>!M.has(p)),first=Math.min(...[...M].map(p=>list.indexOf(p)));
+  let at=rest.filter(p=>list.indexOf(p)<first).length;
+  const after=q=>{const i=rest.indexOf(q);if(i>=0)at=Math.max(at,i+1)};
+  if(anchor)after(anchor);
+  for(const p of M)for(const q of supportsOf(p,list))after(q);
+  const top=[...M].filter(p=>!chain.includes(p)).sort((a,b)=>list.indexOf(a)-list.indexOf(b));
+  rest.splice(at,0,...chain,...top);return rest}
+function addElevation(){const cands=elevCands();
+  if(!cands.length){flashMsg('Nothing to raise: pick pieces standing on the ground (not field items, the FOB or a Bumper block)',true);return}
+  const order=new Map(pieces.map((p,i)=>[p,i])),groups=sideGroups(cands,order);
+  // the earliest-built raised piece next to each group
+  const anchors=groups.map(g=>{let best=null;for(const p of g)for(const c of sideCells(p)){const q=raisedAt(c.x,c.y);
+    if(q&&(!best||order.get(q)<order.get(best.q)||q===best.q&&order.get(p)<order.get(best.root)))best={q,root:p,c}}return best});
+  const need=groups.map((g,i)=>i).filter(i=>!anchors[i]),bp=bumperPlan(need.map(i=>groups[i]),order);
+  const plans=groups.map((g,i)=>anchors[i]?{...anchors[i],bb:null}:bp.has(need.indexOf(i))?{...bp.get(need.indexOf(i)),q:null}:null);
+  let fnd=new Map(),ok=[];const fails=[];
+  groups.forEach((g,i)=>{const pl=plans[i];if(!pl){fails.push(`${P[g[0].t].n} at ${where(g[0])}: no square next to it for a Bumper block`);return}
+    const chain=chainFrom(g,pl.root,pl.c);
+    // try it: everything standing on the group goes up one level and must still follow the rules
+    const trial=new Map(pieces.map(p=>[p,{...p}]));for(const[p,v]of[...fnd,...chain])trial.get(p).fnd={...v};
+    const bad=reseat([...trial.values()]);
+    if(bad){const o=[...trial].find(([,c])=>c===bad.p)[0];fails.push(`${P[o.t].n} at ${where(o)}: ${bad.err}`);return}
+    for(const[p,v]of chain)fnd.set(p,v);ok.push({chain:chain.map(x=>x[0]),anchor:pl.q,cell:pl.q?null:pl.c.x+','+pl.c.y})});
+  if(!ok.length){flashMsg(`Can't raise: ${fails[0]}`,true);return}
+  const copies=new Map(pieces.map(p=>[p,{...p}]));for(const[p,v]of fnd)copies.get(p).fnd={...v};
+  let list=[...copies.values()];reseat(list);
+  for(const o of ok)list=orderChain(list,o.chain.map(p=>copies.get(p)),o.anchor&&copies.get(o.anchor));
+  const raised=fnd.size,bumpers=new Set(ok.filter(o=>o.cell).map(o=>o.cell)).size;
+  snapshot();pieces=list;sel=new Set([...sel].map(p=>copies.get(p)));changed();updateSelBar();
+  flashMsg(`Raised ${raised} piece${raised>1?'s':''} one level`+(bumpers?` · ${bumpers} Bumper block${bumpers>1?'s':''} (see the build order)`:' · snapped to raised pieces next to them')+(fails.length?` · ${fails.length} group${fails.length>1?'s':''} left on the ground: ${fails[0]}`:''),!!fails.length)}
+function removeElevation(){const cands=lowerCands();
+  if(!cands.length){flashMsg('Nothing to lower: none of the selected pieces is raised with elevation',true);return}
+  const order=new Map(pieces.map((p,i)=>[p,i])),groups=sideGroups(cands,order);let off=new Set();const fails=[];
+  for(const g of groups){const trial=new Map(pieces.map(p=>[p,{...p}]));for(const p of[...off,...g])delete trial.get(p).fnd;
+    const bad=reseat([...trial.values()]);
+    if(bad){const o=[...trial].find(([,c])=>c===bad.p)[0];fails.push(`${P[o.t].n} at ${where(o)}: ${bad.err}`);continue}
+    for(const p of g)off.add(p)}
+  if(!off.size){flashMsg(`Can't lower: ${fails[0]}`,true);return}
+  const copies=new Map(pieces.map(p=>[p,{...p}]));for(const p of off)delete copies.get(p).fnd;
+  const list=[...copies.values()];reseat(list);
+  snapshot();pieces=list;sel=new Set([...sel].map(p=>copies.get(p)));changed();updateSelBar();
+  flashMsg(`Lowered ${off.size} piece${off.size>1?'s':''} to the ground`+(fails.length?` · ${fails.length} group${fails.length>1?'s':''} stayed up: ${fails[0]}`:''),!!fails.length)}
 function updateSelBar(){const bar=$('selBar');if(!bar)return;const on=tool==='select'&&(sel.size||pasting);bar.hidden=!on;
   $('selCount').textContent=pasting?`Pasting ${clip.length} piece${clip.length>1?'s':''}`:`${sel.size} selected`;
-  const one=sel.size===1&&!pasting?[...sel][0]:null;$('selMod').hidden=!(one&&window.bpOf&&bpOf(one.t))}
+  const one=sel.size===1&&!pasting?[...sel][0]:null;$('selMod').hidden=!(one&&window.bpOf&&bpOf(one.t));$('selBump').hidden=pasting||!elevCands().length;$('selLow').hidden=pasting||!lowerCands().length}
 function selDown(e,c){
   if(pasting){const res=pasteAt(c);if(res&&commit(res,'Pasted'))pasting=false;return}
   const t=c&&topAt(c.cx,c.cy);
@@ -2898,7 +3003,15 @@ function setBrush(list){list=list.filter(p=>!P[p.t].fixed);if(!list.length){flas
   list=[...list].sort((a,b)=>pieces.indexOf(a)-pieces.indexOf(b));const b=bbox(list);brush=list.map(p=>({...copyPiece(p),x:p.x-b.x,y:p.y-b.y}));
   flashMsg(`Brush: ${brushName(brush)} · click or drag to paint · R turns · Esc picks a new one`);return true}
 function brushAt(c){if(!brush||!c)return null;const b=bbox(brush),ox=c.cx-Math.floor((b.w-1)/2),oy=c.cy-Math.floor((b.d-1)/2);
-  return{res:settle(pieces,brush.map(p=>({...p,x:p.x+ox,y:p.y+oy}))),rect:{x:ox,y:oy,w:b.w,d:b.d}}}
+  return{res:settle(pieces,brushFnd(brush.map(p=>({...p,x:p.x+ox,y:p.y+oy})))),rect:{x:ox,y:oy,w:b.w,d:b.d}}}
+/* Auto elevation on: ground pieces of a stamp that land on bare ground next to a raised piece (or next to one of the
+   stamp raised that way) get a free foundation, even when the brush was picked up without one. */
+function brushFnd(stamp){if(!$('fndMode')||!$('fndMode').checked)return stamp;
+  const bare=p=>{const r=rectOf(p);for(let x=r.x;x<r.x+r.w;x++)for(let y=r.y;y<r.y+r.d;y++)if(topAt(x,y,pieces))return false;return true};
+  const group=stamp.filter(p=>canRaise(p,stamp)&&bare(p));if(!group.length)return stamp;
+  const f=chainFnd(group,pieces,new Map(stamp.filter(p=>p.fnd&&bare(p)).map(p=>[p,p.fnd])));
+  const up=[...f.keys()].filter(p=>group.includes(p));
+  return[...up.map(p=>({...p,fnd:f.get(p)})),...stamp.filter(p=>!up.includes(p))]}
 function turnBrush(){const b=bbox(brush);brush=brush.map(p=>turnCW(p,{...b,x:0,y:0}))}
 function pickBrush(){const b=brushBox;brushBox=null;const r={x:Math.min(b.x0,b.x1),y:Math.min(b.y0,b.y1),w:Math.abs(b.x1-b.x0)+1,d:Math.abs(b.y1-b.y0)+1};
   setBrush([...withStacked(pieces.filter(p=>hit(rectOf(p),r)))]);draw()}
@@ -3081,7 +3194,7 @@ function optimizeWalls(){if(!wallPlan(pieces).length){btnNote($('wallOptBtn'),'N
   flashMsg(`Wall Optimization: ${done*4} large HESCO became ${done} HESCO Wall${done>1?'s':''} · saves ${save} supplies${secs>0?' and ~'+secs+' s of building':''}. Undo takes it back.`);
   btnNote($('wallOptBtn'),`${save} supplies${secs>0?' and '+secs+' s':''} saved`)}
 $('wallOptBtn').onclick=optimizeWalls;
-$('selTurn').onclick=()=>{if(pasting){turnClip();draw()}else turnSel()};$('selCopy').onclick=copySel;$('selPaste').onclick=startPaste;$('selDel').onclick=deleteSel;$('selBrush').onclick=brushButton;$('brushBtn').onclick=brushButton;
+$('selTurn').onclick=()=>{if(pasting){turnClip();draw()}else turnSel()};$('selCopy').onclick=copySel;$('selPaste').onclick=startPaste;$('selDel').onclick=deleteSel;$('selBrush').onclick=brushButton;$('selBump').onclick=addElevation;$('selLow').onclick=removeElevation;$('brushBtn').onclick=brushButton;
 function undo(){if(!history.length)return;const h=JSON.parse(history.pop());
   if(Array.isArray(h))pieces=h;else{pieces=h.pieces;if(h.doc&&window.restoreDoc)restoreDoc(h.doc)}
   sel=new Set();updateSelBar();changed()}
@@ -3323,6 +3436,10 @@ function buildSteps(){const order=buildOrder(),AH=alignHelpers(),out=[],built=[]
       else{// the helper goes where nothing will ever stand if possible (outside the base), else where nothing stands yet
         const r=rectOf(p),side=[fndCell(p)];for(let x=r.x;x<r.x+r.w;x++){side.push({x,y:r.y-1},{x,y:r.y+r.d})}for(let y=r.y;y<r.y+r.d;y++){side.push({x:r.x-1,y},{x:r.x+r.w,y})}
         const inMap=q=>q.x>=0&&q.y>=0&&q.x<N&&q.y<N,used=(x,y)=>pieces.some(q=>hit(rectOf(q),{x,y,w:1,d:1}));
+        // a Bumper block already built next to it, on a square nothing will stand on: keep it up a little longer instead of a new one
+        const old=helpers.find(h=>!used(h.c.x,h.c.y)&&side.some(q=>q.x===h.c.x&&q.y===h.c.y));
+        if(old){const k=out.findIndex(s=>s.kind==='helper'&&s.act==='remove'&&s.h===old);const rm=out.splice(k,1)[0];
+          snap.set(p,{h:old});out.push({kind:'piece',p,ph:P[p.t].ph});built.push(p);out.push(rm);guides(p);return}
         const c=side.find(q=>inMap(q)&&!used(q.x,q.y))||side.find(q=>inMap(q)&&!occupied(q.x,q.y))||side[0];
         const h={c,for:p};helpers.push(h);snap.set(p,{h});out.push({kind:'helper',act:'build',h,ph:P[p.t].ph});
         out.push({kind:'piece',p,ph:P[p.t].ph});built.push(p);out.push({kind:'helper',act:'remove',h,ph:P[p.t].ph});guides(p);return}}
@@ -5561,7 +5678,7 @@ function renderFacts(){
       `A Bunker can stand on the ground${F('stack.bunker')>0?' or on HESCO up to H'+F('stack.bunker'):''}. Recon Towers and Shelters must stand on the ground.`,
       `The FOB build area is a ${F('fob.area')} m square centred on the FOB. Sandbags, barbed wire, hedgehogs and recon tents may sit outside it.`,
       `A FOB takes one Refuel Station and one Repair Station at most, never two of either.`,
-      `Elevation Stacking (free foundation): a piece snapped side to side to a piece standing on a small HESCO is built one level up at no cost, and it chains. Recon Towers and Shelters too; not barbed wire, recon tents, hedgehogs or sandbags. It stays when the Bumper block is removed, and needs the same C4 as the piece on it.`,
+      `Elevation (free foundation): a piece snapped side to side to a piece standing on a small HESCO is built one level up at no cost, and it chains. Recon Towers and Shelters too; not barbed wire, recon tents, hedgehogs or sandbags. It stays when the Bumper block is removed, and needs the same C4 as the piece on it.`,
       `Protected in the threat check: emplacements, stations and the FOB.`]],
   ];
   for(const[h,lines]of RULES)R.append(el('div',{class:'rgrp'},el('h4',{},h),el('ul',{},...lines.map(l=>el('li',{},l)))));

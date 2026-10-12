@@ -8,7 +8,7 @@
 ## Where things live
 | What | Where |
 |---|---|
-| Staging (Claude's workbench) | claude.ai artifact https://claude.ai/artifact/BeyFVpAnFDRbygmRGARv9Z (version 145, released 11 Oct 2026 c: templates removed; b: Find designs, favourites, Tools row) |
+| Staging (Claude's workbench) | claude.ai artifact https://claude.ai/artifact/BeyFVpAnFDRbygmRGARv9Z (version 147 on test 12 Oct 2026: Add/Remove elevation, Auto elevation; version 145 released 11 Oct 2026 c) |
 | Test version | `test.html` in the repo → https://snurras.github.io/wardogs-planner/test.html. Same code as `index.html`; the file name switches on test mode (tester login + `test_*` data, doc 06) |
 | Production | GitHub Pages https://snurras.github.io/wardogs-planner/ (repo `Snurras/wardogs-planner`, file `index.html`) |
 | Docs | the `0x_*.md` files in the repo root (these files) |
@@ -53,7 +53,7 @@ pg.set_content('<!doctype html><html><head><meta charset=utf8></head><body>'+H+'
 pg.evaluate("tipsOff=new Set(Object.keys(TIPS))")          # no tip bubbles in tests
 pg.evaluate("load({v:2,pieces:[{t:'fob',x:40,y:40},{t:'mortar',x:21,y:21}]});$('zoomFit').click()")
 ```
-Pieces: `{t:type,x,y,r(0-3)}`, plus `z` (height it stands at, worked out on load), `fnd` (Elevation Stacking), `mod` (Modify structure changes) and `closed`/`doors`/`doorR` (entrance and centre seals). Always check `pageerror` is empty. Firebase can't be reached from Claude's sandbox: the page falls back to browser storage and the test gate stays up.
+Pieces: `{t:type,x,y,r(0-3)}`, plus `z` (height it stands at, worked out on load), `fnd` (elevation / free foundation), `mod` (Modify structure changes) and `closed`/`doors`/`doorR` (entrance and centre seals). Always check `pageerror` is empty. Firebase can't be reached from Claude's sandbox: the page falls back to browser storage and the test gate stays up.
 
 ## Writing style for Snurra
 Short, plain sentences. Name things as the planner shows them (“Modify an entrance”, “Fact sheet”). Release notes as short bullet lists. One-line answers when possible.

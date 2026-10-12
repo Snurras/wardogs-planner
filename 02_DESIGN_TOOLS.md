@@ -2,7 +2,7 @@
 Use for: toolbar tools, placing/stacking pieces, entrances, Wall Optimization, Guide/Bumper blocks, templates, map controls.
 
 ## Toolbar (one row down to ~1280 px; buttons tighten below 1440 px)
-Select (V) · Brush (B) · Undo · Rotate (R) · Erase (E) · Modify structure (M) · Wall Optimization · Side view (S) | Clear (IED icon) · Straight lines (checkbox) · Elevation Stacking (checkbox).
+Select (V) · Brush (B) · Undo · Rotate (R) · Erase (E) · Modify structure (M) · Wall Optimization · Side view (S) | Clear (IED icon) · Straight lines (checkbox) · Auto elevation (checkbox, was Elevation Stacking).
 - Coloured icons with text kept. Zoom (− size + Fit) and Grid labels sit **below** the map on the right.
 - Process bar above: **1 · Design it → 2 · Haul it → 3 · Build it** (arrow steps with live summaries). Fact sheet / About on the right of the header.
 - **Tools row** under the steps: Find designs, Structure designer (left); **Open ▾** (Find designs…, ★ Favourites, My designs), title field (`dTitle`, autofill off), Personal / Shared, **Save**, **⋯** (Delete, Save / Import .txt) on the right. Menus: `closePops`, `openKey`.
@@ -30,11 +30,11 @@ Select (V) · Brush (B) · Undo · Rotate (R) · Erase (E) · Modify structure (
 | FOB 3×3 | fixed, can be moved not erased | |
 
 ## Building rules (all numbers are facts, see Fact sheet)
-- HESCO/Doors on HESCO/Doors up to H7; anything on a building up to H10. Bunker on ground or on HESCO ≤ H2. Recon Tower / Shelter on the ground only (but Elevation Stacking can raise them to H1, see below).
+- HESCO/Doors on HESCO/Doors up to H7; anything on a building up to H10. Bunker on ground or on HESCO ≤ H2. Recon Tower / Shelter on the ground only (but elevation can raise them to H1, see below).
 - Ladders: the square at a ladder's foot must stay empty, both ways: nothing can be built there, and a structure can't be placed with its ladder square on a piece already there.
 - FOB build area: 60 m square centred on the FOB (field pieces may sit outside). One Refuel and one Repair Station per FOB.
 - Gap rule (emplacements keep a 1-square clear gap) is **switched off**: its checkbox is hidden and every load turns it off. The code stays in case it comes back.
-- **Elevation Stacking** (free foundation): a piece snapped side-to-side to a piece standing on a small HESCO is built one level up for free; it chains; stays when the Bumper block is removed. Not for barbed wire, tents, hedgehogs, sandbags.
+- **Elevation** (free foundation; checkbox **Auto elevation**, code `fndMode`, `p.fnd`): a piece snapped side-to-side to a piece standing on a small HESCO is built one level up for free; it chains; stays when the Bumper block is removed. Not for barbed wire, tents, hedgehogs, sandbags.
 - **Guide blocks (GB) / Bumper blocks (BB)**: helper blocks for stacking; placed only (1 s, 1 supply). “Show Guide and Bumper blocks” checkbox under the notices hides their markers on the map (build steps keep them).
 
 ## Modify structure (M) — also closes entrances
@@ -52,6 +52,8 @@ Finds the most 4-in-a-row Large HESCO (any layer) and swaps each four for one HE
 
 ## Other tools
 - Select: pick, box-select, move, turn, delete, copy/paste (Ctrl+C/V); picking takes everything on top.
-- Brush: eyedropper picks a stack (one or more squares), paints copies; transparent preview; rotate with R.
+- Select → **Add elevation** / **Remove elevation** (selection bar; each shows only when it can act). Add raises selected ground pieces one level on a free foundation, with what stands on them. Each side-to-side group snaps to its earliest-built raised neighbour; groups with none get a Bumper block, chosen so one free square serves as many groups as possible (inside the FOB area, not on a ladder foot, away from the FOB). Each group is moved in the build order as a chain from its neighbour or Bumper block, so no extra Bumper blocks appear. A group that breaks a rule stays and the message says why; a small HESCO holding something up is left alone. Remove takes elevation off the selected pieces. Code: `addElevation`, `removeElevation`, `bumperPlan`, `chainFrom`, `orderChain`, `reseat`, `chainFnd`.
+- Build order (`buildSteps`): a Bumper block already built next to a piece, on a square nothing stands on, is kept up for it (its remove step moves later) instead of a new one.
+- Brush: eyedropper picks a stack (one or more squares), paints copies; transparent preview; rotate with R. With Auto elevation on, brushed ground pieces landing next to a raised piece are raised too, in chain order (`brushFnd`).
 - Side view (S): see doc 04.
 - Templates: removed (11 Oct 2026 c). Shared designs and Find designs do that job.
