@@ -156,7 +156,7 @@ Step 1 + 4 + 5 give most of the value. 3 matters most for the threat check after
 | Steam news for WARDOGS — https://store.steampowered.com/news/app/1867240 | The official patch notes. Follow the game on Steam to get them. |
 | Steam RSS feed — https://store.steampowered.com/feeds/news/app/1867240/ | Same, as a feed (phone, Discord bot, or a scheduled check by Claude). |
 | SteamDB patch history — https://steamdb.info/app/1867240/patchnotes/ | Shows **every** build, also silent hotfixes without notes. A build with no notes = check the `bug` facts. |
-| The official WARDOGS Discord (invite on the Steam page) | Patch notes, hotfix announcements, known-issues posts, dev answers (70). |
+| The official WARDOGS Discord — https://discord.gg/playwardogs | Patch notes, hotfix announcements, known-issues posts, dev answers (70). |
 
 ### 5.2 The steps
 
@@ -200,7 +200,7 @@ Test in game only if **High and below 90**, or **sources disagree** on a High on
 | Your own tests, listed testers | anything High | 100 | doc 11 §10, `09_TODO.md` |
 | A friend's screenshot or clip | quick confirmation | 90 | — |
 | Steam news / official patch notes | what changed, stated numbers | 70 | https://store.steampowered.com/news/app/1867240 |
-| Official Discord, dev posts | hotfixes, known issues, dev answers | 70 | invite on the Steam page |
+| Official Discord, dev posts | hotfixes, known issues, dev answers | 70 | https://discord.gg/playwardogs |
 | wardogs.tools database (datamine) | costs, footprints, numbers the notes skip | 50 | https://wardogs.tools/database/buildables |
 | Dakanoth | FOB, hammers, crates, vehicles | 50 | https://dakanoth.com/wardogs/ |
 | wardogshub.gg | logistics | 50 | https://wardogshub.gg/blog/wardogs-logistics-guide/ |
