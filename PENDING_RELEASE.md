@@ -28,5 +28,11 @@
 - **Esc leaves Side view** and goes back to the piece you were using (like E).
 - **Build time with only the FOB** shows 0:04 (FOB deploy) instead of a dash.
 - **Structure designer:** the Test collapse hint goes away when the test is switched off.
+- **Season 02 pieces (first version, guesses until checked in game):**
+  - **Large Shelter** (Structures): a 6×6 roof at H3 on 4 thin pillars, one in each corner square. The space under it is open: place pieces under it (MG Nest, HESCO up to H2, …); anything taller than the roof's room (H2.65) is refused. Nothing can be built on a pillar's square (Fact sheet *rule.pillarFree*). The threat check lets attackers walk in under the roof; Side view draws the roof and pillars. Modify structure: take pillars off; 2 gone brings the roof down.
+  - **MG Nest** (Emplacements): 2×2, H1. Can stand under the Large Shelter. No protection picture yet (gun height and angles unknown).
+  - **Wooden Step** (Walls & entry): stairs, 1×2, from H1 up to H2 (R turns it; the arrow points up). Attackers can use it too: stairs against an outside wall are a way in.
+  - **Structure designer: Pillar** part (special): a thin post in one corner of a square (R picks the corner), holds a roof 3 layers up. The Large Shelter is in Examples. Your own structure on pillars with nothing on the ground works like the Large Shelter on the map.
+  - Fact sheet: costs, build times, hammer, C4 and heights for the three, all marked ESTIMATE.
 
 Rules: no change needed.

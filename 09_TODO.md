@@ -42,7 +42,7 @@ Things that work but could be better: looks, ease of use, small annoyances.
 
 ## Add
 - [ ] **bumber block** Let me do the 33% etc trick. Let me add bumber to a section if i forgot it. Make it work with brush *QA 10-13: partly there on test: Select → Add elevation adds Bumper blocks to a section, and Brush raises pieces next to a raised one when Auto elevation is on. What's the "33 % trick"? One line on how it works in game and this can be planned.*
-- [ ] *QA 10-13* **Season 02 (15 Oct): new pieces and vehicles.** MG Nest, Large Shelter and Wooden Step as pieces (the Large Shelter likely as a built-in structure from the Structure designer); Wolf-110, Wolf-110 Assault, T-72 and Gepard in the threat check if they change how high attackers reach, and in Haul it if they carry supplies. Needs the game checks under "Season 02" below first.
+- [ ] *QA 10-13* **Season 02 (15 Oct): new pieces and vehicles.** *Pieces on staging v156 (14 Oct) with guessed numbers; left: check them in game (below), MG Nest protection picture, vehicles.* MG Nest, Large Shelter and Wooden Step as pieces (the Large Shelter likely as a built-in structure from the Structure designer); Wolf-110, Wolf-110 Assault, T-72 and Gepard in the threat check if they change how high attackers reach, and in Haul it if they carry supplies. Needs the game checks under "Season 02" below first.
 - [ ] *QA 10-13* **Redo** (Ctrl+Y / Ctrl+Shift+Z). Undo exists, Redo doesn't.
 - [ ] *QA 10-13* **Ctrl+A selects everything** (in Select). Arrow keys already move a selection.
 - [ ] *QA 10-13* **What changed in the threat check.** After an edit, say what got better or worse for a few seconds: "With a car: GETS IN → HOLDS".
