@@ -8,7 +8,7 @@
 ## Where things live
 | What | Where |
 |---|---|
-| Staging (Claude's workbench) | claude.ai artifact https://claude.ai/artifact/BeyFVpAnFDRbygmRGARv9Z (version 156, 14 Oct 2026: Large Shelter, MG Nest, Wooden Step, Pillar part; version 154 on test 12 Oct 2026: C4 blast and collapse, Modify floors, doors, sandbags, floor view, restore, ladder quirk, blocked windows; version 147 on test 12 Oct 2026: Add/Remove elevation, Auto elevation; version 145 released 11 Oct 2026 c) |
+| Staging (Claude's workbench) | claude.ai artifact https://claude.ai/artifact/BeyFVpAnFDRbygmRGARv9Z (version 157, 14 Oct 2026: Large Shelter, MG Nest, Wooden Step, Pillar part; version 154 on test 12 Oct 2026: C4 blast and collapse, Modify floors, doors, sandbags, floor view, restore, ladder quirk, blocked windows; version 147 on test 12 Oct 2026: Add/Remove elevation, Auto elevation; version 145 released 11 Oct 2026 c) |
 | Test version | `test.html` in the repo → https://snurras.github.io/wardogs-planner/test.html. Same code as `index.html`; the file name switches on test mode (tester login + `test_*` data, doc 06) |
 | Production | GitHub Pages https://snurras.github.io/wardogs-planner/ (repo `Snurras/wardogs-planner`, file `index.html`) |
 | Docs | the `0x_*.md` files in the repo root (these files) |
