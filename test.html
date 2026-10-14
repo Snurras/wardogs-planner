@@ -3161,7 +3161,7 @@ document.addEventListener('keydown',e=>{const tg=e.target;if((tg.tagName==='INPU
   if(mod&&(e.key==='c'||e.key==='C')&&inSel&&sel.size){e.preventDefault();copySel();return}
   if(mod&&(e.key==='v'||e.key==='V')){e.preventDefault();startPaste();return}
   if(mod)return;
-  if(svIsOpen()){if(e.key==='r'||e.key==='R'){svTurn(e.shiftKey);return}if(e.key==='Escape'){if(tool==='seal'){svClose();return}$('svPanel').hidden=true;draw();return}if(e.key==='s'||e.key==='S'){svToggle();return}if(e.key==='+'||e.key==='='){$('svZoomIn').click();return}if(e.key==='-'){$('svZoomOut').click();return}if(sv3dOn&&(e.key===']'||e.key==='[')){svLayerBy(e.key===']'?1:-1);return}return}
+  if(svIsOpen()){if(e.key==='r'||e.key==='R'){svTurn(e.shiftKey);return}if(e.key==='Escape'){if(tool==='seal'){svClose();return}setTool(lastPiece);return}/* Esc leaves Side view: back to the piece you were using, like E */if(e.key==='s'||e.key==='S'){svToggle();return}if(e.key==='+'||e.key==='='){$('svZoomIn').click();return}if(e.key==='-'){$('svZoomOut').click();return}if(sv3dOn&&(e.key===']'||e.key==='[')){svLayerBy(e.key===']'?1:-1);return}return}
   if((e.key==='r'||e.key==='R')&&dgfHoverEmp()){dgfView=dgfView==='NS'?'WE':'NS';draw();return}   // turn the protection picture, not a piece
   if((e.key==='r'||e.key==='R')&&tool==='seal'){turnCentreDoor();return}
   if(e.key==='r'||e.key==='R'){if(tool==='brush'){if(brush){turnBrush();draw()}}else if(inSel&&pasting){turnClip();draw()}else if(inSel&&sel.size)turnSel();else turn()}
@@ -3170,6 +3170,7 @@ document.addEventListener('keydown',e=>{const tg=e.target;if((tg.tagName==='INPU
   else if(e.key==='b'||e.key==='B'){brushButton()}
   else if(e.key==='m'||e.key==='M'){setTool(tool==='seal'?lastPiece:'seal')}
   else if(e.key==='s'||e.key==='S'){svToggle()}
+  else if(e.key==='Escape'&&tool==='side'){setTool(lastPiece)}
   else if(e.key==='Escape'){line=null;if(tool==='brush'){brush=null;brushBox=null}pasting=false;sel=new Set();selBox=null;drag=null;updateSelBar();flashMsg('');draw()}
   else if((e.key==='Delete'||e.key==='Backspace')&&inSel&&sel.size){e.preventDefault();deleteSel()}
   else if(inSel&&sel.size&&e.key.startsWith('Arrow')){e.preventDefault();const k=e.shiftKey?4:1;
@@ -3506,7 +3507,7 @@ function buildTime(){const F=WD.F,missing=new Set();let sec=0;
 const mmss=s=>{s=Math.round(s);const h=Math.floor(s/3600),m=Math.floor(s%3600/60),x=s%60;return(h?h+':'+String(m).padStart(2,'0'):m)+':'+String(x).padStart(2,'0')};
 function renderTime(){const box=$('timeCard');if(!box)return;const real=pieces.filter(p=>p.t!=='fob');
   const n=+$('builders').value||1;
-  if(!real.length){$('timeTot').textContent='—';$('timeSub').textContent='';$('timeNote').textContent='Place pieces to see how long the build takes.';return}
+  if(!real.length){const f=WD.F('t.fob')||0;$('timeTot').textContent=pieces.length?mmss(f):'—';$('timeSub').textContent=pieces.length?'min:sec · FOB deploy':'';$('timeNote').textContent='Place pieces to see how long the build takes.';return}   // FOB only: its deploy time
   const{sec,missing}=buildTime(),t=sec/n;
   $('timeTot').textContent=mmss(t);$('timeSub').textContent=`min:sec · ${n} builder${n>1?'s':''}`+(n>1?` (${mmss(sec)} for one)`:'');
   $('timeNote').textContent=missing.length?`Not timed yet, counted as 0: ${missing.join(', ')}. Add them on the Fact sheet.`:''}
@@ -5410,22 +5411,43 @@ function designFromText(txt){let d;const s=String(txt).replace(/^\uFEFF/,'').tri
   if(!s.startsWith('{'))return{err:'That file is not a saved design (it should start with {).'};
   try{d=JSON.parse(s)}catch(e){return{err:'That file is not a saved design (the text is damaged or not a design).'}}
   if(!d||typeof d!=='object'||Array.isArray(d)||!Array.isArray(d.pieces))return{err:'That file is not a saved design (no pieces in it).'};
-  if(d.pieces.length>N*N)return{err:`That design has ${d.pieces.length} pieces, more than the map can hold.`};
-  const customs={};if(d.customs&&typeof d.customs==='object'&&!Array.isArray(d.customs))for(const id of Object.keys(d.customs).slice(0,40)){if(!/^cs_[A-Za-z0-9]{1,40}$/.test(id))continue;const c=cleanBlueprint(d.customs[id]);if(c)customs[id]=c}
-  const known=t=>typeof t==='string'&&(P[t]&&!P[t].custom||customs[t]);let dropped=0;
-  const pieces=[];for(const p of d.pieces){if(!p||typeof p!=='object'||!known(p.t)||!Number.isInteger(p.x)||!Number.isInteger(p.y)||p.x<0||p.y<0||p.x>=N||p.y>=N){dropped++;continue}
+  const r=cleanDesign(d);if(r.err)return r;r.d.name=r.d.name||'Imported design';return r}
+/* Every design is cleaned before it is opened: Import .txt, Find designs, My designs, Favourites and the copy kept in the browser.
+   Known piece types only (own keys, so no "__proto__"), whole-number squares on the map (legacy designs after their shift),
+   plain-text name, plan keys the planner knows with the right type. Bad pieces are dropped and counted. */
+const ownKey=(o,k)=>o!=null&&Object.prototype.hasOwnProperty.call(o,k);
+const isObj=o=>!!o&&typeof o==='object'&&!Array.isArray(o);
+function cleanPlanVal(def,x){
+  if(Array.isArray(def)){if(!Array.isArray(x))return;const r=[...new Set(x.filter(v=>def.includes(v)))];return[...r,...def.filter(v=>!r.includes(v))]}
+  if(isObj(def)){if(!isObj(x))return;const r={};for(const k of Object.keys(def)){const v=cleanPlanVal(def[k],x[k]);r[k]=v===undefined?def[k]:v}return r}
+  if(typeof x!==typeof def||typeof x==='number'&&!Number.isFinite(x))return;return x}
+function cleanDesign(d){
+  if(!isObj(d))return{err:'That design is damaged (not a design).'};
+  const src=Array.isArray(d.pieces)?d.pieces:[];
+  if(src.length>N*N)return{err:`That design has ${src.length} pieces, more than the map can hold.`};
+  const v=Number.isInteger(d.v)&&d.v>=1&&d.v<=9?d.v:undefined,sh=isLegacy({v})?LEGACY_SHIFT:0;
+  const customs={};if(isObj(d.customs))for(const id of Object.keys(d.customs).slice(0,40)){if(!/^cs_[A-Za-z0-9]{1,40}$/.test(id))continue;const c=cleanBlueprint(d.customs[id]);if(c)customs[id]=c}
+  const known=t=>typeof t==='string'&&(ownKey(customs,t)||ownKey(P,t));const on=c=>Number.isInteger(c)&&c+sh>=0&&c+sh<N;
+  let dropped=0;const pieces=[];
+  for(const p of src){if(!isObj(p)||!known(p.t)||!on(p.x)||!on(p.y)){dropped++;continue}
     const q={t:p.t,x:p.x,y:p.y,r:intIn(p.r,0,3,0),z:intIn(p.z,0,40,0)};
-    for(const k of['fnd','closed','doors','doorR','mod','l'])if(p[k]!=null)q[k]=p[k];   // checked again, field by field, when the design is built
+    if(Number.isFinite(p.l))q.l=p.l;
+    for(const k of['closed','doors'])if(Array.isArray(p[k]))q[k]=p[k].filter(Number.isInteger);
+    for(const k of['fnd','doorR','mod'])if(isObj(p[k]))q[k]=p[k];   // checked again, field by field, when the design is built (rebuild)
     pieces.push(q)}
-  const plan={};if(d.plan&&typeof d.plan==='object')for(const[k,v]of Object.entries(Haul.PLAN_DEFAULT)){const x=d.plan[k];if(x!=null&&typeof x===typeof v&&(typeof v!=='object'||!Array.isArray(x)))plan[k]=x}
-  return{d:{name:plainText(d.name,60)||'Imported design',pieces,customs,plan,...(Number.isInteger(d.v)&&d.v>=1&&d.v<=9?{v:d.v}:{}),gapRule:!!d.gapRule,onlyFob:!!d.onlyFob},dropped}}
+  const plan={};if(isObj(d.plan))for(const[k,def]of Object.entries(Haul.PLAN_DEFAULT)){const x=cleanPlanVal(def,d.plan[k]);if(x!==undefined)plan[k]=x}
+  return{d:{name:plainText(d.name,60),pieces,customs,plan,...(v?{v}:{}),gapRule:!!d.gapRule,onlyFob:!!d.onlyFob},dropped}}
+const droppedText=n=>n?`${n} broken piece${n>1?'s':''} left out`:'';
 $('importTxt').addEventListener('change',async e=>{const f=e.target.files&&e.target.files[0],st=$('saveStatus');if(!f)return;
   if(f.size>TXT_MAX){status(`That file is too big for a design (${Math.round(f.size/1024)} KB; the limit is 512 KB). Nothing was changed.`);return}
   let txt;try{txt=await f.text()}catch(err){status('Could not read that file. Nothing was changed.');return}
   const r=designFromText(txt);if(r.err){status(r.err+' Nothing was changed.');return}
   S.cur=null;load(r.d);renderSaved();
   status(`Imported “${r.d.name}”${r.dropped?` (${r.dropped} unknown piece${r.dropped>1?'s':''} left out)`:''}. Undo brings back your previous design. Save it to keep it.`)});
-window.onDesignChanged=()=>{ls.set('wd_design_draft',designDoc());if(tab==='haul')renderHaul();updateTabBadge()};
+// After Clear the stored copy keeps the old design until something is placed, so a reload after a mistaken Clear still has it.
+var keepDraft=false;
+function saveDraft(){if(keepDraft&&!pieces.some(p=>p.t!=='fob'))return;keepDraft=false;ls.set('wd_design_draft',designDoc())}
+window.onDesignChanged=()=>{saveDraft();if(tab==='haul')renderHaul();updateTabBadge()};
 function updateTabBadge(){}
 const TEAM_KINDS=['foot','driver','lakota','mh6'];
 // plan.team = {oneway:{foot,driver,lakota,mh6}, trans:{…}}; anything else (older drafts) counts as no team
@@ -5534,7 +5556,14 @@ function renderHaul(){
       const mine=vehOpts.get(haulPick.veh);sel=mine[Math.min(haulPick.i,mine.length-1)];
       players=[{label:`${isHeli(sel.v)?'Pilot':'Driver'} · ${sel.v.name}`,v:sel.v,trunkCap:sel.trunkCap,heli:isHeli(sel.v),trips:sel.p.tripList.map((t,ti)=>({t,items:ti===0?carry:[]}))}];
       carried=sel.carried;unpack=sel.p.unpack;trips=sel.p.trips;
-      cashRows.push([`Supplies (${[sel.p.pallets.length?plu(sel.p.pallets.length,'pallet'):'',sel.p.crates.length?plu(sel.p.crates.length,'crate'):''].filter(Boolean).join(', ')})`,sel.p.cost]);
+      // one line per type (pallets + stacks in crates or the trunk), then the crates themselves; adds up to the pack's cost
+      {const pP=WD.F('palletPrice'),sP=WD.F('packPrice'),pal={},stk={},rows=[];
+        for(const t of sel.p.pallets)pal[t]=(pal[t]||0)+1;
+        for(const tr of sel.p.tripList)for(const[t,n]of[...tr.crates.flatMap(c=>c.fill),...tr.trunk])stk[t]=(stk[t]||0)+n;
+        for(const t of Haul.ORDER)if(pal[t]||stk[t])rows.push([`${HZ_NAME[t]} (${[pal[t]?plu(pal[t],'pallet'):'',stk[t]?plu(stk[t],'stack'):''].filter(Boolean).join(' + ')})`,(pal[t]||0)*pP+(stk[t]||0)*sP]);
+        const nL=sel.p.crates.filter(c=>c.kind==='large').length,nS=sel.p.crates.length-nL;
+        if(nL||nS)rows.push([`Crates (${[nL?nL+' large':'',nS?nS+' small':''].filter(Boolean).join(', ')})`,nL*WD.F('c.large.price')+nS*WD.F('c.small.price')]);
+        if(rows.reduce((a,x)=>a+x[1],0)===sel.p.cost)cashRows.push(...rows);else cashRows.push([`Pallets and stacks (${plu(sel.p.pallets.length,'pallet')})`,sel.p.cost])}
       if(sel.spawn)cashRows.push([`${sel.v.name} (one, round trips)`,sel.spawn])}
   }
   const shots=shotsOf(carried.mech);
@@ -5761,7 +5790,7 @@ function planTeam(r,team){const S=WD.F('stack'),F=WD.F,carriers=[],locked=[];
   // what each player pays: their vehicle, the supplies they load, and the FOB kit / hammer if they bring them
   for(const c of carriers){c.cash=[];if(!c.trips.length)continue;
     if(c.v){const sp=F('v.'+c.v.id+'.spawn')||0;if(sp)c.cash.push([c.v.name,sp])}
-    const sup=c.trips.reduce((a,t)=>a+tripCost(t),0);if(sup)c.cash.push([`Supplies (${c.trips.length} trip${c.trips.length>1?'s':''})`,sup]);
+    const sup=c.trips.reduce((a,t)=>a+tripCost(t),0);if(sup)c.cash.push([`Pallets and stacks (${c.trips.length} trip${c.trips.length>1?'s':''})`,sup]);
     for(const t of c.trips)for(const[n]of t.items||[])c.cash.push([n,n==='FOB kit'?F('fobPrice'):F('ham.l.price')])}
   const veh=new Map();for(const c of carriers)if(c.v&&c.trips.length){const k=c.v.name;const e=veh.get(k)||[k,0,0];e[1]++;e[2]+=F('v.'+c.v.id+'.spawn')||0;veh.set(k,e)}
   const fake={tripList:all.filter(t=>!t.foot)},u=Haul.unpackTime(fake),hand=fake.unpackHand||0;
@@ -5771,7 +5800,7 @@ function planTeam(r,team){const S=WD.F('stack'),F=WD.F,carriers=[],locked=[];
 
 // inputs fire 'change' while losing focus; redraw on the next tick so the field isn't removed mid-blur
 const later=f=>setTimeout(f,0);
-function planChanged(){ls.set('wd_design_draft',designDoc());later(()=>{renderHaul();updateTabBadge();renderTrips()})}
+function planChanged(){saveDraft();later(()=>{renderHaul();updateTabBadge();renderTrips()})}
 $('optStock').onchange=e=>{plan.useFobStock=e.target.checked;planChanged()};
 for(const[id,k]of[['optFobPack','fobInPack'],['optFobPack2','fobInPack'],['optHamPack','hammerInPack'],['optHamPack2','hammerInPack']])
   $(id).onchange=e=>{plan[k]=e.target.checked;for(const[j,kk]of[['optFobPack','fobInPack'],['optFobPack2','fobInPack'],['optHamPack','hammerInPack'],['optHamPack2','hammerInPack']])$(j).checked=!!plan[kk];planChanged()};
@@ -5902,8 +5931,8 @@ let db=null;   // the claude.ai page database, when running there
 S.local=ls.get('wd_designs')||[];
 let statusTimer=0;
 function status(t){const e=$('saveStatus');e.textContent=t;clearTimeout(statusTimer);if(t)statusTimer=setTimeout(()=>{e.textContent=''},7000)}
-function load(d){registerCustoms(d.customs);snapshotDoc();$('gapRule').checked=false;$('onlyFob').checked=!!d.onlyFob;pieces=rebuild(d.pieces||[],isLegacy(d));sel=new Set();updateSelBar();plan={...Haul.PLAN_DEFAULT,...(d.plan||{})};designName=d.name||'';$('dTitle').value=designName;changed();renderSaved();window.FD?.loaded(S.cur);
-  const r=flaggedText();flashMsg(r?`Loaded "${designName||'design'}". ${r}.`:'',!!r)}
+function load(d){const c=cleanDesign(d);if(c.err){flashMsg(c.err+' Nothing was changed.',true);return false}d=c.d;registerCustoms(d.customs);snapshotDoc();$('gapRule').checked=false;$('onlyFob').checked=!!d.onlyFob;pieces=rebuild(d.pieces||[],isLegacy(d));sel=new Set();updateSelBar();plan={...Haul.PLAN_DEFAULT,...(d.plan||{})};designName=d.name||'';$('dTitle').value=designName;changed();renderSaved();window.FD?.loaded(S.cur);
+  const r=[droppedText(c.dropped),flaggedText()].filter(Boolean).join(' · ');flashMsg(r?`Loaded "${designName||'design'}". ${r}.`:'',!!r);return true}
 const userName=()=>{const u=S.user;if(!u)return'';const n=u.displayName||'Player';return n.charAt(0).toUpperCase()+n.slice(1)};   // never the email
 function parseDoc(r){try{return{...JSON.parse(r.data),name:r.name}}catch(e){return{name:r.name,pieces:[]}}}
 // everything the Open list can show
@@ -5986,7 +6015,8 @@ $('saveForm').addEventListener('submit',async e=>{e.preventDefault();const name=
     else{const id=same?same.id:'d'+Date.now().toString(36);S.local=S.local.filter(d=>d.id!==id);S.local.push({id,...body,updated:now});ls.set('wd_designs',S.local);S.cur='l'+id;status(`Saved "${name}" in this browser.`)}}
   catch(err){status('Could not save: '+errText(err))}
   changed();renderSaved()});
-$('clearBtn').onclick=()=>{snapshotDoc();pieces=rebuild([]);sel=new Set();designName='';S.cur=null;$('dTitle').value='';changed();renderSaved()};
+$('clearBtn').onclick=()=>{snapshotDoc();keepDraft=true;pieces=rebuild([]);sel=new Set();designName='';S.cur=null;$('dTitle').value='';changed();renderSaved();
+  flashMsg('Map cleared. Undo brings it back. Until you place something, a reload also brings it back.')};
 
 /* ---------- logins (Firebase) ---------- */
 function errText(e){const c=(e&&e.code)||'';
@@ -6182,12 +6212,19 @@ $('tgLogin').onclick=()=>openLogin('Log in to open the test version.');
 $('tgOut').onclick=()=>{if(S.fb)S.fb.signOut(S.fb.auth)};
 
 /* ---------- start-up ---------- */
-const draft=ls.get('wd_design_draft');
-const start=draft&&draft.pieces&&draft.pieces.filter(p=>p.t!=='fob').length?draft:{v:SAVE_V,pieces:[]};
-registerCustoms(start.customs);$('gapRule').checked=false;$('onlyFob').checked=!!start.onlyFob;pieces=rebuild(start.pieces,isLegacy(start));designName=start.name||'';plan={...Haul.PLAN_DEFAULT,...(start.plan||{})};
-$('dTitle').value=designName;
-renderPalette();renderLegend();renderThreat();draw();renderSide();renderSaved();updateTabBadge();
-{const r=flaggedText();if(r)flashMsg(r+'.',true)}
+// The design kept in the browser is cleaned like any other. If it still can't be opened, the map starts empty and says so
+// (the old copy is kept as wd_design_draft_bad, the cleaned one replaces it, so the next reload is clean).
+{const EMPTY={v:SAVE_V,pieces:[]},draft=ls.get('wd_design_draft');let start=EMPTY,note='';
+  if(draft!=null){const c=cleanDesign(draft);
+    if(c.err)note='Your last design could not be read, so the map starts empty';
+    else{if(c.d.pieces.some(p=>p.t!=='fob'))start=c.d;if(c.dropped)note=`Your last design: ${droppedText(c.dropped)}`}}
+  const open=d=>{registerCustoms(d.customs);$('gapRule').checked=false;$('onlyFob').checked=!!d.onlyFob;pieces=rebuild(d.pieces,isLegacy(d));designName=d.name||'';plan={...Haul.PLAN_DEFAULT,...(d.plan||{})};
+    $('dTitle').value=designName;renderThreat();draw();renderSide()};
+  renderPalette();renderLegend();
+  try{open(start)}catch(e){note='Your last design could not be opened, so the map starts empty';open(EMPTY)}
+  renderSaved();updateTabBadge();
+  if(note){ls.set('wd_design_draft_bad',draft);ls.set('wd_design_draft',designDoc())}
+  const r=[note,flaggedText()].filter(Boolean).join(' · ');if(r)flashMsg(r+'.',true)}
 requestAnimationFrame(()=>{fitLayout();fit25()});
 if(IN_CLAUDE)(async()=>{try{db=await window.claude.use('db')}catch(e){db=null}if(!db)return;
   db.collection('designs').onSnapshot(sn=>{S.mode='claude';S.remote=sn.docs.map(d=>({id:d.id,...d.data()}));renderSaved()},()=>{});
@@ -6494,7 +6531,7 @@ $('stBack').onclick=()=>showTab('design');
 $('stLayUp').onclick=()=>{ST.layer=Math.min(MAXL,ST.layer+1);renderAll()};$('stLayDn').onclick=()=>{ST.layer=Math.max(0,ST.layer-1);renderAll()};
 $('stTurnL').onclick=()=>{ST.view=(ST.view+3)%4;renderIso()};$('stTurnR').onclick=()=>{ST.view=(ST.view+1)%4;renderIso()};$('stCut').onchange=renderIso;
 function startTest(){ST.testing=true;ST.blown=new Set();ST.c4=0;msg('Click a block on this layer to remove it (hammer) or blow it (C4). Change layer to reach higher blocks.');renderAll()}
-function endTest(){ST.testing=false;ST.blown=new Set();ST.c4=0;renderAll()}
+function endTest(){ST.testing=false;ST.blown=new Set();ST.c4=0;msg('');renderAll()}   // the test hint goes with the test
 $('stJsonBtn').onclick=()=>{const b=$('stJsonBtn'),o=b.getAttribute('aria-expanded')!=='true';b.setAttribute('aria-expanded',o);$('stJsonBody').hidden=!o;b.querySelector('.tdet-c').textContent=o?'▲':'▼'};
 
 // ---------- pointer ----------

@@ -22,5 +22,11 @@
 - **Labels H1, H2, HX** on HESCO Small, HESCO Large and the 1.65-high block, in Modify structure and in the Structure designer.
 - **Corner HESCO is now called HESCO X Size** everywhere in the planner. In the Structure designer's 3D view it is 1.65 high and darker, with the 0.35 roof resting on it; the block list says H1.65.
 - **Side view** (3D look) draws blocks added with Modify structure and closed entrances and centre squares.
+- **Broken designs no longer break the page.** Every design is checked before it opens (the copy kept in the browser, Find designs, My designs, Favourites, Import .txt): broken pieces, pieces off the map and unknown piece types are left out, and the message says how many. If the copy kept in the browser can't be read at all, the map starts empty and says so.
+- **Haul it, Cash box:** one line per type (Supplies, Ammo, Fuel, Mechanical: pallets + stacks), then the crates. Same total as before. In a team plan the line is called "Pallets and stacks".
+- **Clear is safer:** after Clear, a reload still brings the old design back until you place something new. Undo works as before.
+- **Esc leaves Side view** and goes back to the piece you were using (like E).
+- **Build time with only the FOB** shows 0:04 (FOB deploy) instead of a dash.
+- **Structure designer:** the Test collapse hint goes away when the test is switched off.
 
 Rules: no change needed.
