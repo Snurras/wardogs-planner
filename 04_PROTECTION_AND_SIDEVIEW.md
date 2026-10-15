@@ -50,3 +50,8 @@ Use for: Direct ground fire protection rules, the emplacement hover picture, the
 - Builder's Radio: steel table, yellow radio, green cases under, sandbags behind.
 - Accepted as is in the flat look (flat icons): Sandbags, Barbed wire, Hedgehog, Recon tent.
 - Reference mockup pages (private artifacts): Protection Picture Review, Side View Depth Options, Side View Icons.
+
+## Fields of fire all round (staging v158, 15 Oct 2026)
+- Hover an emplacement: fan on the map (`dgfFan`) and an **All round** strip in the hover card (`dgfStrip`), both from `dgfHorizon(p)`: rays every 3° (`HZ_STEP`) from the pivot over boxes built by `dgfBoxes` (cells at their height; pillars as thin posts; sandbags against their side; Bremer as wall + footing; canopy roof as a thin sheet overhead). Distances = grids out from the emplacement edge + pivot-to-edge, as in the side checks.
+- Per direction: floor (highest angle blocked by cover, merged from the gun's lowest angle up), ceiling (lowest angle a roof blocks above). Class: Talon/CIWS/MG by `dgfClass`, poor if the ceiling is within 10° of the floor; mortar by range (free = full, amber ≥ 80%, red below or a roof under 85°); Stingray red if a roof is under its launch angle.
+- The per-side summary, badges and Side view are unchanged (old model).

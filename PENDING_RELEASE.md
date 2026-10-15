@@ -34,5 +34,6 @@
   - **Wooden Step** (Walls & entry): open wooden stairs, 1×2, from H1 up to H2 (R turns it; the arrow points up). Side view draws real steps. You can walk up them or crawl under them (threat check too). Attackers can use them: stairs against an outside wall are a way in.
   - **Structure designer: Pillar** part (special): a thin post in one corner of a square (R picks the corner), holds a roof 3 layers up. The Large Shelter is in Examples. Your own structure on pillars with nothing on the ground works like the Large Shelter on the map.
   - Fact sheet: costs, build times, hammer, C4 and heights for the three, all marked ESTIMATE.
+- **Fields of fire all round (staging v158).** Hover an emplacement: the map shows a fan round it, one slice per direction: blue = shoots freely, amber = limited, red = blocked. A thin pillar or a single block now blocks only its own narrow slice instead of a whole side. The hover card gets an **All round** strip under the side picture: direction along the bottom (N E S W N), the angle up the side, the cover below drawn as a brown skyline, roofs above as grey (e.g. the Large Shelter roof over an MG Nest), and the gun's lowest angle as a red dashed line. The summary rows and badges are worked out as before.
 
 Rules: no change needed.
