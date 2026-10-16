@@ -22,9 +22,9 @@ Select (V) · Brush (B) · Undo · Rotate (R) · Erase (E) · Modify structure (
 | Recon Tower | 4×4 | edges H4, centre 2×2 H5, floor 2 at H2, outside ladder |
 | Indirect Fire Shelter | 5×5 | edges H2, centre 3×3 H3 |
 | Trimmed Recon / Shelter | same | flat H4 / H2 (centre removed, extra trim time); no longer in the piece list, only in older designs |
-| Large Shelter (Season 02) | 6×6 | thin roof H3 on 4 corner pillars, open under it: pieces up to H3 go under it; pillar squares stay free |
+| Large Shelter (Season 02) | 6×6 | roof H3 (0.35 thick) on 4 corner pillars, open under it: pieces up to H2 go under it; pillar squares stay free |
 | MG Nest (Season 02) | 1×1 | H1, emplacement, standing gunner, angles graded like the Talon (Fact sheet dgf.mg.*) |
-| Wooden Step (Season 02) | 1×2 | open stairs H1 → H2, R turns, nothing builds on it; walk up or crawl under (threat check: slabs with crawl space, `low`) |
+| Wooden Step (Season 02) | 1×1 | wooden platform H0.2 (Fact sheet `ht.step.pct`), nothing builds on it |
 | Loudspeaker 2×2 H3 · Builder's Radio 2×1 H1 | | |
 | HESCO Small 1×1 H1 · Large 1×1 H2 · HESCO Wall 4×1 H2 | | |
 | Bremer Wall 1×1 | face H3 (can't be jumped), footing H1 walkable | |

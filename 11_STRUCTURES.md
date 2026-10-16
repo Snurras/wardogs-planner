@@ -109,10 +109,10 @@ A roof on 4 **Pillars**, no floor, no walls: open space under it.
 y0  P  .  .  .  .  P           P = Pillar in that square's outer corner (NW, NE, SE, SW)
 y5  P  .  .  .  .  P
 ```
-- Pillar: special part, thin, 3 high; the roof on it is a thin sheet, so there is room for H3 under it (Snurra 14 Oct). No C4 of its own? (Fact sheet guess 2). Not a solid block: the threat check walks past it.
+- Pillar: special part, thin, 2.65 high + the 0.35 roof = 3, like the Bunker roof: room for H2 under it (Snurra 16 Oct). No C4 of its own? (Fact sheet guess 2). Not a solid block: the threat check walks past it.
 - Roof falls when 2 pillars are gone? (corner rule). Pillars stay.
 - Nothing can be built on a pillar's square? (Fact sheet `rule.pillarFree`, 1 = refused).
-- Pieces stand under the roof if they fit: top ≤ H3. Vehicles can't drive under it?
+- Pieces stand under the roof if they fit: top ≤ H2.65 (so H2). Vehicles can't drive under it?
 - Code: `P.lshelter` with `canopy:3`; `BUILTIN_BP.lshelter`; `isCanopy`, `canopyAt`, `canopyRoofAt`, `solidTopAt` (wd-design: `topAt` prefers a piece under the roof); `PILLAR_H` and the pillar rule in `bpRules` (wd-custom). A custom structure with pillars and no ground blocks becomes a canopy too. Threat check: a protected piece in a room under a roof is reached by walking in (`roomTarget`); walking under a canopy is not a climb (`underOnly`).
 
 ### Not structures in this sense (stay normal pieces)
