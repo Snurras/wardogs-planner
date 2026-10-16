@@ -23,7 +23,7 @@ Select (V) · Brush (B) · Undo · Rotate (R) · Erase (E) · Modify structure (
 | Indirect Fire Shelter | 5×5 | edges H2, centre 3×3 H3 |
 | Trimmed Recon / Shelter | same | flat H4 / H2 (centre removed, extra trim time); no longer in the piece list, only in older designs |
 | Large Shelter (Season 02) | 6×6 | roof H3 (0.35 thick) on 4 corner pillars, open under it: pieces up to H2 go under it; pillar squares stay free |
-| MG Nest (Season 02) | 1×1 | H1, emplacement, standing gunner, angles graded like the Talon (Fact sheet dgf.mg.*) |
+| MG Nest (Season 02) | 1×1 | H1, emplacement, standing gunner, angles graded like the Talon (Fact sheet dgf.mg.*). **Free piece** (`P.free`): `p.off=[dx,dy]` (±0.5, steps 0.05) from its square's middle, Snap to grid checkbox (`snapGrid`), Alt+arrows nudge; only drawing and the gun pivot use it. **Inside piece** (`P.inside`): on a free square inside a structure, on a floor it fits under (`roomsIn`, roof 0.35), `p.in`, `p.fl` (floor, [ ] while placing), snaps to a window (`windowSnap`). `pickAt`, `insideOf`, `surfTarget` (threat check) |
 | Wooden Step (Season 02) | 1×1 | wooden platform H0.2 (Fact sheet `ht.step.pct`), nothing builds on it |
 | Loudspeaker 2×2 H3 · Builder's Radio 2×1 H1 | | |
 | HESCO Small 1×1 H1 · Large 1×1 H2 · HESCO Wall 4×1 H2 | | |
