@@ -50,6 +50,7 @@ button{cursor:pointer}
 .btn{border:1px solid var(--accent);background:var(--accent);color:var(--accent-ink);border-radius:3px;padding:5px 12px;font:700 13px var(--f-head);letter-spacing:.08em;text-transform:uppercase}
 .btn.ghost{background:transparent;color:var(--ink);border-color:var(--line)}
 .chk{display:inline-flex;gap:6px;align-items:center;font-size:14px}
+.chk.noeffect{opacity:.45}   /* a setting that does nothing for the piece you are placing: still clickable */
 .bar input[type=text]{background:var(--bg);border:1px solid var(--line);border-radius:3px;padding:5px 8px;width:200px;max-width:100%}
 .chip{border:1px solid var(--line);background:var(--bg);border-radius:3px;padding:4px 9px;font:600 13px var(--f-head);display:inline-flex;gap:6px;align-items:center}
 .chip.on{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
@@ -797,6 +798,7 @@ a{color:var(--accent)}
     <button class="edit-only btn ghost" type="button" id="clearBtn" title="Start a new, empty design"><span class="ti"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" style="flex:none"><g transform="rotate(-12 12 14)"><rect x="1.5" y="12" width="21" height="5" rx="2.5" fill="#7A5236" stroke="#2A1B10" stroke-width=".9"/><rect x="1.5" y="16" width="21" height="5" rx="2.5" fill="#6A4630" stroke="#2A1B10" stroke-width=".9"/><rect x="4" y="11.3" width="3" height="10.4" fill="#8E969A" stroke="#4A5054" stroke-width=".6"/><rect x="17" y="11.3" width="3" height="10.4" fill="#8E969A" stroke="#4A5054" stroke-width=".6"/><rect x="8" y="6.5" width="8.5" height="9" rx="1.2" fill="#2E3438" stroke="#111" stroke-width=".9"/><rect x="9.5" y="7.8" width="5.5" height="3.6" fill="#9BC48A"/><circle cx="10.5" cy="13.3" r=".6" fill="#ccc"/><circle cx="12.25" cy="13.3" r=".6" fill="#ccc"/><circle cx="14" cy="13.3" r=".6" fill="#ccc"/><path d="M8 8C4 7 3 4 6 3s5 1 4 4M16.5 8c3-2 6-1 5.5 2" fill="none" stroke="#2F6FD1" stroke-width="1.1" stroke-linecap="round"/><path d="M14 15.5c0 3 2 4 3.5 5" fill="none" stroke="#D9A400" stroke-width="1"/></g></svg></span>Clear</button>
     <input type="checkbox" id="gapRule" hidden>
     <label class="chk edit-only" title="Straight lines: hold the mouse button on a piece and drag to lay out a row of them, along a row or a column (never diagonal). See-through pieces show where they go; they are placed when you let go. Untick to paint freely by dragging."><input type="checkbox" id="lineMode" checked> Straight lines</label>
+    <label class="chk edit-only" id="snapGridLbl" title="Snap to grid: free pieces (the MG Nest) sit in the middle of their square, or against the window when you put one inside a structure. Untick to place them anywhere inside their square, where the pointer is. Alt + arrow keys nudge a selected one."><input type="checkbox" id="snapGrid" checked> Snap to grid</label>
     <label class="chk edit-only" title="Auto elevation: anything you place touching a raised piece side to side is built one level up, on a free foundation, at no extra cost. A raised piece is one standing on a small HESCO (a Bumper block: small HESCO with a large HESCO or Bremer on top), or one raised this way, so it chains. Works for walls, Recon Towers, Shelters and the rest; not for barbed wire, recon tents, hedgehogs or sandbags. The raised pieces stay when the Bumper block is removed, and the build order tells you when to build and remove it. Untick to place on the ground next to raised pieces. To raise or lower pieces already placed: Select them, then Add elevation or Remove elevation."><input type="checkbox" id="fndMode" checked> Auto elevation</label>
   </div>
   <div class="bar toolbar modbar edit-only" id="modBar" hidden role="toolbar" aria-label="Modify structure">
@@ -1203,7 +1205,7 @@ a{color:var(--accent)}
       ['ht.ifs.edge','Indirect Fire Shelter roof, outer ring',2],['ht.ifs.centre','Indirect Fire Shelter roof, centre 3×3',3],
       ['ht.recon.window','Recon Tower floor 2 (windows and ladder opening)',2,'Bunker windows are at the bunker floor: its base'],
       ['ht.mg_nest','MG Nest',1,'Guess from a screenshot (Season 02)',true],
-      ['ht.stairs','Wooden Step: height it leads up to (the low step is half of it)',2,'Guess (Season 02, not seen in game yet)',true]]},
+      ['ht.step.pct','Wooden Step: platform height (% of a HESCO height)',20,'Checked in game 16 Oct 2026 (Season 02)']]},
     {name:'Direct ground fire protection',rows:[
       ['dgf.ciws.pivot','CIWS · pivot height above its floor (h)',2,'Tested in game, 5 Oct 2026'],
       ['dgf.ciws.edge','CIWS · pivot to the emplacement edge (grids)',2,'Tested in game, 5 Oct 2026'],
@@ -1248,7 +1250,7 @@ a{color:var(--accent)}
       ['stack.hesco','HESCO and doors stacked on HESCO / doors · max height',7],
       ['stack.total','Anything on top of a building · max height',10],
       ['stack.bunker','Bunker · highest base it can stand on',2],
-      ['rule.pillarFree','Nothing can be built on the square of a pillar (1 = yes, 0 = no). The Large Shelter stands on 4 thin pillars in its corner squares; under its thin H3 roof there is room for H3',1,'Guess (Season 02, not checked in game yet)',true],
+      ['rule.pillarFree','Nothing can be built on the square of a pillar (1 = yes, 0 = no). The Large Shelter stands on 4 thin pillars in its corner squares; under its H3 roof (0.35 thick) there is room up to H2.65',1,'Guess (Season 02, not checked in game yet)',true],
       ['rule.ladderStruct','Structures may block a ladder (1 = yes, 0 = no). Game quirk, likely a bug: a structure can be placed so its own ladder, or the ladder of a structure already there, is blocked. Other pieces still can\'t go on the square in front of a ladder',1,'Tested in game, 12 Oct 2026 · set to 0 if the game fixes it'],
       ['fob.area','FOB build area (metres, square)',60]]},
     {name:'Hammers',rows:[
@@ -1312,9 +1314,10 @@ a{color:var(--accent)}
     if(/^c\.\w+\.stacks$/.test(k)||k==='foot.stacks')return[1,200];
     if(k==='stack')return[1,1000];
     if(k==='palletSize')return[50,100000];
-    if(k.startsWith('ht.'))return[1,10];
+    if(k.startsWith('ht.')&&k!=='ht.step.pct')return[1,10];
     if(/^dgf\.\w+\.(pivot|edge)$/.test(k))return[0,10];
     if(k==='dgf.mg.edgePct')return[0,500];
+    if(k==='ht.step.pct')return[1,100];
     if(/^dgf\.\w+\.reach$/.test(k))return[0,40];
     if(k==='dgf.mortar.max')return[1,10000];
     if(k==='dgf.mortar.perDeg')return[0,1000];
@@ -1337,7 +1340,7 @@ a{color:var(--accent)}
     return[0,10000000]};
   const clamp=(k,v)=>{const[a,b]=LIM(k);return Math.min(b,Math.max(a,Math.round(v)))};
   // Facts that were renamed (old key -> new key, or null when dropped). Values carry over once.
-  const RENAMED={'window.from':'ht.recon.window','c4.recontop':null,   // bed sizes became width × length:
+  const RENAMED={'window.from':'ht.recon.window','c4.recontop':null,'ht.stairs':null,   // bed sizes became width × length:
     'c.pallet.cells':null,'c.large.cells':null,'c.small.cells':null,'v.ural.cells':null,'v.lakota.cells':null,'v.humvee.cells':null,'v.mh6.cells':null};
   const clean=o=>{const out={};
     for(const[k0,v]of Object.entries(o||{})){const k=k0 in RENAMED?RENAMED[k0]:k0;
@@ -1384,8 +1387,8 @@ const P={
   bremer:{n:'Bremer Wall',w:1,d:1,h:3,c:'wall',cat:'Walls & entry',ph:1,ab:'',bremer:1},
   door:{n:'Door',w:1,d:1,h:2,c:'wall',icon:'door',cat:'Walls & entry',ph:2,ab:'D',support:1},
   gate:{n:'Gate',w:4,d:1,h:3,c:'wall',icon:'gate',cat:'Walls & entry',ph:2,ab:'G'},   // H3: barbed wire on top
-  // Wooden Step (Season 02): stairs, 1×2. Walk up from its front (local south, H1) to its back (local north, H2). Nothing builds on it.
-  stairs:{n:'Wooden Step',w:1,d:2,h:2,c:'wall',icon:'stairs',cat:'Walls & entry',ph:2,ab:'ST',noCover:1,hm:(lx,ly)=>ly===0?2:1,note:'Stairs up to H2 · R turns'},
+  // Wooden Step (Season 02, checked 16 Oct): a 1×1 wooden platform, 0.2 high. Nothing builds on it. (Type id 'stairs' kept for saved designs.)
+  stairs:{n:'Wooden Step',w:1,d:1,h:.2,c:'wall',icon:'stairs',cat:'Walls & entry',ph:2,ab:'ST',noCover:1,note:'Wooden platform · H0.2'},
   bunker:{n:'Bunker',w:4,d:4,h:2,c:'struct',cat:'Structures',ph:3,ab:'BUNKER',support:1,
     sym:{door:[['S',1]],win:{N:[1,2],W:[1,2],E:[1,2]}}},   // as tested in game 10 Oct 2026: corners, sandbags + windows, Small HESCO at S x2, entrance S x1
   ifs:{n:'Indirect Fire Shelter',groundOnly:1,w:5,d:5,h:3,c:'struct',cat:'Structures',ph:3,ab:'SHELTER',support:1,
@@ -1398,7 +1401,7 @@ const P={
     trimmed:[1,1,3,3],sym:{arrow:[['N',2],['S',2],['W',2],['E',2]]},note:'Centre 3×3 removed · flat H2'},
   // Large Shelter (Season 02): a 6×6 roof at H3 on 4 thin pillars in its corner squares. canopy = roof height: open space under it,
   // where pieces up to H2 can stand (an MG Nest, HESCO). Built from its blueprint (wd-custom), like the other structures.
-  lshelter:{n:'Large Shelter',groundOnly:1,w:6,d:6,h:3,c:'struct',cat:'Structures',ph:3,ab:'L.SHELTER',support:1,canopy:3,sym:{},note:'Thin roof at H3 on 4 pillars · room for H3 under it'},
+  lshelter:{n:'Large Shelter',groundOnly:1,w:6,d:6,h:3,c:'struct',cat:'Structures',ph:3,ab:'L.SHELTER',support:1,canopy:3,sym:{},note:'Roof H3 on 4 pillars · room for H2 under it'},
   loudspeaker:{glyph:'speaker',ladderEdge:1,n:'Loudspeaker',w:2,d:2,h:3,c:'struct',cat:'Structures',pal:'Stations',ph:3,ab:'LS'},
   radio:{glyph:'radio',n:"Builder's Radio",w:2,d:1,h:1,c:'struct',cat:'Structures',pal:'Stations',ph:3,ab:'R'},
   refuel:{glyph:'refuel',n:'Refuel Station',w:2,d:2,h:2,c:'station',cat:'Stations',ph:4,ab:'FUEL'},
@@ -1408,7 +1411,7 @@ const P={
   stingray:{glyph:'stingray',n:'Stingray',w:3,d:3,h:1,c:'emp',cat:'Emplacements',ph:5,ab:'STG',clear:1},
   talon:{glyph:'talon',n:'Talon 9K-SAM',w:2,d:2,h:2,c:'emp',cat:'Emplacements',ph:5,ab:'SAM',clear:1},
   ciws:{glyph:'ciws',n:'Vanguard CIWS',w:4,d:4,h:2,c:'emp',cat:'Emplacements',ph:5,ab:'CIWS',clear:1},
-  mg_nest:{glyph:'mg',n:'MG Nest',w:1,d:1,h:1,c:'emp',cat:'Emplacements',ph:5,ab:'MG',clear:1,note:'M2 machine gun · Season 02'},
+  mg_nest:{glyph:'mg',n:'MG Nest',w:1,d:1,h:1,c:'emp',cat:'Emplacements',ph:5,ab:'MG',clear:1,free:1,inside:1,note:'M2 machine gun · Season 02'},
   sandbags:{n:'Sandbags',w:2,d:1,h:1,c:'field',icon:'sandbags',cat:'Field',ph:6,q:'≈',ab:'sb',low:1},
   barbed:{n:'Barbed Wire',w:2,d:1,h:1,c:'field',icon:'barbed',cat:'Field',ph:6,ab:'w',low:1},
   hedgehog:{n:'Hedgehog',w:2,d:2,h:1,c:'field',icon:'hedgehog',cat:'Field',ph:6,q:'≈',ab:'X'},
@@ -1440,7 +1443,7 @@ const vert=(a,b)=>a.z<topOf(b)&&b.z<topOf(a);
 /* Canopies (Large Shelter): a roof on thin pillars. The space under the roof is open: pieces stand under it on the ground
    (or on each other) as long as they fit under the roof. So for "what is the top of this square" a canopy counts only when
    nothing else stands there. The roof slab is 0.35 thick: pieces up to H(roof − 0.35) fit under it. */
-const ROOF_T=0;   // the Large Shelter roof is a thin sheet: an H3 roof leaves room for H3 under it
+const ROOF_T=.35;   // the Large Shelter roof is 0.35 thick, like the Bunker's: an H3 roof leaves room up to H2.65 (so H2 fits)
 const PILLAR_OFF=[[0,0],[1,0],[1,1],[0,1]];   // a pillar stands in one corner of its square: r 0 NW, 1 NE, 2 SE, 3 SW
 const isCanopy=p=>!!(p&&P[p.t]&&P[p.t].canopy);
 const canopyRoof=p=>p.z+P[p.t].canopy;
@@ -1455,6 +1458,40 @@ function canopyRoofAt(p,cx,cy){if(!p.mod)return canopyRoof(p);const d=bpOf(p.t),
 // the top piece of a square, canopies left out (null if only a canopy, or nothing, stands there)
 function solidTopAt(cx,cy,list=pieces){let best=null,bh=-1;for(const p of list)if(!isCanopy(p)&&hit(rectOf(p),{x:cx,y:cy,w:1,d:1})){const h=cellTop(p,cx,cy);if(h>bh){bh=h;best=p}}return best}
 function topAt(cx,cy,list=pieces){return solidTopAt(cx,cy,list)||canopyAt(cx,cy,list)}
+// what a click on a square picks (Erase, Select): a piece standing inside a structure there, else the top piece
+function pickAt(cx,cy,list=pieces){let best=null;for(const p of list)if(p.in&&hit(rectOf(p),{x:cx,y:cy,w:1,d:1})&&(!best||p.z>best.z))best=p;return best||topAt(cx,cy,list)}
+/* ---------- Free pieces (P.free, the MG Nest): placed anywhere inside their square ----------
+   p.off = [dx,dy]: the piece's centre, in grids from the middle of its square (−0.5…0.5, steps of 0.05). Every rule
+   (stacking, threat check, build order, haul) still uses the square; only the drawing and the gun's pivot use the offset.
+   Inside pieces (P.inside): a piece put on a free square inside a structure (Bunker, Recon Tower, Shelter, your own) stands on
+   that floor, if it fits under the roof (roof 0.35 thick). p.in = 1 marks it, p.fl = which floor (0 = lowest that fits). */
+const OFF_MAX=.5,offOf=p=>Array.isArray(p.off)?p.off:[0,0];
+const cleanOff=o=>{if(!Array.isArray(o)||o.length!==2)return null;const v=o.map(n=>Number.isFinite(n)?Math.round(Math.max(-OFF_MAX,Math.min(OFF_MAX,n))*20)/20:0);return v[0]||v[1]?v:null};
+// a structure (with a blueprint, not a canopy) whose footprint takes this square
+function structAt(cx,cy,list=pieces){for(const q of list)if(!q.in&&P[q.t]&&P[q.t].sym&&!P[q.t].canopy&&window.bpOf&&bpOf(q.t)&&hit(rectOf(q),{x:cx,y:cy,w:1,d:1}))return q;return null}
+// the floors inside structure s at a square where a piece h high fits: [{z, room, name}] lowest first
+function roomsIn(s,cx,cy,h){const sp=window.structParts&&structParts(s);if(!sp)return[];
+  const here=sp.solids.filter(b=>b.cells.some(([x,y])=>x===cx&&y===cy)),slabs=sp.slabs.filter(o=>o.x===cx&&o.y===cy).map(o=>o.z).sort((a,b)=>a-b);
+  const levels=[s.z,...slabs],out=[];
+  levels.forEach((L,k)=>{const ceil=slabs.find(z=>z>L);if(ceil==null)return;const room=ceil-ROOF_T-L;
+    if(room+1e-6<h)return;if(here.some(b=>b.z<L+h-1e-6&&b.z+(b.bt==='corner'?1.65:b.h)>L+1e-6))return;
+    out.push({z:L,room,name:k===0?'ground floor':'floor '+(k+1)})});
+  return out}
+// pieces standing inside structure s
+const insideOf=(s,list=pieces)=>list.filter(q=>q.in&&q!==s&&hit(rectOf(q),rectOf(s))&&q.z>=s.z&&q.z<topOf(s));
+// after place(): mark a piece standing inside a structure (or clear the mark)
+function applyIn(q,res){if(res&&res.inside){q.in=1;q.fl=q.fl|0}else{delete q.in;delete q.fl}return q}
+const freeBits=(m,q)=>{if(m.fl!=null)q.fl=m.fl|0;const o=cleanOff(m.off);if(o&&P[q.t]&&P[q.t].free)q.off=o;return q};
+let insideLv=0;   // [ ] while placing a free piece: which floor inside a structure (past the last one: on the roof)
+// where the pointer is inside its square (fractions 0…1), for free pieces with Snap to grid off
+let ptrFrac=[.5,.5];
+// snapped against a window of the structure, centred on it (2 squares wide), on the floor it stands on
+function windowSnap(s,cx,cy,z){const sp=structParts(s);if(!sp)return null;
+  const ws=sp.wins.filter(w=>w.x-w.out[0]===cx&&w.y-w.out[1]===cy&&Math.abs(w.need-z)<1e-6);if(!ws.length)return null;const w=ws[0];
+  const mate=sp.wins.find(o=>o!==w&&o.out[0]===w.out[0]&&o.out[1]===w.out[1]&&Math.abs(o.x-w.x)+Math.abs(o.y-w.y)===1&&o.need===w.need);
+  const midX=mate?(w.x+mate.x)/2:w.x,midY=mate?(w.y+mate.y)/2:w.y;   // the window's middle, in squares
+  const along=w.out[0]?[0,midY-w.y]:[midX-w.x,0],toWall=[w.out[0]*.3,w.out[1]*.3];
+  return cleanOff([along[0]+toWall[0],along[1]+toWall[1]])}
 
 // does a piece at this spot rest (directly or through a stack) on a building?
 // FOB build area: a square (Fact sheet, metres) centred on the FOB
@@ -1507,6 +1544,12 @@ function place(np,list=pieces){
   for(const q of list){if(q===np||free)continue;
     if(P[q.t].sym&&feet(q).some(f=>hit(r,{...f,w:1,d:1})))return{err:`The ladder of the ${P[q.t].n} needs the square in front of it free`};
     if(myFeet.some(f=>hit(rectOf(q),{...f,w:1,d:1})))return{err:`This ${t.n}'s ladder needs the square in front of it free: the ${P[q.t].n} is in the way`}}
+  if(t.inside&&!np.fnd){const st=structAt(r.x,r.y,list);
+    if(st&&r.w===1&&r.d===1){const rm=roomsIn(st,r.x,r.y,t.h),k=Math.max(0,np.fl|0);
+      if(k<rm.length){const R0=rm[k];
+        const taken=list.find(q=>q!==np&&q.in&&q.x===r.x&&q.y===r.y&&Math.abs(q.z-R0.z)<1e-6);if(taken)return{err:`A ${P[taken.t].n} already stands there`};
+        return{z:R0.z,inside:st,floor:R0.name,floors:rm.length}}
+      if(!rm.length&&np.fl!=null&&np.fl>0)return{err:`No room inside the ${P[st.t].n} here`}}}   // past the last floor: on the roof, as usual
   if(t.canopy){   // a canopy (Large Shelter): on the ground; what stands under it must fit under the roof; its pillar squares free
     const pil=WD.F('rule.pillarFree')?pillarCells({...np,z:0}):[],room=t.canopy-ROOF_T;
     for(let x=r.x;x<r.x+r.w;x++)for(let y=r.y;y<r.y+r.d;y++){
@@ -1521,7 +1564,7 @@ function place(np,list=pieces){
     const c=canopyAt(x,y,list);
     if(c&&c!==np){if(WD.F('rule.pillarFree')&&pillarAt(c,x,y))return{err:`A pillar of the ${P[c.t].n} stands on this square`};
       const rz=canopyRoofAt(c,x,y),rm=rz==null?null:rz-ROOF_T;if(rm!=null&&(room===null||rm<room)){room=rm;cov=c}}
-    const u=solidTopAt(x,y,list);
+    const u=solidTopAt(x,y,list.filter(q=>!q.in||q===np));
     if(u&&!P[u.t].support)return{err:`Can't build on ${P[u.t].n}`};
     if(u&&stroke.has(u))return{err:'Already placed here'};
     const h=u?cellTop(u,x,y):0;
@@ -1544,7 +1587,12 @@ function place(np,list=pieces){
     if(t.clear&&!tq.low&&hit(grow(r,t.clear),qr))return{err:t.n+' needs a 1-block gap'};}
   return{z};
 }
-function ghostAt(cx,cy){const t=P[tool];const w=rot%2?t.d:t.w,d=rot%2?t.w:t.d;return{t:tool,x:cx-Math.floor((w-1)/2),y:cy-Math.floor((d-1)/2),r:rot}}
+function ghostAt(cx,cy){const t=P[tool];const w=rot%2?t.d:t.w,d=rot%2?t.w:t.d;const g={t:tool,x:cx-Math.floor((w-1)/2),y:cy-Math.floor((d-1)/2),r:rot};
+  if(t.inside&&structAt(g.x,g.y))g.fl=insideLv;
+  if(t.free){const snap=!$('snapGrid')||$('snapGrid').checked;
+    if(!snap){const o=cleanOff([ptrFrac[0]-.5,ptrFrac[1]-.5]);if(o)g.off=o}
+    else if(t.inside){const st=structAt(g.x,g.y),rm=st?roomsIn(st,g.x,g.y,t.h):[],R0=rm[Math.min(insideLv,rm.length)];if(st&&R0){const o=windowSnap(st,g.x,g.y,R0.z);if(o)g.off=o}}}
+  return g}
 const hName=h=>'H'+h;
 // piece heights that live on the Fact sheet
 function applyHeights(){const F=WD.F;P.hesco_s.h=F('ht.hesco_s');P.hesco_l.h=F('ht.hesco_l');P.hesco_wall.h=F('ht.hesco_wall');
@@ -1552,7 +1600,7 @@ function applyHeights(){const F=WD.F;P.hesco_s.h=F('ht.hesco_s');P.hesco_l.h=F('
   const re=F('ht.recon.edge'),rc=Math.max(re,F('ht.recon.centre')),se=F('ht.ifs.edge'),sc=Math.max(se,F('ht.ifs.centre'));
   P.recon_tower.h=rc;P.recon_tower.hm=(lx,ly)=>inner(1,1,2,2)(lx,ly)?rc:re;P.recon_trim.h=re;P.recon_trim.note=`Centre 2×2 removed · flat H${re}`;
   P.ifs.h=sc;P.ifs.hm=(lx,ly)=>inner(1,1,3,3)(lx,ly)?sc:se;P.ifs_trim.h=se;P.ifs_trim.note=`Centre 3×3 removed · flat H${se}`;
-  P.mg_nest.h=F('ht.mg_nest');const sh=F('ht.stairs'),sl=Math.max(1,Math.round(sh/2));P.stairs.h=sh;P.stairs.hm=(lx,ly)=>ly===0?sh:sl}
+  P.mg_nest.h=F('ht.mg_nest');P.stairs.h=F('ht.step.pct')/100}
 applyHeights();
 /* ---------- entrances ----------
    Building openings attackers and defenders walk through (the red arrows).
@@ -1693,11 +1741,10 @@ const ICONS={
     Ln(g,x0,ym,x1,ym,'var(--tent-e)',1.1,'butt');
     g.append(s('path',{d:`M${x1},${d*.3} L${w*.93},${ym} L${x1},${d*.7}Z`,fill:'var(--tent-d)',stroke:'var(--tent-e)','stroke-width':.8,'stroke-linejoin':'round'}));
     Ln(g,x1,ym,w*.93,ym,'var(--tent-e)',.7,'butt')},
-  stairs(g,w,d){ // Wooden Step from above: two stringers, treads, an arrow pointing up the stairs (to the local north, the high end)
-    g.append(s('rect',{x:w*.08,y:d*.03,width:w*.84,height:d*.94,rx:1.5,fill:'var(--wood)','fill-opacity':.85,stroke:'var(--wood-e)','stroke-width':1}));
-    for(let k=1;k<6;k++){const y=d*.03+k*d*.94/6;Ln(g,w*.12,y,w*.88,y,'var(--wood-e)',1,'butt')}
-    for(const x of[w*.12,w*.88])Ln(g,x,d*.05,x,d*.95,'var(--wood-e)',2,'butt');
-    g.append(s('path',{d:`M${w*.5} ${d*.14} L${w*.72} ${d*.32} H${w*.58} V${d*.8} H${w*.42} V${d*.32} H${w*.28}Z`,fill:'var(--panel)',stroke:'var(--wood-e)','stroke-width':.8,'stroke-linejoin':'round'}))},
+  stairs(g,w,d){ // Wooden Step from above: a square wooden platform of planks
+    g.append(s('rect',{x:w*.06,y:d*.06,width:w*.88,height:d*.88,rx:1.5,fill:'var(--wood)','fill-opacity':.9,stroke:'var(--wood-e)','stroke-width':1}));
+    for(let k=1;k<4;k++){const x=w*.06+k*w*.88/4;Ln(g,x,d*.08,x,d*.92,'var(--wood-e)',.9,'butt')}
+    for(const y of[d*.22,d*.78])Ln(g,w*.1,y,w*.9,y,'var(--wood-e)',.6,'butt')},
 };
 const GLYPHS={   // white pictograms; the cut-outs use the block colour
   radio(g,w,d){ // music note
@@ -1777,7 +1824,9 @@ function drawPiece(p,{ghost=false,num=null,covered=false}={}){
   let ox=0,oy=0,sy=1;
   if(p.t==='barbed'&&p.z>0){const u=pieces.find(q=>q.t==='bremer'&&q.x===r.x&&q.y===r.y&&q.z+P.bremer.h===p.z);
     if(u){const fd=faceDir(u);ox=fd[0]*.31*C;oy=fd[1]*.31*C;sy=.45}}   // over the thin wall face, not the footing
+  if(p.off){ox+=p.off[0]*C;oy+=p.off[1]*C}
   const g=s('g',{transform:`translate(${(r.x+r.w/2)*C+ox},${(r.y+r.d/2)*C+oy}) rotate(${rr*90}) scale(1,${sy}) translate(${-w/2},${-d/2})`});
+  if(p.in&&!ghost)g.append(s('rect',{x:-1.5,y:-1.5,width:w+3,height:d+3,rx:3,fill:'var(--panel)',stroke:'var(--accent)','stroke-width':1.6,'stroke-dasharray':'3 2'}));   // standing inside a structure
   const inset=t.sym?1:1.5+Math.min(p.z,3)*1.5;
   const op=t.low?.35:Math.min(.95,.6+topOf(p)*.06);
   if(t.icon==='sandbags'&&!p.z){const ig=s('g',{transform:`translate(0,${-d*.25})`});drawIcon(ig,'sandbags',w,d);g.append(ig)}   // on the ground: against one side (R turns it); on a block: centred (tested for protection)
@@ -1856,7 +1905,7 @@ function drawPiece(p,{ghost=false,num=null,covered=false}={}){
     for(const a of(p.mod&&p.mod.add)||[])g.append(addedMark(a[0],(a[1]-x0)*C,(a[2]-y0)*C,a[4]||0,!!a[3]))}   // Sandbags against their side (in a window: its outer side)
   outer.append(g);
   // text stays upright
-  const cx=(r.x+r.w/2)*C,cy=(r.y+r.d/2)*C;
+  const cx=(r.x+r.w/2)*C+(p.off?p.off[0]*C:0),cy=(r.y+r.d/2)*C+(p.off?p.off[1]*C:0);
   if(t.glyph){   // pictogram never turns; non-square pieces get it in a centred square that fits either way round
     if(t.w===t.d||t.glyph==='radio'){const gg=s('g',{transform:`translate(${cx-w/2},${cy-d/2})`});GLYPHS[t.glyph](gg,w,d);outer.append(gg)}
     else{const q=Math.min(w,d)*.92,gg=s('g',{transform:`translate(${cx-q/2},${cy-q/2})`});GLYPHS[t.glyph](gg,q,q);outer.append(gg)}}
@@ -1960,7 +2009,7 @@ function draw(){
     svg.append(s('text',{x:M+i*C+C/2,y:M-8,'text-anchor':'middle','font-size':i%2?7:9,fill:'var(--muted)','font-family':'IBM Plex Mono, monospace'},COLS(i)));
     svg.append(s('text',{x:M-4,y:M+i*C+C/2+3,'text-anchor':'end','font-size':i%2?7:9,fill:'var(--muted)','font-family':'IBM Plex Mono, monospace'},i+1));}
   const BS=buildSteps(),num=new Map(BS.steps.filter(st=>st.kind==='piece').map(st=>[st.p,st.no])),LY=computeLayers();
-  const dz=p=>isCanopy(p)?canopyRoof(p)-.5:p.z;   // a canopy roof goes over what stands under it
+  const dz=p=>isCanopy(p)?canopyRoof(p)-.5:p.in?50+p.z:p.z;   // a canopy roof goes over what stands under it; pieces inside a structure are drawn over it
   for(const p of [...pieces].sort((a,b)=>dz(a)-dz(b))){
     const t=P[p.t];if(!layerShown(p,LY))continue;
     if(t.clear&&!p.z&&$('gapRule').checked&&mode==='edit'){const h=grow(rectOf(p),t.clear);
@@ -2007,7 +2056,7 @@ function draw(){
     else if(line&&line.erase)drawEraseLine(g);
     else if(tool==='select'||tool==='brush'||tool==='side'){}
     else if(tool==='erase'){g.append(s('rect',{x:hover.cx*C,y:hover.cy*C,width:C,height:C,fill:'none',stroke:'var(--bad)','stroke-width':2}));
-      const t=topAt(hover.cx,hover.cy);$('msg').textContent=t?`Erase ${P[t.t].n} (${label(t)})`:'';$('msg').className='msg'}
+      const t=pickAt(hover.cx,hover.cy);$('msg').textContent=t?`Erase ${P[t.t].n} (${label(t)})${t.in?' inside the '+P[structAt(t.x,t.y).t].n:''}`:'';$('msg').className='msg'}
     else if(line&&P[tool])drawLine(g);
     else{const gp=withFnd(ghostAt(hover.cx,hover.cy)),r=rectOf(gp),res=place(gp),bad=res.err;
       if(!bad)g.append(drawPiece({...gp,z:res.z},{ghost:true}));
@@ -2015,7 +2064,8 @@ function draw(){
       if(P[tool].clear&&$('gapRule').checked){const h=grow(r,1);g.append(s('rect',{x:h.x*C+1,y:h.y*C+1,width:h.w*C-2,height:h.d*C-2,fill:'none',stroke:bad?'var(--bad)':'var(--ok)','stroke-dasharray':'3 3'}))}
       const at=`${COLS(r.x)}${r.y+1}${r.w>1||r.d>1?'–'+COLS(r.x+r.w-1)+(r.y+r.d):''}`;
       const ot=orientText(gp);const facing=ot?' · '+ot:'';
-      $('msg').textContent=bad||`${P[tool].n} · ${at}${facing}${res.z?' · on '+hName(res.z):''}${P[tool].support?' → top '+hName(res.z+P[tool].h):''}`;$('msg').className='msg'+(bad?' bad':'');}
+      const ins=res.inside?` · inside the ${P[res.inside.t].n}, ${res.floor}${' · [ ] other floor or the roof'}`:P[tool].inside&&structAt(gp.x,gp.y)?' · on the roof · [ ] inside':'';
+      $('msg').textContent=bad||`${P[tool].n} · ${at}${facing}${!res.inside&&res.z?' · on '+hName(res.z):''}${ins}${gp.off?' · off the grid':''}${P[tool].support?' → top '+hName(res.z+P[tool].h):''}`;$('msg').className='msg'+(bad?' bad':'');}
   }
   svg.append(g);
 }
@@ -2124,6 +2174,80 @@ function dgfCell(x,y,p,dir){if(x<0||y<0||x>=N||y>=N)return undefined;let hb=null
   if(hs!=null&&hb!=null&&hs<=hb)hs=null;                       // bags under something else don't count
   if(hs!=null&&(pb!=null||hb==null))pb=Math.max(pb??-1e9,hs);   // bags on top of cover (or on their own) add their height
   const r=v=>v==null?null:v-z0,out={hb:r(hb),hs:r(hs),pb:r(pb),name};if(top&&top.t==='bremer'&&dir)out.prof=dgfBremerProf(top,dir,z0);return out}
+/* ---------- Fields of fire all the way round (map fan + panorama strip in the hover card) ----------
+   Rays from the gun's pivot every few degrees. Every piece near it is a few boxes in world squares (a pillar is a thin post,
+   sandbags lie against their side, a Bremer is a thin wall and a footing, a canopy roof is a thin sheet overhead). For each
+   direction: floor = highest angle the cover below blocks (from the gun's lowest angle up), ceiling = lowest angle a roof or
+   overhang blocks above. Distances count from the emplacement's edge plus the pivot-to-edge distance, as in the side checks. */
+const HZ_STEP=3;
+function dgfBoxes(p){const out=[],r0=rectOf(p),SB=dgfSB(),F=WD.F;
+  const L=(q,b)=>{const a=svLocalToWorld(q,b.x0,b.y0),c=svLocalToWorld(q,b.x1,b.y1);return{x0:Math.min(a[0],c[0]),x1:Math.max(a[0],c[0]),y0:Math.min(a[1],c[1]),y1:Math.max(a[1],c[1])}};
+  for(const q of pieces){if(q===p)continue;const t=P[q.t],r=rectOf(q),nm=t.n;
+    if(isCanopy(q)){
+      const d=bpOf(q.t),bl=bpBlocks(d),st=q.mod?pieceState(q):null,fl=bl.filter(b=>b.t==='floor'),ref=fl.length?fl:bl,x0=Math.min(...ref.map(b=>b.x)),y0=Math.min(...ref.map(b=>b.y));
+      for(const b of bl){if(st&&!st.present(b.i))continue;const[wx,wy]=toWorld(q,b.x-x0,b.y-y0);
+        if(b.t==='pillar'){const[ox,oy]=PILLAR_OFF[(b.r+R(q))%4],k=.16;out.push({x0:wx+ox*(1-k),x1:wx+ox*(1-k)+k,y0:wy+oy*(1-k),y1:wy+oy*(1-k)+k,z0:q.z+b.z,z1:q.z+b.z+PILLAR_H,n:'pillar of the '+nm})}
+        else if(b.t==='roof')out.push({x0:wx,x1:wx+1,y0:wy,y1:wy+1,z0:q.z+b.z-ROOF_T,z1:q.z+b.z,n:'roof of the '+nm,roof:1})}
+      continue}
+    if(DGF_SKIP(q.t)||q.in)continue;
+    if(t.sym&&window.structParts&&bpOf(q.t)){const sp=structParts(q);   // a structure as its blocks: windows are openings, roofs a 0.35 slab
+      for(const b of sp.solids){if(b.bt==='window')continue;for(const[x,y]of b.cells)out.push({x0:x,x1:x+1,y0:y,y1:y+1,z0:b.z,z1:b.z+(b.bt==='corner'?1.65:b.h),n:nm})}
+      for(const o of sp.slabs)out.push({x0:o.x,x1:o.x+1,y0:o.y,y1:o.y+1,z0:o.z-ROOF_T,z1:o.z,n:'roof of the '+nm,roof:1});continue}
+    if(q.t==='sandbags'){const b=q.z?{x0:.03,x1:1.97,y0:.5-F('dgf.sb.w')/200,y1:.5+F('dgf.sb.w')/200}:{x0:.03,x1:1.97,y0:.02,y1:.5};out.push({...L(q,b),z0:q.z,z1:q.z+SB,n:nm});continue}
+    if(q.t==='bremer'){const wt=F('dgf.bremer.wall')/100,ft=(F('dgf.bremer.footLow')+F('dgf.bremer.footHigh'))/200;
+      out.push({...L(q,{x0:0,x1:1,y0:0,y1:wt}),z0:q.z,z1:q.z+F('ht.bremer.face'),n:nm},{...L(q,{x0:0,x1:1,y0:wt,y1:1}),z0:q.z,z1:q.z+ft,n:nm});continue}
+    for(let x=r.x;x<r.x+r.w;x++)for(let y=r.y;y<r.y+r.d;y++){const top=cellTop(q,x,y);
+      if(hit(r0,{x,y,w:1,d:1})&&top<=p.z+.01)continue;   // what it stands on
+      out.push({x0:x,x1:x+1,y0:y,y1:y+1,z0:q.z,z1:top,n:nm})}}
+  return out}
+function dgfHorizon(p){const w=DGF_W[p.t];if(!w)return null;const sp=dgfSpec(w),F=WD.F,r=rectOf(p),o=offOf(p),cx=r.x+r.w/2+o[0],cy=r.y+r.d/2+o[1],hw=r.w/2,hd=r.d/2,real=!!P[p.t].free;
+  const Hp=p.z+(w==='sting'?1:sp.Hp),e=w==='sting'?0:sp.e,low=w==='sting'?sp.lo:sp.lo,reach=w==='sting'?0:sp.reach,mx=F('dgf.mortar.max');
+  const boxes=dgfBoxes(p).filter(b=>Math.max(b.x0-cx,cx-b.x1,0)**2+Math.max(b.y0-cy,cy-b.y1,0)**2<=(Math.max(hw,hd)*1.5+reach+2)**2);
+  const rays=[];
+  for(let deg=0;deg<360;deg+=HZ_STEP){const th=(deg+HZ_STEP/2)*Math.PI/180,dx=Math.sin(th),dy=-Math.cos(th);
+    const edge=real?0:Math.min(Math.abs(dx)>1e-9?hw/Math.abs(dx):1e9,Math.abs(dy)>1e-9?hd/Math.abs(dy):1e9);
+    const iv=[];
+    for(const b of boxes){let t0=0,t1=1e9;   // slab test
+      for(const[o,d,a,c]of[[cx,dx,b.x0,b.x1],[cy,dy,b.y0,b.y1]]){if(Math.abs(d)<1e-9){if(o<a||o>c){t0=1;t1=0}continue}let u=(a-o)/d,v=(c-o)/d;if(u>v)[u,v]=[v,u];t0=Math.max(t0,u);t1=Math.min(t1,v)}
+      if(t1<=t0||t1<=0)continue;
+      const k0=Math.max(0,t0-edge),k1=Math.max(0,t1-edge);if(!b.roof&&k0>reach+1)continue;   // grids out from the emplacement's edge
+      const d0=Math.max(.05,k0+(real?0:e)),d1=Math.max(.06,k1+(real?0:e)),z0=b.z0-Hp,z1=b.z1-Hp;
+      const hi=Math.atan2(z1,z1>0?d0:d1)*180/Math.PI,lo=Math.atan2(z0,z0>0?d1:d0)*180/Math.PI;
+      if(hi>lo)iv.push({lo,hi,b,k:Math.floor(k0)})}
+    iv.sort((a,b)=>a.lo-b.lo);
+    let floor=null,cur=low-(w==='mortar'?0:F('dgf.minBlock')),by=null,ceil=null,cb=null;
+    for(const v of iv){if(v.lo<=cur+.5){if(v.hi>cur){cur=v.hi;floor=v.hi;by=v}}else if(ceil==null||v.lo<ceil){ceil=v.lo;cb=v}}
+    if(floor!=null&&floor<low)floor=null;
+    let cls,range=null;
+    if(w==='sting')cls=(ceil!=null&&ceil<sp.lo)||(floor!=null&&floor>=sp.lo)?'poor':'free';
+    else if(w==='mortar'){range=floor==null?mx:dgfRange(floor,by?by.k:9);cls=ceil!=null&&ceil<85?'poor':range>=mx?'free':range>=mx*.8?'lim':'poor'}
+    else{cls=dgfClass(w,floor);if(ceil!=null&&floor!=null&&ceil-floor<10)cls='poor';if(cls==='part')cls='lim'}
+    rays.push({deg,floor,ceil,by:by&&by.b.n,cb:cb&&cb.b.n,cls,range})}
+  return{w,rays,low,Hp,cx,cy}}
+// the fan on the map: one wedge per run of directions with the same result
+const HZ_COL={free:'rgba(63,127,166,.20)',part:'rgba(110,95,166,.28)',lim:'rgba(201,138,28,.32)',poor:'rgba(179,38,30,.38)'};
+function dgfFan(g,p,hz){const r=rectOf(p),R0=(Math.max(r.w,r.d)/2+Math.min(dgfSpec(hz.w).reach||4,5))*C,cx=hz.cx*C,cy=hz.cy*C,fg=s('g',{'pointer-events':'none'});
+  const pt=(a,rr)=>{const t=a*Math.PI/180;return[cx+Math.sin(t)*rr,cy-Math.cos(t)*rr]};
+  const runs=[];for(const ry of hz.rays){const l=runs[runs.length-1];if(l&&l.cls===ry.cls)l.b=ry.deg+HZ_STEP;else runs.push({cls:ry.cls,a:ry.deg,b:ry.deg+HZ_STEP})}
+  if(runs.length>1&&runs[0].cls===runs[runs.length-1].cls){const l=runs.pop();runs[0].a=l.a-360}
+  for(const u of runs){if(u.b-u.a>=360){fg.append(s('circle',{cx,cy,r:R0,fill:HZ_COL[u.cls]}));continue}
+    const[a1,b1]=pt(u.a,R0),[a2,b2]=pt(u.b,R0);fg.append(s('path',{d:`M${cx} ${cy} L${a1} ${b1} A${R0} ${R0} 0 ${u.b-u.a>180?1:0} 1 ${a2} ${b2} Z`,fill:HZ_COL[u.cls],stroke:u.cls==='free'?'none':HZ_COL[u.cls].replace(/[\d.]+\)$/,'.9)'),'stroke-width':1}))}
+  fg.append(s('circle',{cx,cy,r:R0,fill:'none',stroke:'var(--ink)','stroke-width':.8,'stroke-dasharray':'3 3',opacity:.5}));
+  for(const[l,a]of[['N',0],['E',90],['S',180],['W',270]]){const[x,y]=pt(a,R0+7);const t=s('text',{x,y:y+3,'text-anchor':'middle','font-size':8,'font-weight':700,fill:'var(--ink)',opacity:.6,'font-family':'var(--f-mono)'});t.textContent=l;fg.append(t)}
+  g.append(fg)}
+// the panorama strip: direction along, angle up; cover below as a skyline, roofs above as a ceiling, the gun's lowest angle dashed
+function dgfStrip(hz,W){const H=118,l=34,rgt=10,top=16,bot=22,ph=H-top-bot,pw=W-l-rgt,A0=-20,A1=90,X=d=>l+d/360*pw,Y=a=>top+(A1-Math.max(A0,Math.min(A1,a)))/(A1-A0)*ph;
+  const o=[`<text x="${l}" y="11" font-size="10" font-weight="800" fill="var(--ink)" font-family="var(--f-head)">ALL ROUND</text><rect x="${l+70}" y="3" width="9" height="9" fill="#8E7D66"/><text x="${l+82}" y="11" font-size="9" fill="var(--muted)">cover below</text><rect x="${l+145}" y="3" width="9" height="9" fill="#5A5F63"/><text x="${l+157}" y="11" font-size="9" fill="var(--muted)">roof above</text>`];
+  o.push(`<rect x="${l}" y="${top}" width="${pw}" height="${ph}" fill="var(--bg)" stroke="var(--line)"/>`);
+  for(const a of[0,30,60,90]){o.push(`<path d="M${l} ${Y(a)} H${l+pw}" stroke="var(--line)" stroke-width=".6"/><text x="${l-4}" y="${Y(a)+3}" text-anchor="end" font-size="8" fill="var(--muted)">${a}°</text>`)}
+  const st=HZ_STEP/360*pw;
+  for(const ry of hz.rays){const x=X(ry.deg);
+    o.push(`<rect x="${x}" y="${top+ph+2}" width="${st+.3}" height="6" fill="${HZ_COL[ry.cls].replace(/[\d.]+\)$/,'.95)')}"/>`);
+    if(ry.floor!=null)o.push(`<rect x="${x}" y="${Y(ry.floor)}" width="${st+.3}" height="${top+ph-Y(ry.floor)}" fill="#8E7D66" opacity=".85"/>`);
+    if(ry.ceil!=null)o.push(`<rect x="${x}" y="${top}" width="${st+.3}" height="${Y(ry.ceil)-top}" fill="#5A5F63" opacity=".8"/>`)}
+  o.push(`<path d="M${l} ${Y(hz.low)} H${l+pw}" stroke="var(--bad)" stroke-width="1.2" stroke-dasharray="4 3"/><text x="${l+pw-2}" y="${Y(hz.low)-3}" text-anchor="end" font-size="8" fill="var(--bad)">lowest ${hz.low}°</text>`);
+  for(const[t,d]of[['N',0],['E',90],['S',180],['W',270],['N',360]])o.push(`<text x="${X(d)}" y="${H-3}" text-anchor="middle" font-size="9" font-weight="700" fill="var(--muted)">${t}</text>`);
+  return{svg:o.join(''),H}}
 function dgfMap(p){const w=DGF_W[p.t];if(!w)return null;const r=rectOf(p),sides=[],cells=[];
   for(const[dx,dy]of[[0,-1],[1,0],[0,1],[-1,0]]){const len=dx?r.d:r.w,lanes=[],sc=[];
     for(let i=0;i<len;i++){const lane=[];
@@ -2340,10 +2464,10 @@ let dgfView='WE',dgfViewFor=null;
 let dgfScrollRaf=0;vp.addEventListener('scroll',()=>{if(!dgfScrollRaf&&dgfHoverEmp())dgfScrollRaf=requestAnimationFrame(()=>{dgfScrollRaf=0;draw()})},{passive:true});   // keep the picture inside the view while scrolling
 const dgfHoverEmp=()=>hover&&pieces.find(q=>DGF_W[q.t]&&hit(rectOf(q),{x:hover.cx,y:hover.cy,w:1,d:1}));
 
-function dgfHoverCard(g,p,res){if(p!==dgfViewFor){dgfViewFor=p;dgfView='WE'}const r=rectOf(p),pic=dgfPicture(res,dgfView,true);
+function dgfHoverCard(g,p,res,hz){if(p!==dgfViewFor){dgfViewFor=p;dgfView='WE'}const r=rectOf(p),pic=dgfPicture(res,dgfView,true);
   const bl=dgfBadges(res).map(b=>[b.className.replace('dgfb dgf-',''),b.textContent]);
   const BC={none:'#A33B2B',poor:'#A33B2B',low:'#B97C12',lim:'#B97C12',good:'#3F7A3A',strong:'#2D5E22',free:'#3F7FA6',part:'#6E5FA6'};
-  const W=pic.W,Hc=pic.H+26,mapW=N*C;
+  const W=pic.W,strip=hz?dgfStrip(hz,pic.W):null,Hc=pic.H+26+(strip?strip.H+4:0),mapW=N*C;
   // same size on screen at any zoom (about its own pixel size), never bigger than 90% of the map view
   let zs=1;try{zs=svg.getScreenCTM().a||1}catch(e){}
   const sc=Math.min(1.05,.9*vp.clientWidth/W,.9*vp.clientHeight/Hc)/zs,cw=W*sc,ch=Hc*sc;
@@ -2360,6 +2484,7 @@ function dgfHoverCard(g,p,res){if(p!==dgfViewFor){dgfViewFor=p;dgfView='WE'}cons
   const sv=s('svg',{x:0,y:0,width:W,height:pic.H,viewBox:`0 0 ${W} ${pic.H}`});sv.innerHTML=pic.svg;cg.append(sv);
   let bx=8;for(const[c,t]of bl){const bw=t.length*4.8+12;cg.append(s('rect',{x:bx,y:pic.H+5,width:bw,height:16,rx:3,fill:BC[c]}));
     const tt=s('text',{x:bx+bw/2,y:pic.H+16.5,'text-anchor':'middle','font-size':10,'font-weight':700,fill:'#fff','font-family':'var(--f-head)'});tt.textContent=t;cg.append(tt);bx+=bw+5}
+  if(strip){const ss=s('svg',{x:0,y:pic.H+26,width:W,height:strip.H,viewBox:`0 0 ${W} ${strip.H}`});ss.innerHTML=strip.svg;cg.append(ss)}
   g.append(cg)}
 /* ---------- Side view tool (S): drag a rectangle on the map, see it from the side with a slight angle ----------
    View 'WE': standing south of the area looking north (West left, East right); 'NS': standing west looking east
@@ -2596,11 +2721,8 @@ function svPieceBoxes(p){const t=P[p.t],W=t.w,D=t.d,B=(x0,x1,y0,y1,z0,z1,c,det,m
   case'mg_nest':return[B(0,2,0,2,0,.1,SVC.wood),   // MG Nest (from a screenshot): low platform, sandbags round the front half, M2 on a post
     B(.1,1.9,.1,.45,.1,.6,SVC.sand,'bags'),B(.1,.45,.45,1.2,.1,.6,SVC.sand,'bags'),B(1.55,1.9,.45,1.2,.1,.6,SVC.sand,'bags'),
     B(.94,1.06,.94,1.06,.1,.85,SVC.grey),B(.92,1.08,.25,1.35,.85,.97,SVC.dark),B(.86,1.14,1.05,1.4,.8,1,SVC.dark),B(1.1,1.3,1.1,1.3,.72,.88,SVC.green)];
-  case'stairs':{const h=P.stairs.h,n=6,o=[];   // Wooden Step: open wooden stairs, low end at the local south, top landing at the north; space underneath
-    for(let k=0;k<n;k++){const y1=2-k*2/n,y0=y1-2/n,z=(k+1)*h/n;
-      o.push(B(.04,.96,y0,y1,z-.07,z,SVC.wood),B(0,.06,y0,y1,z-.3,z,SVC.wood),B(.94,1,y0,y1,z-.3,z,SVC.wood))}   // tread on two stepped stringers
-    for(const x of[0,.92])o.push(B(x,x+.08,0,.08,0,h-.07,SVC.wood),B(x,x+.08,.95,1.03,0,h/2-.07,SVC.wood));   // posts under the top and the middle
-    return o}
+  case'stairs':{const h=P.stairs.h;   // Wooden Step: planks on two battens
+    return[B(.04,.96,.04,.96,h-.07,h,SVC.wood),B(.08,.2,.04,.96,0,h-.07,SVC.wood),B(.8,.92,.04,.96,0,h-.07,SVC.wood)]}
   case'gate':return[B(0,4,.25,.75,0,.06,SVC.conc,'haz'),B(0,.3,.3,.7,0,2.25,SVC.conc),B(3.7,4,.3,.7,0,2.25,SVC.conc),
     B(.3,1.98,.45,.55,.08,2.05,SVC.galv,'leaf',{door:1}),B(2.02,3.7,.45,.55,.08,2.05,SVC.galv,'leaf'),B(.3,3.7,.45,.55,2.15,2.75,SVC.galv,'coil',{frontFill:'none',topFill:'none'})];
   }
@@ -2693,8 +2815,8 @@ window.sv3dSvg=function(a,view,L=0,opt={}){
       for(const b of bpBlocks(bp)){if(st&&!st.present(b.i))continue;if(b.t==='ladder'){ladder(p,b);continue}
         const er=bEdge(b),w=local(p,{x0:er.x,x1:er.x+er.w,y0:er.y,y1:er.y+er.d}),zz=z+b.z;
         if(b.t==='floor'){push({...w,z0:zz,z1:zz+.05,c:FLOOR});continue}
-        if(b.t==='roof'){push({...w,z0:zz-(t.canopy?.06:.3),z1:zz+.04,zk:zz,c:t.canopy?STEEL:ROOF,net:!t.canopy&&(p.t==='bunker'||/recon/.test(p.t)||/^cs_/.test(p.t))&&isTopRoof(bp,b)});continue}
-        if(b.t==='pillar'){const[ox,oy]=PILLAR_OFF[b.r%4],q=.16,x0=b.x+ox*(1-q),y0=b.y+oy*(1-q);push({...local(p,{x0,x1:x0+q,y0,y1:y0+q}),z0:zz,z1:zz+PILLAR_H-.06,c:SVC.dark});continue}
+        if(b.t==='roof'){push({...w,z0:zz-.3,z1:zz+.04,zk:zz,c:t.canopy?STEEL:ROOF,net:!t.canopy&&(p.t==='bunker'||/recon/.test(p.t)||/^cs_/.test(p.t))&&isTopRoof(bp,b)});continue}
+        if(b.t==='pillar'){const[ox,oy]=PILLAR_OFF[b.r%4],q=.16,x0=b.x+ox*(1-q),y0=b.y+oy*(1-q);push({...local(p,{x0,x1:x0+q,y0,y1:y0+q}),z0:zz,z1:zz+PILLAR_H-.3,c:SVC.dark});continue}
         if(b.t==='window'){winFrame(w,zz,b,R0);continue}
         const h=b.t==='corner'?1.65:CB[b.t]||1;push({...w,z0:zz,z1:zz+h,c:BC[b.t]||HC,mesh:/hesco|corner/.test(b.t)})}
       // blocks added with Modify structure (those whose floor still stands), then closed entrances and centre squares
@@ -2742,7 +2864,7 @@ window.sv3dSvg=function(a,view,L=0,opt={}){
     for(const[lx,ly]of[[.15,.15],[t.w-.15,.15],[.15,t.d-.15],[t.w-.15,t.d-.15]])box({...local(p,{x0:lx-.03,x1:lx+.03,y0:ly-.03,y1:ly+.03}),z0:z,z1:z+.7,c:SVC.dark});
     const w=local(p,{x0:.05,x1:t.w-.05,y0:.05,y1:t.d-.05});
     box({...w,z0:z+.3,z1:z+.75,c:['url(#svNetG)','url(#svNetG)','url(#svNetG)','#2F3620'],kBias:.3})}
-  function emp3d(p,r,z){const w=DGF_W[p.t],res=dgfMap(p),sp=dgfSpec(w),F=WD.F,mx=F('dgf.mortar.max'),Hp=w==='sting'?1:sp.Hp,lo=sp.lo,cx=r.x+r.w/2,cy=r.y+r.d/2,FR=1.7,rd=d=>d*SN;const clip=(x0,y0,x1,y1)=>{let t1=1;const dx=x1-x0,dy=y1-y0;if(dx>0)t1=Math.min(t1,(a.x+a.w-x0)/dx);if(dx<0)t1=Math.min(t1,(a.x-x0)/dx);if(dy>0)t1=Math.min(t1,(a.y+a.d-y0)/dy);if(dy<0)t1=Math.min(t1,(a.y-y0)/dy);return[x0+dx*Math.max(0,t1),y0+dy*Math.max(0,t1)]};
+  function emp3d(p,r,z){const w=DGF_W[p.t],res=dgfMap(p),sp=dgfSpec(w),F=WD.F,mx=F('dgf.mortar.max'),Hp=w==='sting'?1:sp.Hp,lo=sp.lo,cx=r.x+r.w/2+offOf(p)[0],cy=r.y+r.d/2+offOf(p)[1],FR=1.7,rd=d=>d*SN;const clip=(x0,y0,x1,y1)=>{let t1=1;const dx=x1-x0,dy=y1-y0;if(dx>0)t1=Math.min(t1,(a.x+a.w-x0)/dx);if(dx<0)t1=Math.min(t1,(a.x-x0)/dx);if(dy>0)t1=Math.min(t1,(a.y+a.d-y0)/dy);if(dy<0)t1=Math.min(t1,(a.y-y0)/dy);return[x0+dx*Math.max(0,t1),y0+dy*Math.max(0,t1)]};
     const W3=(x,y,zz)=>{const[u,w2]=rotUW(view,a,x,y);return P3(u,w2,zz)},Dk=(x,y)=>{const[u,w2]=rotUW(view,a,x,y);return Dv(u,w2)};
     const CLS={free:'#3F8A3A',part:'#C98A1C',lim:'#C98A1C',poor:'#B3261E'};
     const fs=Math.max(11,.36*G),txt=(q,s,col)=>`<text x="${q[0].toFixed(1)}" y="${q[1].toFixed(1)}" text-anchor="middle" font-size="${fs}" font-weight="800" fill="${col}" stroke="var(--bg)" stroke-width="3" paint-order="stroke">${s}</text>`;
@@ -2933,7 +3055,7 @@ function drawHeightInfo(g){
   else{const e=pieces.find(q=>P[q.t].cat==='Emplacements'&&hit(rectOf(q),{x:hover.cx,y:hover.cy,w:1,d:1}));
     if(e){const ci=coverInfo(e),r=rectOf(e);at={x:r.x+r.w/2,y:r.y};
       text=!ci?'No cover nearby':(ci.surrounded?signH(ci.diff):'Not surrounded')+(ci.partial.length?(ci.surrounded?', ':' · ')+ci.partial.map(signH).join(', ')+' partially':'');
-      const d=dgfMap(e);if(d){dgfHoverCard(g,e,d);return}}}
+      const d=dgfMap(e);if(d){const hz=dgfHorizon(e);if(hz)dgfFan(g,e,hz);dgfHoverCard(g,e,d,hz);return}}}
   if(!text)return;
   lines=lines||[text];
   const LH=15,w=Math.max(...lines.map((l,i)=>l.length*(i===2&&lines.length>1?6.4:7.1)))+18,hh=lines.length*LH+5,px=at.x*C-w/2,py=at.y*C-hh-7,lg=s('g',{'pointer-events':'none'});
@@ -2967,17 +3089,17 @@ function renderLegend(){
    against the building rules before it lands; an invalid move is refused with the reason. */
 let sel=new Set(),selBox=null,drag=null,clip=null,pasting=false,selMsg='';
 function withStacked(set){const out=new Set(set);let grew=true;
-  while(grew){grew=false;for(const q of pieces){if(out.has(q)||!q.z)continue;
-    for(const p of out)if(q.z>p.z&&(!isCanopy(p)||q.z>=canopyRoof(p))&&hit(rectOf(q),rectOf(p))){out.add(q);grew=true;break}}}
+  while(grew){grew=false;for(const q of pieces){if(out.has(q))continue;
+    for(const p of out)if(q.in&&!p.in&&P[p.t].sym&&hit(rectOf(q),rectOf(p))&&q.z>=p.z?true:q.z&&!q.in&&q.z>p.z&&(!isCanopy(p)||q.z>=canopyRoof(p))&&hit(rectOf(q),rectOf(p))){out.add(q);grew=true;break}}}
   return out}
 function bbox(list){let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;for(const p of list){const r=rectOf(p);x0=Math.min(x0,r.x);y0=Math.min(y0,r.y);x1=Math.max(x1,r.x+r.w);y1=Math.max(y1,r.y+r.d)}return{x:x0,y:y0,w:x1-x0,d:y1-y0}}
-const copyPiece=p=>{const q={t:p.t,x:p.x,y:p.y,r:p.r||0,z:p.z};if(p.fnd)q.fnd={...p.fnd};if(p.closed)q.closed=[...p.closed];if(p.doors)q.doors=[...p.doors];if(p.doorR)q.doorR={...p.doorR};if(p.mod)q.mod=JSON.parse(JSON.stringify(p.mod));return q};
+const copyPiece=p=>{const q={t:p.t,x:p.x,y:p.y,r:p.r||0,z:p.z};if(p.fnd)q.fnd={...p.fnd};if(p.closed)q.closed=[...p.closed];if(p.doors)q.doors=[...p.doors];if(p.doorR)q.doorR={...p.doorR};if(p.mod)q.mod=JSON.parse(JSON.stringify(p.mod));if(p.off)q.off=[...p.off];if(p.fl!=null)q.fl=p.fl;if(p.in)q.in=1;return q};
 // try to put `moved` (new positions) on top of `rest`; returns {list, placed} or {err}
 function settle(rest,moved){
   const out=[...rest],placed=[],saved=stroke;stroke=new Set();
   try{
-    const order=[...moved].sort((a,b)=>(a.t==='fob'?-1:b.t==='fob'?1:0)||a.z-b.z);
-    for(const m of order){const np={t:m.t,x:m.x,y:m.y,r:m.r||0};if(m.fnd)np.fnd={...m.fnd};const res=place(np,out);
+    const order=[...moved].sort((a,b)=>(a.t==='fob'?-1:b.t==='fob'?1:0)||a.z-b.z||(a.in?1:0)-(b.in?1:0));
+    for(const m of order){const np=freeBits(m,{t:m.t,x:m.x,y:m.y,r:m.r||0});if(m.fnd)np.fnd={...m.fnd};const res=place(np,out);applyIn(np,res);
       if(res.err)return{err:`${P[m.t].n} at ${COLS(m.x)}${m.y+1}: ${res.err}`};
       const q={...np,z:res.z};if(m._o!=null)Object.defineProperty(q,'_o',{value:m._o,enumerable:false});if(m.closed)q.closed=[...m.closed];if(m.doors)q.doors=[...m.doors];if(m.doorR)q.doorR={...m.doorR};if(m.mod)q.mod=JSON.parse(JSON.stringify(m.mod));out.push(q);placed.push(q)}
     const a=areaRect(fobOf(out)),outside=out.filter(p=>needsFob(p.t)&&!inside(rectOf(p),a));
@@ -2991,7 +3113,7 @@ function transformSel(fn){const moving=[...sel].sort((a,b)=>pieces.indexOf(a)-pi
 const shiftBy=(dx,dy)=>(p)=>({...p,x:p.x+dx,y:p.y+dy});
 // quarter turn clockwise about the selection's bounding box
 const turnCW=(p,b)=>{const r=rectOf(p),q={...p,x:b.x+(b.d-(r.y-b.y)-r.d),y:b.y+(r.x-b.x),r:((p.r||0)+1)%4};
-  if(p.fnd){const c=fndCell(p),nx=b.x+(b.d-(c.y-b.y)-1),ny=b.y+(c.x-b.x);q.fnd={dx:nx-q.x,dy:ny-q.y}}return q};
+  if(p.fnd){const c=fndCell(p),nx=b.x+(b.d-(c.y-b.y)-1),ny=b.y+(c.x-b.x);q.fnd={dx:nx-q.x,dy:ny-q.y}}if(p.off)q.off=cleanOff([-p.off[1],p.off[0]]);return q};
 function commit(res,what){if(res.err){selMsg=res.err;flashMsg(res.err,true);draw();return false}
   snapshot();pieces=res.list;sel=new Set(res.placed);selMsg='';changed();flashMsg(what);return true}
 function flashMsg(t,bad){$('msg').textContent=t||'';$('msg').className='msg'+(bad?' bad':'')}
@@ -3047,9 +3169,9 @@ function chainFrom(g,root,c){const out=[[root,{dx:c.x-root.x,dy:c.y-root.y}]],do
   return out}
 // heights again, bottom up, on copies; the first piece that would break a rule, or null
 function reseat(list){const fob=fobOf(list),done=fob?[fob]:[],saved=stroke;stroke=new Set();
-  try{for(const p of[...list].sort((a,b)=>(a.z||0)-(b.z||0))){if(p===fob)continue;
-    const res=place({t:p.t,x:p.x,y:p.y,r:p.r,fnd:p.fnd},done);
-    if(res.err){if(!p.bad)return{p,err:res.err}}else p.z=res.z;done.push(p)}
+  try{for(const p of[...list].sort((a,b)=>(a.z||0)-(b.z||0)||(a.in?1:0)-(b.in?1:0))){if(p===fob)continue;
+    const res=place({t:p.t,x:p.x,y:p.y,r:p.r,fnd:p.fnd,fl:p.fl},done);
+    if(res.err){if(!p.bad)return{p,err:res.err}}else{p.z=res.z;applyIn(p,res)}done.push(p)}
     return null}finally{stroke=saved}}
 // move a chain (and what stands on it) in the build order: right after its raised neighbour, and after anything the moved pieces stand on
 function orderChain(list,chain,anchor){const M=new Set(chain);
@@ -3102,7 +3224,7 @@ function updateSelBar(){const bar=$('selBar');if(!bar)return;const on=tool==='se
   const one=sel.size===1&&!pasting?[...sel][0]:null;$('selMod').hidden=!(one&&window.bpOf&&bpOf(one.t));$('selBump').hidden=pasting||!elevCands().length;$('selLow').hidden=pasting||!lowerCands().length}
 function selDown(e,c){
   if(pasting){const res=pasteAt(c);if(res&&commit(res,'Pasted'))pasting=false;return}
-  const t=c&&topAt(c.cx,c.cy);
+  const t=c&&pickAt(c.cx,c.cy);
   if(t&&sel.has(t)&&!e.shiftKey){drag={from:c,dx:0,dy:0};return}
   if(t){if(e.shiftKey){const ns=new Set(sel);if(ns.has(t))ns.delete(t);else for(const q of withStacked([t]))ns.add(q);sel=ns}
     else sel=withStacked([t]);drag={from:c,dx:0,dy:0};updateSelBar();draw();return}
@@ -3172,7 +3294,7 @@ function brushButton(){if(tool==='select'&&sel.size){if(setBrush([...sel])){sel=
 
 /* ---------- interaction ---------- */
 function cellFrom(ev){const pt=svg.createSVGPoint();pt.x=ev.clientX;pt.y=ev.clientY;const p=pt.matrixTransform(svg.getScreenCTM().inverse());
-  const cx=Math.floor((p.x-M)/C),cy=Math.floor((p.y-M)/C);return(cx<0||cy<0||cx>=N||cy>=N)?null:{cx,cy}}
+  const cx=Math.floor((p.x-M)/C),cy=Math.floor((p.y-M)/C);ptrFrac=[(p.x-M)/C-cx,(p.y-M)/C-cy];return(cx<0||cy<0||cx>=N||cy>=N)?null:{cx,cy}}
 let down=false,erasing=false,strokeSaved=false,line=null;
 /* Straight lines: press on a square, drag along a row or a column, let go to place the whole row.
    The row steps by the piece's own length along the drag, so walls and gates line up end to end. */
@@ -3182,7 +3304,7 @@ function linePlan(){if(!line)return{ok:[],bad:[]};const a=line.a,b=line.b,dx=b.c
   const list=[...pieces],ok=[],bad=[];
   for(let i=0;i<n;i++){const cx=alongX?a.cx+sg*i*step:a.cx,cy=alongX?a.cy:a.cy+sg*i*step;
     const gp=withFnd(ghostAt(cx,cy),list),res=place(gp,list);
-    if(res.err)bad.push({r:rectOf(gp),err:res.err});else{const np={...gp,z:res.z};list.push(np);ok.push(np)}}
+    if(res.err)bad.push({r:rectOf(gp),err:res.err});else{const np=applyIn({...gp,z:res.z},res);list.push(np);ok.push(np)}}
   return{ok,bad}}
 function drawLine(g){const L=linePlan(),gg=s('g',{opacity:.55});
   for(const q of L.ok){gg.append(drawPiece(q,{ghost:true}));const r=rectOf(q);g.append(s('rect',{x:r.x*C+1,y:r.y*C+1,width:r.w*C-2,height:r.d*C-2,fill:'none',stroke:'var(--ok)','stroke-width':1.6}))}
@@ -3218,12 +3340,12 @@ function supports(p){if(isCanopy(p))return pieces.some(q=>q!==p&&q.z>=canopyRoof
 function act(c){
   if(!c||mode!=='edit')return;
   if(tool==='seal')return;   // Modify structure: handled on press (left adds, right-click takes off)
-  if(erasing||tool==='erase'){const t=topAt(c.cx,c.cy);if(!t)return;
+  if(erasing||tool==='erase'){const t=pickAt(c.cx,c.cy);if(!t)return;
     if(P[t.t].fixed){$('msg').textContent='The FOB is required. Move it with the Select tool';$('msg').className='msg bad';return}
-    if(supports(t)){$('msg').textContent=`Remove what stands on this ${P[t.t].n} first`;$('msg').className='msg bad';return}
+    if(supports(t)||insideOf(t).length){$('msg').textContent=`Remove what stands ${insideOf(t).length?'inside':'on'} this ${P[t.t].n} first`;$('msg').className='msg bad';return}
     if(!strokeSaved){snapshot();strokeSaved=true}pieces.splice(pieces.indexOf(t),1);changedDuringStroke();return}
   const gp=withFnd(ghostAt(c.cx,c.cy));const res=place(gp);if(res.err)return;
-  if(!strokeSaved){snapshot();strokeSaved=true}const np={...gp,z:res.z};pieces.push(np);stroke.add(np);changedDuringStroke();
+  if(!strokeSaved){snapshot();strokeSaved=true}const np=applyIn({...gp,z:res.z},res);pieces.push(np);stroke.add(np);changedDuringStroke();
   window.tipAfterPlace?.(np);
 }
 svg.addEventListener('pointerdown',e=>{if(mode!=='edit'||e.button===1)return;e.preventDefault();down=true;strokeSaved=false;stroke=new Set();erasing=e.button===2;svg.setPointerCapture(e.pointerId);const c=cellFrom(e);hover=c;
@@ -3234,7 +3356,7 @@ svg.addEventListener('pointerdown',e=>{if(mode!=='edit'||e.button===1)return;e.p
   if(tool==='seal'){if(c)window.modMapClick?.(c.cx,c.cy,erasing);return}
   if((erasing||tool==='erase')&&lineOn()){if(c){line={a:c,b:c,erase:true};draw()}return}
   act(c)});
-svg.addEventListener('pointermove',e=>{const c=cellFrom(e);if(!c){hover=null;draw();return}if(hover&&c.cx===hover.cx&&c.cy===hover.cy)return;hover=c;if(down&&tool==='select'&&!erasing){selMove(c);return}
+svg.addEventListener('pointermove',e=>{const c=cellFrom(e);if(!c){hover=null;draw();return}if(hover&&c.cx===hover.cx&&c.cy===hover.cy){if(!down&&P[tool]&&P[tool].free&&$('snapGrid')&&!$('snapGrid').checked)draw();return}hover=c;if(down&&tool==='select'&&!erasing){selMove(c);return}
   if(down&&tool==='side'){if(svBox){svBox.x1=c.cx;svBox.y1=c.cy}draw();return}
   if(down&&tool==='brush'&&!erasing){if(brushBox){brushBox.x1=c.cx;brushBox.y1=c.cy;draw()}else paintBrush(c,false);return}
   if(down&&line){line.b=c;draw();return}
@@ -3256,6 +3378,11 @@ document.addEventListener('keydown',e=>{const tg=e.target;if((tg.tagName==='INPU
   if(mod&&(e.key==='c'||e.key==='C')&&inSel&&sel.size){e.preventDefault();copySel();return}
   if(mod&&(e.key==='v'||e.key==='V')){e.preventDefault();startPaste();return}
   if(mod)return;
+  if((e.key==='['||e.key===']')&&P[tool]&&P[tool].inside&&mode==='edit'){e.preventDefault();insideLv=Math.max(0,insideLv+(e.key===']'?1:-1));draw();return}
+  if(e.altKey&&inSel&&sel.size&&e.key.startsWith('Arrow')){const fr=[...sel].filter(p=>P[p.t].free);if(fr.length){e.preventDefault();snapshot();
+    const d=e.key==='ArrowLeft'?[-1,0]:e.key==='ArrowRight'?[1,0]:e.key==='ArrowUp'?[0,-1]:[0,1];
+    for(const p of fr){const o=cleanOff([offOf(p)[0]+d[0]*.05,offOf(p)[1]+d[1]*.05]);if(o)p.off=o;else delete p.off}
+    changed();flashMsg(`Nudged ${fr.length>1?fr.length+' pieces':'the '+P[fr[0].t].n} (${fr.map(p=>offOf(p).map(v=>v.toFixed(2)).join(', ')).join(' · ')} from the middle of the square)`);return}}
   if(svIsOpen()){if(e.key==='r'||e.key==='R'){svTurn(e.shiftKey);return}if(e.key==='Escape'){if(tool==='seal'){svClose();return}setTool(lastPiece);return}/* Esc leaves Side view: back to the piece you were using, like E */if(e.key==='s'||e.key==='S'){svToggle();return}if(e.key==='+'||e.key==='='){$('svZoomIn').click();return}if(e.key==='-'){$('svZoomOut').click();return}if(sv3dOn&&(e.key===']'||e.key==='[')){svLayerBy(e.key===']'?1:-1);return}return}
   if((e.key==='r'||e.key==='R')&&dgfHoverEmp()){dgfView=dgfView==='NS'?'WE':'NS';draw();return}   // turn the protection picture, not a piece
   if((e.key==='r'||e.key==='R')&&tool==='seal'){turnCentreDoor();return}
@@ -3350,7 +3477,10 @@ let lastPiece='hesco_wall';
 function setTool(t){if(t!=='side'){svArea=null;svBox=null;if($('svPanel'))$('svPanel').hidden=true}if(t==='bremer')setTimeout(()=>window.showTip?.('bremer'),0);if(t!=='select'){pasting=false;drag=null;selBox=null}if(t!=='brush')brushBox=null;if(P[t])lastPiece=t;tool=t;updateSelBar();$('eraseBtn').setAttribute('aria-pressed',t==='erase'?'true':'false');
   $('selToolBtn').setAttribute('aria-pressed',t==='select'?'true':'false');$('sealToolBtn').setAttribute('aria-pressed',t==='seal'?'true':'false');$('brushBtn').setAttribute('aria-pressed',t==='brush'?'true':'false');$('sideBtn').setAttribute('aria-pressed',t==='side'?'true':'false');
   $('brushBtn').disabled=t==='seal';$('wallOptBtn').disabled=t==='seal';   // no brush or Wall Optimization while modifying a structure
-  renderPalette();window.modToolChanged?.(t);draw()}
+  renderPalette();window.modToolChanged?.(t);snapLook();draw()}
+// Snap to grid only acts on free pieces (the MG Nest): greyed out (still clickable) for anything else
+function snapLook(){const l=$('snapGridLbl');if(!l)return;const on=!!(P[tool]&&P[tool].free);l.classList.toggle('noeffect',!on);l.dataset.tipOff=on?'':'1'}
+snapLook();
 $('selToolBtn').onclick=()=>setTool(tool==='select'?lastPiece:'select');
 $('sealToolBtn').onclick=()=>setTool(tool==='seal'?lastPiece:'seal');
 const TRIM_OF={recon_tower:'recon_trim',ifs:'ifs_trim'},TRIMMED=new Set(Object.values(TRIM_OF));
@@ -3670,8 +3800,8 @@ function rebuild(list,legacy){
   const rep={unknown:[],flagged:0,fixed:0};
   const f=list.find(p=>p.t==='fob');
   const out=[{...FOB_AT,...(f&&!legacy?{x:f.x,y:f.y}:{})}];list=list.filter(p=>p.t!=='fob');
-  const sorted=[...list].sort((a,b)=>(a.l||0)-(b.l||0)||(a.z||0)-(b.z||0)),ord=new Map();
-  for(const p of sorted){const np={t:p.t,x:p.x,y:p.y,r:((p.r|0)%4+4)%4};if(p.fnd&&Number.isInteger(p.fnd.dx)&&Number.isInteger(p.fnd.dy))np.fnd={dx:p.fnd.dx,dy:p.fnd.dy};
+  const sorted=[...list].sort((a,b)=>(a.l||0)-(b.l||0)||(a.z||0)-(b.z||0)||(a.in?1:0)-(b.in?1:0)),ord=new Map();
+  for(const p of sorted){const np=freeBits(p,{t:p.t,x:p.x,y:p.y,r:((p.r|0)%4+4)%4});if(p.fnd&&Number.isInteger(p.fnd.dx)&&Number.isInteger(p.fnd.dy))np.fnd={dx:p.fnd.dx,dy:p.fnd.dy};
     if(!P[np.t]){rep.unknown.push(p.t);continue}
     const q={...np};ord.set(q,list.indexOf(p));
     if(p.mod&&typeof p.mod==='object'&&window.bpOf&&bpOf(np.t)){const nb=(bpOf(np.t).blocks||[]).length,ok=a=>[...new Set((Array.isArray(a)?a:[]).filter(i=>Number.isInteger(i)&&i>=0&&i<nb))].sort((a,b)=>a-b);
@@ -3687,7 +3817,7 @@ function rebuild(list,legacy){
     if(closed.length)q.closed=[...closed].sort();if(doors.length)q.doors=[...doors].sort();
     if(p.doorR&&typeof p.doorR==='object'){const dr={};for(const[k,v]of Object.entries(p.doorR))if(doors.includes(+k)&&+k>=CENTRE_K&&v>=1&&v<=3)dr[k]=v|0;if(Object.keys(dr).length)q.doorR=dr}
     const res=place(np,out);
-    if(!res.err)q.z=res.z;
+    if(!res.err){q.z=res.z;applyIn(q,res)}
     else{q.z=looseZ(np,out);q.bad=res.err;rep.flagged++}
     out.push(q)}
   rebuild.report=rep;
@@ -3700,8 +3830,8 @@ function looseZ(np,list){const r=rectOf(np);let z=0;
 // re-check the flags after an edit, without moving anything (keeps the selection intact)
 function recheck(){if(!pieces.some(p=>p.bad))return;
   const fob=fobOf(),done=fob?[fob]:[];
-  for(const p of[...pieces].sort((a,b)=>a.z-b.z)){if(p===fob)continue;
-    const res=place({t:p.t,x:p.x,y:p.y,r:p.r,fnd:p.fnd},done);if(res.err)p.bad=res.err;else{delete p.bad;p.z=res.z}done.push(p)}}
+  for(const p of[...pieces].sort((a,b)=>a.z-b.z||(a.in?1:0)-(b.in?1:0))){if(p===fob)continue;
+    const res=place({t:p.t,x:p.x,y:p.y,r:p.r,fnd:p.fnd,fl:p.fl},done);if(res.err)p.bad=res.err;else{delete p.bad;p.z=res.z;applyIn(p,res)}done.push(p)}}
 function flaggedText(){const r=rebuild.report||{},bits=[];
   if(r.flagged)bits.push(`${r.flagged} piece${r.flagged>1?'s break':' breaks'} the current rules (marked red)`);
   if(r.fixed)bits.push(`${r.fixed} bunker door${r.fixed>1?'s':''} changed to HESCO`);
@@ -3746,7 +3876,6 @@ function vBlock(p,b){const xs=b.cells.map(c=>c[0]),ys=b.cells.map(c=>c[1]);
 const blockName=q=>q.blk?(q.seal?`${q.t==='door'?'Door':P[q.t].n+' seal'} in the ${P[q.of.t].n} ${q.centre?'centre':'entrance'}`:`${q.add?'added ':''}${q.bt==='corner'?'HESCO X Size':P[q.t].n} of the ${P[q.of.t].n}`):P[q.t].n;
 const isBanned=(banned,q)=>banned.has(q)||!!(q&&q.of&&banned.has(q.of));
 // a cell's shape: the surface you stand on (h) and the rooms under roofs. sol = [[bottom, top], …], slabs = roof heights.
-// low: the slabs are open stairs (Wooden Step): the space under them counts from 1 high (crawl), not door height
 function cellShape(sol,slabs,low){let h=0;for(const[,t]of sol)if(t>h)h=t;for(const z of slabs)if(z>h)h=z;
   if(!slabs.length)return{h,rooms:[]};const rooms=[];
   for(const z of[...new Set(slabs)].sort((a,b)=>a-b)){let f=0;for(const[,t]of sol)if(t<=z&&t>f)f=t;for(const u of slabs)if(u<z&&u>f)f=u;
@@ -3761,8 +3890,6 @@ function threatGrid(){setBounds();
       const vb=[],sl=[];vbs.set(p,vb);slabsOf.set(p,sl);
       for(const b of sb.solids){const q=vBlock(p,b);vb.push(q);for(const[x,y]of b.cells)if(IB(x,y))(b.bt==='window'?hang:col)[idx(x,y)].push(q)}   // windows hang from the roof: not blown with the column under them
       for(const z of sb.slabs)if(IB(z.x,z.y)){const o={z:z.z,i:z.i,p,c:idx(z.x,z.y)};sl.push(o);slab[o.c].push(z.z);slabI[o.c].push(o)}continue}
-    if(p.t==='stairs'){for(let x=r.x;x<r.x+r.w;x++)for(let y=r.y;y<r.y+r.d;y++){if(!IB(x,y))continue;const i=idx(x,y),o={z:cellTop(p,x,y),i:-1,p,c:i};   // open stairs: a surface to walk up, space under it to crawl through
-        slab[i].push(o.z);slabI[i].push(o);low[i]=true;stairAt[i]=p}continue}
     for(let x=r.x;x<r.x+r.w;x++)for(let y=r.y;y<r.y+r.d;y++){const i=idx(x,y);
       if(PROTECTED.has(t.cat)){if(p.t==='fob'||!$('onlyFob').checked){target[i]=true;(tz[i]=tz[i]||new Set()).add(p.z)}continue}   // "Only FOB": the rest is just walked past
       if(p.t==='hedgehog'||p.t==='loudspeaker'||p.t==='radio'){vehBlock[i]=true;continue}   // infantry passes, vehicles don't
@@ -3805,6 +3932,8 @@ function threatGrid(){setBounds();
 }
 // a room with a protected piece standing in it (an MG Nest under a Large Shelter): reaching the room reaches the piece
 const roomTarget=(G,cell,z)=>!!(G.target[cell]&&G.tz[cell]&&G.tz[cell].has(z));
+// standing on top of a square reaches a protected piece there, unless it stands inside under a roof (then only its room does)
+const surfTarget=(G,cell)=>!!(G.target[cell]&&(!G.tz[cell]||[...G.tz[cell]].some(z=>z>=G.H[cell]-1e-6)));
 // cells a vehicle can drive to from outside the area
 function vehicleZone(G){
   const ok=new Array(N*N).fill(false),q=[];
@@ -3879,7 +4008,7 @@ function climbRoute(G,cap,banned,collect,seeds){
       const j2=idx(x2,y2);if(H[j2]<=hi+J.up)push(j2,n);
       const ft=faceTop(j2);if(ft!=null&&ft<=hi+J.up)push(2*NN+j2,n)}};
   for(let qh=0;qh<q.length;qh++){const n=q[qh];
-    if(!collect&&(n<NN?G.target[n]:n<2*NN&&roomTarget(G,G.rooms[n-NN].cell,G.rooms[n-NN].z))){const path=[];for(let k=n;k>=0;k=prev[k])path.unshift(k);return path}
+    if(!collect&&(n<NN?surfTarget(G,n):n<2*NN&&roomTarget(G,G.rooms[n-NN].cell,G.rooms[n-NN].z))){const path=[];for(let k=n;k>=0;k=prev[k])path.unshift(k);return path}
     if(n>=2*NN){const c=n-2*NN;fromHeight(c,faceTop(c),n,0);continue}                                  // standing on a Bremer face
     if(n>=NN){const Rm=G.rooms[n-NN],i=Rm.cell;if(banned.has(i))continue;   // in a room: to the next room, out to the next square, down a ladder
       for(const[dx,dy]of DIRS){const x=cx_(i)+dx,y=cy_(i)+dy;if(!inGrid(x,y))continue;const j=idx(x,y);if(banned.has(j))continue;
@@ -3984,7 +4113,7 @@ function c4Search(G,banned,fixed,shut,vmode,charges,U){fixed=fixed||new Set();sh
   for(let i=0;i<NN;i++)if(onEdge(i))base[i].forEach((o,oi)=>{if(o.h<=STEP)relax(key(0,i,oi),c4of(o.rm,[]),-1)});
   while(heap.length){const[d,k]=pop();if(d>(dist.get(k)??Infinity))continue;
     const{t,i,o:oi,l}=dec(k),cur=O(t,i)[oi],x=cx_(i),y=cy_(i);
-    if(l>=0?roomTarget(G,i,cur.rooms[l].z):G.target[i]){const states=[];for(let s=k;s!==-1;s=prev.get(s))states.unshift(s);
+    if(l>=0?roomTarget(G,i,cur.rooms[l].z):surfTarget(G,i)){const states=[];for(let s=k;s!==-1;s=prev.get(s))states.unshift(s);
       const path=states.map(s=>dec(s).i),blown=[],ladders=[];let first=null;
       for(const s of states){const sl=meta.get(s),ds=dec(s);
         if(sl&&sl.charge){if(first==null)first=ds.i;blown.push(Object.assign(Object.create(sl.tgt),{c4:sl.c4,charge:true,takes:sl.takes,fell:sl.fell}))}
@@ -4870,7 +4999,7 @@ if(run&&run.def&&run.def.alarm!=null&&!run.def.dead&&run.defPos)p={x:(p.x+run.de
 const CUSTOM_DATA={};
 const customId=key=>'cs_'+String(key).replace(/[^A-Za-z0-9]/g,'').slice(0,40);
 const CB={hesco_s:1,hesco_l:2,sandbags:1,door:2,window:1,corner:2};   // block heights (corner: 1.65 + the 0.35 roof slab on it)
-// Pillar (Large Shelter, Season 02): a thin post in one corner of its square (r 0 NW, 1 NE, 2 SE, 3 SW), 3 high; the roof on it is a thin sheet.
+// Pillar (Large Shelter, Season 02): a thin post in one corner of its square (r 0 NW, 1 NE, 2 SE, 3 SW), 2.65 high + the 0.35 roof = 3.
 // Not a solid block: you walk past it and under the roof it holds. A roof on pillars falls when 2 of them are gone (guess, like corners).
 const PILLAR_H=3;
 
@@ -5172,6 +5301,7 @@ function addErr(p,I,Ls,L,blk){const t=blk.t,n=Ls.indexOf(L)+1,rules=bpRules(I.d,
     if(!I.foot.some(([u,v])=>u===x&&v===y))return'Sandbags need two squares inside the structure: turn them (R) or pick another square';
     if(!slabAt(I,L,x,y))return`No floor here ${onFloor(floorName(Ls,n))}: there's nothing to stand the ${P[t].n} on`;
     const tk=takenAt(p,I,Ls,L,x,y);if(tk)return`That square already has a ${tk}. Erase (E) or right-click takes it off`;
+    {const[qx,qy]=at(p,I,x,y),ins=insideOf(p).find(q=>q.x===p.x+qx&&q.y===p.y+qy&&q.z<p.z+L+CB[t]&&p.z+L<q.z+P[q.t].h);if(ins)return`The ${P[ins.t].n} stands there: move or erase it first`}
     if(L===0){const[qx,qy]=at(p,I,x,y),e=openingsOf(p).find(e=>e.x-p.x===qx&&e.y-p.y===qy);if(e&&e.sealType)return`That ${e.centre?'centre square':'entrance'} is closed with a ${P[e.sealType].n}. Erase (E) or right-click opens it`}
     const above=I.bl.filter(b=>b.t==='roof'&&b.z>L&&b.x===x&&b.y===y&&I.st.present(b.i)).map(b=>b.z);
     if(above.length){const z=Math.min(...above),low=rules.some(r=>r.z===z&&r.kind==='corners'&&!r.pillar);   // a roof on HESCO X Size leaves 1.65 of headroom (the slab is 0.35 thick)
@@ -5549,6 +5679,7 @@ function cleanDesign(d){
   for(const p of src){if(!isObj(p)||!known(p.t)||!on(p.x)||!on(p.y)){dropped++;continue}
     const q={t:p.t,x:p.x,y:p.y,r:intIn(p.r,0,3,0),z:intIn(p.z,0,40,0)};
     if(Number.isFinite(p.l))q.l=p.l;
+    {const o=cleanOff(p.off);if(o)q.off=o}if(Number.isInteger(p.fl)&&p.fl>=0&&p.fl<=5)q.fl=p.fl;if(p.in===1||p.in===true)q.in=1;
     for(const k of['closed','doors'])if(Array.isArray(p[k]))q[k]=p[k].filter(Number.isInteger);
     for(const k of['fnd','doorR','mod'])if(isObj(p[k]))q[k]=p[k];   // checked again, field by field, when the design is built (rebuild)
     pieces.push(q)}
@@ -6375,7 +6506,7 @@ const T={
   roof:{n:'Roof / middle floor',kind:'slab',special:1,note:'Walkable; open space under it'},
   window:{n:'Window',kind:'solid',h:1,w:2,special:1,edge:.2,look:'window',note:'Wooden frame on the edge, no glass. A 1h opening: crawl only'},
   ladder:{n:'Ladder',kind:'ladder',special:1,note:'On the outside of a square, up to this layer'},
-  pillar:{n:'Pillar',kind:'pillar',special:1,note:'A thin post in one corner of a square (R picks the corner), 3 high: a Roof 3 layers up rests on it (a thin sheet). You walk past it and under the roof. A roof on pillars falls when 2 are gone (guess)'},
+  pillar:{n:'Pillar',kind:'pillar',special:1,note:'A thin post in one corner of a square (R picks the corner), 2.65 high: a Roof 3 layers up rests on it (0.35 thick). You walk past it and under the roof. A roof on pillars falls when 2 are gone (guess)'},
 };
 const ORDER=['hesco_s','hesco_l','sandbags','door','corner','floor','roof','window','ladder','pillar'];
 const CORNER=['NW','NE','SE','SW'];
@@ -6527,8 +6658,7 @@ const Pj=(u,w,z)=>[(u-w)*A,(u+w)*B-z*HZ];
 const pts=a=>a.map(p=>p.join(',')).join(' ');
 const FILL={pillar:['#4A4F52','var(--ink)'],hesco:['var(--entry)','var(--ink)'],corner:['#8C6E44','var(--ink)'],bags:['var(--sand)','var(--sand-edge)'],door:['var(--door-g)','var(--door-edge)'],window:['var(--wood)','var(--wood-e)'],floor:['var(--concrete)','var(--concrete-edge)'],roof:['var(--slab)','var(--slab)']};
 function boxesOf(b){const t=T[b.t],out=[];
-  if(b.t==='pillar'){const[ox,oy]=PILLAR_OFF[b.r%4],q=.16;out.push({x:b.x+ox*(1-q),y:b.y+oy*(1-q),w:q,d:q,z0:b.z,z1:b.z+PILLAR_H-.06,c:FILL.pillar,b});return out}
-  if(b.t==='roof'&&ST.s.blocks.some(q=>q.t==='pillar'&&q.z+PILLAR_H===b.z)){out.push({x:b.x,y:b.y,w:1,d:1,z0:b.z-.06,z1:b.z+.02,c:FILL.roof,b});return out}   // a roof on pillars is a thin sheet
+  if(b.t==='pillar'){const[ox,oy]=PILLAR_OFF[b.r%4],q=.16;out.push({x:b.x+ox*(1-q),y:b.y+oy*(1-q),w:q,d:q,z0:b.z,z1:b.z+PILLAR_H-.3,c:FILL.pillar,b});return out}
   if(t.kind==='slab'){out.push({x:b.x,y:b.y,w:1,d:1,z0:b.z>0?b.z-.3:b.z,z1:b.z+(b.z>0?.04:.12),c:FILL[b.t],b});return out}   // a roof is 0.35 thick: it rests on the 1.65 HESCO X Size, its top at the layer
   if(t.look==='window'){const e=edgeRect(b),along=b.r%2?'y':'x',L=2,p=.14,h=H(b);   // frame: three posts, a sill and a top beam
     for(const k of[0,.5,1]){const o=k*(L-p);out.push(along==='x'?{x:e.x+o,y:e.y,w:p,d:e.d,z0:b.z,z1:b.z+h,c:FILL.window,b}:{x:e.x,y:e.y+o,w:e.w,d:p,z0:b.z,z1:b.z+h,c:FILL.window,b})}
@@ -6596,7 +6726,7 @@ function swatch(t){const sv=s('svg',{viewBox:'0 0 14 14',width:14,height:14});
 function renderPal(){const root=$('stPal');root.replaceChildren();
   const grp=(name,ids,first)=>{root.append(el('h4',{},name,...(first?[el('span',{class:'phl',title:'Footprint and height'},'Space'),el('span',{class:'phl c',title:'Build supplies'},'Supply')]:[])));
     for(const id of ids){const t=T[id],on=ST.tool===id&&!ST.testing;
-      const size=t.kind==='slab'?'1×1 · thin':t.kind==='ladder'?'edge':t.kind==='pillar'?'corner · H3':`${t.w}×1 · H${t.corner?'1.65':t.h}`+(t.edge?` · ${Math.round(t.edge*100)}%`:'');
+      const size=t.kind==='slab'?'1×1 · thin':t.kind==='ladder'?'edge':t.kind==='pillar'?'corner · H2.65':`${t.w}×1 · H${t.corner?'1.65':t.h}`+(t.edge?` · ${Math.round(t.edge*100)}%`:'');
       const row=el('div',{class:'pc'+(on?' on':''),title:t.n+(t.note?': '+t.note:'')+(t.normal?` · C4 ${c4Of(id)}`:' · no C4 of its own')});
       row.addEventListener('click',()=>{ST.tool=id;if(ST.testing)endTest();renderAll()});
       const sw=el('span',{class:'sw',style:'background:none;display:grid;place-items:center'});sw.append(swatch(id));
